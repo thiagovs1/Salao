@@ -256,13 +256,13 @@
                             <div class="dados-profissional">
 
                                 <img
-                                    src="imagens/betriz.png"
+                                    src="imagens/juliana.png"
                                     alt="Betriz Costa">
 
                                 <div class="informacoes">
 
                                     <h3>
-                                        Betriz Costa
+                                        juliana Costa
                                     </h3>
 
                                     <span class="profissao">
@@ -468,11 +468,8 @@
     <script>
 
         let pedidoAtual = null;
-
         let servicosSelecionados = [];
-
         let profissionalSelecionado = null;
-
 
         async function carregarPedido() {
 
@@ -531,9 +528,7 @@
                     dados.servicos || [];
 
                 renderizarServicos();
-
                 atualizarResumo();
-
                 filtrarProfissionais();
 
             }
@@ -551,7 +546,6 @@
             }
 
         }
-
 
         function renderizarServicos() {
 
@@ -609,14 +603,12 @@
                         </p>
 
                     `;
-
                     container.appendChild(card);
 
                 }
             );
 
         }
-
 
         function formatarPreco(valor) {
 
@@ -625,7 +617,6 @@
                 .replace(".", ",");
 
         }
-
 
         function calcularTotal() {
 

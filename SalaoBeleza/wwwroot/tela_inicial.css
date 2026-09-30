@@ -322,13 +322,11 @@ body {
 }
 
 
-.conteudo-promocao {
-
-    position: relative;
-
-    z-index: 2;
-
-    padding: 42px 8px;
+.conteudo-promocao {  
+    position: relative;  
+    z-index: 2;  
+    padding: 38px 8px;  
+    width: 125px; 
 }
 
 
@@ -400,23 +398,15 @@ body {
 
 
 
-.imagem-promocao {
-
-    position: absolute;
-
-    right: -8px;
-
-    bottom: 0;
-
-    width: 125px;
-
-    height: 190px;
-
-    object-fit: cover;
-
-    object-position: center top;
-
-    z-index: 1;
+.imagem-promocao {  
+    position: absolute;  
+    right: -8px;  
+    bottom: 0;  
+    width: 115px;  
+    height: 204px;  
+    object-fit: cover;  
+    object-position: center top;  
+    z-index: 1;  
 }
 
 
@@ -672,136 +662,4 @@ body {
     bottom: -12px;
 
     transform: rotate(155deg);
-}
-
-
-@media (max-width: 1100px) {
-
-    .area-superior {
-
-        grid-template-columns:
-            minmax(450px, 1fr)
-            230px;
-
-        gap: 15px;
-    }
-
-
-    .imagem-boas {
-
-        left: 430px;
-    }
-
-
-    .frase-boas {
-
-        left: 605px;
-    }
-
-
-    .ramo-esquerdo {
-
-        left: 345px;
-    }
-
-
-    .area-combos {
-
-        padding-right: 245px;
-    }
-
-}
-
-
-@media (max-width: 900px) {
-
-    .menu-lateral {
-
-        width: 190px;
-    }
-
-
-    .conteudo {
-
-        margin-left: 190px;
-
-        padding: 20px 15px;
-    }
-
-
-    .area-superior {
-
-        grid-template-columns: 1fr;
-    }
-
-
-    .area-combos {
-
-        padding-right: 0;
-    }
-
-
-    .frase-lateral {
-
-        position: static;
-
-        width: 100%;
-
-        margin-top: 20px;
-    }
-
-
-    .imagem-boas {
-
-        left: auto;
-
-        right: 130px;
-    }
-
-
-    .frase-boas {
-
-        left: auto;
-
-        right: 15px;
-    }
-
-}
-
-
-@media (max-width: 700px) {
-
-    .menu-lateral {
-
-        position: relative;
-
-        width: 100%;
-
-        height: auto;
-    }
-
-
-    .imagem-lateral {
-
-        display: none;
-    }
-
-
-    .conteudo {
-
-        margin-left: 0;
-    }
-
-
-    .lista-combos {
-
-        grid-template-columns: 1fr;
-    }
-
-
-    .boas-vindas {
-
-        min-height: 204px;
-    }
-
 }
