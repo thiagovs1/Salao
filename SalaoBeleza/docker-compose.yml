@@ -1,0 +1,16 @@
+services:
+  banco:
+    image: mysql:8.0
+    container_name: salao_mysql
+    restart: always
+    environment:
+      MYSQL_DATABASE: Belleza
+      MYSQL_ROOT_PASSWORD: ""
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+    ports:
+      - "3306:3306"
+    volumes:
+      - dados_salao:/var/lib/mysql
+
+volumes:
+  dados_salao:

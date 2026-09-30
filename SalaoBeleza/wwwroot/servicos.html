@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Serviços - Belleza</title>
+
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <link rel="stylesheet" href="servicos.css">
+</head>
+
+<body>
+
+    <aside class="sidebar">
+
+        <div class="logo-area">
+
+            <img
+                src="imagens/logo_belleza.png"
+                alt="Belleza"
+                class="logo-belleza">
+
+        </div>
+
+        <nav class="menu">
+
+            <a href="tela_inicial.html" class="menu-item">
+                <i class="fa-solid fa-house"></i>
+                <span>Início</span>
+            </a>
+
+            <a href="servicos.html" class="menu-item ativo">
+                <i class="fa-solid fa-scissors"></i>
+                <span>Serviços</span>
+            </a>
+
+            <a href="profissionais.html" class="menu-item">
+                <i class="fa-solid fa-users"></i>
+                <span>Profissionais</span>
+            </a>
+
+            <a href="agendar_horario.html" class="menu-item">
+                <i class="fa-regular fa-calendar"></i>
+                <span>Agendar horário</span>
+            </a>
+
+            <a href="meus_agendamentos.html" class="menu-item">
+                <i class="fa-regular fa-calendar"></i>
+                <span>Meus agendamentos</span>
+            </a>
+
+            <a href="#" class="menu-item">
+                <i class="fa-solid fa-tags"></i>
+                <span>Promoções</span>
+            </a>
+
+            <a href="#" class="menu-item">
+                <i class="fa-regular fa-star"></i>
+                <span>Avaliações</span>
+            </a>
+
+            <a href="#" class="menu-item">
+                <i class="fa-regular fa-circle-user"></i>
+                <span>Minha Conta</span>
+            </a>
+
+            <a href="#" class="menu-item sair">
+                <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                <span>Sair</span>
+            </a>
+
+        </nav>
+
+    </aside>
+
+
+    <main class="conteudo">
+
+        <section class="area-servicos">
+
+            <div class="conteudo-servicos">
+
+                <h1 class="titulo-pagina">
+                    Escolha o serviço
+                </h1>
+
+                <button class="categoria ativa" type="button">
+
+                    <span class="nome-categoria">
+                        Cabelo
+                    </span>
+
+                    <span class="quantidade">
+                        6 serviços
+                    </span>
+
+                </button>
+
+
+                <h2 class="titulo-servicos">
+                    Serviços de cabelo
+                </h2>
+
+
+                <div class="lista-servicos">
+
+
+                    <div class="servico">
+
+                        <h3>
+                            Corte + Escove
+                        </h3>
+
+                        <p>
+                            Tipo: corte dos fios para cabelos cacheados
+                            <br>
+                            e lisos e finalização com a escova.
+                        </p>
+
+                        <span>
+                            Preço: R$ 65,00
+                        </span>
+
+                        <span>
+                            Tempo: 1h
+                        </span>
+
+                        <button
+                            type="button"
+                            class="btn-servico"
+                            data-nome="Corte + Escove"
+                            data-preco="65.00"
+                            data-tempo="1h">
+
+                            Selecionar
+
+                        </button>
+
+                    </div>
+
+
+                    <div class="servico">
+
+                        <h3>
+                            Corte + Hidratação
+                        </h3>
+
+                        <p>
+                            Tipo: corte dos fios para cabelos
+                            <br>
+                            cacheados e lisos e tratamento para
+                            <br>
+                            recuperar a hidratação dos cabelos.
+                        </p>
+
+                        <span>
+                            Preço: R$ 90,00
+                        </span>
+
+                        <span>
+                            Tempo: 1h 30
+                        </span>
+
+                        <button
+                            type="button"
+                            class="btn-servico"
+                            data-nome="Corte + Hidratação"
+                            data-preco="90.00"
+                            data-tempo="1h 30">
+
+                            Selecionar
+
+                        </button>
+
+                    </div>
+
+
+                    <div class="servico">
+
+                        <h3>
+                            Mecha + Tratamento
+                        </h3>
+
+                        <p>
+                            Tipo: aplicação de mechas e
+                            <br>
+                            tratamento pós-química.
+                        </p>
+
+                        <span>
+                            Preço: R$ 220,00
+                        </span>
+
+                        <span>
+                            Tempo: 3h 30
+                        </span>
+
+                        <button
+                            type="button"
+                            class="btn-servico"
+                            data-nome="Mecha + Tratamento"
+                            data-preco="220.00"
+                            data-tempo="3h 30">
+
+                            Selecionar
+
+                        </button>
+
+                    </div>
+
+
+                    <div class="servico">
+
+                        <h3>
+                            Escova + Hidratação
+                        </h3>
+
+                        <p>
+                            Tipo: hidratação dos fios e escova
+                            <br>
+                            para finalizar.
+                        </p>
+
+                        <span>
+                            Preço: R$ 75,00
+                        </span>
+
+                        <span>
+                            Tempo: 1h 15
+                        </span>
+
+                        <button
+                            type="button"
+                            class="btn-servico"
+                            data-nome="Escova + Hidratação"
+                            data-preco="75.00"
+                            data-tempo="1h 15">
+
+                            Selecionar
+
+                        </button>
+
+                    </div>
+
+
+                    <div class="servico">
+
+                        <h3>
+                            Coloração + Reconstrução
+                        </h3>
+
+                        <p>
+                            Tipo: coloração completa e
+                            <br>
+                            tratamento de reconstrução.
+                        </p>
+
+                        <span>
+                            Preço: R$ 180,00
+                        </span>
+
+                        <span>
+                            Tempo: 2h 30
+                        </span>
+
+                        <button
+                            type="button"
+                            class="btn-servico"
+                            data-nome="Coloração + Reconstrução"
+                            data-preco="180.00"
+                            data-tempo="2h 30">
+
+                            Selecionar
+
+                        </button>
+
+                    </div>
+
+
+                    <div class="servico">
+
+                        <h3>
+                            Progressiva + Hidratação
+                        </h3>
+
+                        <p>
+                            Tipo: alisamento dos fios e
+                            <br>
+                            hidratação para manter o cabelo
+                            <br>
+                            saudável.
+                        </p>
+
+                        <span>
+                            Preço: R$ 200,00
+                        </span>
+
+                        <span>
+                            Tempo: 3h
+                        </span>
+
+                        <button
+                            type="button"
+                            class="btn-servico"
+                            data-nome="Progressiva + Hidratação"
+                            data-preco="200.00"
+                            data-tempo="3h">
+
+                            Selecionar
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <aside class="resumo">
+
+                <h2>
+                    Resumo do atendimento
+                </h2>
+
+
+                <div class="resumo-item">
+
+                    <div class="resumo-icone">
+                        <i class="fa-solid fa-scissors"></i>
+                    </div>
+
+                    <div class="resumo-texto">
+
+                        <span>
+                            Serviço
+                        </span>
+
+                        <strong id="resumoServico">
+                            Não selecionado
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <div class="resumo-item">
+
+                    <div class="resumo-icone">
+                        <i class="fa-solid fa-people-group"></i>
+                    </div>
+
+                    <div class="resumo-texto">
+
+                        <span>
+                            Profissional
+                        </span>
+
+                        <strong>
+                            Não selecionado
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <div class="resumo-item">
+
+                    <div class="resumo-icone">
+                        <i class="fa-regular fa-calendar"></i>
+                    </div>
+
+                    <div class="resumo-texto">
+
+                        <span>
+                            Data e horário
+                        </span>
+
+                        <strong>
+                            Não selecionado
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <div class="total">
+
+                    <span class="titulo-total">
+                        Total do atendimento
+                    </span>
+
+                    <div class="valor">
+
+                        <strong id="valorTotal">
+                            R$ 0,00
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <a href="profissionais.html"
+                    class="btn-continuar">
+
+                    <span>
+                        Continuar
+                    </span>
+
+                    <span>
+                        ➜
+                    </span>
+
+                </a>
+
+            </aside>
+
+        </section>
+
+    </main>
+
+
+    <script>
+
+        const botoesServicos =
+            document.querySelectorAll(".btn-servico");
+
+
+        async function verificarPedido() {
+
+            try {
+
+                const resposta = await fetch(
+                    "/api/pedidos/meu-pedido",
+                    {
+                        method: "GET",
+                        credentials: "include"
+                    }
+                );
+
+                if (resposta.status === 401) {
+
+                    window.location.href = "login_cliente.html";
+                    return null;
+
+                }
+
+                if (resposta.status === 404) {
+
+                    return null;
+
+                }
+
+                if (!resposta.ok) {
+
+                    return null;
+
+                }
+
+                return await resposta.json();
+
+            } catch (erro) {
+
+                console.error(
+                    "Erro ao consultar pedido:",
+                    erro
+                );
+
+                return null;
+
+            }
+
+        }
+
+
+        async function atualizarTela() {
+
+            const pedido = await verificarPedido();
+
+            if (!pedido) {
+
+                document.getElementById(
+                    "resumoServico"
+                ).textContent = "Não selecionado";
+
+                document.getElementById(
+                    "valorTotal"
+                ).textContent = "R$ 0,00";
+
+                return;
+
+            }
+
+
+            if (
+                pedido.servicos &&
+                pedido.servicos.length > 0
+            ) {
+
+                const nomes = pedido.servicos.map(
+                    function (servico) {
+                        return servico.nome;
+                    }
+                );
+
+                document.getElementById(
+                    "resumoServico"
+                ).textContent = nomes.join(", ");
+
+            }
+
+
+            let total = 0;
+
+
+            if (pedido.combo) {
+
+                total = Number(pedido.combo.preco);
+
+            } else if (
+                pedido.servicos &&
+                pedido.servicos.length > 0
+            ) {
+
+                total = pedido.servicos.reduce(
+                    function (soma, servico) {
+
+                        return soma + Number(servico.preco);
+
+                    },
+                    0
+                );
+
+            }
+
+
+            document.getElementById(
+                "valorTotal"
+            ).textContent =
+                total.toLocaleString(
+                    "pt-BR",
+                    {
+                        style: "currency",
+                        currency: "BRL"
+                    }
+                );
+
+
+            atualizarBotoes(pedido);
+
+        }
+
+
+        function atualizarBotoes(pedido) {
+
+            const servicosSelecionados =
+                pedido?.servicos || [];
+
+
+            botoesServicos.forEach(
+                function (botao) {
+
+                    const nome =
+                        botao.dataset.nome;
+
+
+                    const selecionado =
+                        servicosSelecionados.some(
+                            function (servico) {
+
+                                return servico.nome === nome;
+
+                            }
+                        );
+
+
+                    if (selecionado) {
+
+                        botao.textContent =
+                            "Selecionado";
+
+                        botao.classList.add(
+                            "selecionado-btn"
+                        );
+
+                    } else {
+
+                        botao.textContent =
+                            "Selecionar";
+
+                        botao.classList.remove(
+                            "selecionado-btn"
+                        );
+
+                    }
+
+                }
+            );
+
+        }
+
+
+        async function selecionarServico(botao) {
+
+            const nome =
+                botao.dataset.nome;
+
+
+            botao.disabled = true;
+
+            botao.textContent =
+                "Adicionando...";
+
+
+            try {
+
+                const resposta = await fetch(
+                    "/api/pedidos/servico",
+                    {
+                        method: "POST",
+
+                        headers: {
+                            "Content-Type":
+                                "application/json"
+                        },
+
+                        credentials: "include",
+
+                        body: JSON.stringify({
+                            nomeServico: nome
+                        })
+                    }
+                );
+
+
+                const dados =
+                    await resposta.json();
+
+
+                if (resposta.status === 401) {
+
+                    alert(
+                        "Faça login para selecionar um serviço."
+                    );
+
+                    window.location.href =
+                        "login_cliente.html";
+
+                    return;
+
+                }
+
+
+                if (!resposta.ok) {
+
+                    alert(
+                        dados.mensagem ||
+                        "Não foi possível adicionar o serviço."
+                    );
+
+                    return;
+
+                }
+
+
+                await atualizarTela();
+
+
+                window.location.href =
+                    "profissionais.html";
+
+
+            } catch (erro) {
+
+                console.error(
+                    "Erro ao adicionar serviço:",
+                    erro
+                );
+
+                alert(
+                    "Erro ao conectar com o servidor."
+                );
+
+            } finally {
+
+                botao.disabled = false;
+
+            }
+
+        }
+
+
+        botoesServicos.forEach(
+            function (botao) {
+
+                botao.addEventListener(
+                    "click",
+                    function () {
+
+                        selecionarServico(this);
+
+                    }
+                );
+
+            }
+        );
+
+
+        atualizarTela();
+
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <title>Cadastro de Clientes</title>
+
+    <link rel="stylesheet"
+        href="style.css">
+
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+</head>
+
+
+<body>
+
+    <aside class="sidebar">
+
+
+        <div class="logo-area">
+
+            <img
+                src="imagens/logo_belleza.png"
+                alt="Belleza"
+                class="logo-belleza">
+
+        </div>
+
+
+        <div class="linha-logo"></div>
+
+        <nav class="menu">
+
+
+            <a href="#"
+                class="menu-item ativo">
+
+                <i class="fa-solid fa-house"></i>
+
+                <span>Início</span>
+
+            </a>
+
+
+            <a href="#"
+                class="menu-item">
+
+                <i class="fa-regular fa-calendar"></i>
+
+                <span>Meus agendamentos</span>
+
+            </a>
+
+
+            <a href="#"
+                class="menu-item">
+
+                <i class="fa-solid fa-scissors"></i>
+
+                <span>Serviços</span>
+
+            </a>
+
+
+            <a href="#"
+                class="menu-item">
+
+                <i class="fa-solid fa-users"></i>
+
+                <span>Profissionais</span>
+
+            </a>
+
+
+            <a href="#"
+                class="menu-item">
+
+                <i class="fa-solid fa-tags"></i>
+
+                <span>Promoções</span>
+
+            </a>
+
+
+            <a href="#"
+                class="menu-item">
+
+                <i class="fa-regular fa-star"></i>
+
+                <span>Avaliações</span>
+
+            </a>
+
+
+            <a href="#"
+                class="menu-item">
+
+                <i class="fa-solid fa-circle-user"></i>
+
+                <span>Minha Conta</span>
+
+            </a>
+
+
+            <a href="#"
+                class="menu-item">
+
+                <i class="fa-regular fa-circle-question"></i>
+
+                <span>Ajuda</span>
+
+            </a>
+
+
+            <a href="#"
+                class="menu-item sair">
+
+                <i class="fa-solid fa-arrow-right-from-bracket"></i>
+
+                <span>Sair</span>
+
+            </a>
+
+
+        </nav>
+
+    </aside>
+
+    <main class="conteudo">
+
+
+        <h1>Cadastro de Clientes</h1>
+
+        <section class="cadastro">
+
+
+            <div class="titulo-secao">
+
+                <div class="icone-titulo">
+
+                    <i class="fa-solid fa-user"></i>
+
+                </div>
+
+                <span>Cadastrar Clientes</span>
+
+            </div>
+
+
+
+            <div class="formulario">
+
+                <div class="campo">
+
+                    <label for="nome">
+
+                        Nome Completo<span>*</span>
+
+                    </label>
+
+                    <input
+                        type="text"
+                        id="nome">
+
+                </div>
+
+                <div class="campo">
+
+                    <label for="email">
+
+                        E-mail<span>*</span>
+
+                    </label>
+
+                    <input
+                        type="email"
+                        id="email">
+
+                </div>
+
+                <div class="campo">
+
+                    <label for="telefone">
+
+                        Telefone<span>*</span>
+
+                    </label>
+
+                    <input
+                        type="text"
+                        id="telefone">
+
+                </div>
+
+                <div class="campo">
+
+                    <label for="senha">
+
+                        Senha<span>*</span>
+
+                    </label>
+
+                    <input
+                        type="password"
+                        id="senha">
+
+                </div>
+
+                <button
+                    class="btn-cadastrar"
+                    onclick="cadastrarCliente()">
+
+                    <i class="fa-regular fa-user"></i>
+
+                    Cadastrar Cliente
+
+                </button>
+
+
+            </div>
+
+        </section>
+
+        <section class="clientes">
+
+
+            <div class="titulo-tabela">
+
+
+                <div class="icone-clientes">
+
+                    <i class="fa-solid fa-users"></i>
+
+                </div>
+
+
+                <span>
+                    Clientes Cadastrados
+                </span>
+
+
+            </div>
+
+
+
+            <div class="tabela-container">
+
+
+                <table>
+
+
+                    <thead>
+
+                        <tr>
+
+                            <th>ID</th>
+
+                            <th>Nome</th>
+
+                            <th>Telefone</th>
+
+                            <th>E-mail</th>
+
+                        </tr>
+
+                    </thead>
+
+
+
+                    <tbody id="listaClientes">
+
+                    </tbody>
+
+
+                </table>
+
+
+            </div>
+
+
+        </section>
+
+
+    </main>
+
+    <script>
+
+
+        const API = "/api/clientes";
+
+        async function cadastrarCliente() {
+
+
+            const nome =
+                document
+                    .getElementById("nome")
+                    .value
+                    .trim();
+
+
+            const telefone =
+                document
+                    .getElementById("telefone")
+                    .value
+                    .trim();
+
+
+            const email =
+                document
+                    .getElementById("email")
+                    .value
+                    .trim();
+
+
+            const senha =
+                document
+                    .getElementById("senha")
+                    .value;
+
+
+
+            const nomeValido =
+                /^[A-Za-zÀ-ÿ\s]+$/;
+
+            if (nome === "") {
+
+                alert(
+                    "Digite o nome do cliente!"
+                );
+
+                return;
+
+            }
+
+
+
+            if (!nomeValido.test(nome)) {
+
+                alert(
+                    "O nome deve conter apenas letras e espaços. " +
+                    "Não pode conter números."
+                );
+
+                return;
+
+            }
+
+            if (!/^\d+$/.test(telefone)) {
+
+                alert(
+                    "O telefone deve conter apenas números."
+                );
+
+                return;
+
+            }
+
+
+
+            if (telefone.length < 11) {
+
+                alert(
+                    "O telefone deve ter no mínimo 11 números."
+                );
+
+                return;
+
+            }
+
+            if (
+                !email.includes("@") ||
+                !email.includes(".")
+            ) {
+
+                alert(
+                    "Digite um email válido contendo @ e ."
+                );
+
+                return;
+
+            }
+
+
+
+            try {
+
+
+                const resposta =
+                    await fetch(API, {
+
+                        method: "POST",
+
+                        headers: {
+
+                            "Content-Type":
+                                "application/json"
+
+                        },
+
+
+                        body: JSON.stringify({
+
+                            nome: nome,
+
+                            telefone: telefone,
+
+                            email: email,
+
+                            senha: senha
+
+                        })
+
+                    });
+
+
+
+                if (!resposta.ok) {
+
+
+                    const erro =
+                        await resposta.text();
+
+
+
+                    console.error(
+                        "STATUS:",
+                        resposta.status
+                    );
+
+
+
+                    console.error(
+                        "ERRO DO SERVIDOR:",
+                        erro
+                    );
+
+
+
+                    alert(
+
+                        "Erro ao cadastrar cliente!\n\n" +
+
+                        "Código: " +
+                        resposta.status +
+
+                        "\n\n" +
+
+                        "Detalhes: " +
+                        erro
+
+                    );
+
+
+                    return;
+
+                }
+
+
+
+                alert(
+                    "Cliente cadastrado com sucesso!"
+                );
+
+                document
+                    .getElementById("nome")
+                    .value = "";
+
+
+                document
+                    .getElementById("telefone")
+                    .value = "";
+
+
+                document
+                    .getElementById("email")
+                    .value = "";
+
+
+                document
+                    .getElementById("senha")
+                    .value = "";
+
+                carregarClientes();
+
+
+            }
+
+
+            catch (erro) {
+
+
+                console.error(
+                    "Erro:",
+                    erro
+                );
+
+
+                alert(
+                    "Não foi possível conectar com o servidor."
+                );
+
+            }
+
+        }
+
+        async function carregarClientes() {
+
+
+            try {
+
+
+                const resposta =
+                    await fetch(API);
+
+
+
+                if (!resposta.ok) {
+
+
+                    const erro =
+                        await resposta.text();
+
+
+
+                    console.error(
+                        "STATUS:",
+                        resposta.status
+                    );
+
+
+                    console.error(
+                        "ERRO DO SERVIDOR:",
+                        erro
+                    );
+
+
+                    alert(
+
+                        "Erro ao carregar clientes!\n\n" +
+
+                        "Código: " +
+                        resposta.status +
+
+                        "\n\n" +
+
+                        "Detalhes: " +
+                        erro
+
+                    );
+
+
+                    return;
+
+                }
+
+
+
+                const clientes =
+                    await resposta.json();
+
+
+
+                console.log(
+                    "Clientes recebidos:",
+                    clientes
+                );
+
+
+
+                const tabela =
+                    document.getElementById(
+                        "listaClientes"
+                    );
+
+
+
+                tabela.innerHTML = "";
+
+
+
+                clientes.forEach(
+                    cliente => {
+
+
+                        const linha =
+                            document.createElement("tr");
+
+
+
+                        linha.innerHTML = `
+
+                            <td>
+                                ${cliente.id}
+                            </td>
+
+                            <td>
+                                ${cliente.nome}
+                            </td>
+
+                            <td>
+                                ${cliente.telefone}
+                            </td>
+
+                            <td>
+                                ${cliente.email}
+                            </td>
+
+                        `;
+
+
+
+                        tabela.appendChild(
+                            linha
+                        );
+
+                    }
+                );
+
+                if (clientes.length === 0) {
+
+
+                    tabela.innerHTML = `
+
+                        <tr>
+
+                            <td
+                                colspan="4"
+                                class="nenhum">
+
+                                Nenhum cliente cadastrado.
+
+                            </td>
+
+                        </tr>
+
+                    `;
+
+                }
+
+
+            }
+
+
+            catch (erro) {
+
+
+                console.error(
+                    "Erro ao carregar clientes:",
+                    erro
+                );
+
+
+                alert(
+                    "Não foi possível carregar os clientes."
+                );
+
+            }
+
+        }
+
+        carregarClientes();
+
+
+    </script>
+
+
+</body>
+
+</html>

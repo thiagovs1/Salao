@@ -1,0 +1,1328 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <title>Profissionais - Belleza</title>
+
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <link
+        rel="stylesheet"
+        href="profissionais.css">
+
+</head>
+
+<body>
+
+    <aside class="sidebar">
+
+        <div class="logo-area">
+
+            <img
+                src="imagens/logo_belleza.png"
+                alt="Belleza"
+                class="logo-belleza">
+
+        </div>
+
+        <nav class="menu">
+
+            <a href="tela_inicial.html" class="menu-item">
+
+                <i class="fa-solid fa-house"></i>
+
+                <span>Início</span>
+
+            </a>
+
+            <a href="servicos.html" class="menu-item">
+
+                <i class="fa-solid fa-scissors"></i>
+
+                <span>Serviços</span>
+
+            </a>
+
+            <a href="profissionais.html" class="menu-item ativo">
+
+                <i class="fa-solid fa-users"></i>
+
+                <span>Profissionais</span>
+
+            </a>
+
+            <a href="agendar_horario.html" class="menu-item">
+
+                <i class="fa-regular fa-calendar"></i>
+
+                <span>Agendar horário</span>
+
+            </a>
+
+            <a href="meus_agendamentos.html" class="menu-item">
+
+                <i class="fa-regular fa-calendar"></i>
+
+                <span>Meus agendamentos</span>
+
+            </a>
+
+            <a href="#" class="menu-item">
+
+                <i class="fa-solid fa-tags"></i>
+
+                <span>Promoções</span>
+
+            </a>
+
+            <a href="#" class="menu-item">
+
+                <i class="fa-regular fa-star"></i>
+
+                <span>Avaliações</span>
+
+            </a>
+
+            <a href="#" class="menu-item">
+
+                <i class="fa-regular fa-circle-user"></i>
+
+                <span>Minha Conta</span>
+
+            </a>
+
+            <a href="#" class="menu-item sair">
+
+                <i class="fa-solid fa-arrow-right-from-bracket"></i>
+
+                <span>Sair</span>
+
+            </a>
+
+        </nav>
+
+    </aside>
+
+    <main class="conteudo">
+
+        <h1 class="titulo-pagina">
+            Escolha o profissional
+        </h1>
+
+        <div class="area-principal">
+
+            <div class="parte-esquerda">
+
+                <section class="servicos-selecionados">
+
+                    <h2>
+                        Serviços selecionados
+                    </h2>
+
+                    <div
+                        class="servicos-escolhidos"
+                        id="servicosEscolhidos">
+                    </div>
+
+                    <a
+                        href="servicos.html"
+                        class="btn-mais-servicos">
+
+                        adicionar mais serviços
+
+                    </a>
+
+                </section>
+
+                <section class="area-profissionais">
+
+                    <h2>
+                        Nossos profissionais
+                    </h2>
+
+                    <div class="filtros">
+
+                        <div class="campo-busca">
+
+                            <i class="fa-solid fa-magnifying-glass"></i>
+
+                            <input
+                                type="text"
+                                id="campoBusca"
+                                placeholder="Buscar profissional pelo nome...">
+
+                        </div>
+
+                        <select id="filtroProfissionais">
+
+                            <option value="todos">
+                                Todos os profissionais
+                            </option>
+
+                            <option value="Camila Ferreira">
+                                Camila Ferreira
+                            </option>
+
+                            <option value="Betriz Costa">
+                                Betriz Costa
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                    <div
+                        class="lista-profissionais"
+                        id="listaProfissionais">
+
+                        <div
+                            class="profissional"
+                            data-id="1"
+                            data-nome="Camila Ferreira">
+
+                            <div class="dados-profissional">
+
+                                <img
+                                    src="imagens/camila.png"
+                                    alt="Camila Ferreira">
+
+                                <div class="informacoes">
+
+                                    <h3>
+                                        Camila Ferreira
+                                    </h3>
+
+                                    <span class="profissao">
+                                        Cabeleireira
+                                    </span>
+
+                                    <div class="avaliacao">
+
+                                        <span class="estrela">
+                                            ★
+                                        </span>
+
+                                        <strong>
+                                            4.9
+                                        </strong>
+
+                                        <small>
+                                            (128 avaliações)
+                                        </small>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                            <div class="especialidades">
+
+                                <span>Corte</span>
+                                <span>Escova</span>
+                                <span>Coloração</span>
+                                <span>Mecha</span>
+                                <span>Tratamento</span>
+                                <span>Hidratação</span>
+                                <span>Penteado</span>
+                                <span>Maquiagem</span>
+
+                            </div>
+
+                            <button
+                                type="button"
+                                class="btn-profissional"
+                                onclick="selecionarProfissional(1, 'Camila Ferreira', this)">
+
+                                Selecionar
+
+                            </button>
+
+                        </div>
+
+                        <div
+                            class="profissional"
+                            data-id="2"
+                            data-nome="Betriz Costa">
+
+                            <div class="dados-profissional">
+
+                                <img
+                                    src="imagens/betriz.png"
+                                    alt="Betriz Costa">
+
+                                <div class="informacoes">
+
+                                    <h3>
+                                        Betriz Costa
+                                    </h3>
+
+                                    <span class="profissao">
+                                        Cabeleireira
+                                    </span>
+
+                                    <div class="avaliacao">
+
+                                        <span class="estrela">
+                                            ★
+                                        </span>
+
+                                        <strong>
+                                            4.8
+                                        </strong>
+
+                                        <small>
+                                            (48 avaliações)
+                                        </small>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                            <div class="especialidades">
+
+                                <span>Corte</span>
+                                <span>Escova</span>
+                                <span>Coloração</span>
+                                <span>Manicure</span>
+                                <span>Pedicure</span>
+
+                            </div>
+
+                            <button
+                                type="button"
+                                class="btn-profissional"
+                                onclick="selecionarProfissional(2, 'Betriz Costa', this)">
+
+                                Selecionar
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+            </div>
+
+            <aside class="resumo">
+
+                <h2>
+                    Resumo do atendimento
+                </h2>
+
+                <div class="resumo-item">
+
+                    <div class="resumo-icone">
+
+                        <i class="fa-solid fa-scissors"></i>
+
+                    </div>
+
+                    <div class="resumo-texto">
+
+                        <span>
+                            Serviço
+                        </span>
+
+                        <strong id="servicoResumo">
+                            Selecionado
+                        </strong>
+
+                    </div>
+
+                    <span class="seta">
+                        ›
+                    </span>
+
+                </div>
+
+                <div class="resumo-item">
+
+                    <div class="resumo-icone">
+
+                        <i class="fa-solid fa-people-group"></i>
+
+                    </div>
+
+                    <div class="resumo-texto">
+
+                        <span>
+                            Profissional
+                        </span>
+
+                        <strong id="profissionalResumo">
+                            Não selecionado
+                        </strong>
+
+                    </div>
+
+                    <span class="seta">
+                        ›
+                    </span>
+
+                </div>
+
+                <div class="resumo-item">
+
+                    <div class="resumo-icone">
+
+                        <i class="fa-regular fa-calendar"></i>
+
+                    </div>
+
+                    <div class="resumo-texto">
+
+                        <span>
+                            Data e horário
+                        </span>
+
+                        <strong id="dataHorarioResumo">
+                            Não selecionado
+                        </strong>
+
+                    </div>
+
+                    <span class="seta">
+                        ›
+                    </span>
+
+                </div>
+
+                <div class="total">
+
+                    <span class="titulo-total">
+                        Total do atendimento
+                    </span>
+
+                    <strong
+                        class="valor-total"
+                        id="valorTotal">
+
+                        R$ 0,00
+
+                    </strong>
+
+                </div>
+
+                <button
+                    type="button"
+                    class="btn-continuar"
+                    onclick="continuar()">
+
+                    continuar
+
+                    <span>
+                        ➜
+                    </span>
+
+                </button>
+
+            </aside>
+
+        </div>
+
+    </main>
+
+    <div
+        id="mensagem-overlay"
+        class="mensagem-overlay">
+
+        <div class="mensagem-caixa">
+
+            <div class="mensagem-coracao">
+                ♥
+            </div>
+
+            <h2 id="mensagem-titulo">
+                Profissional selecionada!
+            </h2>
+
+            <p id="mensagem-texto">
+                Profissional selecionada com sucesso.
+            </p>
+
+            <button
+                type="button"
+                onclick="fecharMensagem()">
+
+                OK
+
+            </button>
+
+        </div>
+
+    </div>
+
+    <script>
+
+        let pedidoAtual = null;
+
+        let servicosSelecionados = [];
+
+        let profissionalSelecionado = null;
+
+
+        async function carregarPedido() {
+
+            try {
+
+                const resposta = await fetch(
+                    "/api/pedidos/meu-pedido",
+                    {
+                        method: "GET",
+                        credentials: "include"
+                    }
+                );
+
+                const dados = await resposta.json();
+
+                if (resposta.status === 401) {
+
+                    alert(
+                        "Sua sessão expirou. Faça login novamente."
+                    );
+
+                    window.location.href =
+                        "login_cliente.html";
+
+                    return;
+
+                }
+
+                if (resposta.status === 404) {
+
+                    alert(
+                        "Você ainda não selecionou nenhum serviço."
+                    );
+
+                    window.location.href =
+                        "servicos.html";
+
+                    return;
+
+                }
+
+                if (!resposta.ok) {
+
+                    alert(
+                        dados.mensagem ||
+                        "Não foi possível carregar seu pedido."
+                    );
+
+                    return;
+
+                }
+
+                pedidoAtual = dados;
+
+                servicosSelecionados =
+                    dados.servicos || [];
+
+                renderizarServicos();
+
+                atualizarResumo();
+
+                filtrarProfissionais();
+
+            }
+            catch (erro) {
+
+                console.error(
+                    "Erro ao carregar pedido:",
+                    erro
+                );
+
+                alert(
+                    "Erro ao conectar com o servidor."
+                );
+
+            }
+
+        }
+
+
+        function renderizarServicos() {
+
+            const container =
+                document.getElementById(
+                    "servicosEscolhidos"
+                );
+
+            if (!container) {
+                return;
+            }
+
+            container.innerHTML = "";
+
+            if (
+                !servicosSelecionados ||
+                servicosSelecionados.length === 0
+            ) {
+
+                container.innerHTML = `
+                    <p>
+                        Nenhum serviço selecionado.
+                    </p>
+                `;
+
+                return;
+
+            }
+
+            servicosSelecionados.forEach(
+                function(servico) {
+
+                    const card =
+                        document.createElement("div");
+
+                    card.className =
+                        "servico-card";
+
+                    card.innerHTML = `
+
+                        <h3>
+                            ${servico.nome}
+                        </h3>
+
+                        <p>
+                            ${servico.categoria}
+                        </p>
+
+                        <p>
+                            ${servico.duracaoMinutos} minutos
+                        </p>
+
+                        <p>
+                            R$ ${formatarPreco(servico.preco)}
+                        </p>
+
+                    `;
+
+                    container.appendChild(card);
+
+                }
+            );
+
+        }
+
+
+        function formatarPreco(valor) {
+
+            return Number(valor || 0)
+                .toFixed(2)
+                .replace(".", ",");
+
+        }
+
+
+        function calcularTotal() {
+
+            const combo =
+                pedidoAtual?.combo;
+
+            const servicos =
+                pedidoAtual?.servicos || [];
+
+            let total = 0;
+
+            if (combo) {
+
+                total =
+                    Number(combo.preco || 0);
+
+                servicos.forEach(
+                    function(servico) {
+
+                        if (!servico.doCombo) {
+
+                            total +=
+                                Number(
+                                    servico.preco || 0
+                                );
+
+                        }
+
+                    }
+                );
+
+            }
+            else {
+
+                servicos.forEach(
+                    function(servico) {
+
+                        total +=
+                            Number(
+                                servico.preco || 0
+                            );
+
+                    }
+                );
+
+            }
+
+            return total;
+
+        }
+
+
+        function atualizarResumo() {
+
+            if (!pedidoAtual) {
+                return;
+            }
+
+            const combo =
+                pedidoAtual.combo;
+
+            const servicos =
+                pedidoAtual.servicos || [];
+
+
+            const servicoResumo =
+                document.getElementById(
+                    "servicoResumo"
+                );
+
+            if (servicoResumo) {
+
+                if (combo) {
+
+                    servicoResumo.textContent =
+                        combo.nome;
+
+                }
+                else if (servicos.length === 1) {
+
+                    servicoResumo.textContent =
+                        servicos[0].nome;
+
+                }
+                else if (servicos.length > 1) {
+
+                    servicoResumo.textContent =
+                        servicos.length +
+                        " serviços selecionados";
+
+                }
+                else {
+
+                    servicoResumo.textContent =
+                        "Não selecionado";
+
+                }
+
+            }
+
+
+            const valorTotal =
+                document.getElementById(
+                    "valorTotal"
+                );
+
+            if (valorTotal) {
+
+                valorTotal.textContent =
+                    calcularTotal().toLocaleString(
+                        "pt-BR",
+                        {
+                            style: "currency",
+                            currency: "BRL"
+                        }
+                    );
+
+            }
+
+
+            const profissionalResumo =
+                document.getElementById(
+                    "profissionalResumo"
+                );
+
+            if (profissionalResumo) {
+
+                if (profissionalSelecionado) {
+
+                    profissionalResumo.textContent =
+                        profissionalSelecionado.nome;
+
+                }
+                else {
+
+                    profissionalResumo.textContent =
+                        "Não selecionado";
+
+                }
+
+            }
+
+        }
+
+
+        function filtrarProfissionais() {
+
+            if (
+                !servicosSelecionados ||
+                servicosSelecionados.length === 0
+            ) {
+
+                return;
+
+            }
+
+            const categorias =
+                servicosSelecionados.map(
+                    function(servico) {
+
+                        return String(
+                            servico.categoria || ""
+                        )
+                        .trim()
+                        .toLowerCase();
+
+                    }
+                );
+
+            const cards =
+                document.querySelectorAll(
+                    ".profissional"
+                );
+
+            cards.forEach(
+                function(card) {
+
+                    const especialidades =
+                        Array.from(
+                            card.querySelectorAll(
+                                ".especialidades span"
+                            )
+                        ).map(
+                            function(span) {
+
+                                return span.textContent
+                                    .trim()
+                                    .toLowerCase();
+
+                            }
+                        );
+
+                    let podeAtender = false;
+
+                    categorias.forEach(
+                        function(categoria) {
+
+                            if (
+                                categoria === "cabelo"
+                            ) {
+
+                                const possuiCabelo =
+                                    especialidades.some(
+                                        function(item) {
+
+                                            return [
+                                                "corte",
+                                                "escova",
+                                                "coloração",
+                                                "mecha",
+                                                "tratamento",
+                                                "hidratação",
+                                                "penteado"
+                                            ].includes(item);
+
+                                        }
+                                    );
+
+                                if (possuiCabelo) {
+                                    podeAtender = true;
+                                }
+
+                            }
+
+                            if (
+                                categoria === "maquiagem" &&
+                                especialidades.includes(
+                                    "maquiagem"
+                                )
+                            ) {
+
+                                podeAtender = true;
+
+                            }
+
+                            if (
+                                categoria === "manicure" &&
+                                especialidades.includes(
+                                    "manicure"
+                                )
+                            ) {
+
+                                podeAtender = true;
+
+                            }
+
+                            if (
+                                categoria === "pedicure" &&
+                                especialidades.includes(
+                                    "pedicure"
+                                )
+                            ) {
+
+                                podeAtender = true;
+
+                            }
+
+                            if (
+                                categoria === "sobrancelha" &&
+                                especialidades.includes(
+                                    "sobrancelha"
+                                )
+                            ) {
+
+                                podeAtender = true;
+
+                            }
+
+                        }
+                    );
+
+                    card.style.display =
+                        podeAtender
+                            ? ""
+                            : "none";
+
+                }
+            );
+
+        }
+
+
+        function selecionarProfissional(
+            id,
+            nome,
+            botao
+        ) {
+
+            if (!id || !nome) {
+                return;
+            }
+
+            profissionalSelecionado = {
+
+                id: Number(id),
+
+                nome: nome
+
+            };
+
+
+            localStorage.setItem(
+                "profissionalSelecionado",
+                JSON.stringify(
+                    profissionalSelecionado
+                )
+            );
+
+
+            document
+                .querySelectorAll(
+                    ".btn-profissional"
+                )
+                .forEach(
+                    function(btn) {
+
+                        btn.classList.remove(
+                            "selecionado"
+                        );
+
+                        btn.textContent =
+                            "Selecionar";
+
+                    }
+                );
+
+
+            if (botao) {
+
+                botao.classList.add(
+                    "selecionado"
+                );
+
+                botao.textContent =
+                    "Selecionado";
+
+            }
+
+
+            atualizarResumo();
+
+
+            mostrarMensagem(
+                "Profissional selecionada!",
+                nome +
+                " foi selecionada com sucesso."
+            );
+
+        }
+
+
+        function mostrarMensagem(
+            titulo,
+            texto
+        ) {
+
+            const overlay =
+                document.getElementById(
+                    "mensagem-overlay"
+                );
+
+            const tituloElemento =
+                document.getElementById(
+                    "mensagem-titulo"
+                );
+
+            const textoElemento =
+                document.getElementById(
+                    "mensagem-texto"
+                );
+
+            if (tituloElemento) {
+
+                tituloElemento.textContent =
+                    titulo;
+
+            }
+
+            if (textoElemento) {
+
+                textoElemento.textContent =
+                    texto;
+
+            }
+
+            if (overlay) {
+
+                overlay.classList.add(
+                    "ativo"
+                );
+
+            }
+
+        }
+
+
+        function fecharMensagem() {
+
+            const overlay =
+                document.getElementById(
+                    "mensagem-overlay"
+                );
+
+            if (overlay) {
+
+                overlay.classList.remove(
+                    "ativo"
+                );
+
+            }
+
+        }
+
+
+        function configurarBusca() {
+
+            const campoBusca =
+                document.getElementById(
+                    "campoBusca"
+                );
+
+            if (!campoBusca) {
+                return;
+            }
+
+            campoBusca.addEventListener(
+                "input",
+                function() {
+
+                    const busca =
+                        campoBusca.value
+                            .trim()
+                            .toLowerCase();
+
+                    const cards =
+                        document.querySelectorAll(
+                            ".profissional"
+                        );
+
+                    cards.forEach(
+                        function(card) {
+
+                            const nome =
+                                card.dataset.nome
+                                    .toLowerCase();
+
+                            if (
+                                nome.includes(busca)
+                            ) {
+
+                                card.style.display =
+                                    "";
+
+                            }
+                            else {
+
+                                card.style.display =
+                                    "none";
+
+                            }
+
+                        }
+                    );
+
+                }
+            );
+
+        }
+
+
+        function configurarFiltro() {
+
+            const filtro =
+                document.getElementById(
+                    "filtroProfissionais"
+                );
+
+            if (!filtro) {
+                return;
+            }
+
+            filtro.addEventListener(
+                "change",
+                function() {
+
+                    const valor =
+                        filtro.value;
+
+                    const cards =
+                        document.querySelectorAll(
+                            ".profissional"
+                        );
+
+                    cards.forEach(
+                        function(card) {
+
+                            const nome =
+                                card.dataset.nome;
+
+                            if (
+                                valor === "todos"
+                            ) {
+
+                                card.style.display =
+                                    "";
+
+                                return;
+
+                            }
+
+                            card.style.display =
+                                nome === valor
+                                    ? ""
+                                    : "none";
+
+                        }
+                    );
+
+                }
+            );
+
+        }
+
+
+        function continuar() {
+
+            if (!pedidoAtual) {
+
+                alert(
+                    "O pedido ainda não foi carregado."
+                );
+
+                return;
+
+            }
+
+
+            if (!profissionalSelecionado) {
+
+                alert(
+                    "Selecione um profissional para continuar."
+                );
+
+                return;
+
+            }
+
+
+            const agendamento =
+                {
+
+                    profissionalId:
+                        Number(
+                            profissionalSelecionado.id
+                        ),
+
+                    profissionalNome:
+                        profissionalSelecionado.nome,
+
+                    pedidoId:
+                        pedidoAtual.id,
+
+                    servicos:
+                        servicosSelecionados,
+
+                    total:
+                        calcularTotal()
+
+                };
+
+
+            localStorage.setItem(
+                "agendamentoSelecionado",
+                JSON.stringify(
+                    agendamento
+                )
+            );
+
+
+            window.location.href =
+                "agendar_horario.html";
+
+        }
+
+
+        function carregarProfissionalAnterior() {
+
+            const salvo =
+                localStorage.getItem(
+                    "profissionalSelecionado"
+                );
+
+            if (!salvo) {
+                return;
+            }
+
+
+            try {
+
+                profissionalSelecionado =
+                    JSON.parse(salvo);
+
+            }
+            catch (erro) {
+
+                localStorage.removeItem(
+                    "profissionalSelecionado"
+                );
+
+                profissionalSelecionado =
+                    null;
+
+                return;
+
+            }
+
+
+            if (
+                !profissionalSelecionado ||
+                !profissionalSelecionado.id
+            ) {
+
+                profissionalSelecionado =
+                    null;
+
+                return;
+
+            }
+
+
+            const cards =
+                document.querySelectorAll(
+                    ".profissional"
+                );
+
+
+            cards.forEach(
+                function(card) {
+
+                    const id =
+                        Number(
+                            card.dataset.id
+                        );
+
+
+                    if (
+                        id ===
+                        Number(
+                            profissionalSelecionado.id
+                        )
+                    ) {
+
+                        const botao =
+                            card.querySelector(
+                                ".btn-profissional"
+                            );
+
+
+                        if (botao) {
+
+                            botao.classList.add(
+                                "selecionado"
+                            );
+
+                            botao.textContent =
+                                "Selecionado";
+
+                        }
+
+                    }
+
+                }
+            );
+
+
+            atualizarResumo();
+
+        }
+
+
+        document.addEventListener(
+            "DOMContentLoaded",
+            async function() {
+
+                await carregarPedido();
+
+                configurarBusca();
+
+                configurarFiltro();
+
+                carregarProfissionalAnterior();
+
+            }
+        );
+
+    </script>
+
+</body>
+
+</html>

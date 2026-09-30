@@ -1,0 +1,563 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    width: 100%;
+    min-height: 100vh;
+
+    background-color: #ffffff;
+
+    color: #30282a;
+
+    font-family: Georgia, "Times New Roman", serif;
+}
+
+.sidebar {
+    width: 190px;
+    min-height: 100vh;
+    background-image: url("imagens/menu_belleza.png");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    border-right: 1px solid #eadada;
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    overflow: hidden;
+}
+
+.sidebar::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(248, 238, 238, 0.72);
+    z-index: 0;
+}
+
+.logo-area,
+.linha-logo,
+.menu {
+    position: relative;
+    z-index: 1;
+}
+
+.logo-area {
+    width: 100%;
+    height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 15px 10px;
+}
+
+.logo-belleza {
+    width: 165px;
+    height: auto;
+    object-fit: contain;
+    display: block;
+}
+
+.linha-logo {
+    height: 4px;
+    width: 174px;
+    background: #8d3b5c;
+    margin: 0 auto 8px;
+}
+
+.menu {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.menu-item {
+    width: 100%;
+    height: 37px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding-left: 18px;
+    text-decoration: none;
+    color: #994e6a;
+    font-size: 14px;
+    transition: 0.2s;
+}
+
+.menu-item i {
+    width: 18px;
+    text-align: center;
+    font-size: 16px;
+}
+
+.menu-item:hover {
+    background: rgba(234, 214, 220, 0.90);
+}
+
+.menu-item.ativo {
+    background: #8f3d5e;
+    color: white;
+    border-radius: 0 4px 4px 0;
+}
+
+.menu-item.sair {
+    margin-top: 5px;
+}
+
+.conteudo {
+
+    margin-left: 213px;
+
+    padding-top: 21px;
+    padding-left: 9px;
+
+    display: flex;
+
+    align-items: flex-start;
+
+    gap: 20px;
+
+    width: 932px;
+}
+
+
+
+
+.coluna-esquerda {
+
+    width: 250px;
+
+    flex-shrink: 0;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 18px;
+}
+
+
+
+
+.promocao {
+
+    width: 250px;
+    height: 204px;
+
+    background-color: #8e3d61;
+
+    border-radius: 3px;
+
+    position: relative;
+
+    overflow: hidden;
+}
+
+
+/* TEXTO */
+
+.texto-promocao {
+
+    position: absolute;
+
+    top: 43px;
+    left: 7px;
+
+    width: 125px;
+
+    color: #ffffff;
+
+    z-index: 2;
+}
+
+
+.texto-promocao h2 {
+
+    font-size: 16px;
+
+    font-weight: 400;
+
+    margin-bottom: 10px;
+}
+
+
+.texto-promocao h1 {
+
+    font-size: 21px;
+
+    font-weight: 400;
+
+    margin-bottom: 5px;
+}
+
+
+.texto-promocao p {
+
+    font-size: 13px;
+
+    line-height: 17px;
+
+    font-weight: bold;
+}
+
+
+
+
+.promocao img {
+
+    position: absolute;
+
+    right: 0;
+    top: 0;
+
+    width: 133px;
+    height: 204px;
+
+    object-fit: cover;
+
+    object-position: center;
+}
+
+
+
+
+.botao-promocao {
+
+    position: absolute;
+
+    left: 60px;
+    bottom: 13px;
+
+    width: 119px;
+    height: 27px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 4px;
+
+    background-color: #f3d4da;
+
+    color: #91425f;
+
+    border-radius: 3px;
+
+    text-decoration: none;
+
+    font-size: 12px;
+
+    z-index: 3;
+}
+
+
+.botao-promocao:hover {
+
+    background-color: #ffffff;
+}
+
+
+
+
+.frase {
+
+    width: 250px;
+    height: 170px;
+
+    background-color: #f8eaea;
+
+    position: relative;
+
+    overflow: hidden;
+
+    text-align: center;
+
+    color: #91425f;
+
+    padding-top: 30px;
+}
+
+
+.frase::before {
+
+    content: "❧";
+
+    position: absolute;
+
+    left: -2px;
+    top: 18px;
+
+    font-size: 67px;
+
+    opacity: 0.55;
+
+    transform: rotate(-20deg);
+}
+
+
+.frase::after {
+
+    content: "❧";
+
+    position: absolute;
+
+    right: -3px;
+    bottom: -12px;
+
+    font-size: 67px;
+
+    opacity: 0.55;
+
+    transform: rotate(160deg);
+}
+
+
+.coracao {
+
+    display: block;
+
+    font-size: 25px;
+
+    margin-bottom: 8px;
+}
+
+
+.frase p {
+
+    font-size: 14px;
+
+    font-style: italic;
+
+    line-height: 22px;
+}
+
+
+
+.cortes {
+
+    width: 250px;
+    height: 187px;
+
+    background-color: #8e3d61;
+
+    border-radius: 3px;
+
+    overflow: hidden;
+
+    display: flex;
+
+    padding: 7px;
+}
+
+
+.cortes img {
+
+    width: 130px;
+    height: 173px;
+
+    object-fit: cover;
+
+    border-radius: 11px;
+}
+
+
+.texto-cortes {
+
+    padding-top: 17px;
+    padding-left: 7px;
+
+    color: #ffffff;
+}
+
+
+.texto-cortes h2 {
+
+    font-size: 15px;
+
+    font-weight: 400;
+
+    line-height: 21px;
+
+    margin-bottom: 17px;
+}
+
+
+.botao-cortes {
+
+    width: 103px;
+    height: 25px;
+
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+
+    background-color: #f3d4da;
+
+    color: #91425f;
+
+    border-radius: 3px;
+
+    text-decoration: none;
+
+    font-size: 12px;
+}
+
+
+
+
+.agendamentos {
+
+    width: 648px;
+    height: 313px;
+
+    background-color: #f8eaea;
+
+    border-radius: 3px;
+
+    padding: 11px;
+
+    position: relative;
+
+    flex-shrink: 0;
+}
+
+
+
+
+.agendamentos > h1 {
+
+    width: 100%;
+
+    text-align: center;
+
+    color: #91425f;
+
+    font-size: 21px;
+
+    font-weight: 400;
+
+    margin-bottom: 13px;
+}
+
+
+
+
+.filtros {
+
+    width: 100%;
+
+    display: flex;
+
+    gap: 9px;
+}
+
+
+.filtro {
+
+    width: 150px;
+    height: 39px;
+
+    border: none;
+
+    border-radius: 3px;
+
+    background-color: #8e3d61;
+
+    color: #ffffff;
+
+    font-family: Georgia, "Times New Roman", serif;
+
+    font-size: 15px;
+
+    cursor: pointer;
+}
+
+
+.filtro.todos {
+
+    background-color: #f1d5db;
+
+    color: #ffffff;
+
+    border: 1px solid #dfbbc4;
+}
+
+
+
+
+.sem-agendamento {
+
+    position: absolute;
+
+    top: 150px;
+
+    left: 0;
+
+    width: 100%;
+
+    text-align: center;
+
+    color: #91425f;
+}
+
+
+.sem-agendamento h2 {
+
+    font-size: 15px;
+
+    font-weight: 400;
+
+    margin-bottom: 9px;
+}
+
+
+.sem-agendamento p {
+
+    font-size: 13px;
+
+    margin-bottom: 20px;
+}
+
+
+
+
+.botao-agendar {
+
+    width: 150px;
+    height: 30px;
+
+    margin: 0 auto;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 8px;
+
+    background-color: #8e3d61;
+
+    color: #ffffff;
+
+    border-radius: 3px;
+
+    text-decoration: none;
+
+    font-size: 12px;
+
+    font-weight: bold;
+}
+
+
+.botao-agendar:hover {
+
+    background-color: #71314d;
+}
