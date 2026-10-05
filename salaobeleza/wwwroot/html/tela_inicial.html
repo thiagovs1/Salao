@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Início - Belleza</title>
+
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <link rel="stylesheet" href="../css/tela_inicial.css">
+
+</head>
+
+<body>
+
+    <aside class="sidebar">
+
+        <div class="logo-area">
+
+            <img
+                src="/imagens/logo_belleza.png"
+                alt="Belleza"
+                class="logo-belleza">
+
+        </div>
+
+        <nav class="menu">
+
+            <a href="/html/tela_inicial.html"
+                class="menu-item ativo">
+
+                <i class="fa-solid fa-house"></i>
+
+                <span>Início</span>
+
+            </a>
+
+            <a href="/html/servicos.html"
+                class="menu-item">
+
+                <i class="fa-solid fa-scissors"></i>
+
+                <span>Serviços</span>
+
+            </a>
+
+            <a href="/html/profissionais.html"
+                class="menu-item">
+
+                <i class="fa-solid fa-users"></i>
+
+                <span>Profissionais</span>
+
+            </a>
+
+            <a href="/html/agendar_horario.html"
+                class="menu-item">
+
+                <i class="fa-regular fa-calendar"></i>
+
+                <span>Agendar horário</span>
+
+            </a>
+
+            <a href="/html/meus_agendamentos.html"
+                class="menu-item">
+
+                <i class="fa-regular fa-calendar"></i>
+
+                <span>Meus agendamentos</span>
+
+            </a>
+
+            <a href="#"
+                class="menu-item">
+
+                <i class="fa-solid fa-tags"></i>
+
+                <span>Promoções</span>
+
+            </a>
+
+            <a href="#"
+                class="menu-item">
+
+                <i class="fa-regular fa-star"></i>
+
+                <span>Avaliações</span>
+
+            </a>
+
+            <a href="#"
+                class="menu-item">
+
+                <i class="fa-regular fa-circle-user"></i>
+
+                <span>Minha Conta</span>
+
+            </a>
+
+            <a href="#"
+                class="menu-item sair">
+
+                <i class="fa-solid fa-arrow-right-from-bracket"></i>
+
+                <span>Sair</span>
+
+            </a>
+
+        </nav>
+
+    </aside>
+
+
+    <main class="conteudo">
+
+        <section class="area-superior">
+
+            <div class="boas-vindas">
+
+                <div class="texto-boas">
+
+                    <h1>Olá , Maravilhosa!</h1>
+
+                    <h2>Que bom ter você por aqui!</h2>
+
+                    <p>
+                        Cuide de você, sua beleza e bem-estar
+                        <br>
+                        são a nossa prioridade.
+                    </p>
+
+                    <span class="coracao">
+                        ♥
+                    </span>
+
+                </div>
+
+                <div class="ramo ramo-esquerdo">
+                    ❧
+                </div>
+
+                <img
+                    src="/imagens/beatriz.png"
+                    class="imagem-boas">
+
+                <p class="frase-boas">
+                    Beleza também é
+                    <br>
+                    autocuidado!
+                </p>
+
+                <div class="ramo ramo-direito">
+                    ❧
+                </div>
+
+            </div>
+
+
+            <div class="promocao">
+
+                <div class="conteudo-promocao">
+
+                    <h2>Promoção especial</h2>
+
+                    <h1>
+                        10 %
+
+                        <span>OFF</span>
+                    </h1>
+
+                    <p>
+                        em todos os nossos serviços
+                        <br>
+                        de cabelo
+                    </p>
+
+                    <a href="promocao.html" class="btn-promocao">
+
+                        Aproveite agora
+
+                        <span>➜</span>
+
+                    </a>
+
+                </div>
+
+                <img
+                    src="/imagens/promocao.png"
+                    class="imagem-promocao">
+
+            </div>
+
+        </section>
+
+
+        <section class="area-combos">
+
+            <h2>Combos em destaque</h2>
+
+            <p class="descricao-combos">
+                Cuide de você com nossos pacotes especiais.
+            </p>
+
+            <div class="lista-combos" id="lista-combos">
+
+                <!-- Os combos serão carregados pelo banco -->
+
+            </div>
+
+        </section>
+
+
+        <div class="frase-lateral">
+
+            <div class="decoracao-flor esquerda">
+                ❧
+            </div>
+
+            <span>♥</span>
+
+            <p>
+                Cuidar de você
+                <br>
+                é sempre uma boa ideia
+            </p>
+
+            <div class="decoracao-flor direita">
+                ❧
+            </div>
+
+        </div>
+
+    </main>
+
+
+    <!-- =====================================================
+         MODAL DE CONFIRMAÇÃO DO COMBO
+    ===================================================== -->
+
+    <div id="modal-combo" class="modal-combo">
+
+        <div class="conteudo-modal">
+
+            <button
+                type="button"
+                class="fechar-modal"
+                onclick="fecharModal()">
+
+                &times;
+
+            </button>
+
+            <h2 id="modal-nome-combo">
+                Combo
+            </h2>
+
+            <p class="titulo-servicos-modal">
+                Serviços incluídos:
+            </p>
+
+            <ul id="modal-servicos"></ul>
+
+            <div class="informacoes-modal">
+
+                <span id="modal-duracao"></span>
+
+                <strong id="modal-preco"></strong>
+
+            </div>
+
+            <div class="botoes-modal">
+
+                <button
+                    type="button"
+                    class="btn-confirmar"
+                    onclick="confirmarCombo()">
+
+                    Confirmar seleção
+
+                </button>
+
+                <button
+                    type="button"
+                    class="btn-cancelar"
+                    onclick="fecharModal()">
+
+                    Cancelar
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <script>
+
+        const API_URL = "http://localhost:5000/api";
+
+        let comboSelecionado = null;
+
+
+        // =====================================================
+        // CARREGAR COMBOS DO BANCO
+        // =====================================================
+
+        async function carregarCombos() {
+
+            const lista =
+                document.getElementById("lista-combos");
+
+            try {
+
+                const resposta =
+                    await fetch(`${API_URL}/Combos`);
+
+                if (!resposta.ok) {
+
+                    throw new Error(
+                        "Não foi possível carregar os combos."
+                    );
+
+                }
+
+                const combos =
+                    await resposta.json();
+
+                lista.innerHTML = "";
+
+
+                combos.forEach(combo => {
+
+                    const card =
+                        document.createElement("div");
+
+                    card.className = "combo";
+
+
+                    const imagem =
+                        document.createElement("img");
+
+
+                    if (combo.id === 1) {
+
+                        imagem.src =
+                            "/imagens/combo1.png";
+
+                    }
+                    else if (combo.id === 2) {
+
+                        imagem.src =
+                            "/imagens/combo2.png";
+
+                    }
+                    else if (combo.id === 3) {
+
+                        imagem.src =
+                            "/imagens/combo3.png";
+
+                    }
+
+
+                    imagem.alt =
+                        "Imagem do " + combo.nome;
+
+
+                    const titulo =
+                        document.createElement("h3");
+
+
+                    titulo.textContent =
+                        "Combo " + combo.nome;
+
+
+                    const servicos =
+                        document.createElement("p");
+
+
+                    servicos.className =
+                        "servicos";
+
+
+                    servicos.innerHTML =
+                        combo.servicos
+                            .map(servico => servico.nome)
+                            .join(" + ");
+
+
+                    const informacoes =
+                        document.createElement("div");
+
+
+                    informacoes.className =
+                        "informacoes";
+
+
+                    const duracao =
+                        document.createElement("span");
+
+
+                    const totalMinutos =
+                        combo.servicos.reduce(
+                            (total, servico) =>
+                                total + servico.duracaoMinutos,
+                            0
+                        );
+
+
+                    duracao.textContent =
+                        formatarDuracao(totalMinutos);
+
+
+                    const preco =
+                        document.createElement("strong");
+
+
+                    preco.textContent =
+                        formatarPreco(combo.preco);
+
+
+                    informacoes.appendChild(
+                        duracao
+                    );
+
+
+                    informacoes.appendChild(
+                        preco
+                    );
+
+
+                    const botao =
+                        document.createElement("button");
+
+
+                    botao.type =
+                        "button";
+
+
+                    botao.className =
+                        "btn-adicionar";
+
+
+                    botao.textContent =
+                        "Adicionar";
+
+
+                    botao.addEventListener(
+                        "click",
+                        function () {
+
+                            abrirModal(combo);
+
+                        }
+                    );
+
+
+                    card.appendChild(
+                        imagem
+                    );
+
+
+                    card.appendChild(
+                        titulo
+                    );
+
+
+                    card.appendChild(
+                        servicos
+                    );
+
+
+                    card.appendChild(
+                        informacoes
+                    );
+
+
+                    card.appendChild(
+                        botao
+                    );
+
+
+                    lista.appendChild(
+                        card
+                    );
+
+                });
+
+            }
+            catch (erro) {
+
+                console.error(
+                    "Erro ao carregar combos:",
+                    erro
+                );
+
+                lista.innerHTML =
+                    "<p>Não foi possível carregar os combos.</p>";
+
+            }
+
+        }
+
+
+        // =====================================================
+        // FORMATAR PREÇO
+        // =====================================================
+
+        function formatarPreco(preco) {
+
+            return Number(preco).toLocaleString(
+                "pt-BR",
+                {
+                    style: "currency",
+                    currency: "BRL"
+                }
+            );
+
+        }
+
+
+        // =====================================================
+        // FORMATAR DURAÇÃO
+        // =====================================================
+
+        function formatarDuracao(minutos) {
+
+            const horas =
+                Math.floor(minutos / 60);
+
+
+            const minutosRestantes =
+                minutos % 60;
+
+
+            if (horas === 0) {
+
+                return minutosRestantes + "min";
+
+            }
+
+
+            if (minutosRestantes === 0) {
+
+                return horas + "h";
+
+            }
+
+
+            return horas +
+                "h " +
+                minutosRestantes +
+                "min";
+
+        }
+
+
+        // =====================================================
+        // ABRIR MODAL
+        // =====================================================
+
+        function abrirModal(combo) {
+
+            comboSelecionado =
+                combo;
+
+
+            document.getElementById(
+                "modal-nome-combo"
+            ).textContent =
+                "Combo " + combo.nome;
+
+
+            const listaServicos =
+                document.getElementById(
+                    "modal-servicos"
+                );
+
+
+            listaServicos.innerHTML =
+                "";
+
+
+            combo.servicos.forEach(
+                servico => {
+
+                    const item =
+                        document.createElement("li");
+
+
+                    item.textContent =
+                        servico.nome;
+
+
+                    listaServicos.appendChild(
+                        item
+                    );
+
+                }
+            );
+
+
+            const totalMinutos =
+                combo.servicos.reduce(
+                    (total, servico) =>
+                        total + servico.duracaoMinutos,
+                    0
+                );
+
+
+            document.getElementById(
+                "modal-duracao"
+            ).textContent =
+                formatarDuracao(
+                    totalMinutos
+                );
+
+
+            document.getElementById(
+                "modal-preco"
+            ).textContent =
+                formatarPreco(
+                    combo.preco
+                );
+
+
+            document.getElementById(
+                "modal-combo"
+            ).classList.add(
+                "aberto"
+            );
+
+        }
+
+
+        // =====================================================
+        // FECHAR MODAL
+        // =====================================================
+
+        function fecharModal() {
+
+            document.getElementById(
+                "modal-combo"
+            ).classList.remove(
+                "aberto"
+            );
+
+
+            comboSelecionado =
+                null;
+
+        }
+
+
+        // =====================================================
+        // CONFIRMAR COMBO
+        // =====================================================
+         
+        async function confirmarCombo() {
+
+    if (!comboSelecionado) {
+
+        return;
+
+    }
+
+
+    const item = {
+
+        id: comboSelecionado.id,
+
+        nome: comboSelecionado.nome,
+
+        preco: Number(comboSelecionado.preco),
+
+        tipo: "combo"
+
+    };
+
+
+    try {
+
+        const resposta =
+            await fetch(
+                `${API_URL}/Selecao`,
+                {
+                    method: "POST",
+
+                    credentials: "include",
+
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+
+                    body: JSON.stringify(item)
+                }
+            );
+
+
+        if (!resposta.ok) {
+
+            throw new Error(
+                "Erro ao salvar o combo."
+            );
+
+        }
+
+
+        fecharModal();
+
+
+        window.location.href =
+            "servicos.html";
+
+    }
+    catch (erro) {
+
+        console.error(
+            "Erro ao selecionar combo:",
+            erro
+        );
+
+
+        alert(
+            "Não foi possível selecionar o combo."
+        );
+
+    }
+
+}
+
+        // =====================================================
+        // INICIAR
+        // =====================================================
+
+        carregarCombos();
+
+    </script>
+
+</body>
+
+</html>
+

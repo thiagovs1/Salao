@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Login - Belleza</title>
+
+    <link rel="stylesheet" href="/css/login_cliente.css?v=2">
+</head>
+
+<body>
+
+    <main class="login-card">
+
+        <div class="logo-area">
+
+            <img
+                src="../imagens/logo_belleza_login.png"
+                alt="Logo Belleza"
+                class="logo"
+            >
+
+        </div>
+
+        <p class="texto-login">
+            Faça login para continuar
+        </p>
+
+        <form id="formLogin">
+
+            <div class="campo">
+
+                <label for="email">
+                    E-mail
+                </label>
+
+                <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    placeholder="Digite seu e-mail"
+                    required
+                >
+
+            </div>
+
+            <div class="campo">
+
+                <label for="senha">
+                    Senha
+                </label>
+
+                <input
+                    type="password"
+                    id="senha"
+                    name="senha"
+                    placeholder="Digite sua senha"
+                    required
+                >
+
+            </div>
+
+            <div class="esqueci">
+
+                <a href="../html/recuperar_senha.html">
+                    Esqueci minha senha
+                </a>
+
+            </div>
+
+            <div
+                id="mensagemLogin"
+                style="
+                    margin-top: 10px;
+                    margin-bottom: 10px;
+                    text-align: center;
+                    font-size: 14px;
+                    min-height: 20px;
+                ">
+            </div>
+
+            <button
+                type="submit"
+                class="btn-entrar">
+
+                Entrar
+
+            </button>
+
+            <div class="ou">
+
+                <span>ou</span>
+
+            </div>
+
+            <a
+                href="../html/criar_conta.html"
+                class="btn-criar">
+
+                Criar conta
+
+            </a>
+
+        </form>
+
+        <p class="frase">
+            Realce sua beleza. Revele sua essência.
+        </p>
+
+    </main>
+
+    <script>
+
+        const formLogin = document.getElementById("formLogin");
+        const mensagemLogin = document.getElementById("mensagemLogin");
+
+        formLogin.addEventListener("submit", async function (event) {
+
+            event.preventDefault();
+
+            mensagemLogin.textContent = "";
+            mensagemLogin.style.color = "";
+
+            const email = document.getElementById("email").value.trim();
+            const senha = document.getElementById("senha").value;
+
+            if (email === "" || senha === "") {
+
+                mensagemLogin.textContent =
+                    "Preencha o e-mail e a senha.";
+
+                mensagemLogin.style.color = "#c0392b";
+
+                return;
+            }
+
+            try {
+
+                const resposta = await fetch(
+                    "http://localhost:5000/api/Usuarios/login",
+                    {
+                        method: "POST",
+
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+
+                        body: JSON.stringify({
+                            email: email,
+                            senha: senha
+                        })
+                    }
+                );
+
+                const resultado = await resposta.json();
+
+                if (!resposta.ok) {
+
+                    mensagemLogin.textContent =
+                        resultado.mensagem ||
+                        "E-mail ou senha incorretos.";
+
+                    mensagemLogin.style.color = "#c0392b";
+
+                    return;
+                }
+
+                localStorage.setItem("clienteId", resultado.id);
+localStorage.setItem("clienteNome", resultado.nome);
+localStorage.setItem("clienteEmail", resultado.email);
+
+mensagemLogin.textContent =
+    "Login realizado com sucesso!";
+
+mensagemLogin.style.color = "#2e8b57";
+
+setTimeout(function () {
+
+    window.location.href =
+        "../html/tela_inicial.html";
+
+}, 1500);
+            }
+            catch (erro) {
+
+                console.error(erro);
+
+                mensagemLogin.textContent =
+                    "Não foi possível conectar ao servidor.";
+
+                mensagemLogin.style.color = "#c0392b";
+            }
+
+        });
+
+    </script>
+
+</body>
+
+</html>

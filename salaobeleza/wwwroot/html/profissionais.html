@@ -1,0 +1,1255 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <title>Escolha o profissional - Belleza</title>
+
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <link
+        rel="stylesheet"
+        href="../css/profissionais.css">
+
+</head>
+
+<body>
+
+    <!-- MENU LATERAL -->
+
+    <aside class="sidebar">
+
+        <div class="logo-area">
+
+            <img
+                src="../imagens/logo_belleza.png"
+                alt="Belleza"
+                class="logo-belleza">
+
+        </div>
+
+        <nav class="menu">
+
+            <a href="tela_inicial.html" class="menu-item">
+
+                <i class="fa-solid fa-house"></i>
+
+                <span>Início</span>
+
+            </a>
+
+            <a href="servicos.html" class="menu-item">
+
+                <i class="fa-solid fa-scissors"></i>
+
+                <span>Serviços</span>
+
+            </a>
+
+            <a href="profissionais.html" class="menu-item ativo">
+
+                <i class="fa-solid fa-users"></i>
+
+                <span>Profissionais</span>
+
+            </a>
+
+            <a href="agendar_horario.html" class="menu-item">
+
+                <i class="fa-regular fa-calendar"></i>
+
+                <span>Agendar horário</span>
+
+            </a>
+
+            <a href="meus_agendamentos.html" class="menu-item">
+
+                <i class="fa-regular fa-calendar"></i>
+
+                <span>Meus agendamentos</span>
+
+            </a>
+
+            <a href="#" class="menu-item">
+
+                <i class="fa-solid fa-tags"></i>
+
+                <span>Promoções</span>
+
+            </a>
+
+            <a href="#" class="menu-item">
+
+                <i class="fa-regular fa-star"></i>
+
+                <span>Avaliações</span>
+
+            </a>
+
+            <a href="#" class="menu-item">
+
+                <i class="fa-regular fa-circle-user"></i>
+
+                <span>Minha Conta</span>
+
+            </a>
+
+            <a href="#" class="menu-item sair">
+
+                <i class="fa-solid fa-arrow-right-from-bracket"></i>
+
+                <span>Sair</span>
+
+            </a>
+
+        </nav>
+
+    </aside>
+
+
+    <!-- CONTEÚDO -->
+
+    <main class="conteudo">
+
+        <h1 class="titulo-pagina">
+            Escolha o profissional
+        </h1>
+
+
+        <div class="area-principal">
+
+
+            <!-- PARTE ESQUERDA -->
+
+            <div class="parte-esquerda">
+
+
+                <!-- SERVIÇOS SELECIONADOS -->
+
+                <section class="servicos-selecionados">
+
+                    <h2>
+                        Serviços selecionados
+                    </h2>
+
+
+                    <div
+                        id="servicosEscolhidos"
+                        class="servicos-escolhidos">
+
+                    </div>
+
+
+                    <a
+                        href="servicos.html"
+                        id="btn-mais-servicos"
+                        class="btn-mais-servicos">
+
+                        adicionar mais serviços
+
+                    </a>
+
+                </section>
+
+
+                <!-- PROFISSIONAIS -->
+
+                <section class="area-profissionais">
+
+                    <h2>
+                        Nossos profissionais
+                    </h2>
+
+
+                    <!-- FILTROS -->
+
+                    <div class="filtros">
+
+                        <div class="campo-busca">
+
+                            <i class="fa-solid fa-magnifying-glass"></i>
+
+                            <input
+                                type="text"
+                                id="pesquisaProfissional"
+                                placeholder="Buscar profissional pelo nome...">
+
+                        </div>
+
+
+                        <select id="filtroProfissional">
+
+                            <option value="todos">
+                                Todos os profissionais
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- LISTA -->
+
+                    <div
+                        id="listaProfissionais"
+                        class="lista-profissionais">
+
+                    </div>
+
+                </section>
+
+            </div>
+
+
+            <!-- RESUMO -->
+
+            <aside class="resumo">
+
+                <h2>
+                    Resumo do atendimento
+                </h2>
+
+
+                <div class="resumo-item">
+
+                    <div class="resumo-icone">
+
+                        <i class="fa-solid fa-scissors"></i>
+
+                    </div>
+
+                    <div class="resumo-texto">
+
+                        <span>
+                            Serviço
+                        </span>
+
+                        <strong id="servicoResumo">
+                            Nenhum serviço
+                        </strong>
+
+                    </div>
+
+                    <span class="seta">
+                        ›
+                    </span>
+
+                </div>
+
+
+                <div class="resumo-item">
+
+                    <div class="resumo-icone">
+
+                        <i class="fa-solid fa-people-group"></i>
+
+                    </div>
+
+                    <div class="resumo-texto">
+
+                        <span>
+                            Profissional
+                        </span>
+
+                        <strong id="profissionalResumo">
+                            Não selecionado
+                        </strong>
+
+                    </div>
+
+                    <span class="seta">
+                        ›
+                    </span>
+
+                </div>
+
+
+                <div class="resumo-item">
+
+                    <div class="resumo-icone">
+
+                        <i class="fa-regular fa-calendar"></i>
+
+                    </div>
+
+                    <div class="resumo-texto">
+
+                        <span>
+                            Data e horário
+                        </span>
+
+                        <strong id="dataHorarioResumo">
+                            Não selecionado
+                        </strong>
+
+                    </div>
+
+                    <span class="seta">
+                        ›
+                    </span>
+
+                </div>
+
+
+                <div class="total">
+
+                    <span class="titulo-total">
+                        Total do atendimento
+                    </span>
+
+                    <strong
+                        class="valor-total"
+                        id="valorTotal">
+
+                        R$ 0,00
+
+                    </strong>
+
+                </div>
+
+
+                <button
+                    type="button"
+                    class="btn-continuar"
+                    onclick="continuar()">
+
+                    continuar
+
+                    <span>
+                        ➜
+                    </span>
+
+                </button>
+
+            </aside>
+
+        </div>
+
+    </main>
+
+
+    <!-- MENSAGEM -->
+
+    <div
+        id="overlayMensagem"
+        class="mensagem-overlay">
+
+        <div class="mensagem-caixa">
+
+            <div class="mensagem-coracao">
+                ♥
+            </div>
+
+            <h2 id="mensagemTitulo">
+                Atenção
+            </h2>
+
+            <p id="textoMensagem">
+            </p>
+
+            <button
+                type="button"
+                onclick="fecharMensagem()">
+
+                OK
+
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <script>
+
+        const API_URL =
+            "http://localhost:5000/api";
+
+
+        let selecionados = [];
+
+        let profissionalSelecionado = null;
+
+        let profissionais = [];
+
+
+        /* =========================
+           FORMATA PREÇO
+        ========================= */
+
+        function formatarPreco(valor) {
+
+            return Number(valor).toLocaleString(
+                "pt-BR",
+                {
+                    style: "currency",
+                    currency: "BRL"
+                }
+            );
+
+        }
+
+
+        /* =========================
+           MENSAGEM
+        ========================= */
+
+        function mostrarMensagem(mensagem) {
+
+            document.getElementById(
+                "textoMensagem"
+            ).textContent = mensagem;
+
+            document.getElementById(
+                "mensagemTitulo"
+            ).textContent = "Atenção";
+
+            document.getElementById(
+                "overlayMensagem"
+            ).classList.add("ativo");
+
+        }
+
+
+        function fecharMensagem() {
+
+            document.getElementById(
+                "overlayMensagem"
+            ).classList.remove("ativo");
+
+        }
+
+
+        /* =========================
+           CARREGAR SELEÇÃO
+        ========================= */
+
+        async function carregarSelecao() {
+
+            try {
+
+                const resposta = await fetch(
+                    `${API_URL}/Selecao`,
+                    {
+                        credentials: "include"
+                    }
+                );
+
+                if (!resposta.ok) {
+
+                    throw new Error(
+                        "Erro ao carregar seleção."
+                    );
+
+                }
+
+                selecionados =
+                    await resposta.json();
+
+                atualizarServicosSelecionados();
+
+                atualizarResumo();
+
+            }
+            catch (erro) {
+
+                console.error(
+                    "Erro ao carregar seleção:",
+                    erro
+                );
+
+            }
+
+        }
+
+
+        /* =========================
+           MOSTRAR SERVIÇOS
+        ========================= */
+
+        function atualizarServicosSelecionados() {
+
+            const container =
+                document.getElementById(
+                    "servicosEscolhidos"
+                );
+
+            container.innerHTML = "";
+
+
+            if (
+                !selecionados ||
+                selecionados.length === 0
+            ) {
+
+                container.innerHTML = `
+                    <p class="nenhum-servico">
+                        Nenhum serviço selecionado.
+                    </p>
+                `;
+
+                return;
+
+            }
+
+
+            selecionados.forEach(
+                function(item) {
+
+                    const servico =
+                        document.createElement("div");
+
+                    servico.className =
+                        "servico-card";
+
+
+                    const nome =
+                        document.createElement("h3");
+
+                    nome.textContent =
+                        item.nome;
+
+
+                    const preco =
+                        document.createElement("p");
+
+                    preco.textContent =
+                        formatarPreco(item.preco);
+
+
+                    servico.appendChild(nome);
+
+                    servico.appendChild(preco);
+
+                    container.appendChild(servico);
+
+                }
+            );
+
+        }
+
+
+        /* =========================
+           ATUALIZAR RESUMO
+        ========================= */
+
+        function atualizarResumo() {
+
+            const servicoResumo =
+                document.getElementById(
+                    "servicoResumo"
+                );
+
+            const profissionalResumo =
+                document.getElementById(
+                    "profissionalResumo"
+                );
+
+            const valorTotal =
+                document.getElementById(
+                    "valorTotal"
+                );
+
+
+            /* SERVIÇOS */
+
+            if (
+                selecionados &&
+                selecionados.length > 0
+            ) {
+
+                if (selecionados.length === 1) {
+
+                    servicoResumo.textContent =
+                        selecionados[0].nome;
+
+                }
+                else {
+
+                    servicoResumo.textContent =
+                        `${selecionados.length} serviços selecionados`;
+
+                }
+
+            }
+            else {
+
+                servicoResumo.textContent =
+                    "Nenhum serviço";
+
+            }
+
+
+            /* PROFISSIONAL */
+
+            if (profissionalSelecionado) {
+
+                profissionalResumo.textContent =
+                    profissionalSelecionado.nome;
+
+            }
+            else {
+
+                profissionalResumo.textContent =
+                    "Não selecionado";
+
+            }
+
+
+            /* TOTAL */
+
+            const total =
+                selecionados.reduce(
+                    function(soma, item) {
+
+                        return soma +
+                            Number(item.preco);
+
+                    },
+                    0
+                );
+
+
+            valorTotal.textContent =
+                formatarPreco(total);
+
+        }
+
+
+        /* =========================
+           CARREGAR PROFISSIONAIS
+        ========================= */
+
+        async function carregarProfissionais() {
+
+            try {
+
+                const resposta = await fetch(
+                    `${API_URL}/Profissionais`
+                );
+
+                if (!resposta.ok) {
+
+                    throw new Error(
+                        "Erro ao carregar profissionais."
+                    );
+
+                }
+
+                profissionais =
+                    await resposta.json();
+
+                mostrarProfissionais();
+
+                preencherFiltroProfissionais();
+
+            }
+            catch (erro) {
+
+                console.error(
+                    "Erro ao carregar profissionais:",
+                    erro
+                );
+
+            }
+
+        }
+
+
+        /* =========================
+           MOSTRAR PROFISSIONAIS
+        ========================= */
+
+        function mostrarProfissionais(
+            lista = profissionais
+        ) {
+
+            const container =
+                document.getElementById(
+                    "listaProfissionais"
+                );
+
+            container.innerHTML = "";
+
+
+            lista.forEach(
+                function(profissional) {
+
+                    const card =
+                        document.createElement("div");
+
+                    card.className =
+                        "profissional";
+
+                    card.dataset.id =
+                        profissional.id;
+
+                    card.dataset.nome =
+                        profissional.nome;
+
+
+                    const dados =
+                        document.createElement("div");
+
+                    dados.className =
+                        "dados-profissional";
+
+
+                    const imagem =
+                        document.createElement("img");
+
+                    imagem.src =
+                        `/imagens/${profissional.imagem}`;
+
+                    imagem.alt =
+                        profissional.nome;
+
+
+                    const informacoes =
+                        document.createElement("div");
+
+                    informacoes.className =
+                        "informacoes";
+
+
+                    const nome =
+                        document.createElement("h3");
+
+                    nome.textContent =
+                        profissional.nome;
+
+
+                    const profissao =
+                        document.createElement("span");
+
+                    profissao.className =
+                        "profissao";
+
+                    profissao.textContent =
+                        profissional.profissao ||
+                        "Profissional";
+
+
+                    const avaliacao =
+                        document.createElement("div");
+
+                    avaliacao.className =
+                        "avaliacao";
+
+
+                    const estrela =
+                        document.createElement("span");
+
+                    estrela.className =
+                        "estrela";
+
+                    estrela.textContent =
+                        "★";
+
+
+                    const nota =
+                        document.createElement("strong");
+
+                    nota.textContent =
+                        profissional.avaliacao ||
+                        "5.0";
+
+
+                    const quantidade =
+                        document.createElement("small");
+
+                    quantidade.textContent =
+                        profissional.avaliacoes
+                            ? `(${profissional.avaliacoes} avaliações)`
+                            : "";
+
+
+                    avaliacao.appendChild(estrela);
+
+                    avaliacao.appendChild(nota);
+
+                    avaliacao.appendChild(quantidade);
+
+
+                    informacoes.appendChild(nome);
+
+                    informacoes.appendChild(profissao);
+
+                    informacoes.appendChild(avaliacao);
+
+
+                    dados.appendChild(imagem);
+
+                    dados.appendChild(informacoes);
+
+
+                    const especialidades =
+                        document.createElement("div");
+
+                    especialidades.className =
+                        "especialidades";
+
+
+                    if (
+                        profissional.especialidades &&
+                        Array.isArray(
+                            profissional.especialidades
+                        )
+                    ) {
+
+                        profissional.especialidades.forEach(
+                            function(especialidade) {
+
+                                const tag =
+                                    document.createElement("span");
+
+                                tag.textContent =
+                                    especialidade;
+
+                                especialidades.appendChild(tag);
+
+                            }
+                        );
+
+                    }
+                    else {
+
+                        const tag =
+                            document.createElement("span");
+
+                        tag.textContent =
+                            profissional.profissao ||
+                            "Atendimento";
+
+                        especialidades.appendChild(tag);
+
+                    }
+
+
+                    const botao =
+                        document.createElement("button");
+
+                    botao.type =
+                        "button";
+
+                    botao.className =
+                        "btn-profissional";
+
+                    botao.textContent =
+                        "Selecionar";
+
+
+                    botao.addEventListener(
+                        "click",
+                        function() {
+
+                            selecionarProfissional(
+                                profissional,
+                                botao
+                            );
+
+                        }
+                    );
+
+
+                    card.appendChild(dados);
+
+                    card.appendChild(especialidades);
+
+                    card.appendChild(botao);
+
+                    container.appendChild(card);
+
+                }
+            );
+
+
+            marcarProfissionalSelecionado();
+
+        }
+
+
+        /* =========================
+           FILTRO
+        ========================= */
+
+        function preencherFiltroProfissionais() {
+
+            const filtro =
+                document.getElementById(
+                    "filtroProfissional"
+                );
+
+            filtro.innerHTML = `
+                <option value="todos">
+                    Todos os profissionais
+                </option>
+            `;
+
+
+            profissionais.forEach(
+                function(profissional) {
+
+                    const option =
+                        document.createElement("option");
+
+                    option.value =
+                        profissional.nome;
+
+                    option.textContent =
+                        profissional.nome;
+
+                    filtro.appendChild(option);
+
+                }
+            );
+
+        }
+
+
+        function filtrarProfissionais() {
+
+            const pesquisa =
+                document.getElementById(
+                    "pesquisaProfissional"
+                )
+                .value
+                .toLowerCase()
+                .trim();
+
+
+            const filtro =
+                document.getElementById(
+                    "filtroProfissional"
+                ).value;
+
+
+            const lista =
+                profissionais.filter(
+                    function(profissional) {
+
+                        const nome =
+                            profissional.nome
+                            .toLowerCase();
+
+                        const combinaPesquisa =
+                            nome.includes(pesquisa);
+
+                        const combinaFiltro =
+                            filtro === "todos" ||
+                            profissional.nome === filtro;
+
+                        return (
+                            combinaPesquisa &&
+                            combinaFiltro
+                        );
+
+                    }
+                );
+
+
+            mostrarProfissionais(lista);
+
+        }
+
+
+        /* =========================
+           SELECIONAR PROFISSIONAL
+        ========================= */
+
+        async function selecionarProfissional(
+            profissional,
+            botao
+        ) {
+
+            try {
+
+                const resposta = await fetch(
+                    `${API_URL}/Selecao/profissional`,
+                    {
+                        method: "POST",
+
+                        headers: {
+                            "Content-Type":
+                                "application/json"
+                        },
+
+                        credentials: "include",
+
+                        body: JSON.stringify({
+                            id: profissional.id,
+                            nome: profissional.nome
+                        })
+                    }
+                );
+
+
+                if (!resposta.ok) {
+
+                    throw new Error(
+                        "Erro ao selecionar profissional."
+                    );
+
+                }
+
+
+                profissionalSelecionado = {
+
+                    id:
+                        profissional.id,
+
+                    nome:
+                        profissional.nome
+
+                };
+
+
+                marcarProfissionalSelecionado();
+
+                atualizarResumo();
+
+
+                document.getElementById(
+                    "mensagemTitulo"
+                ).textContent =
+                    "Profissional selecionada!";
+
+
+                document.getElementById(
+                    "textoMensagem"
+                ).textContent =
+                    `${profissional.nome} foi selecionada com sucesso.`;
+
+
+                document.getElementById(
+                    "overlayMensagem"
+                ).classList.add("ativo");
+
+            }
+            catch (erro) {
+
+                console.error(
+                    "Erro ao selecionar profissional:",
+                    erro
+                );
+
+                mostrarMensagem(
+                    "Não foi possível selecionar o profissional."
+                );
+
+            }
+
+        }
+
+
+        /* =========================
+           MARCAR PROFISSIONAL
+        ========================= */
+
+        function marcarProfissionalSelecionado() {
+
+            const botoes =
+                document.querySelectorAll(
+                    ".btn-profissional"
+                );
+
+
+            botoes.forEach(
+                function(botao) {
+
+                    botao.classList.remove(
+                        "selecionado"
+                    );
+
+                    botao.textContent =
+                        "Selecionar";
+
+                }
+            );
+
+
+            if (!profissionalSelecionado) {
+                return;
+            }
+
+
+            botoes.forEach(
+                function(botao) {
+
+                    const card =
+                        botao.closest(
+                            ".profissional"
+                        );
+
+                    if (!card) {
+                        return;
+                    }
+
+
+                    const id =
+                        Number(
+                            card.dataset.id
+                        );
+
+
+                    if (
+                        id ===
+                        Number(
+                            profissionalSelecionado.id
+                        )
+                    ) {
+
+                        botao.classList.add(
+                            "selecionado"
+                        );
+
+                        botao.textContent =
+                            "Selecionado";
+
+                    }
+
+                }
+            );
+
+        }
+
+
+        /* =========================
+           CARREGAR PROFISSIONAL
+        ========================= */
+
+        async function carregarProfissional() {
+
+            try {
+
+                const resposta = await fetch(
+                    `${API_URL}/Selecao/profissional`,
+                    {
+                        credentials: "include"
+                    }
+                );
+
+
+                if (!resposta.ok) {
+                    return;
+                }
+
+
+                const profissional =
+                    await resposta.json();
+
+
+                if (profissional) {
+
+                    profissionalSelecionado =
+                        profissional;
+
+                    marcarProfissionalSelecionado();
+
+                    atualizarResumo();
+
+                }
+
+            }
+            catch (erro) {
+
+                console.error(
+                    "Erro ao carregar profissional:",
+                    erro
+                );
+
+            }
+
+        }
+
+
+        /* =========================
+           CONTINUAR
+        ========================= */
+
+        function continuar() {
+
+            if (
+                !selecionados ||
+                selecionados.length === 0
+            ) {
+
+                mostrarMensagem(
+                    "Selecione pelo menos um serviço antes de continuar."
+                );
+
+                return;
+
+            }
+
+
+            if (!profissionalSelecionado) {
+
+                mostrarMensagem(
+                    "Selecione um profissional antes de continuar."
+                );
+
+                return;
+
+            }
+
+
+            window.location.href =
+                "agendar_horario.html";
+
+        }
+
+
+        /* =========================
+           EVENTOS
+        ========================= */
+
+        document
+            .getElementById(
+                "pesquisaProfissional"
+            )
+            .addEventListener(
+                "input",
+                filtrarProfissionais
+            );
+
+
+        document
+            .getElementById(
+                "filtroProfissional"
+            )
+            .addEventListener(
+                "change",
+                filtrarProfissionais
+            );
+
+
+        /* =========================
+           INICIAR
+        ========================= */
+
+        async function iniciarPagina() {
+
+            await carregarSelecao();
+
+            await carregarProfissionais();
+
+            await carregarProfissional();
+
+        }
+
+
+        iniciarPagina();
+
+    </script>
+
+</body>
+
+</html>

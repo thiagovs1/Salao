@@ -1,0 +1,1821 @@
+<!DOCTYPE html>
+
+<html lang="pt-br">
+
+<head>
+
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+
+<title>Agendar horário - Belleza</title>
+
+<link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+<link rel="stylesheet"
+      href="../css/agendar_horario.css">
+
+
+</head>
+
+<body>
+
+
+<aside class="sidebar">
+
+    <div class="logo-area">
+
+        <img src="/imagens/logo_belleza.png"
+             alt="Belleza"
+             class="logo-belleza">
+
+    </div>
+
+    <nav class="menu">
+
+        <a href="tela_inicial.html"
+           class="menu-item">
+
+            <i class="fa-solid fa-house"></i>
+
+            <span>Início</span>
+
+        </a>
+
+
+        <a href="servicos.html"
+           class="menu-item">
+
+            <i class="fa-solid fa-scissors"></i>
+
+            <span>Serviços</span>
+
+        </a>
+
+
+        <a href="profissionais.html"
+           class="menu-item">
+
+            <i class="fa-solid fa-users"></i>
+
+            <span>Profissionais</span>
+
+        </a>
+
+
+        <a href="agendar_horario.html"
+           class="menu-item ativo">
+
+            <i class="fa-regular fa-calendar"></i>
+
+            <span>Agendar horário</span>
+
+        </a>
+
+
+        <a href="meus_agendamentos.html"
+           class="menu-item">
+
+            <i class="fa-regular fa-calendar"></i>
+
+            <span>Meus agendamentos</span>
+
+        </a>
+
+
+        <a href="#"
+           class="menu-item">
+
+            <i class="fa-solid fa-tags"></i>
+
+            <span>Promoções</span>
+
+        </a>
+
+
+        <a href="#"
+           class="menu-item">
+
+            <i class="fa-regular fa-star"></i>
+
+            <span>Avaliações</span>
+
+        </a>
+
+
+        <a href="#"
+           class="menu-item">
+
+            <i class="fa-regular fa-circle-user"></i>
+
+            <span>Minha Conta</span>
+
+        </a>
+
+
+        <a href="#"
+           class="menu-item sair">
+
+            <i class="fa-solid fa-arrow-right-from-bracket"></i>
+
+            <span>Sair</span>
+
+        </a>
+
+    </nav>
+
+</aside>
+
+
+<main class="conteudo">
+
+    <h1 class="titulo-pagina">
+        Escolha a data e o horário
+    </h1>
+
+
+    <div class="layout-principal">
+
+        <div class="area-esquerda">
+
+            <div class="cabecalho-calendario">
+
+                Horário e calendário da profissional escolhida
+
+            </div>
+
+
+            <div class="area-agendamento">
+
+
+                <!-- =================================================
+                     CALENDÁRIO
+                     ================================================= -->
+
+                <section class="calendario">
+
+                    <h2>
+
+                        <i class="fa-regular fa-calendar"></i>
+
+                        Selecione a data
+
+                    </h2>
+
+
+                    <div class="mes">
+
+                        <button
+                            type="button"
+                            id="mesAnterior"
+                            aria-label="Mês anterior">
+
+                            <i class="fa-solid fa-chevron-left"></i>
+
+                        </button>
+
+
+                        <span id="mesAtual">
+                            Carregando...
+                        </span>
+
+
+                        <button
+                            type="button"
+                            id="mesProximo"
+                            aria-label="Próximo mês">
+
+                            <i class="fa-solid fa-chevron-right"></i>
+
+                        </button>
+
+                    </div>
+
+
+                    <div class="dias-semana">
+
+                        <span>Dom</span>
+                        <span>Seg</span>
+                        <span>Ter</span>
+                        <span>Qua</span>
+                        <span>Qui</span>
+                        <span>Sex</span>
+                        <span>Sáb</span>
+
+                    </div>
+
+
+                    <div
+                        class="dias"
+                        id="diasCalendario">
+                    </div>
+
+
+                    <div class="legenda-calendario">
+
+                        <div>
+
+                            <span class="bolinha roxa"></span>
+
+                            <span>Dia disponível</span>
+
+                        </div>
+
+
+                        <div>
+
+                            <span class="bolinha rosa"></span>
+
+                            <span>Dia selecionado</span>
+
+                        </div>
+
+
+                        <div>
+
+                            <span class="bolinha clara"></span>
+
+                            <span>Dia indisponível</span>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+                <!-- =================================================
+                     HORÁRIOS
+                     ================================================= -->
+
+                <section class="horarios">
+
+                    <h2>
+
+                        <i class="fa-regular fa-clock"></i>
+
+                        Selecione o horário
+
+                    </h2>
+
+
+                    <div
+                        class="lista-horarios"
+                        id="listaHorarios">
+
+
+                        <!-- MANHÃ -->
+
+                        <div class="periodo-horarios">
+
+                            <div class="titulo-periodo">
+
+                                <i class="fa-regular fa-sun"></i>
+
+                                Manhã
+
+                            </div>
+
+
+                            <div
+                                class="lista-periodo"
+                                id="listaManha">
+
+                                <p class="mensagem-horario">
+
+                                    Selecione uma data para visualizar os horários.
+
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- TARDE -->
+
+                        <div class="periodo-horarios">
+
+                            <div class="titulo-periodo">
+
+                                <i class="fa-solid fa-cloud-sun"></i>
+
+                                Tarde
+
+                            </div>
+
+
+                            <div
+                                class="lista-periodo"
+                                id="listaTarde">
+
+                                <p class="mensagem-horario">
+
+                                    Selecione uma data para visualizar os horários.
+
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+
+                    <div class="legenda-horarios">
+
+                        <div>
+
+                            <span class="bolinha horario-indisponivel"></span>
+
+                            <span>Horário indisponível</span>
+
+                        </div>
+
+
+                        <div>
+
+                            <span class="bolinha horario-disponivel"></span>
+
+                            <span>Horário disponível para esse serviço</span>
+
+                        </div>
+
+
+                        <div>
+
+                            <span class="bolinha horario-escolhido"></span>
+
+                            <span>Horário escolhido</span>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+            </div>
+
+        </div>
+
+
+        <!-- =====================================================
+             RESUMO
+             ===================================================== -->
+
+        <aside class="resumo">
+
+            <h2>
+                Resumo do atendimento
+            </h2>
+
+
+            <!-- SERVIÇO -->
+
+            <div class="resumo-item">
+
+                <div class="resumo-icone">
+
+                    <i class="fa-solid fa-scissors"></i>
+
+                </div>
+
+
+                <div class="resumo-texto">
+
+                    <span>
+                        Serviço
+                    </span>
+
+                    <strong id="resumoServico">
+                        Não selecionado
+                    </strong>
+
+                </div>
+
+
+                <span class="seta">
+                    ›
+                </span>
+
+            </div>
+
+
+            <!-- PROFISSIONAL -->
+
+            <div class="resumo-item">
+
+                <div class="resumo-icone">
+
+                    <i class="fa-solid fa-people-group"></i>
+
+                </div>
+
+
+                <div class="resumo-texto">
+
+                    <span>
+                        Profissional
+                    </span>
+
+                    <strong id="resumoProfissional">
+                        Não selecionado
+                    </strong>
+
+                </div>
+
+
+                <span class="seta">
+                    ›
+                </span>
+
+            </div>
+
+
+            <!-- DATA E HORÁRIO -->
+
+            <div class="resumo-item">
+
+                <div class="resumo-icone">
+
+                    <i class="fa-regular fa-calendar"></i>
+
+                </div>
+
+
+                <div class="resumo-texto">
+
+                    <span>
+                        Data e horário
+                    </span>
+
+                    <strong id="resumoDataHorario">
+                        Não selecionado
+                    </strong>
+
+                </div>
+
+
+                <span class="seta">
+                    ›
+                </span>
+
+            </div>
+
+
+            <!-- TOTAL -->
+
+            <div class="total">
+
+                <span>
+                    Total do atendimento
+                </span>
+
+                <strong id="resumoPreco">
+                    R$ 0,00
+                </strong>
+
+            </div>
+
+
+            <!-- FINALIZAR -->
+
+            <button
+                type="button"
+                class="btn-continuar"
+                id="btnContinuar">
+
+                finalizar
+
+                <span>
+                    ➜
+                </span>
+
+            </button>
+
+
+            <!-- ADICIONAR SERVIÇO -->
+
+            <a
+                href="servicos.html"
+                class="btn-adicionar">
+
+                adicionar mais serviços
+
+            </a>
+
+        </aside>
+
+    </div>
+
+
+    <!-- =====================================================
+         FRASE LATERAL
+         ===================================================== -->
+
+    <div class="frase-lateral">
+
+        <span>♥</span>
+
+        <p>
+
+            Cuidar de você
+            <br>
+            é sempre uma boa
+            <br>
+            ideia
+
+        </p>
+
+    </div>
+
+</main>
+
+
+<script>
+
+    const API_URL =
+        "http://localhost:5000/api";
+
+
+    let dataAtual =
+        new Date();
+
+
+    let dataSelecionada =
+        null;
+
+
+    let horarioSelecionado =
+        null;
+
+
+    let servicoSelecionado =
+        null;
+
+
+    let profissionalSelecionado =
+        null;
+
+
+    let tipo =
+        null;
+
+
+    let itemId =
+        null;
+
+
+    // =====================================================
+    // ELEMENTOS
+    // =====================================================
+
+    const listaManha =
+        document.getElementById("listaManha");
+
+
+    const listaTarde =
+        document.getElementById("listaTarde");
+
+
+    // =====================================================
+    // ATUALIZA DATA E HORÁRIO DO RESUMO
+    // =====================================================
+
+    function atualizarResumoDataHorario()
+    {
+        const elemento =
+            document.getElementById(
+                "resumoDataHorario"
+            );
+
+
+        if (!dataSelecionada)
+        {
+            elemento.textContent =
+                "Não selecionado";
+
+            return;
+        }
+
+
+        const dataFormatada =
+            dataSelecionada.toLocaleDateString(
+                "pt-BR"
+            );
+
+
+        if (!horarioSelecionado)
+        {
+            elemento.textContent =
+                dataFormatada;
+
+            return;
+        }
+
+
+        elemento.textContent =
+            `${dataFormatada} às ${horarioSelecionado}`;
+    }
+
+
+    // =====================================================
+    // CARREGA SELEÇÃO
+    // =====================================================
+
+    async function carregarSelecao()
+    {
+        try
+        {
+            const resposta =
+                await fetch(
+                    `${API_URL}/Selecao`,
+                    {
+                        credentials: "include"
+                    }
+                );
+
+
+            if (!resposta.ok)
+            {
+                throw new Error(
+                    "Não foi possível carregar a seleção."
+                );
+            }
+
+
+            const dados =
+                await resposta.json();
+
+
+            const selecao =
+                Array.isArray(dados)
+                    ? dados[0]
+                    : dados;
+
+
+            if (!selecao)
+            {
+                throw new Error(
+                    "Nenhum serviço ou combo foi selecionado."
+                );
+            }
+
+
+            servicoSelecionado =
+                selecao;
+
+
+            tipo =
+                selecao.tipo ??
+                selecao.Tipo;
+
+
+            itemId =
+                selecao.id ??
+                selecao.Id;
+
+
+            const nome =
+                selecao.nome ??
+                selecao.Nome ??
+                "-";
+
+
+            const preco =
+                selecao.preco ??
+                selecao.Preco ??
+                0;
+
+
+            // =================================================
+            // VALIDAÇÃO
+            // =================================================
+
+            if (
+                itemId === undefined ||
+                itemId === null ||
+                Number.isNaN(Number(itemId))
+            )
+            {
+                throw new Error(
+                    "O serviço/combo selecionado não possui ID válido."
+                );
+            }
+
+
+            if (!tipo)
+            {
+                throw new Error(
+                    "O tipo do serviço/combo não foi informado."
+                );
+            }
+
+
+            tipo =
+                String(tipo);
+
+
+            itemId =
+                Number(itemId);
+
+
+            // =================================================
+            // RESUMO
+            // =================================================
+
+            document.getElementById(
+                "resumoServico"
+            ).textContent =
+                nome;
+
+
+            document.getElementById(
+                "resumoPreco"
+            ).textContent =
+                Number(preco).toLocaleString(
+                    "pt-BR",
+                    {
+                        style: "currency",
+                        currency: "BRL"
+                    }
+                );
+
+
+            // =================================================
+            // CARREGA PROFISSIONAL
+            // =================================================
+
+            await carregarProfissional();
+
+
+            // =================================================
+            // MONTA CALENDÁRIO
+            // =================================================
+
+            renderizarCalendario();
+
+        }
+        catch (erro)
+        {
+            console.error(
+                "Erro ao carregar seleção:",
+                erro
+            );
+
+
+            listaManha.innerHTML =
+                `
+                <p class="mensagem-horario">
+                    Não foi possível carregar a seleção.
+                </p>
+                `;
+
+
+            listaTarde.innerHTML =
+                `
+                <p class="mensagem-horario">
+                    Não foi possível carregar a seleção.
+                </p>
+                `;
+        }
+    }
+
+
+    // =====================================================
+    // CARREGA PROFISSIONAL
+    // =====================================================
+
+    async function carregarProfissional()
+    {
+        try
+        {
+            const resposta =
+                await fetch(
+                    `${API_URL}/Selecao/profissional`,
+                    {
+                        credentials: "include"
+                    }
+                );
+
+
+            if (!resposta.ok)
+            {
+                throw new Error(
+                    "Profissional não encontrado."
+                );
+            }
+
+
+            const dados =
+                await resposta.json();
+
+
+            if (!dados)
+            {
+                throw new Error(
+                    "Nenhuma profissional foi selecionada."
+                );
+            }
+
+
+            const id =
+                dados.id ??
+                dados.Id;
+
+
+            const nome =
+                dados.nome ??
+                dados.Nome ??
+                "-";
+
+
+            if (
+                id === undefined ||
+                id === null
+            )
+            {
+                throw new Error(
+                    "A profissional selecionada não possui ID."
+                );
+            }
+
+
+            profissionalSelecionado =
+            {
+                id: Number(id),
+                nome: nome
+            };
+
+
+            document.getElementById(
+                "resumoProfissional"
+            ).textContent =
+                nome;
+
+        }
+        catch (erro)
+        {
+            console.error(
+                "Erro ao carregar profissional:",
+                erro
+            );
+
+
+            profissionalSelecionado =
+                null;
+
+
+            document.getElementById(
+                "resumoProfissional"
+            ).textContent =
+                "Não selecionado";
+        }
+    }
+
+
+    // =====================================================
+    // CALENDÁRIO
+    // =====================================================
+
+    function renderizarCalendario()
+    {
+        const ano =
+            dataAtual.getFullYear();
+
+
+        const mes =
+            dataAtual.getMonth();
+
+
+        const nomeMes =
+            dataAtual.toLocaleDateString(
+                "pt-BR",
+                {
+                    month: "long",
+                    year: "numeric"
+                }
+            );
+
+
+        document.getElementById(
+            "mesAtual"
+        ).textContent =
+            nomeMes.charAt(0).toUpperCase()
+            +
+            nomeMes.slice(1);
+
+
+        const diasContainer =
+            document.getElementById(
+                "diasCalendario"
+            );
+
+
+        diasContainer.innerHTML =
+            "";
+
+
+        const primeiroDia =
+            new Date(
+                ano,
+                mes,
+                1
+            ).getDay();
+
+
+        const quantidadeDias =
+            new Date(
+                ano,
+                mes + 1,
+                0
+            ).getDate();
+
+
+        // =================================================
+        // ESPAÇOS ANTES DO PRIMEIRO DIA
+        // =================================================
+
+        for (
+            let i = 0;
+            i < primeiroDia;
+            i++
+        )
+        {
+            const vazio =
+                document.createElement(
+                    "div"
+                );
+
+
+            vazio.className =
+                "vazio";
+
+
+            diasContainer.appendChild(
+                vazio
+            );
+        }
+
+
+        // =================================================
+        // DIAS DO MÊS
+        // =================================================
+
+        for (
+            let dia = 1;
+            dia <= quantidadeDias;
+            dia++
+        )
+        {
+            const botao =
+                document.createElement(
+                    "button"
+                );
+
+
+            botao.type =
+                "button";
+
+
+            botao.className =
+                "dia";
+
+
+            botao.textContent =
+                dia;
+
+
+            const data =
+                new Date(
+                    ano,
+                    mes,
+                    dia
+                );
+
+
+            const hoje =
+                new Date();
+
+
+            hoje.setHours(
+                0,
+                0,
+                0,
+                0
+            );
+
+
+            // =================================================
+            // VERIFICAÇÕES
+            // =================================================
+
+            const domingo =
+                data.getDay() === 0;
+
+
+            const diaPassado =
+                data < hoje;
+
+
+            if (
+                diaPassado ||
+                domingo
+            )
+            {
+                botao.classList.add(
+                    "indisponivel"
+                );
+
+
+                botao.disabled =
+                    true;
+            }
+            else
+            {
+                botao.classList.add(
+                    "disponivel"
+                );
+
+
+                botao.addEventListener(
+                    "click",
+                    () =>
+                        selecionarData(data)
+                );
+            }
+
+
+            // =================================================
+            // DATA SELECIONADA
+            // =================================================
+
+            if (
+                dataSelecionada &&
+                mesmaData(
+                    data,
+                    dataSelecionada
+                )
+            )
+            {
+                botao.classList.add(
+                    "selecionado"
+                );
+            }
+
+
+            diasContainer.appendChild(
+                botao
+            );
+        }
+    }
+
+
+    // =====================================================
+    // COMPARA DATAS
+    // =====================================================
+
+    function mesmaData(
+        data1,
+        data2
+    )
+    {
+        return (
+            data1.getFullYear()
+            ===
+            data2.getFullYear()
+
+            &&
+
+            data1.getMonth()
+            ===
+            data2.getMonth()
+
+            &&
+
+            data1.getDate()
+            ===
+            data2.getDate()
+        );
+    }
+
+
+    // =====================================================
+    // SELECIONAR DATA
+    // =====================================================
+
+    function selecionarData(data)
+    {
+        if (
+            data.getDay() === 0
+        )
+        {
+            return;
+        }
+
+
+        dataSelecionada =
+            data;
+
+
+        horarioSelecionado =
+            null;
+
+
+        atualizarResumoDataHorario();
+
+
+        renderizarCalendario();
+
+
+        carregarHorarios();
+    }
+
+
+    // =====================================================
+    // CARREGAR HORÁRIOS
+    // =====================================================
+
+    async function carregarHorarios()
+    {
+        if (!dataSelecionada)
+        {
+            return;
+        }
+
+
+        if (
+            dataSelecionada.getDay() === 0
+        )
+        {
+            listaManha.innerHTML =
+                `
+                <p class="mensagem-horario">
+                    Salão fechado aos domingos.
+                </p>
+                `;
+
+
+            listaTarde.innerHTML =
+                `
+                <p class="mensagem-horario">
+                    Salão fechado aos domingos.
+                </p>
+                `;
+
+
+            return;
+        }
+
+
+        listaManha.innerHTML =
+            `
+            <p class="mensagem-horario">
+                Carregando...
+            </p>
+            `;
+
+
+        listaTarde.innerHTML =
+            `
+            <p class="mensagem-horario">
+                Carregando...
+            </p>
+            `;
+
+
+        const ano =
+            dataSelecionada.getFullYear();
+
+
+        const mes =
+            String(
+                dataSelecionada.getMonth() + 1
+            ).padStart(
+                2,
+                "0"
+            );
+
+
+        const dia =
+            String(
+                dataSelecionada.getDate()
+            ).padStart(
+                2,
+                "0"
+            );
+
+
+        const data =
+            `${ano}-${mes}-${dia}`;
+
+
+        try
+        {
+            const horarios =
+                await buscarHorariosParaData(
+                    data
+                );
+
+
+            mostrarHorarios(
+                horarios
+            );
+        }
+        catch (erro)
+        {
+            console.error(
+                "Erro ao carregar horários:",
+                erro
+            );
+
+
+            listaManha.innerHTML =
+                `
+                <p class="mensagem-horario">
+                    Erro ao carregar horários.
+                </p>
+                `;
+
+
+            listaTarde.innerHTML =
+                `
+                <p class="mensagem-horario">
+                    Erro ao carregar horários.
+                </p>
+                `;
+        }
+    }
+
+
+    // =====================================================
+    // BUSCAR HORÁRIOS NA API
+    // =====================================================
+
+    async function buscarHorariosParaData(
+        data
+    )
+    {
+        // =================================================
+        // VALIDAR PROFISSIONAL
+        // =================================================
+
+        if (
+            !profissionalSelecionado ||
+            !profissionalSelecionado.id
+        )
+        {
+            throw new Error(
+                "Profissional não selecionado."
+            );
+        }
+
+
+        // =================================================
+        // VALIDAR SERVIÇO/COMBO
+        // =================================================
+
+        if (
+            itemId === null ||
+            itemId === undefined ||
+            Number.isNaN(Number(itemId))
+        )
+        {
+            throw new Error(
+                "Serviço ou combo não selecionado."
+            );
+        }
+
+
+        if (!tipo)
+        {
+            throw new Error(
+                "Tipo do atendimento não informado."
+            );
+        }
+
+
+        // =================================================
+        // MONTA URL
+        // =================================================
+
+        let url =
+            `${API_URL}/Agendamentos/horarios-disponiveis`
+            +
+            `?profissionalId=${Number(
+                profissionalSelecionado.id
+            )}`
+            +
+            `&data=${data}`;
+
+
+        if (
+            tipo.toLowerCase() === "combo"
+        )
+        {
+            url +=
+                `&comboId=${Number(itemId)}`;
+        }
+        else
+        {
+            url +=
+                `&servicoId=${Number(itemId)}`;
+        }
+
+
+        console.log(
+            "Buscando horários:",
+            url
+        );
+
+
+        // =================================================
+        // BUSCAR API
+        // =================================================
+
+        const resposta =
+            await fetch(
+                url,
+                {
+                    credentials: "include"
+                }
+            );
+
+
+        if (!resposta.ok)
+        {
+            const erro =
+                await resposta.text();
+
+
+            throw new Error(
+                erro ||
+                "Erro ao buscar horários."
+            );
+        }
+
+
+        return await resposta.json();
+    }
+
+
+    // =====================================================
+    // MOSTRAR HORÁRIOS
+    // =====================================================
+
+    function mostrarHorarios(
+        horarios
+    )
+    {
+        listaManha.innerHTML =
+            "";
+
+
+        listaTarde.innerHTML =
+            "";
+
+
+        if (
+            !Array.isArray(horarios)
+        )
+        {
+            horarios =
+                [];
+        }
+
+
+        const horariosManha =
+            horarios.filter(
+                item =>
+                    item.horario < "12:00"
+            );
+
+
+        const horariosTarde =
+            horarios.filter(
+                item =>
+                    item.horario >= "12:00"
+            );
+
+
+        renderizarPeriodo(
+            listaManha,
+            horariosManha
+        );
+
+
+        renderizarPeriodo(
+            listaTarde,
+            horariosTarde
+        );
+    }
+
+
+    // =====================================================
+    // RENDERIZA CADA PERÍODO
+    // =====================================================
+
+    function renderizarPeriodo(
+        container,
+        horarios
+    )
+    {
+        if (
+            !horarios ||
+            horarios.length === 0
+        )
+        {
+            container.innerHTML =
+                `
+                <p class="mensagem-horario">
+                    Nenhum horário disponível.
+                </p>
+                `;
+
+
+            return;
+        }
+
+
+        horarios.forEach(
+            item =>
+            {
+                const botao =
+                    document.createElement(
+                        "button"
+                    );
+
+
+                botao.type =
+                    "button";
+
+
+                botao.className =
+                    "horario";
+
+
+                botao.textContent =
+                    item.horario;
+
+
+                if (
+                    !item.disponivel
+                )
+                {
+                    botao.disabled =
+                        true;
+
+
+                    botao.classList.add(
+                        "indisponivel"
+                    );
+                }
+                else
+                {
+                    botao.addEventListener(
+                        "click",
+                        () =>
+                            selecionarHorario(
+                                botao,
+                                item.horario
+                            )
+                    );
+                }
+
+
+                container.appendChild(
+                    botao
+                );
+            }
+        );
+    }
+
+
+    // =====================================================
+    // SELECIONAR HORÁRIO
+    // =====================================================
+
+    function selecionarHorario(
+        botao,
+        horario
+    )
+    {
+        document
+            .querySelectorAll(
+                ".horario.selecionado"
+            )
+            .forEach(
+                elemento =>
+                    elemento.classList.remove(
+                        "selecionado"
+                    )
+            );
+
+
+        botao.classList.add(
+            "selecionado"
+        );
+
+
+        horarioSelecionado =
+            horario;
+
+
+        atualizarResumoDataHorario();
+    }
+
+
+    // =====================================================
+    // MUDAR MÊS
+    // =====================================================
+
+    document.getElementById(
+        "mesAnterior"
+    ).addEventListener(
+        "click",
+        () =>
+        {
+            dataAtual.setMonth(
+                dataAtual.getMonth() - 1
+            );
+
+
+            renderizarCalendario();
+        }
+    );
+
+
+    document.getElementById(
+        "mesProximo"
+    ).addEventListener(
+        "click",
+        () =>
+        {
+            dataAtual.setMonth(
+                dataAtual.getMonth() + 1
+            );
+
+
+            renderizarCalendario();
+        }
+    );
+
+
+    // =====================================================
+    // FINALIZAR
+    // =====================================================
+
+    document.getElementById(
+        "btnContinuar"
+    ).addEventListener(
+        "click",
+        async () =>
+        {
+            // =================================================
+            // VALIDAR DATA
+            // =================================================
+
+            if (!dataSelecionada)
+            {
+                alert(
+                    "Selecione uma data."
+                );
+
+
+                return;
+            }
+
+
+            // =================================================
+            // DOMINGO
+            // =================================================
+
+            if (
+                dataSelecionada.getDay() === 0
+            )
+            {
+                alert(
+                    "O salão não realiza agendamentos aos domingos."
+                );
+
+
+                return;
+            }
+
+
+            // =================================================
+            // VALIDAR HORÁRIO
+            // =================================================
+
+            if (!horarioSelecionado)
+            {
+                alert(
+                    "Selecione um horário."
+                );
+
+
+                return;
+            }
+
+
+            // =================================================
+            // VALIDAR PROFISSIONAL
+            // =================================================
+
+            if (
+                !profissionalSelecionado ||
+                !profissionalSelecionado.id
+            )
+            {
+                alert(
+                    "Selecione uma profissional."
+                );
+
+
+                return;
+            }
+
+
+            // =================================================
+            // VALIDAR SERVIÇO/COMBO
+            // =================================================
+
+            if (
+                itemId === null ||
+                itemId === undefined ||
+                Number.isNaN(Number(itemId))
+            )
+            {
+                alert(
+                    "Serviço ou combo não selecionado."
+                );
+
+
+                return;
+            }
+
+
+            if (!tipo)
+            {
+                alert(
+                    "Tipo do atendimento não informado."
+                );
+
+
+                return;
+            }
+
+
+            // =================================================
+            // MONTA DATA LOCAL
+            // =================================================
+
+            const ano =
+                dataSelecionada.getFullYear();
+
+
+            const mes =
+                String(
+                    dataSelecionada.getMonth() + 1
+                ).padStart(
+                    2,
+                    "0"
+                );
+
+
+            const dia =
+                String(
+                    dataSelecionada.getDate()
+                ).padStart(
+                    2,
+                    "0"
+                );
+
+
+            const dataBase =
+                `${ano}-${mes}-${dia}`;
+
+
+            const dataHora =
+                `${dataBase}T${horarioSelecionado}:00`;
+
+
+            // =================================================
+            // MONTA AGENDAMENTO
+            // =================================================
+
+            const agendamento =
+            {
+                dataHora:
+                    dataHora,
+
+
+                servicoId:
+                    tipo.toLowerCase() === "combo"
+                        ? null
+                        : Number(itemId),
+
+
+                comboId:
+                    tipo.toLowerCase() === "combo"
+                        ? Number(itemId)
+                        : null,
+
+
+                profissionalId:
+                    Number(
+                        profissionalSelecionado.id
+                    )
+            };
+
+
+            console.log(
+                "Agendamento enviado:",
+                agendamento
+            );
+
+
+            // =================================================
+            // ENVIA PARA API
+            // =================================================
+
+            try
+            {
+                const resposta =
+                    await fetch(
+                        `${API_URL}/Agendamentos`,
+                        {
+                            method: "POST",
+
+                            headers:
+                            {
+                                "Content-Type":
+                                    "application/json"
+                            },
+
+                            credentials:
+                                "include",
+
+                            body:
+                                JSON.stringify(
+                                    agendamento
+                                )
+                        }
+                    );
+
+
+                if (!resposta.ok)
+                {
+                    const erro =
+                        await resposta.text();
+
+
+                    throw new Error(
+                        erro ||
+                        "Não foi possível realizar o agendamento."
+                    );
+                }
+
+
+                alert(
+                    "Agendamento realizado com sucesso!"
+                );
+
+
+                window.location.href =
+                    "tela_inicial.html";
+
+            }
+            catch (erro)
+            {
+                console.error(
+                    "Erro ao criar agendamento:",
+                    erro
+                );
+
+
+                alert(
+                    erro.message ||
+                    "Erro ao realizar agendamento."
+                );
+            }
+        }
+    );
+
+
+    // =====================================================
+    // INICIALIZAÇÃO
+    // =====================================================
+
+    carregarSelecao();
+
+</script>
+
+
+</body>
+
+</html>

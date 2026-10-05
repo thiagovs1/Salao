@@ -1,0 +1,1740 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <title>Serviços - Belleza</title>
+
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <link rel="stylesheet"
+        href="../css/servicos.css">
+
+</head>
+
+<body>
+
+    <!-- =========================
+         MENU LATERAL
+    ========================== -->
+
+    <aside class="sidebar">
+
+        <div class="logo-area">
+
+            <img
+                src="../imagens/logo_belleza.png"
+                alt="Belleza"
+                class="logo-belleza">
+
+        </div>
+
+
+        <nav class="menu">
+
+            <a href="tela_inicial.html"
+                class="menu-item">
+
+                <i class="fa-solid fa-house"></i>
+
+                <span>Início</span>
+
+            </a>
+
+
+            <a href="servicos.html"
+                class="menu-item ativo">
+
+                <i class="fa-solid fa-scissors"></i>
+
+                <span>Serviços</span>
+
+            </a>
+
+
+            <a href="profissionais.html"
+                class="menu-item">
+
+                <i class="fa-solid fa-users"></i>
+
+                <span>Profissionais</span>
+
+            </a>
+
+
+            <a href="agendar_horario.html"
+                class="menu-item">
+
+                <i class="fa-regular fa-calendar"></i>
+
+                <span>Agendar horário</span>
+
+            </a>
+
+
+            <a href="meus_agendamentos.html"
+                class="menu-item">
+
+                <i class="fa-regular fa-calendar"></i>
+
+                <span>Meus agendamentos</span>
+
+            </a>
+
+
+            <a href="#"
+                class="menu-item">
+
+                <i class="fa-solid fa-tags"></i>
+
+                <span>Promoções</span>
+
+            </a>
+
+
+            <a href="#"
+                class="menu-item">
+
+                <i class="fa-regular fa-star"></i>
+
+                <span>Avaliações</span>
+
+            </a>
+
+
+            <a href="#"
+                class="menu-item">
+
+                <i class="fa-regular fa-circle-user"></i>
+
+                <span>Minha Conta</span>
+
+            </a>
+
+
+            <a href="#"
+                class="menu-item sair">
+
+                <i class="fa-solid fa-arrow-right-from-bracket"></i>
+
+                <span>Sair</span>
+
+            </a>
+
+        </nav>
+
+    </aside>
+
+
+
+    <!-- =========================
+         CONTEÚDO
+    ========================== -->
+
+    <main class="conteudo">
+
+        <section class="area-servicos">
+
+
+            <div class="conteudo-servicos">
+
+                <h1 class="titulo-pagina">
+                    Escolha o serviço
+                </h1>
+
+
+                <!-- =========================
+                     CATEGORIAS
+                ========================== -->
+
+                <div class="categorias-escolha">
+
+                    <button
+                        type="button"
+                        id="btn-servicos"
+                        class="categoria ativa">
+
+                        <span class="nome-categoria">
+                            Serviços
+                        </span>
+
+                        <span
+                            class="quantidade"
+                            id="quantidade-servicos">
+
+                            Carregando...
+
+                        </span>
+
+                    </button>
+
+
+                    <button
+                        type="button"
+                        id="btn-combos"
+                        class="categoria">
+
+                        <span class="nome-categoria">
+                            Combos
+                        </span>
+
+                        <span
+                            class="quantidade"
+                            id="quantidade-combos">
+
+                            Carregando...
+
+                        </span>
+
+                    </button>
+
+                </div>
+
+
+
+                <!-- =========================
+                     SERVIÇOS
+                ========================== -->
+
+                <div
+                    id="area-servicos"
+                    class="area-lista">
+
+                    <h2 class="titulo-servicos">
+                        Serviços disponíveis
+                    </h2>
+
+
+                    <div
+                        id="lista-servicos"
+                        class="lista-servicos">
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- =========================
+                     COMBOS
+                ========================== -->
+
+                <div
+                    id="area-combos"
+                    class="area-lista oculto">
+
+                    <h2 class="titulo-servicos">
+                        Combos disponíveis
+                    </h2>
+
+
+                    <div
+                        id="lista-combos"
+                        class="lista-servicos">
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =========================
+                 RESUMO
+            ========================== -->
+
+            <aside class="resumo">
+
+                <h2>
+                    Resumo do atendimento
+                </h2>
+
+
+                <div
+                    id="itens-selecionados"
+                    class="itens-selecionados">
+
+                    <p class="nenhum-item">
+                        Nenhum serviço selecionado.
+                    </p>
+
+                </div>
+
+
+                <div class="resumo-item">
+
+                    <div class="resumo-icone">
+
+                        <i class="fa-solid fa-people-group"></i>
+
+                    </div>
+
+
+                    <div class="resumo-texto">
+
+                        <span>
+                            Profissional
+                        </span>
+
+                        <strong>
+                            Não selecionado
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <div class="resumo-item">
+
+                    <div class="resumo-icone">
+
+                        <i class="fa-regular fa-calendar"></i>
+
+                    </div>
+
+
+                    <div class="resumo-texto">
+
+                        <span>
+                            Data e horário
+                        </span>
+
+                        <strong>
+                            Não selecionado
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <div class="total">
+
+                    <span class="titulo-total">
+                        Total do atendimento
+                    </span>
+
+
+                    <div class="valor">
+
+                        <strong id="valorTotal">
+                            R$ 0,00
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <button
+                    type="button"
+                    id="btn-excluir-pedido"
+                    class="btn-limpar">
+
+                    Limpar seleção
+
+                </button>
+
+
+                <button
+                    type="button"
+                    id="btn-continuar"
+                    class="btn-continuar">
+
+                    <span>
+                        Continuar
+                    </span>
+
+                    <span>
+                        ➜
+                    </span>
+
+                </button>
+
+            </aside>
+
+        </section>
+
+    </main>
+
+
+
+    <script>
+
+        const API_URL =
+            "http://localhost:5000/api";
+
+
+        let servicos = [];
+
+        let combos = [];
+
+        let selecionados = [];
+
+
+
+        // =========================================================
+        // TROCAR ENTRE SERVIÇOS E COMBOS
+        // =========================================================
+
+        document
+            .getElementById("btn-servicos")
+            .addEventListener(
+                "click",
+                function () {
+
+                    document
+                        .getElementById("btn-servicos")
+                        .classList.add("ativa");
+
+
+                    document
+                        .getElementById("btn-combos")
+                        .classList.remove("ativa");
+
+
+                    document
+                        .getElementById("area-servicos")
+                        .classList.remove("oculto");
+
+
+                    document
+                        .getElementById("area-combos")
+                        .classList.add("oculto");
+
+                }
+            );
+
+
+
+        document
+            .getElementById("btn-combos")
+            .addEventListener(
+                "click",
+                function () {
+
+                    document
+                        .getElementById("btn-combos")
+                        .classList.add("ativa");
+
+
+                    document
+                        .getElementById("btn-servicos")
+                        .classList.remove("ativa");
+
+
+                    document
+                        .getElementById("area-combos")
+                        .classList.remove("oculto");
+
+
+                    document
+                        .getElementById("area-servicos")
+                        .classList.add("oculto");
+
+                }
+            );
+
+
+
+        // =========================================================
+        // CRIAR CARD DE SERVIÇO
+        // =========================================================
+
+        function criarCardServico(servico) {
+
+            const container =
+                document.getElementById(
+                    "lista-servicos"
+                );
+
+
+            const card =
+                document.createElement("div");
+
+
+            card.className =
+                "servico";
+
+
+            const nome =
+                servico.nome ??
+                servico.Nome;
+
+
+            const preco =
+                servico.preco ??
+                servico.Preco;
+
+
+            const id =
+                servico.id ??
+                servico.Id;
+
+
+            const duracao =
+                servico.duracaoMinutos ??
+                servico.DuracaoMinutos ??
+                0;
+
+
+            card.innerHTML = `
+
+                <h3>
+                    ${nome}
+                </h3>
+
+                <p>
+                    Serviço disponível no salão.
+                </p>
+
+                <span>
+                    Preço: ${formatarPreco(preco)}
+                </span>
+
+                <span>
+                    Tempo: ${formatarDuracao(duracao)}
+                </span>
+
+                <button
+                    type="button"
+                    class="btn-servico">
+
+                    Selecionar
+
+                </button>
+
+            `;
+
+
+            const botao =
+                card.querySelector(
+                    ".btn-servico"
+                );
+
+
+            botao.addEventListener(
+                "click",
+                function () {
+
+                    selecionarItem(
+                        id,
+                        nome,
+                        preco,
+                        duracao,
+                        "servico"
+                    );
+
+                }
+            );
+
+
+            container.appendChild(card);
+
+        }
+
+
+
+        // =========================================================
+        // CRIAR CARD DE COMBO
+        // =========================================================
+
+        function criarCardCombo(combo) {
+
+            const container =
+                document.getElementById(
+                    "lista-combos"
+                );
+
+
+            const card =
+                document.createElement("div");
+
+
+            card.className =
+                "servico";
+
+
+            const nome =
+                combo.nome ??
+                combo.Nome;
+
+
+            const preco =
+                combo.preco ??
+                combo.Preco;
+
+
+            const id =
+                combo.id ??
+                combo.Id;
+
+
+            let descricao =
+                "Combo de serviços";
+
+
+            if (
+                combo.servicos &&
+                combo.servicos.length > 0
+            ) {
+
+                descricao =
+                    combo.servicos
+                        .map(
+                            function (servico) {
+
+                                return (
+                                    servico.nome ??
+                                    servico.Nome
+                                );
+
+                            }
+                        )
+                        .join(" + ");
+
+            }
+
+
+            let totalMinutos = 0;
+
+
+            if (
+                combo.servicos &&
+                combo.servicos.length > 0
+            ) {
+
+                totalMinutos =
+                    combo.servicos.reduce(
+                        function (
+                            total,
+                            servico
+                        ) {
+
+                            return total +
+                                Number(
+                                    servico.duracaoMinutos ??
+                                    servico.DuracaoMinutos ??
+                                    0
+                                );
+
+                        },
+                        0
+                    );
+
+            }
+
+
+            card.innerHTML = `
+
+                <h3>
+                    ${nome}
+                </h3>
+
+                <p>
+                    ${descricao}
+                </p>
+
+                <span>
+                    Preço: ${formatarPreco(preco)}
+                </span>
+
+                <span>
+                    Tempo: ${formatarDuracao(totalMinutos)}
+                </span>
+
+                <button
+                    type="button"
+                    class="btn-servico">
+
+                    Selecionar
+
+                </button>
+
+            `;
+
+
+            const botao =
+                card.querySelector(
+                    ".btn-servico"
+                );
+
+
+            botao.addEventListener(
+                "click",
+                function () {
+
+                    selecionarItem(
+                        id,
+                        nome,
+                        preco,
+                        totalMinutos,
+                        "combo"
+                    );
+
+                }
+            );
+
+
+            container.appendChild(card);
+
+        }
+
+
+
+        // =========================================================
+        // FORMATAR PREÇO
+        // =========================================================
+
+        function formatarPreco(preco) {
+
+            return Number(preco)
+                .toLocaleString(
+                    "pt-BR",
+                    {
+                        style: "currency",
+                        currency: "BRL"
+                    }
+                );
+
+        }
+
+
+
+        // =========================================================
+        // FORMATAR TEMPO
+        // =========================================================
+
+        function formatarDuracao(minutos) {
+
+            minutos =
+                Number(minutos) || 0;
+
+
+            if (minutos === 0) {
+
+                return "Tempo não informado";
+
+            }
+
+
+            const horas =
+                Math.floor(
+                    minutos / 60
+                );
+
+
+            const minutosRestantes =
+                minutos % 60;
+
+
+            if (horas === 0) {
+
+                return minutosRestantes + "min";
+
+            }
+
+
+            if (minutosRestantes === 0) {
+
+                return horas + "h";
+
+            }
+
+
+            return horas +
+                "h " +
+                minutosRestantes +
+                "min";
+
+        }
+
+
+
+        // =========================================================
+        // ENCONTRAR COMBO
+        // =========================================================
+
+        function encontrarComboPorNome(nome) {
+
+            return combos.find(
+                function (combo) {
+
+                    const nomeCombo =
+                        combo.nome ??
+                        combo.Nome;
+
+                    return nomeCombo === nome;
+
+                }
+            );
+
+        }
+
+
+
+        // =========================================================
+        // VERIFICAR SE SERVIÇO ESTÁ EM COMBO
+        // =========================================================
+
+        function encontrarComboDoServico(
+            id,
+            nome
+        ) {
+
+            for (
+                const combo of combos
+            ) {
+
+                if (
+                    !combo.servicos ||
+                    combo.servicos.length === 0
+                ) {
+
+                    continue;
+
+                }
+
+
+                const encontrado =
+                    combo.servicos.some(
+                        function (servico) {
+
+                            const servicoId =
+                                servico.id ??
+                                servico.Id;
+
+
+                            const servicoNome =
+                                servico.nome ??
+                                servico.Nome;
+
+
+                            return (
+                                Number(servicoId) === Number(id) ||
+                                servicoNome === nome
+                            );
+
+                        }
+                    );
+
+
+                if (encontrado) {
+
+                    return combo;
+
+                }
+
+            }
+
+
+            return null;
+
+        }
+
+
+
+        // =========================================================
+        // VERIFICAR SE COMBO CONTÉM SERVIÇO
+        // =========================================================
+
+        function comboContemServico(
+            combo,
+            item
+        ) {
+
+            if (
+                !combo.servicos ||
+                combo.servicos.length === 0
+            ) {
+
+                return false;
+
+            }
+
+
+            return combo.servicos.some(
+                function (servico) {
+
+                    const servicoId =
+                        servico.id ??
+                        servico.Id;
+
+
+                    const servicoNome =
+                        servico.nome ??
+                        servico.Nome;
+
+
+                    return (
+                        Number(servicoId) === Number(item.id) ||
+                        servicoNome === item.nome
+                    );
+
+                }
+            );
+
+        }
+
+
+
+        // =========================================================
+        // SELECIONAR ITEM
+        // =========================================================
+
+        async function selecionarItem(
+            id,
+            nome,
+            preco,
+            duracao,
+            tipo
+        ) {
+
+            // =====================================================
+            // 1. NÃO PERMITIR DUPLICAÇÃO
+            // =====================================================
+
+            const jaSelecionado =
+                selecionados.some(
+                    function (item) {
+
+                        return (
+                            Number(item.id) === Number(id) &&
+                            item.tipo === tipo
+                        );
+
+                    }
+                );
+
+
+            if (jaSelecionado) {
+
+                if (tipo === "servico") {
+
+                    alert(
+                        "Este serviço já foi selecionado. Você só pode adicionar um de cada serviço."
+                    );
+
+                } else {
+
+                    alert(
+                        "Este combo já foi selecionado."
+                    );
+
+                }
+
+
+                return;
+
+            }
+
+
+
+            // =====================================================
+            // 2. SE FOR SERVIÇO
+            // =====================================================
+
+            if (tipo === "servico") {
+
+                const comboDoServico =
+                    encontrarComboDoServico(
+                        id,
+                        nome
+                    );
+
+
+                if (comboDoServico) {
+
+                    const comboSelecionado =
+                        selecionados.find(
+                            function (item) {
+
+                                return (
+                                    item.tipo === "combo" &&
+                                    item.nome ===
+                                    (
+                                        comboDoServico.nome ??
+                                        comboDoServico.Nome
+                                    )
+                                );
+
+                            }
+                        );
+
+
+                    if (comboSelecionado) {
+
+                        alert(
+                            `Este serviço já está incluído no combo "${comboSelecionado.nome}". Remova o combo para selecionar este serviço separadamente.`
+                        );
+
+                        return;
+
+                    }
+
+                }
+
+            }
+
+
+
+            // =====================================================
+            // 3. SE FOR COMBO
+            // =====================================================
+
+            if (tipo === "combo") {
+
+                const comboAtual =
+                    combos.find(
+                        function (combo) {
+
+                            const comboId =
+                                combo.id ??
+                                combo.Id;
+
+                            return (
+                                Number(comboId) ===
+                                Number(id)
+                            );
+
+                        }
+                    );
+
+
+                if (comboAtual) {
+
+                    // =============================================
+                    // BELLEZA COMPLETA
+                    // =============================================
+
+                    const nomeComboAtual =
+                        comboAtual.nome ??
+                        comboAtual.Nome;
+
+
+                    if (
+                        nomeComboAtual
+                            .toLowerCase()
+                            .includes("belleza completa")
+                    ) {
+
+                        const outrosCombos =
+                            selecionados.filter(
+                                function (item) {
+
+                                    return (
+                                        item.tipo === "combo"
+                                    );
+
+                                }
+                            );
+
+
+                        if (
+                            outrosCombos.length > 0
+                        ) {
+
+                            const nomes =
+                                outrosCombos
+                                    .map(
+                                        function (item) {
+
+                                            return item.nome;
+
+                                        }
+                                    )
+                                    .join(", ");
+
+
+                            alert(
+                                `O combo "Belleza Completa" já inclui os serviços dos combos ${nomes}. Remova esses combos para selecionar o Belleza Completa.`
+                            );
+
+                            return;
+
+                        }
+
+                    }
+
+
+                    // =============================================
+                    // VERIFICAR SERVIÇOS JÁ SELECIONADOS
+                    // =============================================
+
+                    const servicosSelecionados =
+                        selecionados.filter(
+                            function (item) {
+
+                                return (
+                                    item.tipo === "servico"
+                                );
+
+                            }
+                        );
+
+
+                    const servicosConflitantes =
+                        servicosSelecionados.filter(
+                            function (item) {
+
+                                return comboContemServico(
+                                    comboAtual,
+                                    item
+                                );
+
+                            }
+                        );
+
+
+                    if (
+                        servicosConflitantes.length > 0
+                    ) {
+
+                        const nomes =
+                            servicosConflitantes
+                                .map(
+                                    function (item) {
+
+                                        return item.nome;
+
+                                    }
+                                )
+                                .join(", ");
+
+
+                        alert(
+                            `O serviço ${nomes} já está incluído no combo "${nomeComboAtual}". Remova esse serviço para selecionar o combo.`
+                        );
+
+                        return;
+
+                    }
+
+                }
+
+            }
+
+
+
+            // =====================================================
+            // 4. MONTAR OBJETO
+            // =====================================================
+
+            const item = {
+
+                id: Number(id),
+
+                nome: nome,
+
+                preco: Number(preco),
+
+                duracaoMinutos: Number(duracao),
+
+                tipo: tipo
+
+            };
+
+
+            console.log(
+                "Enviando seleção:",
+                item
+            );
+
+
+
+            // =====================================================
+            // 5. ENVIAR PARA SESSION
+            // =====================================================
+
+            try {
+
+                const resposta =
+                    await fetch(
+                        `${API_URL}/Selecao`,
+                        {
+                            method: "POST",
+
+                            headers: {
+                                "Content-Type":
+                                    "application/json"
+                            },
+
+                            credentials: "include",
+
+                            body:
+                                JSON.stringify(item)
+
+                        }
+                    );
+
+
+                const dados =
+                    await resposta.json();
+
+
+                console.log(
+                    "Resposta da API:",
+                    dados
+                );
+
+
+                if (!resposta.ok) {
+
+                    throw new Error(
+                        dados.mensagem ||
+                        "Erro ao salvar seleção."
+                    );
+
+                }
+
+
+                await carregarSelecao();
+
+
+                atualizarBotoes();
+
+            }
+            catch (erro) {
+
+                console.error(
+                    "Erro ao selecionar item:",
+                    erro
+                );
+
+
+                alert(
+                    erro.message ||
+                    "Não foi possível selecionar o item."
+                );
+
+            }
+
+        }
+
+
+
+        // =========================================================
+        // CARREGAR SERVIÇOS
+        // =========================================================
+
+        async function carregarServicos() {
+
+            try {
+
+                const resposta =
+                    await fetch(
+                        `${API_URL}/Servicos`
+                    );
+
+
+                if (!resposta.ok) {
+
+                    throw new Error(
+                        "Erro ao buscar serviços."
+                    );
+
+                }
+
+
+                servicos =
+                    await resposta.json();
+
+
+                const container =
+                    document.getElementById(
+                        "lista-servicos"
+                    );
+
+
+                container.innerHTML = "";
+
+
+                servicos.forEach(
+                    function (servico) {
+
+                        criarCardServico(
+                            servico
+                        );
+
+                    }
+                );
+
+
+                document.getElementById(
+                    "quantidade-servicos"
+                ).textContent =
+                    servicos.length +
+                    (
+                        servicos.length === 1
+                            ? " serviço"
+                            : " serviços"
+                    );
+
+            }
+            catch (erro) {
+
+                console.error(
+                    "Erro ao carregar serviços:",
+                    erro
+                );
+
+            }
+
+        }
+
+
+
+        // =========================================================
+        // CARREGAR COMBOS
+        // =========================================================
+
+        async function carregarCombos() {
+
+            try {
+
+                const resposta =
+                    await fetch(
+                        `${API_URL}/Combos`
+                    );
+
+
+                if (!resposta.ok) {
+
+                    throw new Error(
+                        "Erro ao buscar combos."
+                    );
+
+                }
+
+
+                combos =
+                    await resposta.json();
+
+
+                console.log(
+                    "COMBOS:",
+                    combos
+                );
+
+
+                const container =
+                    document.getElementById(
+                        "lista-combos"
+                    );
+
+
+                container.innerHTML = "";
+
+
+                combos.forEach(
+                    function (combo) {
+
+                        criarCardCombo(
+                            combo
+                        );
+
+                    }
+                );
+
+
+                document.getElementById(
+                    "quantidade-combos"
+                ).textContent =
+                    combos.length +
+                    (
+                        combos.length === 1
+                            ? " combo"
+                            : " combos"
+                    );
+
+            }
+            catch (erro) {
+
+                console.error(
+                    "Erro ao carregar combos:",
+                    erro
+                );
+
+            }
+
+        }
+
+
+
+        // =========================================================
+        // CARREGAR SELEÇÃO
+        // =========================================================
+
+        async function carregarSelecao() {
+
+            try {
+
+                const resposta =
+                    await fetch(
+                        `${API_URL}/Selecao`,
+                        {
+                            method: "GET",
+                            credentials: "include"
+                        }
+                    );
+
+
+                if (!resposta.ok) {
+
+                    throw new Error(
+                        "Erro ao carregar seleção."
+                    );
+
+                }
+
+
+                const dados =
+                    await resposta.json();
+
+
+                selecionados =
+                    Array.isArray(dados)
+                        ? dados
+                        : [];
+
+
+                console.log(
+                    "SELEÇÃO:",
+                    selecionados
+                );
+
+
+                atualizarResumo();
+
+                atualizarBotoes();
+
+            }
+            catch (erro) {
+
+                console.error(
+                    "Erro ao carregar seleção:",
+                    erro
+                );
+
+            }
+
+        }
+
+
+
+        // =========================================================
+        // ATUALIZAR RESUMO
+        // =========================================================
+
+        function atualizarResumo() {
+
+            const container =
+                document.getElementById(
+                    "itens-selecionados"
+                );
+
+
+            const valorTotal =
+                document.getElementById(
+                    "valorTotal"
+                );
+
+
+            container.innerHTML = "";
+
+
+            if (
+                !selecionados ||
+                selecionados.length === 0
+            ) {
+
+                container.innerHTML = `
+                    <p class="nenhum-item">
+                        Nenhum serviço selecionado.
+                    </p>
+                `;
+
+
+                valorTotal.textContent =
+                    "R$ 0,00";
+
+
+                return;
+
+            }
+
+
+            let total = 0;
+
+
+            selecionados.forEach(
+                function (item) {
+
+                    const nome =
+                        item.nome ??
+                        item.Nome;
+
+
+                    const preco =
+                        Number(
+                            item.preco ??
+                            item.Preco ??
+                            0
+                        );
+
+
+                    total += preco;
+
+
+                    const div =
+                        document.createElement(
+                            "div"
+                        );
+
+
+                    div.className =
+                        "item-selecionado";
+
+
+                    div.innerHTML = `
+
+                        <div class="pedido-detalhes">
+
+                            <strong>
+                                ${nome}
+                            </strong>
+
+                        </div>
+
+                        <div class="pedido-preco">
+                            ${formatarPreco(preco)}
+                        </div>
+
+                    `;
+
+
+                    container.appendChild(
+                        div
+                    );
+
+                }
+            );
+
+
+            valorTotal.textContent =
+                formatarPreco(total);
+
+        }
+
+
+
+        // =========================================================
+        // ATUALIZAR BOTÕES
+        // =========================================================
+
+        function atualizarBotoes() {
+
+            const botoes =
+                document.querySelectorAll(
+                    ".btn-servico"
+                );
+
+
+            botoes.forEach(
+                function (botao) {
+
+                    const card =
+                        botao.closest(
+                            ".servico"
+                        );
+
+
+                    if (!card) {
+                        return;
+                    }
+
+
+                    const titulo =
+                        card.querySelector(
+                            "h3"
+                        );
+
+
+                    if (!titulo) {
+                        return;
+                    }
+
+
+                    const nome =
+                        titulo.textContent.trim();
+
+
+                    const selecionado =
+                        selecionados.some(
+                            function (item) {
+
+                                const itemNome =
+                                    item.nome ??
+                                    item.Nome;
+
+
+                                return (
+                                    itemNome === nome
+                                );
+
+                            }
+                        );
+
+
+                    if (selecionado) {
+
+                        botao.textContent =
+                            "Selecionado";
+
+                        botao.classList.add(
+                            "selecionado-btn"
+                        );
+
+                    }
+                    else {
+
+                        botao.textContent =
+                            "Selecionar";
+
+                        botao.classList.remove(
+                            "selecionado-btn"
+                        );
+
+                    }
+
+                }
+            );
+
+        }
+
+
+
+        // =========================================================
+        // LIMPAR SELEÇÃO
+        // =========================================================
+
+        document
+            .getElementById(
+                "btn-excluir-pedido"
+            )
+            .addEventListener(
+                "click",
+                async function () {
+
+                    try {
+
+                        const resposta =
+                            await fetch(
+                                `${API_URL}/Selecao`,
+                                {
+                                    method: "DELETE",
+                                    credentials: "include"
+                                }
+                            );
+
+
+                        if (!resposta.ok) {
+
+                            throw new Error(
+                                "Erro ao limpar seleção."
+                            );
+
+                        }
+
+
+                        selecionados = [];
+
+
+                        atualizarResumo();
+
+                        atualizarBotoes();
+
+                    }
+                    catch (erro) {
+
+                        console.error(
+                            "Erro ao limpar seleção:",
+                            erro
+                        );
+
+
+                        alert(
+                            "Não foi possível limpar a seleção."
+                        );
+
+                    }
+
+                }
+            );
+
+
+
+        // =========================================================
+        // CONTINUAR
+        // =========================================================
+
+        document
+            .getElementById(
+                "btn-continuar"
+            )
+            .addEventListener(
+                "click",
+                function () {
+
+                    if (
+                        !selecionados ||
+                        selecionados.length === 0
+                    ) {
+
+                        alert(
+                            "Selecione pelo menos um serviço ou combo."
+                        );
+
+                        return;
+
+                    }
+
+
+                    window.location.href =
+                        "profissionais.html";
+
+                }
+            );
+
+
+
+        // =========================================================
+        // INICIAR
+        // =========================================================
+
+        async function iniciar() {
+
+            await carregarServicos();
+
+            await carregarCombos();
+
+            await carregarSelecao();
+
+        }
+
+
+        iniciar();
+
+    </script>
+
+</body>
+
+</html>

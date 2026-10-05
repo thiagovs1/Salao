@@ -1,0 +1,689 @@
+
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Meus agendamentos - Belleza</title>
+
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <link rel="stylesheet" href="../css/meus_agendamentos.css">
+</head>
+
+<body>
+
+    <aside class="sidebar">
+
+        <div class="logo-area">
+
+            <img
+                src="../imagens/salao_belleza.png"
+                alt="Belleza"
+                class="logo-belleza">
+
+        </div>
+
+        <nav class="menu">
+
+            <a href="tela_inicial.html"
+                class="menu-item">
+                <i class="fa-solid fa-house"></i>
+                <span>Início</span>
+            </a>
+
+            <a href="servicos.html"
+                class="menu-item">
+                <i class="fa-solid fa-scissors"></i>
+                <span>Serviços</span>
+            </a>
+
+            <a href="profissionais.html"
+                class="menu-item">
+                <i class="fa-solid fa-users"></i>
+                <span>Profissionais</span>
+            </a>
+
+            <a href="agendar_horario.html"
+                class="menu-item">
+                <i class="fa-regular fa-calendar"></i>
+                <span>Agendar horário</span>
+            </a>
+
+            <a href="meus_agendamentos.html"
+                class="menu-item ativo">
+                <i class="fa-regular fa-calendar"></i>
+                <span>Meus agendamentos</span>
+            </a>
+
+            <a href="#"
+                class="menu-item">
+                <i class="fa-solid fa-tags"></i>
+                <span>Promoções</span>
+            </a>
+
+            <a href="#"
+                class="menu-item">
+                <i class="fa-regular fa-star"></i>
+                <span>Avaliações</span>
+            </a>
+
+            <a href="#"
+                class="menu-item">
+                <i class="fa-regular fa-circle-user"></i>
+                <span>Minha Conta</span>
+            </a>
+
+            <a href="#"
+                class="menu-item sair">
+                <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                <span>Sair</span>
+            </a>
+
+        </nav>
+
+    </aside>
+
+
+    <main class="conteudo">
+
+        <section class="coluna-esquerda">
+
+            <div class="promocao">
+
+                <div class="texto-promocao">
+
+                    <h2>
+                        Promoção especial
+                    </h2>
+
+                    <h1>
+                        10 % &nbsp;OFF
+                    </h1>
+
+                    <p>
+                        em todos os nossos serviços
+                        <br>
+                        de cabelo
+                    </p>
+
+                </div>
+
+                <img
+                    src="/imagens/promocao.png"
+                    alt="Promoção">
+
+                <a
+                    href="pagina_promocao.html"
+                    class="botao-promocao">
+                    Aproveite agora
+                    <span>➜</span>
+                </a>
+
+            </div>
+
+
+            <div class="frase">
+
+                <span class="coracao">
+                    ♥
+                </span>
+
+                <p>
+                    Cuidar de você
+                    <br>
+                    é sempre uma boa ideia
+                </p>
+
+            </div>
+
+
+            <div class="cortes">
+
+                <img
+                    src="/imagens/beatriz.png"
+                    alt="Cortes">
+
+                <div class="texto-cortes">
+
+                    <h2>
+                        Cortes para
+                        <br>
+                        todo tipo de
+                        <br>
+                        cabelos
+                    </h2>
+
+                    <a
+                        href="pagina_promocao.html"
+                        class="botao-cortes">
+                        Venha conferir
+                    </a>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <section class="agendamentos">
+
+            <h1>
+                Meus agendamentos
+            </h1>
+
+
+            <div class="filtros">
+
+                <button
+                    class="filtro todos ativo-filtro"
+                    data-filtro="Todos">
+                    Todos
+                </button>
+
+                <button
+                    class="filtro"
+                    data-filtro="Aberto">
+                    Abertos
+                </button>
+
+                <button
+                    class="filtro"
+                    data-filtro="Confirmado">
+                    Confirmados
+                </button>
+
+                <button
+                    class="filtro"
+                    data-filtro="Cancelado">
+                    Cancelados
+                </button>
+
+            </div>
+
+
+            <div
+                id="lista-agendamentos"
+                class="lista-agendamentos">
+
+            </div>
+
+
+            <div
+                id="sem-agendamento"
+                class="sem-agendamento">
+
+                <h2>
+                    Nenhum agendamento encontrado
+                </h2>
+
+                <p>
+                    Você ainda não realizou nenhum agendamento
+                </p>
+
+                <a
+                    href="agendar_horario.html"
+                    class="botao-agendar">
+                    Agendar horário
+                    <span>➜</span>
+                </a>
+
+            </div>
+
+
+            <div
+                id="mensagem-erro"
+                class="mensagem-erro">
+
+                Não foi possível carregar seus agendamentos.
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <script>
+
+        let agendamentos = [];
+
+        let filtroAtual = "Todos";
+
+
+        // =====================================================
+        // CARREGAR AGENDAMENTOS
+        // =====================================================
+
+        async function carregarAgendamentos() {
+
+            const lista =
+                document.getElementById(
+                    "lista-agendamentos"
+                );
+
+            const semAgendamento =
+                document.getElementById(
+                    "sem-agendamento"
+                );
+
+            const mensagemErro =
+                document.getElementById(
+                    "mensagem-erro"
+                );
+
+
+            lista.innerHTML = "";
+
+            semAgendamento.style.display = "none";
+
+            mensagemErro.style.display = "none";
+
+
+            try {
+
+                const resposta =
+                    await fetch(
+                        "/api/agendamentos/meus"
+                    );
+
+
+                if (resposta.status === 401) {
+
+                    window.location.href =
+                        "login_cliente.html";
+
+                    return;
+                }
+
+
+                if (!resposta.ok) {
+
+                    throw new Error(
+                        "Erro ao carregar agendamentos."
+                    );
+
+                }
+
+
+                agendamentos =
+                    await resposta.json();
+
+
+                mostrarAgendamentos();
+
+            }
+            catch (erro) {
+
+                console.error(
+                    "Erro ao carregar agendamentos:",
+                    erro
+                );
+
+                lista.innerHTML = "";
+
+                mensagemErro.style.display =
+                    "block";
+
+            }
+
+        }
+
+
+        // =====================================================
+        // MOSTRAR AGENDAMENTOS
+        // =====================================================
+
+        function mostrarAgendamentos() {
+
+            const lista =
+                document.getElementById(
+                    "lista-agendamentos"
+                );
+
+            const semAgendamento =
+                document.getElementById(
+                    "sem-agendamento"
+                );
+
+
+            lista.innerHTML = "";
+
+
+            let filtrados;
+
+
+            if (filtroAtual === "Todos") {
+
+                filtrados =
+                    agendamentos;
+
+            }
+            else {
+
+                filtrados =
+                    agendamentos.filter(
+                        agendamento =>
+                            agendamento.status ===
+                            filtroAtual
+                    );
+
+            }
+
+
+            if (filtrados.length === 0) {
+
+                lista.style.display = "none";
+
+                semAgendamento.style.display =
+                    "block";
+
+                return;
+
+            }
+
+
+            lista.style.display = "flex";
+
+            semAgendamento.style.display =
+                "none";
+
+
+            filtrados.forEach(
+                agendamento => {
+
+                    const card =
+                        criarCardAgendamento(
+                            agendamento
+                        );
+
+                    lista.appendChild(card);
+
+                }
+            );
+
+        }
+
+
+        // =====================================================
+        // CRIAR CARD
+        // =====================================================
+
+        function criarCardAgendamento(
+            agendamento
+        ) {
+
+            const card =
+                document.createElement("div");
+
+
+            card.className =
+                "card-agendamento";
+
+
+            const data =
+                new Date(
+                    agendamento.dataHora
+                );
+
+
+            const dataFormatada =
+                data.toLocaleDateString(
+                    "pt-BR"
+                );
+
+
+            const horarioFormatado =
+                data.toLocaleTimeString(
+                    "pt-BR",
+                    {
+                        hour: "2-digit",
+                        minute: "2-digit"
+                    }
+                );
+
+
+            const status =
+                agendamento.status;
+
+
+            let classeStatus = "";
+
+            let textoStatus = "";
+
+
+            if (status === "Aberto") {
+
+                classeStatus = "status-aberto";
+
+                textoStatus = "Aberto";
+
+            }
+            else if (
+                status === "Confirmado"
+            ) {
+
+                classeStatus =
+                    "status-confirmado";
+
+                textoStatus =
+                    "Confirmado";
+
+            }
+            else if (
+                status === "Cancelado"
+            ) {
+
+                classeStatus =
+                    "status-cancelado";
+
+                textoStatus =
+                    "Cancelado";
+
+            }
+
+
+            card.innerHTML = `
+
+                <div class="informacoes-agendamento">
+
+                    <div class="icone-agendamento">
+
+                        <i class="fa-regular fa-calendar"></i>
+
+                    </div>
+
+
+                    <div class="dados-agendamento">
+
+                        <h2>
+                            ${agendamento.nomeServico}
+                        </h2>
+
+                        <p>
+                            <strong>Data:</strong>
+                            ${dataFormatada}
+                        </p>
+
+                        <p>
+                            <strong>Horário:</strong>
+                            ${horarioFormatado}
+                        </p>
+
+                        <p>
+                            <strong>Valor:</strong>
+                            R$ ${Number(
+                                agendamento.preco
+                            ).toFixed(2).replace(".", ",")}
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="acoes-agendamento">
+
+                    <span class="status ${classeStatus}">
+                        ${textoStatus}
+                    </span>
+
+                    ${
+                        status === "Aberto"
+                        ?
+                        `
+                        <button
+                            class="botao-cancelar"
+                            onclick="cancelarAgendamento(${agendamento.id})">
+                            Cancelar
+                        </button>
+                        `
+                        :
+                        ""
+                    }
+
+                </div>
+
+            `;
+
+
+            return card;
+
+        }
+
+
+        // =====================================================
+        // CANCELAR AGENDAMENTO
+        // =====================================================
+
+        async function cancelarAgendamento(
+            id
+        ) {
+
+            const confirmar =
+                confirm(
+                    "Tem certeza que deseja cancelar este agendamento?"
+                );
+
+
+            if (!confirmar) {
+
+                return;
+
+            }
+
+
+            try {
+
+                const resposta =
+                    await fetch(
+                        `/api/agendamentos/${id}/cancelar`,
+                        {
+                            method: "PUT"
+                        }
+                    );
+
+
+                if (resposta.status === 401) {
+
+                    window.location.href =
+                        "login_cliente.html";
+
+                    return;
+
+                }
+
+
+                if (!resposta.ok) {
+
+                    const erro =
+                        await resposta.json();
+
+                    alert(
+                        erro.mensagem ||
+                        "Não foi possível cancelar o agendamento."
+                    );
+
+                    return;
+
+                }
+
+
+                await carregarAgendamentos();
+
+            }
+            catch (erro) {
+
+                console.error(
+                    "Erro ao cancelar agendamento:",
+                    erro
+                );
+
+                alert(
+                    "Erro ao cancelar o agendamento."
+                );
+
+            }
+
+        }
+
+
+        // =====================================================
+        // FILTROS
+        // =====================================================
+
+        document
+            .querySelectorAll(".filtro")
+            .forEach(
+                botao => {
+
+                    botao.addEventListener(
+                        "click",
+                        function () {
+
+                            document
+                                .querySelectorAll(
+                                    ".filtro"
+                                )
+                                .forEach(
+                                    outro =>
+                                        outro.classList.remove(
+                                            "ativo-filtro"
+                                        )
+                                );
+
+
+                            this.classList.add(
+                                "ativo-filtro"
+                            );
+
+
+                            filtroAtual =
+                                this.dataset.filtro;
+
+
+                            mostrarAgendamentos();
+
+                        }
+                    );
+
+                }
+            );
+
+
+        // =====================================================
+        // INICIAR
+        // =====================================================
+
+        carregarAgendamentos();
+
+    </script>
+
+</body>
+
+</html>
+
