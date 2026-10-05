@@ -1,4 +1,25 @@
+
+-- BANCO DE DADOS BELLEZA
+-- =====================================================
+
+CREATE DATABASE IF NOT EXISTS Belleza
+CHARACTER SET utf8mb4
+COLLATE utf8mb4_0900_ai_ci;
+
 USE Belleza;
+
+
+-- =====================================================
+-- USUÁRIOS
+-- =====================================================
+
+CREATE TABLE IF NOT EXISTS Usuario (
+    Id INT AUTO_INCREMENT PRIMARY KEY,
+    Nome VARCHAR(100) NOT NULL,
+    Email VARCHAR(150) NOT NULL UNIQUE,
+    Senha VARCHAR(255) NOT NULL
+);
+
 
 -- =====================================================
 -- CLIENTES
@@ -31,57 +52,43 @@ CREATE TABLE IF NOT EXISTS Servicos (
 INSERT INTO Servicos (Nome, Preco, DuracaoMinutos)
 SELECT 'Corte', 40.00, 60
 WHERE NOT EXISTS (
-    SELECT 1
-    FROM Servicos
-    WHERE Nome = 'Corte'
+    SELECT 1 FROM Servicos WHERE Nome = 'Corte'
 );
 
 INSERT INTO Servicos (Nome, Preco, DuracaoMinutos)
 SELECT 'Hidratação', 50.00, 60
 WHERE NOT EXISTS (
-    SELECT 1
-    FROM Servicos
-    WHERE Nome = 'Hidratação'
+    SELECT 1 FROM Servicos WHERE Nome = 'Hidratação'
 );
 
 INSERT INTO Servicos (Nome, Preco, DuracaoMinutos)
 SELECT 'Manicure', 30.00, 45
 WHERE NOT EXISTS (
-    SELECT 1
-    FROM Servicos
-    WHERE Nome = 'Manicure'
+    SELECT 1 FROM Servicos WHERE Nome = 'Manicure'
 );
 
 INSERT INTO Servicos (Nome, Preco, DuracaoMinutos)
 SELECT 'Pedicure', 35.00, 45
 WHERE NOT EXISTS (
-    SELECT 1
-    FROM Servicos
-    WHERE Nome = 'Pedicure'
+    SELECT 1 FROM Servicos WHERE Nome = 'Pedicure'
 );
 
 INSERT INTO Servicos (Nome, Preco, DuracaoMinutos)
 SELECT 'Penteado', 70.00, 90
 WHERE NOT EXISTS (
-    SELECT 1
-    FROM Servicos
-    WHERE Nome = 'Penteado'
+    SELECT 1 FROM Servicos WHERE Nome = 'Penteado'
 );
 
 INSERT INTO Servicos (Nome, Preco, DuracaoMinutos)
 SELECT 'Maquiagem', 90.00, 90
 WHERE NOT EXISTS (
-    SELECT 1
-    FROM Servicos
-    WHERE Nome = 'Maquiagem'
+    SELECT 1 FROM Servicos WHERE Nome = 'Maquiagem'
 );
 
 INSERT INTO Servicos (Nome, Preco, DuracaoMinutos)
 SELECT 'Design de Sobrancelha', 25.00, 30
 WHERE NOT EXISTS (
-    SELECT 1
-    FROM Servicos
-    WHERE Nome = 'Design de Sobrancelha'
+    SELECT 1 FROM Servicos WHERE Nome = 'Design de Sobrancelha'
 );
 
 
@@ -94,7 +101,8 @@ CREATE TABLE IF NOT EXISTS Profissionais (
     Nome VARCHAR(100) NOT NULL,
     Profissao VARCHAR(100) NOT NULL,
     Foto VARCHAR(255) NOT NULL,
-    Ativo BOOLEAN NOT NULL DEFAULT TRUE
+    Ativo BOOLEAN NOT NULL DEFAULT TRUE,
+    Imagem VARCHAR(255) NOT NULL DEFAULT ''
 );
 
 
@@ -103,12 +111,13 @@ CREATE TABLE IF NOT EXISTS Profissionais (
 -- =====================================================
 
 INSERT INTO Profissionais
-    (Nome, Profissao, Foto, Ativo)
+    (Nome, Profissao, Foto, Ativo, Imagem)
 SELECT
     'Camila Ferreira',
     'Cabeleireira',
     'camila.png',
-    TRUE
+    TRUE,
+    ''
 WHERE NOT EXISTS (
     SELECT 1
     FROM Profissionais
@@ -117,12 +126,13 @@ WHERE NOT EXISTS (
 
 
 INSERT INTO Profissionais
-    (Nome, Profissao, Foto, Ativo)
+    (Nome, Profissao, Foto, Ativo, Imagem)
 SELECT
     'Beatriz Costa',
     'Cabeleireira',
     'beatriz.png',
-    TRUE
+    TRUE,
+    ''
 WHERE NOT EXISTS (
     SELECT 1
     FROM Profissionais
@@ -164,15 +174,21 @@ CREATE TABLE IF NOT EXISTS HorariosProfissionais (
 -- 4 = Quinta
 -- 5 = Sexta
 -- 6 = Sábado
+--
+-- Horários:
+-- 08:00 às 12:00
+-- 13:00 às 18:00
 -- =====================================================
 
 INSERT INTO HorariosProfissionais
     (ProfissionalId, DiaSemana, HoraInicio, HoraFim)
+
 SELECT
     p.Id,
     d.DiaSemana,
     h.HoraInicio,
     h.HoraFim
+
 FROM Profissionais p
 
 CROSS JOIN (
@@ -186,7 +202,7 @@ CROSS JOIN (
 CROSS JOIN (
     SELECT
         '08:00:00' AS HoraInicio,
-        '11:00:00' AS HoraFim
+        '12:00:00' AS HoraFim
 
     UNION ALL
 
@@ -203,70 +219,13 @@ WHERE p.Nome IN (
 AND NOT EXISTS (
     SELECT 1
     FROM HorariosProfissionais hp
+
     WHERE hp.ProfissionalId = p.Id
       AND hp.DiaSemana = d.DiaSemana
       AND hp.HoraInicio = h.HoraInicio
       AND hp.HoraFim = h.HoraFim
 );
 
-
--- =====================================================
--- AGENDAMENTOS
--- =====================================================
-
-CREATE TABLE IF NOT EXISTS Agendamentos (
-    Id INT AUTO_INCREMENT PRIMARY KEY,
-
-    DataHora DATETIME NOT NULL,
-
-    ClienteId INT NOT NULL,
-
-    ServicoId INT NOT NULL,
-
-    ProfissionalId INT NOT NULL,
-
-    CONSTRAINT FK_Agendamento_Cliente
-        FOREIGN KEY (ClienteId)
-        REFERENCES Clientes(Id)
-        ON DELETE CASCADE
-        ON UPDATE CASCADE,
-
-    CONSTRAINT FK_Agendamento_Servico
-        FOREIGN KEY (ServicoId)
-        REFERENCES Servicos(Id)
-        ON DELETE CASCADE
-        ON UPDATE CASCADE,
-
-    CONSTRAINT FK_Agendamento_Profissional
-        FOREIGN KEY (ProfissionalId)
-        REFERENCES Profissionais(Id)
-        ON DELETE RESTRICT
-        ON UPDATE CASCADE
-);
-
-ALTER TABLE Agendamentos
-ADD COLUMN Status VARCHAR(20) NOT NULL DEFAULT 'Aberto';
-
-USE Belleza;
-
-ALTER TABLE Agendamentos
-MODIFY COLUMN ServicoId INT NULL;
-
-ALTER TABLE Agendamentos
-ADD COLUMN ComboId INT NULL;
-
-ALTER TABLE Agendamentos
-ADD CONSTRAINT FK_Agendamentos_Combo
-FOREIGN KEY (ComboId)
-REFERENCES Combo(Id)
-ON DELETE CASCADE
-ON UPDATE CASCADE;
-
-
-UPDATE HorariosProfissionais
-SET HoraFim = '12:00:00'
-WHERE HoraInicio = '08:00:00'
-  AND HoraFim = '11:00:00';
 
 -- =====================================================
 -- COMBOS
@@ -276,30 +235,6 @@ CREATE TABLE IF NOT EXISTS Combo (
     Id INT AUTO_INCREMENT PRIMARY KEY,
     Nome VARCHAR(100) NOT NULL,
     Preco DECIMAL(10,2) NOT NULL
-);
-
-
--- =====================================================
--- SERVIÇOS DOS COMBOS
--- =====================================================
-
-CREATE TABLE IF NOT EXISTS ComboServico (
-    ComboId INT NOT NULL,
-    ServicoId INT NOT NULL,
-
-    PRIMARY KEY (ComboId, ServicoId),
-
-    CONSTRAINT FK_ComboServico_Combo
-        FOREIGN KEY (ComboId)
-        REFERENCES Combo(Id)
-        ON DELETE CASCADE
-        ON UPDATE CASCADE,
-
-    CONSTRAINT FK_ComboServico_Servico
-        FOREIGN KEY (ServicoId)
-        REFERENCES Servicos(Id)
-        ON DELETE CASCADE
-        ON UPDATE CASCADE
 );
 
 
@@ -335,15 +270,42 @@ WHERE NOT EXISTS (
 
 
 -- =====================================================
+-- SERVIÇOS DOS COMBOS
+-- =====================================================
+
+CREATE TABLE IF NOT EXISTS ComboServico (
+    ComboId INT NOT NULL,
+    ServicoId INT NOT NULL,
+
+    PRIMARY KEY (ComboId, ServicoId),
+
+    CONSTRAINT FK_ComboServico_Combo
+        FOREIGN KEY (ComboId)
+        REFERENCES Combo(Id)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE,
+
+    CONSTRAINT FK_ComboServico_Servico
+        FOREIGN KEY (ServicoId)
+        REFERENCES Servicos(Id)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE
+);
+
+
+-- =====================================================
 -- DIA DE BELEZA
 -- Corte + Hidratação + Manicure + Pedicure
 -- =====================================================
 
 INSERT INTO ComboServico (ComboId, ServicoId)
+
 SELECT
     c.Id,
     s.Id
+
 FROM Combo c
+
 INNER JOIN Servicos s
     ON s.Nome IN (
         'Corte',
@@ -351,7 +313,9 @@ INNER JOIN Servicos s
         'Manicure',
         'Pedicure'
     )
+
 WHERE c.Nome = 'Dia de beleza'
+
 AND NOT EXISTS (
     SELECT 1
     FROM ComboServico cs
@@ -366,17 +330,22 @@ AND NOT EXISTS (
 -- =====================================================
 
 INSERT INTO ComboServico (ComboId, ServicoId)
+
 SELECT
     c.Id,
     s.Id
+
 FROM Combo c
+
 INNER JOIN Servicos s
     ON s.Nome IN (
         'Penteado',
         'Maquiagem',
         'Design de Sobrancelha'
     )
+
 WHERE c.Nome = 'Produção para festa'
+
 AND NOT EXISTS (
     SELECT 1
     FROM ComboServico cs
@@ -392,10 +361,13 @@ AND NOT EXISTS (
 -- =====================================================
 
 INSERT INTO ComboServico (ComboId, ServicoId)
+
 SELECT
     c.Id,
     s.Id
+
 FROM Combo c
+
 INNER JOIN Servicos s
     ON s.Nome IN (
         'Corte',
@@ -405,10 +377,63 @@ INNER JOIN Servicos s
         'Maquiagem',
         'Design de Sobrancelha'
     )
+
 WHERE c.Nome = 'Belleza completa'
+
 AND NOT EXISTS (
     SELECT 1
     FROM ComboServico cs
     WHERE cs.ComboId = c.Id
       AND cs.ServicoId = s.Id
 );
+
+
+-- =====================================================
+-- AGENDAMENTOS
+-- =====================================================
+
+CREATE TABLE IF NOT EXISTS Agendamentos (
+    Id INT AUTO_INCREMENT PRIMARY KEY,
+
+    DataHora DATETIME NOT NULL,
+
+    ClienteId INT NOT NULL,
+
+    ServicoId INT NULL,
+
+    ProfissionalId INT NOT NULL,
+
+    Status VARCHAR(20) NOT NULL DEFAULT 'Aberto',
+
+    ComboId INT NULL,
+
+    CONSTRAINT FK_Agendamento_Cliente
+        FOREIGN KEY (ClienteId)
+        REFERENCES Clientes(Id)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE,
+
+    CONSTRAINT FK_Agendamento_Servico
+        FOREIGN KEY (ServicoId)
+        REFERENCES Servicos(Id)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE,
+
+    CONSTRAINT FK_Agendamentos_Profissionais
+        FOREIGN KEY (ProfissionalId)
+        REFERENCES Profissionais(Id)
+        ON DELETE RESTRICT
+        ON UPDATE CASCADE,
+
+    CONSTRAINT FK_Agendamentos_Combo
+        FOREIGN KEY (ComboId)
+        REFERENCES Combo(Id)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE
+);
+
+
+-- =====================================================
+-- FIM DO BANCO BELLEZA
+-- =====================================================
+
