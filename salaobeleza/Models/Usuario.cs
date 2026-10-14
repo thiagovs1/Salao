@@ -1,3 +1,4 @@
+
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -7,18 +8,27 @@ namespace SalaoBeleza.Models;
 public class Usuario
 {
     [Key]
-    [Column("id")]
+    [Column("Id")]
     public int Id { get; set; }
 
     [Required]
-    [Column("nome")]
+    [Column("Nome")]
     public string Nome { get; set; } = string.Empty;
 
     [Required]
-    [Column("email")]
+    [Column("Email")]
     public string Email { get; set; } = string.Empty;
 
     [Required]
-    [Column("senha")]
+    [Column("Senha")]
     public string Senha { get; set; } = string.Empty;
+
+    [Required]
+    [Column("TipoUsuario")]
+    public string TipoUsuario { get; set; } = "Cliente";
+
+    [Column("ProfissionalId")]
+    public int? ProfissionalId { get; set; }
+
+    public Profissional? Profissional { get; set; }
 }

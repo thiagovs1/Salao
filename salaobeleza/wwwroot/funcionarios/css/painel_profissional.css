@@ -1,0 +1,633 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #ffffff;
+    color: #6d4051;
+}
+
+
+/* ================= MENU ================= */
+
+.sidebar {
+    width: 190px;
+    min-height: 100vh;
+
+    background-image: url("imagens/menu_belleza.png");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    border-right: 1px solid #eadada;
+
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+
+    overflow: hidden;
+    z-index: 1000;
+}
+
+
+.sidebar::before {
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    background: rgba(248, 238, 238, 0.72);
+
+    z-index: 0;
+}
+
+
+.logo-area,
+.menu {
+    position: relative;
+    z-index: 1;
+}
+
+
+.logo-area {
+    width: 100%;
+    height: 120px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 15px 10px;
+}
+
+
+.logo-belleza {
+    width: 165px;
+    height: auto;
+
+    object-fit: contain;
+    display: block;
+}
+
+
+.menu {
+    display: flex;
+    flex-direction: column;
+
+    width: 100%;
+}
+
+
+.menu-item {
+    width: 100%;
+    height: 37px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 15px;
+
+    padding-left: 18px;
+
+    text-decoration: none;
+
+    color: #994e6a;
+
+    font-size: 14px;
+
+    transition: 0.2s;
+}
+
+
+.menu-item i {
+    width: 18px;
+
+    text-align: center;
+
+    font-size: 16px;
+}
+
+
+.menu-item:hover {
+    background: rgba(234, 214, 220, 0.90);
+}
+
+
+.menu-item.ativo {
+    background: #8f3d5e;
+
+    color: white;
+
+    border-radius: 0 4px 4px 0;
+}
+
+
+.menu-item.sair {
+    margin-top: 5px;
+}
+
+
+/* ================= CONTEÚDO ================= */
+
+.conteudo {
+    margin-left: 190px;
+
+    padding: 32px;
+
+    min-height: 100vh;
+
+    background: #ffffff;
+}
+
+
+/* ================= CABEÇALHO ================= */
+
+.cabecalho {
+    background: #fcf8f8;
+
+    padding: 12px 10px;
+
+    border-radius: 6px;
+
+    margin-bottom: 10px;
+}
+
+
+.cabecalho h1 {
+    color: #984e6a;
+
+    font-size: 22px;
+
+    font-weight: normal;
+
+    margin-bottom: 4px;
+}
+
+
+.cabecalho p {
+    color: #80586a;
+
+    font-size: 13px;
+}
+
+
+/* ================= INFORMAÇÕES ================= */
+
+.informacoes {
+    display: grid;
+
+    grid-template-columns: 1fr 1fr 1fr;
+
+    gap: 10px;
+
+    margin-bottom: 8px;
+}
+
+
+.info-box {
+    height: 60px;
+
+    border: 1px solid #a85b77;
+
+    background: #fbf2f2;
+
+    border-radius: 7px;
+
+    padding: 8px 10px;
+
+    display: flex;
+
+    align-items: center;
+}
+
+
+/* ================= INFORMAÇÕES DO TOPO ================= */
+
+.informacoes {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 8px;
+}
+
+.info-box {
+    height: 60px !important;
+
+    border: 1px solid #a85b77;
+    background: #fbf2f2;
+    border-radius: 7px;
+
+    padding: 8px 10px !important;
+
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    justify-content: center !important;
+}
+
+
+.info-box span {
+    display: block !important;
+
+    color: #9a526c;
+    font-size: 13px;
+
+    margin: 0 0 5px 0 !important;
+}
+
+
+.info-box .info-valor {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+
+    gap: 10px;
+}
+
+
+.info-box .info-valor strong {
+    display: block !important;
+
+    color: #4d3940;
+    font-size: 14px;
+    font-weight: normal;
+
+    margin: 0 !important;
+}
+
+
+.info-box .info-valor small {
+    display: block !important;
+
+    color: #80586a;
+    font-size: 12px;
+
+    margin: 0 !important;
+}
+/* ================= ÁREA PRINCIPAL ================= */
+
+.area-principal {
+    display: grid;
+
+    grid-template-columns: 1fr 245px;
+
+    gap: 10px;
+}
+
+
+/* ================= AGENDA ================= */
+
+.agenda {
+    border: 1px solid #984e6a;
+
+    border-radius: 8px;
+
+    overflow: hidden;
+
+    background: #fbf1f1;
+}
+
+
+.titulo-tabela {
+    height: 27px;
+
+    display: grid;
+
+    grid-template-columns: 80px 1.4fr 1.1fr 1fr 100px;
+
+    align-items: center;
+
+    background: #984e6a;
+
+    color: white;
+
+    font-size: 13px;
+
+    font-weight: bold;
+
+    padding: 0 7px;
+    
+    text-align: left;
+}
+
+.titulo-tabela div:first-child {
+    text-align: center;
+}
+
+.atendimento {
+    min-height: 66px;
+
+    display: grid;
+
+    grid-template-columns: 80px 1.4fr 1.1fr 1fr 100px;
+
+    align-items: center;
+
+    padding: 5px 7px;
+
+    color: #73505e;
+
+    font-size: 12px;
+
+    border-bottom: 1px solid #f1dede;
+}
+
+
+.atendimento:last-child {
+    border-bottom: none;
+}
+
+
+/* ================= HORÁRIO ================= */
+
+.horario {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+    text-align: center;
+}
+
+.horario strong {
+    font-size: 12px;
+    color: #8f3d5e;
+    display: block;
+}
+
+.horario small {
+    font-size: 10px;
+    color: #6f5059;
+    display: block;
+    margin-top: 2px;
+}
+
+/* ================= CLIENTE ================= */
+
+.cliente {
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+}
+
+
+.cliente i {
+    width: 23px;
+    height: 23px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: #7c3513;
+
+    color: white;
+
+    font-size: 12px;
+}
+
+
+.cliente div {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 3px;
+}
+
+
+.cliente span {
+    font-size: 11px;
+}
+
+
+.cliente small {
+    font-size: 10px;
+}
+
+
+/* ================= STATUS ================= */
+
+.status {
+    background: #8f3d5e;
+
+    color: white;
+
+    padding: 2px 7px;
+
+    border-radius: 4px;
+
+    font-size: 10px;
+
+    font-weight: bold;
+}
+
+
+/* ================= LADO DIREITO ================= */
+
+.lateral-direita {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 15px;
+}
+
+
+/* ================= PROFISSIONAL ================= */
+
+.card-profissional {
+    background: #f7eaea;
+
+    border-radius: 6px;
+
+    padding: 10px;
+}
+
+
+.profissional-topo {
+    display: flex;
+
+    gap: 10px;
+}
+
+
+.profissional-topo img {
+    width: 60px;
+    height: 63px;
+
+    object-fit: cover;
+
+    border-radius: 6px;
+}
+
+
+.profissional-topo h3 {
+    color: #984e6a;
+
+    font-size: 14px;
+
+    font-weight: normal;
+
+    margin-top: 3px;
+}
+
+
+.profissional-topo p {
+    color: #80586a;
+
+    font-size: 11px;
+
+    margin-top: 7px;
+}
+
+
+.avaliacao {
+    color: #e5a91a;
+
+    font-size: 11px;
+
+    margin-top: 5px;
+}
+
+
+.avaliacao span {
+    color: #8b5969;
+
+    font-size: 9px;
+}
+
+
+.titulo-servicos {
+    color: #68434f;
+
+    font-size: 11px;
+
+    margin-top: 15px;
+
+    margin-bottom: 6px;
+}
+
+
+.servicos {
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 5px;
+}
+
+
+.servicos span {
+    background: #8f3d5e;
+
+    color: white;
+
+    padding: 3px 7px;
+
+    border-radius: 4px;
+
+    font-size: 9px;
+}
+
+
+/* ================= RESUMO ================= */
+
+.resumo {
+    background: #f8eeee;
+
+    border-radius: 6px;
+
+    overflow: hidden;
+}
+
+
+.resumo h3 {
+    padding: 12px;
+
+    color: #4d3940;
+
+    font-size: 14px;
+
+    font-weight: normal;
+}
+
+
+.resumo-item {
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    padding: 10px;
+
+    border-top: 1px solid #e7cccc;
+}
+
+
+.resumo-item i {
+    color: #8f5639;
+
+    font-size: 18px;
+
+    width: 20px;
+
+    text-align: center;
+}
+
+
+.resumo-item span {
+    color: #9a526c;
+
+    font-size: 10px;
+}
+
+
+.resumo-item p {
+    color: #57434a;
+
+    font-size: 11px;
+
+    margin-top: 3px;
+}
+
+
+.proximo-dia {
+    width: calc(100% - 20px);
+
+    margin: 10px;
+
+    padding: 9px;
+
+    border: none;
+
+    border-radius: 4px;
+
+    background: #8f3d5e;
+
+    color: white;
+
+    font-size: 12px;
+
+    cursor: pointer;
+}
+
+
+.proximo-dia:hover {
+    background: #78334f;
+}

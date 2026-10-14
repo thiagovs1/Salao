@@ -15,26 +15,13 @@ public class AgendamentoRepository : IAgendamentoRepository
 
     public async Task<List<Agendamento>> ListarTodos()
     {
-        return await _context.Agendamentos
-            .Include(a => a.Cliente)
-            .Include(a => a.Servico)
-            .Include(a => a.Combo)
-                .ThenInclude(c => c.ComboServicos)
-                    .ThenInclude(cs => cs.Servico)
-            .Include(a => a.Profissional)
+        return await ConsultaCompleta()
             .ToListAsync();
     }
 
-    public async Task<List<Agendamento>> ListarPorCliente(
-        int clienteId)
+    public async Task<List<Agendamento>> ListarPorCliente(int clienteId)
     {
-        return await _context.Agendamentos
-            .Include(a => a.Cliente)
-            .Include(a => a.Servico)
-            .Include(a => a.Combo)
-                .ThenInclude(c => c.ComboServicos)
-                    .ThenInclude(cs => cs.Servico)
-            .Include(a => a.Profissional)
+        return await ConsultaCompleta()
             .Where(a => a.ClienteId == clienteId)
             .OrderByDescending(a => a.DataHora)
             .ToListAsync();
@@ -42,13 +29,7 @@ public class AgendamentoRepository : IAgendamentoRepository
 
     public async Task<Agendamento?> BuscarPorId(int id)
     {
-        return await _context.Agendamentos
-            .Include(a => a.Cliente)
-            .Include(a => a.Servico)
-            .Include(a => a.Combo)
-                .ThenInclude(c => c.ComboServicos)
-                    .ThenInclude(cs => cs.Servico)
-            .Include(a => a.Profissional)
+        return await ConsultaCompleta()
             .FirstOrDefaultAsync(a => a.Id == id);
     }
 
@@ -57,19 +38,30 @@ public class AgendamentoRepository : IAgendamentoRepository
         DateTime data)
     {
         var inicio = data.Date;
-
         var fim = inicio.AddDays(1);
 
-        return await _context.Agendamentos
-            .Include(a => a.Servico)
-            .Include(a => a.Combo)
-                .ThenInclude(c => c.ComboServicos)
-                    .ThenInclude(cs => cs.Servico)
+        return await ConsultaCompleta()
             .Where(a =>
                 a.ProfissionalId == profissionalId &&
                 a.DataHora >= inicio &&
                 a.DataHora < fim &&
                 a.Status != "Cancelado")
+            .OrderBy(a => a.DataHora)
+            .ToListAsync();
+    }
+
+    public async Task<List<Agendamento>> ListarPorProfissionalEPeriodo(
+        int profissionalId,
+        DateTime inicio,
+        DateTime fim)
+    {
+        return await ConsultaCompleta()
+            .Where(a =>
+                a.ProfissionalId == profissionalId &&
+                a.DataHora >= inicio &&
+                a.DataHora < fim &&
+                a.Status != "Cancelado")
+            .OrderBy(a => a.DataHora)
             .ToListAsync();
     }
 
@@ -81,8 +73,7 @@ public class AgendamentoRepository : IAgendamentoRepository
             .FirstOrDefaultAsync(c => c.Id == id);
     }
 
-    public async Task<Agendamento> Adicionar(
-        Agendamento agendamento)
+    public async Task<Agendamento> Adicionar(Agendamento agendamento)
     {
         _context.Agendamentos.Add(agendamento);
 
@@ -91,19 +82,28 @@ public class AgendamentoRepository : IAgendamentoRepository
         return agendamento;
     }
 
-    public async Task Atualizar(
-        Agendamento agendamento)
+    public async Task Atualizar(Agendamento agendamento)
     {
         _context.Agendamentos.Update(agendamento);
 
         await _context.SaveChangesAsync();
     }
 
-    public async Task Remover(
-        Agendamento agendamento)
+    public async Task Remover(Agendamento agendamento)
     {
         _context.Agendamentos.Remove(agendamento);
 
         await _context.SaveChangesAsync();
+    }
+
+    private IQueryable<Agendamento> ConsultaCompleta()
+    {
+        return _context.Agendamentos
+            .Include(a => a.Cliente)
+            .Include(a => a.Servico)
+            .Include(a => a.Combo)
+                .ThenInclude(c => c.ComboServicos)
+                    .ThenInclude(cs => cs.Servico)
+            .Include(a => a.Profissional);
     }
 }

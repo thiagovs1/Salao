@@ -6,32 +6,26 @@ public interface IAgendamentoRepository
 {
     Task<List<Agendamento>> ListarTodos();
 
-    Task<List<Agendamento>> ListarPorCliente(
-        int clienteId
-    );
+    Task<List<Agendamento>> ListarPorCliente(int clienteId);
 
-    Task<Agendamento?> BuscarPorId(
-        int id
-    );
+    Task<Agendamento?> BuscarPorId(int id);
 
     Task<List<Agendamento>> BuscarPorProfissionalEData(
         int profissionalId,
         DateTime data
     );
 
-    Task<Combo?> BuscarComboPorId(
-        int id
+    Task<List<Agendamento>> ListarPorProfissionalEPeriodo(
+        int profissionalId,
+        DateTime inicio,
+        DateTime fim
     );
 
-    Task<Agendamento> Adicionar(
-        Agendamento agendamento
-    );
+    Task<Combo?> BuscarComboPorId(int id);
 
-    Task Atualizar(
-        Agendamento agendamento
-    );
+    Task<Agendamento> Adicionar(Agendamento agendamento);
 
-    Task Remover(
-        Agendamento agendamento
-    );
+    Task Atualizar(Agendamento agendamento);
+
+    Task Remover(Agendamento agendamento);
 }

@@ -1,3 +1,4 @@
+
 using SalaoBeleza.DTOs;
 using SalaoBeleza.Models;
 using SalaoBeleza.Repositories;
@@ -31,42 +32,40 @@ public class UsuarioService
         if (string.IsNullOrWhiteSpace(dto.Senha))
             throw new Exception("A senha é obrigatória.");
 
+        var email = dto.Email.Trim();
+
         var usuarioExistente =
-            await _usuarioRepo.BuscarPorEmail(dto.Email);
+            await _usuarioRepo.BuscarPorEmail(email);
 
         if (usuarioExistente != null)
-            throw new Exception(
-                "Este e-mail já está cadastrado."
-            );
+            throw new Exception("Este e-mail já está cadastrado.");
 
         var clienteExistente =
             await _clienteRepo.BuscarPorTelefone(dto.Telefone);
 
         if (clienteExistente != null)
-            throw new Exception(
-                "Este telefone já está cadastrado."
-            );
+            throw new Exception("Este telefone já está cadastrado.");
 
         var clienteEmailExistente =
-            await _clienteRepo.BuscarPorEmail(dto.Email);
+            await _clienteRepo.BuscarPorEmail(email);
 
         if (clienteEmailExistente != null)
-            throw new Exception(
-                "Este e-mail já está cadastrado."
-            );
+            throw new Exception("Este e-mail já está cadastrado.");
 
         var usuario = new Usuario
         {
-            Nome = dto.Nome,
-            Email = dto.Email,
-            Senha = dto.Senha
+            Nome = dto.Nome.Trim(),
+            Email = email,
+            Senha = dto.Senha,
+            TipoUsuario = "Cliente",
+            ProfissionalId = null
         };
 
         var cliente = new Cliente
         {
-            Nome = dto.Nome,
-            Email = dto.Email,
-            Telefone = dto.Telefone
+            Nome = dto.Nome.Trim(),
+            Email = email,
+            Telefone = dto.Telefone.Trim()
         };
 
         var usuarioCriado =
@@ -79,14 +78,15 @@ public class UsuarioService
 
     public async Task<Usuario?> Login(UsuarioLoginDTO dto)
     {
-        if (string.IsNullOrWhiteSpace(dto.Email))
+        if (string.IsNullOrWhiteSpace(dto.Email) ||
+            string.IsNullOrWhiteSpace(dto.Senha))
+        {
             return null;
+        }
 
-        if (string.IsNullOrWhiteSpace(dto.Senha))
-            return null;
-
-        var usuario =
-            await _usuarioRepo.BuscarPorEmail(dto.Email);
+        var usuario = await _usuarioRepo.BuscarPorEmail(
+            dto.Email.Trim()
+        );
 
         if (usuario == null)
             return null;
@@ -97,8 +97,6 @@ public class UsuarioService
         return usuario;
     }
 
-    // Busca o Cliente usando o mesmo e-mail da conta Usuario.
-    // Usuario e Cliente possuem IDs independentes.
     public async Task<Cliente?> BuscarClientePorEmail(string email)
     {
         return await _clienteRepo.BuscarPorEmail(email);
@@ -108,35 +106,26 @@ public class UsuarioService
         UsuarioRecuperarSenhaDTO dto)
     {
         if (string.IsNullOrWhiteSpace(dto.Email))
-            throw new Exception(
-                "O e-mail é obrigatório."
-            );
+            throw new Exception("O e-mail é obrigatório.");
 
         if (string.IsNullOrWhiteSpace(dto.NovaSenha))
-            throw new Exception(
-                "A nova senha é obrigatória."
-            );
+            throw new Exception("A nova senha é obrigatória.");
 
         if (string.IsNullOrWhiteSpace(dto.ConfirmarSenha))
-            throw new Exception(
-                "A confirmação da senha é obrigatória."
-            );
+            throw new Exception("A confirmação da senha é obrigatória.");
 
         if (dto.NovaSenha != dto.ConfirmarSenha)
-            throw new Exception(
-                "As senhas não são iguais."
-            );
+            throw new Exception("As senhas não são iguais.");
 
-        var usuario =
-            await _usuarioRepo.BuscarPorEmail(dto.Email);
+        var usuario = await _usuarioRepo.BuscarPorEmail(
+            dto.Email.Trim()
+        );
 
         if (usuario == null)
-            throw new Exception(
-                "Não existe uma conta com este e-mail."
-            );
+            throw new Exception("Não existe uma conta com este e-mail.");
 
         return await _usuarioRepo.AlterarSenha(
-            dto.Email,
+            dto.Email.Trim(),
             dto.NovaSenha
         );
     }

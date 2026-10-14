@@ -1,3 +1,4 @@
+
 using Microsoft.AspNetCore.Mvc;
 using SalaoBeleza.DTOs;
 using SalaoBeleza.Services;
@@ -26,12 +27,13 @@ public class UsuariosController : ControllerBase
             {
                 id = usuario.Id,
                 nome = usuario.Nome,
-                email = usuario.Email
+                email = usuario.Email,
+                tipoUsuario = usuario.TipoUsuario
             });
         }
         catch (Exception ex)
         {
-            return BadRequest(ex.Message);
+            return BadRequest(new { mensagem = ex.Message });
         }
     }
 
@@ -48,9 +50,41 @@ public class UsuariosController : ControllerBase
             });
         }
 
-        // Busca o cliente correspondente ao usuário logado.
-        // Usuario e Cliente são tabelas diferentes,
-        // então não podemos usar o ID do Usuario como ClienteId.
+        // Limpa os dados da sessão da conta anterior.
+        HttpContext.Session.Remove("ClienteId");
+        HttpContext.Session.Remove("ProfissionalId");
+
+        // LOGIN DA FUNCIONÁRIA
+        if (string.Equals(
+            usuario.TipoUsuario,
+            "Funcionario",
+            StringComparison.OrdinalIgnoreCase))
+        {
+            if (usuario.ProfissionalId == null)
+            {
+                return Unauthorized(new
+                {
+                    mensagem = "Esta conta não está vinculada a uma profissional."
+                });
+            }
+
+            HttpContext.Session.SetInt32(
+                "ProfissionalId",
+                usuario.ProfissionalId.Value
+            );
+
+            return Ok(new
+            {
+                id = usuario.Id,
+                nome = usuario.Nome,
+                email = usuario.Email,
+                tipoUsuario = "Funcionario",
+                profissionalId = usuario.ProfissionalId,
+                redirecionamento = "/funcionarios/html/painel_profissional.html"
+            });
+        }
+
+        // LOGIN DO CLIENTE
         var cliente = await _service.BuscarClientePorEmail(usuario.Email);
 
         if (cliente == null)
@@ -61,17 +95,15 @@ public class UsuariosController : ControllerBase
             });
         }
 
-        // Guarda o ID real do Cliente na sessão.
-        HttpContext.Session.SetInt32(
-            "ClienteId",
-            cliente.Id
-        );
+        HttpContext.Session.SetInt32("ClienteId", cliente.Id);
 
         return Ok(new
         {
             id = usuario.Id,
             nome = usuario.Nome,
-            email = usuario.Email
+            email = usuario.Email,
+            tipoUsuario = "Cliente",
+            redirecionamento = "/html/tela_inicial.html"
         });
     }
 
@@ -103,5 +135,16 @@ public class UsuariosController : ControllerBase
                 mensagem = ex.Message
             });
         }
+    }
+
+    [HttpPost("logout")]
+    public IActionResult Logout()
+    {
+        HttpContext.Session.Clear();
+
+        return Ok(new
+        {
+            mensagem = "Sessão encerrada com sucesso."
+        });
     }
 }

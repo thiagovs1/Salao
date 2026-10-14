@@ -1,0 +1,550 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minha Agenda - Belleza</title>
+
+        
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<link rel="stylesheet" href="../css/painel_profissional.css">
+
+
+</head>
+<body>
+    <aside class="sidebar">
+        <div class="logo-area">
+            <img src="../../imagens/logo_belleza.png"
+                 alt="Belleza"
+                 class="logo-belleza">
+        </div>
+
+        <nav class="menu">
+            <a href="painel_profissional.html" class="menu-item ativo">
+                <i class="fa-regular fa-calendar"></i>
+                <span>Minha agenda</span>
+            </a>
+
+            <a href="#" id="btnSair" class="menu-item sair">
+                <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                <span>Sair</span>
+            </a>
+        </nav>
+    </aside>
+
+    <main class="conteudo">
+        <header class="cabecalho">
+            <h1>Minha agenda</h1>
+            <p>Consulte seus atendimentos e organize seu dia.</p>
+        </header>
+
+        <div id="mensagem" class="mensagem" role="status" aria-live="polite"></div>
+
+        <section class="informacoes">
+            <div class="info-box">
+                <span>Total de atendimentos</span>
+                <div class="info-valor">
+                    <strong id="totalAtendimentos">0</strong>
+                    <small id="legendaTotal">Neste dia</small>
+                </div>
+            </div>
+
+            <div class="info-box">
+                <span>Primeiro atendimento</span>
+                <div class="info-valor">
+                    <strong id="horarioInicio">--:--</strong>
+                </div>
+            </div>
+
+            <div class="info-box">
+                <span>Último atendimento</span>
+                <div class="info-valor">
+                    <strong id="horarioTermino">--:--</strong>
+                </div>
+            </div>
+        </section>
+
+        <div class="area-principal">
+            <section class="agenda">
+                <div class="agenda-controles">
+                    <button type="button" id="diaAnterior" class="botao-navegacao"
+                            aria-label="Dia anterior">
+                        <i class="fa-solid fa-chevron-left"></i>
+                    </button>
+
+                    <div class="data-selecionada">
+                        <h2 id="tituloData">Minha agenda</h2>
+                        <input type="date" id="seletorData" aria-label="Escolher data">
+                    </div>
+
+                    <button type="button" id="diaSeguinte" class="botao-navegacao"
+                            aria-label="Próximo dia">
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </button>
+
+                    <button type="button" id="btnHoje" class="botao-hoje">
+                        Hoje
+                    </button>
+                </div>
+
+                <div class="tabela-responsiva">
+                    <div class="titulo-tabela">
+                        <div>Horário</div>
+                        <div>Cliente</div>
+                        <div>Serviço(s)</div>
+                        <div>Tipo</div>
+                        <div>Status</div>
+                    </div>
+
+                    <div id="listaAtendimentos">
+                        <div class="estado-lista">Carregando atendimentos...</div>
+                    </div>
+                </div>
+            </section>
+
+            <aside class="lateral-direita">
+                <section class="card-calendario">
+                    <div class="calendario-cabecalho">
+                        <h3>Calendário mensal</h3>
+                        <div class="calendario-navegacao">
+                            <button type="button" id="mesAnterior"
+                                    aria-label="Mês anterior">
+                                <i class="fa-solid fa-chevron-left"></i>
+                            </button>
+                            <button type="button" id="mesSeguinte"
+                                    aria-label="Próximo mês">
+                                <i class="fa-solid fa-chevron-right"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <h4 id="tituloMes"></h4>
+
+                    <div class="calendario-semana">
+                        <span>Seg</span>
+                        <span>Ter</span>
+                        <span>Qua</span>
+                        <span>Qui</span>
+                        <span>Sex</span>
+                        <span>Sáb</span>
+                        <span>Dom</span>
+                    </div>
+
+                    <div id="calendarioDias" class="calendario-dias"></div>
+
+                    <p class="legenda-calendario">
+                        <span class="ponto-legenda"></span>
+                        Dia com atendimento
+                    </p>
+                </section>
+
+                <section class="resumo">
+                    <h3>Resumo do dia</h3>
+
+                    <div class="resumo-item">
+                        <i class="fa-regular fa-calendar"></i>
+                        <div>
+                            <span>Data selecionada</span>
+                            <p id="resumoData">--</p>
+                        </div>
+                    </div>
+
+                    <div class="resumo-item">
+                        <i class="fa-regular fa-clock"></i>
+                        <div>
+                            <span>Período dos atendimentos</span>
+                            <p id="resumoHorario">--:-- às --:--</p>
+                        </div>
+                    </div>
+
+                    <div class="resumo-item">
+                        <i class="fa-regular fa-calendar-check"></i>
+                        <div>
+                            <span>Atendimentos do dia</span>
+                            <p id="resumoTotal">0</p>
+                        </div>
+                    </div>
+
+                    <div class="resumo-item">
+                        <i class="fa-solid fa-circle-check"></i>
+                        <div>
+                            <span>Confirmados</span>
+                            <p id="resumoConfirmados">0</p>
+                        </div>
+                    </div>
+
+                    <button type="button" id="btnProximoDia" class="proximo-dia">
+                        Ver próximo dia
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </section>
+            </aside>
+        </div>
+    </main>
+
+    <script>
+        const API_DIA = "/api/agenda-profissional/dia";
+        const API_MES = "/api/agenda-profissional/mes";
+
+        const seletorData = document.getElementById("seletorData");
+        const listaAtendimentos = document.getElementById("listaAtendimentos");
+        const calendarioDias = document.getElementById("calendarioDias");
+        const mensagem = document.getElementById("mensagem");
+
+        let dataSelecionada = dataLocalISO(new Date());
+        let agendamentosDoMes = [];
+        let carregando = false;
+
+        function dataLocalISO(data) {
+            const ano = data.getFullYear();
+            const mes = String(data.getMonth() + 1).padStart(2, "0");
+            const dia = String(data.getDate()).padStart(2, "0");
+            return `${ano}-${mes}-${dia}`;
+        }
+
+        function converterDataLocal(valor) {
+            const [ano, mes, dia] = valor.split("-").map(Number);
+            return new Date(ano, mes - 1, dia);
+        }
+
+        function formatarData(valor) {
+            return converterDataLocal(valor).toLocaleDateString("pt-BR", {
+                weekday: "long",
+                day: "2-digit",
+                month: "long",
+                year: "numeric"
+            });
+        }
+
+        function formatarDataCurta(valor) {
+            return converterDataLocal(valor).toLocaleDateString("pt-BR");
+        }
+
+        function formatarHora(valor) {
+            const data = new Date(valor);
+            return data.toLocaleTimeString("pt-BR", {
+                hour: "2-digit",
+                minute: "2-digit"
+            });
+        }
+
+        function formatarDuracao(minutos) {
+            const horas = Math.floor((minutos || 0) / 60);
+            const resto = (minutos || 0) % 60;
+
+            if (horas === 0) return `${resto}min`;
+            if (resto === 0) return `${horas}h`;
+            return `${horas}h ${String(resto).padStart(2, "0")}min`;
+        }
+
+        function mostrarMensagem(texto, erro = false) {
+            mensagem.textContent = texto;
+            mensagem.className = erro
+                ? "mensagem mensagem-erro"
+                : "mensagem";
+        }
+
+        async function buscarJSON(url) {
+            const resposta = await fetch(url, {
+                method: "GET",
+                credentials: "include",
+                headers: { "Accept": "application/json" }
+            });
+
+            if (resposta.status === 401) {
+                window.location.href = "/html/login_cliente.html";
+                throw new Error("Sua sessão expirou. Entre novamente.");
+            }
+
+            if (!resposta.ok) {
+                throw new Error(`Não foi possível carregar os dados (${resposta.status}).`);
+            }
+
+            return resposta.json();
+        }
+
+        async function carregarDia() {
+            if (carregando) return;
+
+            carregando = true;
+            seletorData.value = dataSelecionada;
+            document.getElementById("tituloData").textContent =
+                formatarData(dataSelecionada);
+
+            listaAtendimentos.innerHTML =
+                '<div class="estado-lista">Carregando atendimentos...</div>';
+
+            try {
+                const dados = await buscarJSON(
+                    `${API_DIA}?data=${encodeURIComponent(dataSelecionada)}`
+                );
+
+                const atendimentos = dados.agendamentos || [];
+                renderizarAtendimentos(atendimentos);
+                atualizarResumo(atendimentos);
+                mostrarMensagem("");
+            } catch (erro) {
+                listaAtendimentos.innerHTML =
+                    '<div class="estado-lista">Não foi possível carregar a agenda.</div>';
+                mostrarMensagem(erro.message, true);
+            } finally {
+                carregando = false;
+            }
+        }
+
+        function renderizarAtendimentos(atendimentos) {
+            listaAtendimentos.replaceChildren();
+
+            if (atendimentos.length === 0) {
+                const vazio = document.createElement("div");
+                vazio.className = "estado-lista";
+                vazio.textContent = "Nenhum atendimento agendado para este dia.";
+                listaAtendimentos.appendChild(vazio);
+                return;
+            }
+
+            atendimentos.forEach(atendimento => {
+                const linha = document.createElement("div");
+                linha.className = "atendimento";
+
+                const horario = document.createElement("div");
+                horario.className = "horario";
+
+                const hora = document.createElement("strong");
+                hora.textContent = formatarHora(atendimento.dataHora);
+
+                const duracao = document.createElement("small");
+                duracao.textContent = `(${formatarDuracao(atendimento.duracaoMinutos)})`;
+
+                horario.append(hora, duracao);
+
+                const cliente = document.createElement("div");
+                cliente.className = "cliente";
+
+                const icone = document.createElement("i");
+                icone.className = "fa-solid fa-user";
+
+                const dadosCliente = document.createElement("div");
+                const nomeCliente = document.createElement("span");
+                nomeCliente.textContent = atendimento.cliente || "Cliente";
+
+                const telefone = document.createElement("small");
+                telefone.textContent = atendimento.telefone || "Telefone não informado";
+
+                dadosCliente.append(nomeCliente, telefone);
+                cliente.append(icone, dadosCliente);
+
+                const servicos = document.createElement("div");
+                servicos.className = "coluna-servico";
+
+                const nomesServicos = atendimento.servicosCombo || [];
+                servicos.textContent = nomesServicos.length
+                    ? nomesServicos.join(" + ")
+                    : atendimento.servico || "Atendimento";
+
+                const tipo = document.createElement("div");
+                const ehCombo = nomesServicos.length > 0;
+                tipo.textContent = ehCombo ? "Combo" : "Serviço";
+
+                const statusColuna = document.createElement("div");
+                const status = document.createElement("span");
+                const statusTexto = atendimento.status || "Aberto";
+                status.className = "status " + classeStatus(statusTexto);
+                status.textContent = statusTexto;
+                statusColuna.appendChild(status);
+
+                linha.append(horario, cliente, servicos, tipo, statusColuna);
+                listaAtendimentos.appendChild(linha);
+            });
+        }
+
+        function classeStatus(status) {
+            const normalizado = status.toLowerCase();
+
+            if (normalizado.includes("confirm")) return "status-confirmado";
+            if (normalizado.includes("cancel")) return "status-cancelado";
+            if (normalizado.includes("conclu")) return "status-concluido";
+
+            return "status-aberto";
+        }
+
+        function atualizarResumo(atendimentos) {
+            const total = atendimentos.length;
+            const horarios = atendimentos
+                .map(a => new Date(a.dataHora))
+                .sort((a, b) => a - b);
+
+            const inicio = total ? horarios[0] : null;
+            const fim = total ? horarios[horarios.length - 1] : null;
+
+            const horaInicio = inicio
+                ? inicio.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })
+                : "--:--";
+
+            const horaFim = fim
+                ? fim.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })
+                : "--:--";
+
+            const confirmados = atendimentos.filter(a =>
+                (a.status || "").toLowerCase().includes("confirm")
+            ).length;
+
+            document.getElementById("totalAtendimentos").textContent = total;
+            document.getElementById("horarioInicio").textContent = horaInicio;
+            document.getElementById("horarioTermino").textContent = horaFim;
+            document.getElementById("resumoData").textContent =
+                formatarDataCurta(dataSelecionada);
+            document.getElementById("resumoHorario").textContent =
+                `${horaInicio} às ${horaFim}`;
+            document.getElementById("resumoTotal").textContent = total;
+            document.getElementById("resumoConfirmados").textContent = confirmados;
+        }
+
+        async function carregarMes() {
+            const data = converterDataLocal(dataSelecionada);
+            const ano = data.getFullYear();
+            const mes = data.getMonth() + 1;
+
+            document.getElementById("tituloMes").textContent =
+                data.toLocaleDateString("pt-BR", {
+                    month: "long",
+                    year: "numeric"
+                });
+
+            try {
+                const dados = await buscarJSON(`${API_MES}?ano=${ano}&mes=${mes}`);
+                agendamentosDoMes = dados.agendamentos || [];
+                renderizarCalendario(ano, mes);
+            } catch (erro) {
+                mostrarMensagem(erro.message, true);
+                calendarioDias.replaceChildren();
+            }
+        }
+
+        function renderizarCalendario(ano, mes) {
+            calendarioDias.replaceChildren();
+
+            const primeiroDia = new Date(ano, mes - 1, 1);
+            const totalDias = new Date(ano, mes, 0).getDate();
+
+            // Converte domingo (0) para a última coluna, mantendo segunda como início.
+            const deslocamento = (primeiroDia.getDay() + 6) % 7;
+
+            for (let i = 0; i < deslocamento; i++) {
+                const vazio = document.createElement("span");
+                vazio.className = "dia-vazio";
+                calendarioDias.appendChild(vazio);
+            }
+
+            const diasComAtendimento = new Set(
+                agendamentosDoMes.map(a => {
+                    const d = new Date(a.dataHora);
+                    return dataLocalISO(d);
+                })
+            );
+
+            const hoje = dataLocalISO(new Date());
+
+            for (let dia = 1; dia <= totalDias; dia++) {
+                const valor = `${ano}-${String(mes).padStart(2, "0")}-${String(dia).padStart(2, "0")}`;
+                const botao = document.createElement("button");
+
+                botao.type = "button";
+                botao.className = "dia-calendario";
+                botao.textContent = dia;
+                botao.setAttribute("aria-label", `Selecionar ${dia}/${mes}/${ano}`);
+
+                if (valor === dataSelecionada) botao.classList.add("selecionado");
+                if (valor === hoje) botao.classList.add("dia-hoje");
+
+                if (diasComAtendimento.has(valor)) {
+                    botao.classList.add("tem-atendimento");
+
+                    const ponto = document.createElement("span");
+                    ponto.className = "ponto-dia";
+                    ponto.setAttribute("aria-hidden", "true");
+                    botao.appendChild(ponto);
+                }
+
+                botao.addEventListener("click", async () => {
+                    dataSelecionada = valor;
+                    await carregarDia();
+                    await carregarMes();
+                });
+
+                calendarioDias.appendChild(botao);
+            }
+        }
+
+        async function selecionarData(valor) {
+            dataSelecionada = valor;
+            await carregarDia();
+            await carregarMes();
+        }
+
+        document.getElementById("diaAnterior").addEventListener("click", async () => {
+            const data = converterDataLocal(dataSelecionada);
+            data.setDate(data.getDate() - 1);
+            await selecionarData(dataLocalISO(data));
+        });
+
+        document.getElementById("diaSeguinte").addEventListener("click", async () => {
+            const data = converterDataLocal(dataSelecionada);
+            data.setDate(data.getDate() + 1);
+            await selecionarData(dataLocalISO(data));
+        });
+
+        document.getElementById("btnProximoDia").addEventListener("click", async () => {
+            const data = converterDataLocal(dataSelecionada);
+            data.setDate(data.getDate() + 1);
+            await selecionarData(dataLocalISO(data));
+        });
+
+        document.getElementById("btnHoje").addEventListener("click", async () => {
+            await selecionarData(dataLocalISO(new Date()));
+        });
+
+        seletorData.addEventListener("change", async () => {
+            if (seletorData.value) {
+                await selecionarData(seletorData.value);
+            }
+        });
+
+        document.getElementById("mesAnterior").addEventListener("click", async () => {
+            const data = converterDataLocal(dataSelecionada);
+            data.setDate(1);
+            data.setMonth(data.getMonth() - 1);
+            await selecionarData(dataLocalISO(data));
+        });
+
+        document.getElementById("mesSeguinte").addEventListener("click", async () => {
+            const data = converterDataLocal(dataSelecionada);
+            data.setDate(1);
+            data.setMonth(data.getMonth() + 1);
+            await selecionarData(dataLocalISO(data));
+        });
+
+        document.getElementById("btnSair").addEventListener("click", async (evento) => {
+            evento.preventDefault();
+
+            try {
+                await fetch("/api/agenda-profissional/sair", {
+                    method: "POST",
+                    credentials: "include"
+                });
+            } finally {
+                window.location.href = "/html/login_cliente.html";
+            }
+        });
+
+        async function iniciarAgenda() {
+            seletorData.value = dataSelecionada;
+            await carregarDia();
+            await carregarMes();
+        }
+
+        iniciarAgenda();
+    </script>
+</body>
+</html>

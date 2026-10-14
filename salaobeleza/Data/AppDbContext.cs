@@ -1,3 +1,4 @@
+
 using Microsoft.EntityFrameworkCore;
 using SalaoBeleza.Models;
 
@@ -15,11 +16,7 @@ public class AppDbContext : DbContext
         base.OnModelCreating(modelBuilder);
 
         modelBuilder.Entity<ComboServico>()
-            .HasKey(cs => new
-            {
-                cs.ComboId,
-                cs.ServicoId
-            });
+            .HasKey(cs => new { cs.ComboId, cs.ServicoId });
 
         modelBuilder.Entity<ComboServico>()
             .HasOne(cs => cs.Combo)
@@ -31,22 +28,18 @@ public class AppDbContext : DbContext
             .WithMany()
             .HasForeignKey(cs => cs.ServicoId);
 
-        // Relação entre Agendamento e Serviço.
         modelBuilder.Entity<Agendamento>()
             .HasOne(a => a.Servico)
             .WithMany(s => s.Agendamentos)
             .HasForeignKey(a => a.ServicoId)
             .OnDelete(DeleteBehavior.Cascade);
 
-        // Relação entre Agendamento e Combo.
         modelBuilder.Entity<Agendamento>()
             .HasOne(a => a.Combo)
             .WithMany()
             .HasForeignKey(a => a.ComboId)
             .OnDelete(DeleteBehavior.Cascade);
 
-        // Serviço e Combo são opcionais porque um agendamento
-        // pode representar um serviço OU um combo.
         modelBuilder.Entity<Agendamento>()
             .Property(a => a.ServicoId)
             .IsRequired(false);
@@ -54,21 +47,21 @@ public class AppDbContext : DbContext
         modelBuilder.Entity<Agendamento>()
             .Property(a => a.ComboId)
             .IsRequired(false);
+
+        modelBuilder.Entity<Usuario>()
+            .HasOne(u => u.Profissional)
+            .WithMany()
+            .HasForeignKey(u => u.ProfissionalId)
+            .IsRequired(false)
+            .OnDelete(DeleteBehavior.SetNull);
     }
 
     public DbSet<Cliente> Clientes { get; set; }
-
     public DbSet<Servico> Servicos { get; set; }
-
     public DbSet<Agendamento> Agendamentos { get; set; }
-
     public DbSet<Usuario> Usuarios { get; set; }
-
     public DbSet<Combo> Combos { get; set; }
-
     public DbSet<ComboServico> ComboServicos { get; set; }
-
     public DbSet<Profissional> Profissionais { get; set; }
-
     public DbSet<HorarioProfissional> HorariosProfissionais { get; set; }
 }
