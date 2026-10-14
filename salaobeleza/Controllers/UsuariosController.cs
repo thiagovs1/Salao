@@ -50,11 +50,8 @@ public class UsuariosController : ControllerBase
             });
         }
 
-        // Limpa os dados da sessão da conta anterior.
-        HttpContext.Session.Remove("ClienteId");
-        HttpContext.Session.Remove("ProfissionalId");
+        HttpContext.Session.Clear();
 
-        // LOGIN DA FUNCIONÁRIA
         if (string.Equals(
             usuario.TipoUsuario,
             "Funcionario",
@@ -84,7 +81,6 @@ public class UsuariosController : ControllerBase
             });
         }
 
-        // LOGIN DO CLIENTE
         var cliente = await _service.BuscarClientePorEmail(usuario.Email);
 
         if (cliente == null)

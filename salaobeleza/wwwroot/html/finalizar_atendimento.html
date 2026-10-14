@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finalizar Atendimento - Belleza</title>
+
+    <link rel="stylesheet" href="../css/finalizar_atendimento.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <aside class="sidebar">
+        <div class="logo">
+            <img src="../imagens/logo_belleza.png" alt="Belleza">
+        </div>
+
+        <nav class="menu">
+            <a href="tela_inicial.html">
+                <i class="fa-solid fa-house"></i><span>Início</span>
+            </a>
+
+            <a href="servicos.html">
+                <i class="fa-solid fa-scissors"></i><span>Serviços</span>
+            </a>
+
+            <a href="profissionais.html">
+                <i class="fa-solid fa-people-group"></i><span>Profissionais</span>
+            </a>
+
+            <a href="agendar_horario.html" class="ativo">
+                <i class="fa-regular fa-calendar"></i><span>Agendar horário</span>
+            </a>
+
+            <a href="meus_agendamentos.html">
+                <i class="fa-regular fa-calendar-check"></i><span>Meus agendamentos</span>
+            </a>
+
+            <a href="#">
+                <i class="fa-solid fa-tags"></i><span>Promoções</span>
+            </a>
+
+            <a href="#">
+                <i class="fa-regular fa-star"></i><span>Avaliações</span>
+            </a>
+
+            <a href="#">
+                <i class="fa-regular fa-circle-user"></i><span>Minha Conta</span>
+            </a>
+
+            <a href="login_cliente.html" class="sair">
+                <i class="fa-solid fa-arrow-right-from-bracket"></i><span>Sair</span>
+            </a>
+        </nav>
+
+        <div class="foto-sidebar">
+            <img src="../imagens/salao_belleza.png" alt="Interior do salão Belleza">
+        </div>
+    </aside>
+
+    <main class="conteudo">
+        <h1>Finalizar Atendimento</h1>
+
+        <div class="layout">
+            <section class="coluna-esquerda">
+
+                <div class="card pagamento">
+                    <h2>Forma de Pagamento</h2>
+
+                    <label class="opcao-pagamento">
+                        <span class="icone-pagamento pix">
+                            <i class="fa-brands fa-pix"></i>
+                        </span>
+
+                        <span class="detalhes-pagamento">
+                            <span>Pix</span>
+                            <small>50% do valor pago agora os outros 50% no salão</small>
+                        </span>
+
+                        <input type="radio" name="pagamento" value="Pix" checked>
+                    </label>
+
+                    <label class="opcao-pagamento">
+                        <span class="icone-pagamento">
+                            <i class="fa-solid fa-money-bill-wave"></i>
+                        </span>
+
+                        <span class="detalhes-pagamento">
+                            <span>No salão</span>
+                            <small>Valor vai ser pago no local</small>
+                        </span>
+
+                        <input type="radio" name="pagamento" value="No salão">
+                    </label>
+                </div>
+
+                <div class="card resumo-atendimento">
+                    <h2>Resumo do Atendimento</h2>
+
+                    <div class="linha-resumo">
+                        <span>Serviço:</span>
+                        <strong id="servico">1 serviço selecionado</strong>
+                    </div>
+
+                    <div class="linha-resumo">
+                        <span>Profissional:</span>
+                        <strong id="profissional">Beatriz Costa</strong>
+                    </div>
+
+                    <div class="linha-resumo">
+                        <span>Data e horário:</span>
+                        <strong id="dataHorario">30/10 às 14:00</strong>
+                    </div>
+
+                    <div class="linha-resumo total-atendimento">
+                        <span>Total do atendimento:</span>
+                        <strong id="totalAtendimento">R$ 130,00</strong>
+                    </div>
+                </div>
+
+            </section>
+
+            <section class="coluna-direita">
+
+                <div class="card dados-cliente">
+                    <h2>Dados do Cliente</h2>
+
+                    <div class="dado">
+                        <span>Nome:</span>
+                        <strong id="nomeCliente">Esther Alves dos Santos</strong>
+                    </div>
+
+                    <div class="dado">
+                        <span>Gmail:</span>
+                        <strong id="emailCliente">esther@gmail.com.br</strong>
+                    </div>
+
+                    <div class="dado">
+                        <span>Número:</span>
+                        <strong id="telefoneCliente">63 997345675</strong>
+                    </div>
+                </div>
+
+                <div class="card resumo-pedido">
+                    <h2>Resumo do Pedido</h2>
+
+                    <div class="valor-linha">
+                        <span>Serviços:</span>
+                        <strong id="valorServicos">R$ 130,00</strong>
+                    </div>
+
+                    <div class="valor-linha">
+                        <span>Taxa de Atendimento:</span>
+                        <strong id="taxaAtendimento">R$ 0,00</strong>
+                    </div>
+
+                    <div class="total-pedido">
+                        <span>Total:</span>
+                        <strong id="totalPedido">R$ 130,00</strong>
+                    </div>
+
+                    <button type="button" id="btnFinalizar">Finalizar</button>
+                </div>
+
+            </section>
+        </div>
+    </main>
+
+    <script>
+       const API_URL = "http://localhost:5000/api";
+
+const botaoFinalizar = document.getElementById("btnFinalizar");
+
+let agendamento = null;
+
+function formatarPreco(valor) {
+    return Number(valor || 0).toLocaleString("pt-BR", {
+        style: "currency",
+        currency: "BRL"
+    });
+}
+
+function preencher(id, valor) {
+    const elemento = document.getElementById(id);
+    if (elemento) elemento.textContent = valor || "Não informado";
+}
+
+async function requisicao(url, opcoes = {}) {
+    const resposta = await fetch(url, {
+        credentials: "include",
+        ...opcoes
+    });
+
+    if (!resposta.ok) {
+        let mensagem = "Ocorreu um erro na solicitação.";
+
+        try {
+            const erro = await resposta.json();
+            mensagem = erro.mensagem || erro.title || mensagem;
+        } catch {
+            const texto = await resposta.text();
+            if (texto) mensagem = texto;
+        }
+
+        throw new Error(mensagem);
+    }
+
+    if (resposta.status === 204) return null;
+
+    return resposta.json();
+}
+
+async function carregarDados() {
+    const salvo = sessionStorage.getItem("agendamentoCriado");
+
+    if (!salvo) {
+        throw new Error(
+            "Agendamento não encontrado. Volte e selecione a data e o horário."
+        );
+    }
+
+    agendamento = JSON.parse(salvo);
+
+    if (!agendamento.id) {
+        throw new Error("O ID do agendamento não foi encontrado.");
+    }
+
+    const cliente = await requisicao(`${API_URL}/Clientes/meu-perfil`);
+
+    preencher("servico", agendamento.nomeServico);
+    preencher("profissional", agendamento.profissional);
+
+    const data = new Date(agendamento.dataHora);
+
+    preencher(
+        "dataHorario",
+        Number.isNaN(data.getTime())
+            ? "Não informado"
+            : data.toLocaleString("pt-BR", {
+                dateStyle: "short",
+                timeStyle: "short"
+            })
+    );
+
+    preencher("nomeCliente", cliente.nome);
+    preencher("emailCliente", cliente.email);
+    preencher("telefoneCliente", cliente.telefone);
+
+    const preco = Number(agendamento.preco || 0);
+
+    preencher("totalAtendimento", formatarPreco(preco));
+    preencher("valorServicos", formatarPreco(preco));
+    preencher("taxaAtendimento", formatarPreco(0));
+    preencher("totalPedido", formatarPreco(preco));
+
+    if (agendamento.formaPagamento) {
+        const radio = document.querySelector(
+            `input[name="pagamento"][value="${agendamento.formaPagamento}"]`
+        );
+
+        if (radio) radio.checked = true;
+    }
+}
+
+botaoFinalizar.addEventListener("click", async () => {
+    if (!agendamento || !agendamento.id) {
+        alert("Não foi possível identificar o agendamento.");
+        return;
+    }
+
+    const pagamento = document.querySelector(
+        'input[name="pagamento"]:checked'
+    );
+
+    if (!pagamento) {
+        alert("Selecione uma forma de pagamento.");
+        return;
+    }
+
+    const textoOriginal = botaoFinalizar.textContent;
+
+    botaoFinalizar.disabled = true;
+    botaoFinalizar.textContent = "Finalizando...";
+
+    try {
+        await requisicao(
+            `${API_URL}/Agendamentos/${agendamento.id}/pagamento`,
+            {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    formaPagamento: pagamento.value
+                })
+            }
+        );
+
+        agendamento.formaPagamento = pagamento.value;
+
+        sessionStorage.setItem(
+            "agendamentoCriado",
+            JSON.stringify(agendamento)
+        );
+
+        alert("Atendimento finalizado com sucesso!");
+
+        window.location.href = "meus_agendamentos.html";
+    } catch (erro) {
+        console.error(erro);
+        alert(erro.message || "Não foi possível finalizar o atendimento.");
+    } finally {
+        botaoFinalizar.disabled = false;
+        botaoFinalizar.textContent = textoOriginal;
+    }
+});
+
+carregarDados().catch(erro => {
+    console.error(erro);
+    alert(erro.message || "Erro ao carregar os dados do atendimento.");
+    botaoFinalizar.disabled = true;
+});
+    </script>
+
+</body>
+</html>

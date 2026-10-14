@@ -156,6 +156,9 @@ CREATE TABLE IF NOT EXISTS Agendamentos (
         ON DELETE SET NULL
 );
 
+ALTER TABLE Agendamentos
+ADD COLUMN FormaPagamento VARCHAR(30) NULL;
+
 -- =========================================
 -- DADOS DOS SERVIÇOS
 -- =========================================

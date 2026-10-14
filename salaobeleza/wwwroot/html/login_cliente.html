@@ -10,11 +10,7 @@
 <body>
     <main class="login-card">
         <div class="logo-area">
-            <img
-                src="../imagens/logo_belleza_login.png"
-                alt="Logo Belleza"
-                class="logo"
-            >
+            <img src="/imagens/logo_belleza_login.png" alt="Logo Belleza" class="logo">
         </div>
 
         <p class="texto-login">Faça login para continuar</p>
@@ -22,34 +18,19 @@
         <form id="formLogin">
             <div class="campo">
                 <label for="email">E-mail</label>
-                <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    placeholder="Digite seu e-mail"
-                    required
-                >
+                <input type="email" id="email" name="email" placeholder="Digite seu e-mail" required>
             </div>
 
             <div class="campo">
                 <label for="senha">Senha</label>
-                <input
-                    type="password"
-                    id="senha"
-                    name="senha"
-                    placeholder="Digite sua senha"
-                    required
-                >
+                <input type="password" id="senha" name="senha" placeholder="Digite sua senha" required>
             </div>
 
             <div class="esqueci">
                 <a href="recuperar_senha.html">Esqueci minha senha</a>
             </div>
 
-            <div
-                id="mensagemLogin"
-                style="margin-top:10px;margin-bottom:10px;text-align:center;font-size:14px;min-height:20px;">
-            </div>
+            <div id="mensagemLogin" style="margin-top:10px;margin-bottom:10px;text-align:center;font-size:14px;min-height:20px;"></div>
 
             <button type="submit" class="btn-entrar">Entrar</button>
 
@@ -83,27 +64,28 @@
             }
 
             try {
-                const resposta = await fetch(
-                    "http://localhost:5000/api/Usuarios/login",
-                    {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json"
-                        },
-                        credentials: "include",
-                        body: JSON.stringify({
-                            email: email,
-                            senha: senha
-                        })
-                    }
-                );
+                const resposta = await fetch("http://localhost:5000/api/Usuarios/login", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    credentials: "include",
+                    body: JSON.stringify({
+                        email: email,
+                        senha: senha
+                    })
+                });
 
                 const resultado = await resposta.json();
 
                 if (!resposta.ok) {
-                    mensagemLogin.textContent =
-                        resultado.mensagem || "E-mail ou senha incorretos.";
+                    mensagemLogin.textContent = resultado.mensagem || "E-mail ou senha incorretos.";
+                    mensagemLogin.style.color = "#c0392b";
+                    return;
+                }
 
+                if (!resultado.redirecionamento) {
+                    mensagemLogin.textContent = "O destino após o login não foi informado.";
                     mensagemLogin.style.color = "#c0392b";
                     return;
                 }
@@ -111,28 +93,12 @@
                 mensagemLogin.textContent = "Login realizado com sucesso!";
                 mensagemLogin.style.color = "#2e8b57";
 
-                // Usa o destino definido pelo backend.
-                // Funcionárias e clientes recebem destinos diferentes.
-                const destino = resultado.redirecionamento;
-
-                if (!destino) {
-                    mensagemLogin.textContent =
-                        "Login realizado, mas o destino não foi informado pelo servidor.";
-
-                    mensagemLogin.style.color = "#c0392b";
-                    return;
-                }
-
                 setTimeout(function () {
-                    window.location.href = destino;
+                    window.location.href = resultado.redirecionamento;
                 }, 800);
-
             } catch (erro) {
-                console.error("Erro no login:", erro);
-
-                mensagemLogin.textContent =
-                    "Não foi possível conectar ao servidor.";
-
+                console.error(erro);
+                mensagemLogin.textContent = "Não foi possível conectar ao servidor.";
                 mensagemLogin.style.color = "#c0392b";
             }
         });

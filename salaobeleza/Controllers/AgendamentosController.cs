@@ -10,110 +10,59 @@ public class AgendamentosController : ControllerBase
 {
     private readonly AgendamentoService _service;
 
-    public AgendamentosController(
-        AgendamentoService service)
+    public AgendamentosController(AgendamentoService service)
     {
         _service = service;
     }
 
-    // GET api/agendamentos
     [HttpGet]
     public async Task<IActionResult> Listar()
     {
-        var agendamentos =
-            await _service.Listar();
-
-        return Ok(agendamentos);
+        return Ok(await _service.Listar());
     }
 
-    // GET api/agendamentos/meus
     [HttpGet("meus")]
     public async Task<IActionResult> MeusAgendamentos()
     {
-        var clienteId =
-            HttpContext.Session.GetInt32(
-                "ClienteId"
-            );
+        var clienteId = HttpContext.Session.GetInt32("ClienteId");
 
         if (clienteId == null)
-        {
-            return Unauthorized(new
-            {
-                mensagem =
-                    "Cliente não está logado."
-            });
-        }
+            return Unauthorized(new { mensagem = "Cliente não está logado." });
 
-        var agendamentos =
-            await _service.ListarPorCliente(
-                clienteId.Value
-            );
-
-        return Ok(agendamentos);
+        return Ok(await _service.ListarPorCliente(clienteId.Value));
     }
 
-    // POST api/agendamentos
     [HttpPost]
-    public async Task<IActionResult> Criar(
-        AgendamentoCriarDTO dto)
+    public async Task<IActionResult> Criar(AgendamentoCriarDTO dto)
     {
         try
         {
-            var clienteId =
-                HttpContext.Session.GetInt32(
-                    "ClienteId"
-                );
+            var clienteId = HttpContext.Session.GetInt32("ClienteId");
 
             if (clienteId == null)
-            {
-                return Unauthorized(new
-                {
-                    mensagem =
-                        "Cliente não está logado."
-                });
-            }
+                return Unauthorized(new { mensagem = "Cliente não está logado." });
 
-            var agendamentoDTO =
-                new AgendamentoCriarDTO(
-                    dto.DataHora,
-                    clienteId.Value,
-                    dto.ServicoId,
-                    dto.ComboId,
-                    dto.ProfissionalId
-                );
-
-            var criado =
-                await _service.Criar(
-                    agendamentoDTO
-                );
-
-
-            // =====================================================
-            // AGENDAMENTO FINALIZADO COM SUCESSO
-            // LIMPAR A SELEÇÃO DA SESSION
-            // =====================================================
-
-            HttpContext.Session.Remove(
-                "SELECAO_SERVICOS"
+            var agendamentoDTO = new AgendamentoCriarDTO(
+                dto.DataHora,
+                clienteId.Value,
+                dto.ServicoId,
+                dto.ComboId,
+                dto.ProfissionalId
             );
 
+            var criado = await _service.Criar(agendamentoDTO);
 
-            HttpContext.Session.Remove(
-                "PROFISSIONAL_SELECIONADO"
-            );
-
+            HttpContext.Session.Remove("SELECAO_SERVICOS");
+            HttpContext.Session.Remove("PROFISSIONAL_SELECIONADO");
 
             return Ok(criado);
         }
         catch (Exception ex)
         {
-            return BadRequest(
-                ex.Message
-            );
+            return BadRequest(new { mensagem = ex.Message });
         }
     }
 
-    // GET api/agendamentos/horarios-disponiveis
     [HttpGet("horarios-disponiveis")]
     public async Task<IActionResult> HorariosDisponiveis(
         int profissionalId,
@@ -123,99 +72,99 @@ public class AgendamentosController : ControllerBase
     {
         try
         {
-            var horarios =
-                await _service.BuscarHorariosDisponiveis(
-                    profissionalId,
-                    servicoId,
-                    comboId,
-                    data
-                );
+            var horarios = await _service.BuscarHorariosDisponiveis(
+                profissionalId,
+                servicoId,
+                comboId,
+                data
+            );
 
             return Ok(horarios);
         }
         catch (Exception ex)
         {
-            return BadRequest(
-                ex.Message
-            );
+            return BadRequest(new { mensagem = ex.Message });
         }
     }
 
-    // GET api/agendamentos/dia-trabalho
     [HttpGet("dia-trabalho")]
-    public async Task<IActionResult> DiaTrabalho(
-        int profissionalId,
-        int diaSemana)
+    public async Task<IActionResult> DiaTrabalho(int profissionalId, int diaSemana)
     {
         try
         {
-            var trabalha =
-                await _service.VerificarDiaTrabalho(
-                    profissionalId,
-                    diaSemana
-                );
+            var trabalha = await _service.VerificarDiaTrabalho(
+                profissionalId,
+                diaSemana
+            );
+
+            return Ok(new { trabalha });
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { mensagem = ex.Message });
+        }
+    }
+
+    [HttpPut("{id}/pagamento")]
+    public async Task<IActionResult> RegistrarPagamento(
+        int id,
+        [FromBody] FormaPagamentoDTO dto)
+    {
+        var clienteId = HttpContext.Session.GetInt32("ClienteId");
+
+        if (clienteId == null)
+            return Unauthorized(new { mensagem = "Faça login para continuar." });
+
+        if (dto == null ||
+            (dto.FormaPagamento != "Pix" &&
+             dto.FormaPagamento != "No salão"))
+        {
+            return BadRequest(new { mensagem = "Forma de pagamento inválida." });
+        }
+
+        try
+        {
+            var salvo = await _service.RegistrarFormaPagamento(
+                id,
+                clienteId.Value,
+                dto.FormaPagamento
+            );
+
+            if (!salvo)
+                return NotFound(new { mensagem = "Agendamento não encontrado." });
 
             return Ok(new
             {
-                trabalha = trabalha
+                mensagem = "Forma de pagamento registrada.",
+                formaPagamento = dto.FormaPagamento
             });
         }
         catch (Exception ex)
         {
-            return BadRequest(
-                ex.Message
-            );
+            return BadRequest(new { mensagem = ex.Message });
         }
     }
 
-    // PUT api/agendamentos/5/cancelar
     [HttpPut("{id}/cancelar")]
-    public async Task<IActionResult> Cancelar(
-        int id)
+    public async Task<IActionResult> Cancelar(int id)
     {
-        var clienteId =
-            HttpContext.Session.GetInt32(
-                "ClienteId"
-            );
+        var clienteId = HttpContext.Session.GetInt32("ClienteId");
 
         if (clienteId == null)
-        {
-            return Unauthorized(new
-            {
-                mensagem =
-                    "Cliente não está logado."
-            });
-        }
+            return Unauthorized(new { mensagem = "Cliente não está logado." });
 
-        var ok =
-            await _service.Cancelar(
-                id,
-                clienteId.Value
-            );
+        var ok = await _service.Cancelar(id, clienteId.Value);
 
         if (!ok)
-        {
-            return NotFound(new
-            {
-                mensagem =
-                    "Agendamento não encontrado."
-            });
-        }
+            return NotFound(new { mensagem = "Agendamento não encontrado." });
 
-        return Ok(new
-        {
-            mensagem =
-                "Agendamento cancelado com sucesso."
-        });
+        return Ok(new { mensagem = "Agendamento cancelado com sucesso." });
     }
 
-    // DELETE api/agendamentos/5
     [HttpDelete("{id}")]
-    public async Task<IActionResult> Remover(
-        int id)
+    public async Task<IActionResult> Remover(int id)
     {
-        var ok =
-            await _service.Remover(id);
+        var ok = await _service.Remover(id);
 
         if (!ok)
             return NotFound();
@@ -223,3 +172,5 @@ public class AgendamentosController : ControllerBase
         return NoContent();
     }
 }
+
+public record FormaPagamentoDTO(string FormaPagamento);

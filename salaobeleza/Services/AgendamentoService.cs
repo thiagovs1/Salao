@@ -739,4 +739,23 @@ public class AgendamentoService
             }
         }
     }
+    public async Task<bool> RegistrarFormaPagamento(
+    int id,
+    int clienteId,
+    string formaPagamento)
+{
+    var agendamento = await _repo.BuscarPorId(id);
+
+    if (agendamento == null || agendamento.ClienteId != clienteId)
+        return false;
+
+    if (formaPagamento != "Pix" && formaPagamento != "No salão")
+        throw new Exception("Forma de pagamento inválida.");
+
+    agendamento.FormaPagamento = formaPagamento;
+
+    await _repo.Atualizar(agendamento);
+
+    return true;
+}
 }

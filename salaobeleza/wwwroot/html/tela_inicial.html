@@ -103,14 +103,10 @@
 
             </a>
 
-            <a href="#"
-                class="menu-item sair">
-
+           <a href="#" id="btnSair" class="menu-item sair">
                 <i class="fa-solid fa-arrow-right-from-bracket"></i>
-
                 <span>Sair</span>
-
-            </a>
+           </a>
 
         </nav>
 
@@ -744,6 +740,28 @@
 
     </script>
 
+<script>
+document.getElementById("btnSair").addEventListener("click", async function (event) {
+    event.preventDefault();
+
+    try {
+        const resposta = await fetch("http://localhost:5000/api/Usuarios/logout", {
+            method: "POST",
+            credentials: "include"
+        });
+
+        if (!resposta.ok) {
+            throw new Error("Não foi possível encerrar a sessão.");
+        }
+
+        sessionStorage.clear();
+        window.location.replace("/html/login_cliente.html");
+    } catch (erro) {
+        console.error(erro);
+        alert("Não foi possível sair da conta. Verifique se o servidor está ligado.");
+    }
+});
+</script>
 </body>
 
 </html>
