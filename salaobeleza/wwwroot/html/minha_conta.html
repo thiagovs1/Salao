@@ -1,0 +1,236 @@
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Minha Conta - Belleza</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" href="../css/minha_conta.css">
+</head>
+<body>
+
+    <aside class="sidebar">
+        <div class="logo-area">
+            <img src="../imagens/logo_belleza.png" alt="Belleza" class="logo-belleza">
+        </div>
+
+        <nav class="menu">
+            <a href="tela_inicial.html" class="menu-item">
+                <i class="fa-solid fa-house"></i>
+                <span>Início</span>
+            </a>
+
+            <a href="agendar_horario.html" class="menu-item">
+                <i class="fa-regular fa-calendar"></i>
+                <span>Agendar horário</span>
+            </a>
+
+            <a href="meus_agendamentos.html" class="menu-item">
+                <i class="fa-regular fa-calendar-days"></i>
+                <span>Meus agendamentos</span>
+            </a>
+
+            <a href="servicos.html" class="menu-item">
+                <i class="fa-solid fa-scissors"></i>
+                <span>Serviços</span>
+            </a>
+
+            <a href="profissionais.html" class="menu-item">
+                <i class="fa-solid fa-users"></i>
+                <span>Profissionais</span>
+            </a>
+
+            <a href="avaliacoes.html" class="menu-item">
+                <i class="fa-regular fa-star"></i>
+                <span>Avaliações</span>
+            </a>
+
+            <a href="minha_conta.html" class="menu-item ativo">
+                <i class="fa-regular fa-circle-user"></i>
+                <span>Minha Conta</span>
+            </a>
+        </nav>
+    </aside>
+
+    <main class="conteudo">
+
+        <div class="layout-perfil">
+
+            <aside class="menu-perfil">
+
+                <a href="#perfil" class="opcao-perfil selecionada">
+                    <i class="fa-solid fa-circle-user"></i>
+                    <span>Meu Perfil</span>
+                </a>
+
+                <button type="button" class="opcao-perfil" id="btnSair">
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                    <span>Sair da Conta</span>
+                </button>
+
+                <button type="button" class="opcao-perfil" id="btnApagar">
+                    <i class="fa-regular fa-trash-can"></i>
+                    <span>Apagar Perfil</span>
+                </button>
+
+                <div class="banner-agendamento">
+                    <img src="../imagens/salao_belleza.png" alt="Salão Belleza">
+                    <div class="texto-banner">
+                        faça seu<br>
+                        agendamento!
+                    </div>
+                </div>
+
+                <a href="tela_inicial.html" class="btn-inicio">
+                    Voltar ao início
+                </a>
+
+            </aside>
+
+            <section class="painel-perfil" id="perfil">
+
+                <div class="cabecalho-perfil">
+                    <i class="fa-regular fa-circle-user icone-perfil"></i>
+                    <h2>Meu Perfil</h2>
+                </div>
+
+                <div class="dados-perfil" id="dadosPerfil">
+
+                    <div class="campo-perfil">
+                        <strong>Nome:</strong>
+                        <span id="nomeUsuario">Allana Carneiro Santos</span>
+                    </div>
+
+                    <div class="campo-perfil">
+                        <strong>Email:</strong>
+                        <span id="emailUsuario">Allanadograu244@gmail.com</span>
+                    </div>
+
+                    <div class="campo-perfil">
+                        <strong>Telefone:</strong>
+                        <span id="telefoneUsuario">(63) 99376-8976</span>
+                    </div>
+
+                    <div class="campo-perfil">
+                        <strong>CPF:</strong>
+                        <span id="cpfUsuario">999.888.777-65</span>
+                    </div>
+
+                    <div class="campo-perfil campo-endereco">
+                        <strong>Endereço:</strong>
+                        <span id="enderecoUsuario">Rua Alegria, 1234, Setor Norte, Colinas-TO</span>
+                    </div>
+
+                </div>
+
+                <form id="formEditar" class="form-editar" hidden>
+
+                    <label for="nome">Nome</label>
+                    <input type="text" id="nome" required>
+
+                    <label for="email">Email</label>
+                    <input type="email" id="email" required>
+
+                    <label for="telefone">Telefone</label>
+                    <input type="tel" id="telefone" required>
+
+                    <label for="cpf">CPF</label>
+                    <input type="text" id="cpf" required>
+
+                    <label for="endereco">Endereço</label>
+                    <textarea id="endereco" rows="2" required></textarea>
+
+                    <div class="botoes-edicao">
+                        <button type="submit" class="btn-salvar">
+                            <i class="fa-solid fa-check"></i>
+                            Salvar alterações
+                        </button>
+
+                        <button type="button" class="btn-cancelar" id="btnCancelar">
+                            Cancelar
+                        </button>
+                    </div>
+
+                </form>
+
+                <button type="button" class="btn-editar" id="btnEditar">
+                    <i class="fa-solid fa-pen"></i>
+                    Editar perfil
+                </button>
+
+            </section>
+
+        </div>
+
+    </main>
+
+    <script>
+        const btnEditar = document.getElementById("btnEditar");
+        const btnCancelar = document.getElementById("btnCancelar");
+        const formEditar = document.getElementById("formEditar");
+        const dadosPerfil = document.getElementById("dadosPerfil");
+
+        const campos = {
+            nome: document.getElementById("nomeUsuario"),
+            email: document.getElementById("emailUsuario"),
+            telefone: document.getElementById("telefoneUsuario"),
+            cpf: document.getElementById("cpfUsuario"),
+            endereco: document.getElementById("enderecoUsuario")
+        };
+
+        const entradas = {
+            nome: document.getElementById("nome"),
+            email: document.getElementById("email"),
+            telefone: document.getElementById("telefone"),
+            cpf: document.getElementById("cpf"),
+            endereco: document.getElementById("endereco")
+        };
+
+        function abrirEdicao() {
+            Object.keys(campos).forEach(chave => {
+                entradas[chave].value = campos[chave].textContent.trim();
+            });
+
+            dadosPerfil.hidden = true;
+            formEditar.hidden = false;
+            btnEditar.hidden = true;
+        }
+
+        function cancelarEdicao() {
+            formEditar.hidden = true;
+            dadosPerfil.hidden = false;
+            btnEditar.hidden = false;
+        }
+
+        btnEditar.addEventListener("click", abrirEdicao);
+        btnCancelar.addEventListener("click", cancelarEdicao);
+
+        formEditar.addEventListener("submit", function(evento) {
+            evento.preventDefault();
+
+            Object.keys(campos).forEach(chave => {
+                campos[chave].textContent = entradas[chave].value.trim();
+            });
+
+            cancelarEdicao();
+            alert("Dados atualizados na tela!");
+        });
+
+        document.getElementById("btnSair").addEventListener("click", function() {
+            if (confirm("Deseja realmente sair da sua conta?")) {
+                window.location.href = "login_cliente.html";
+            }
+        });
+
+        document.getElementById("btnApagar").addEventListener("click", function() {
+            if (confirm("Deseja realmente apagar seu perfil?")) {
+                alert("A exclusão permanente precisa ser conectada à API.");
+            }
+        });
+    </script>
+
+</body>
+</html>

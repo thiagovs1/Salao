@@ -1,0 +1,340 @@
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Avaliações - Belleza</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" href="../css/avaliacoes.css">
+</head>
+<body>
+
+    <aside class="sidebar">
+        <div class="logo-area">
+            <img src="../imagens/logo_belleza.png" alt="Belleza" class="logo-belleza">
+        </div>
+
+        <nav class="menu">
+            <a href="tela_inicial.html" class="menu-item">
+                <i class="fa-solid fa-house"></i>
+                <span>Início</span>
+            </a>
+
+            <a href="servicos.html" class="menu-item">
+                <i class="fa-solid fa-scissors"></i>
+                <span>Serviços</span>
+            </a>
+
+            <a href="profissionais.html" class="menu-item">
+                <i class="fa-solid fa-users"></i>
+                <span>Profissionais</span>
+            </a>
+
+            <a href="agendar_horario.html" class="menu-item">
+                <i class="fa-regular fa-calendar"></i>
+                <span>Agendar horário</span>
+            </a>
+
+            <a href="meus_agendamentos.html" class="menu-item">
+                <i class="fa-regular fa-calendar"></i>
+                <span>Meus agendamentos</span>
+            </a>
+
+            <a href="avaliacoes.html" class="menu-item ativo">
+                <i class="fa-regular fa-star"></i>
+                <span>Avaliações</span>
+            </a>
+
+            <a href="minha_conta.html" class="menu-item">
+                <i class="fa-regular fa-circle-user"></i>
+                <span>Minha Conta</span>
+            </a>
+        </nav>
+    </aside>
+
+    <main class="conteudo">
+
+        <h1 class="titulo-pagina">Avaliações</h1>
+
+        <section class="painel-avaliacoes">
+
+            <div class="cabecalho-avaliacoes">
+                <h2>
+                    Comentários
+                    <i class="fa-regular fa-circle-question icone-ajuda"
+                       title="Veja as opiniões dos clientes sobre o salão"></i>
+                </h2>
+
+                <button class="btn-comentar" id="btnComentar" type="button">
+                    <i class="fa-solid fa-pen-to-square"></i>
+                    Comentar
+                </button>
+            </div>
+
+            <div class="lista-comentarios" id="listaComentarios">
+
+                <article class="comentario">
+                    <div class="avatar">
+                        <i class="fa-solid fa-user"></i>
+                    </div>
+
+                    <div class="conteudo-comentario">
+                        <div class="nome-cliente">Otávio Pereira de Rosa</div>
+                        <div class="subtitulo">Um comentário</div>
+
+                        <div class="estrelas">
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <span>1 semana atrás</span>
+                        </div>
+
+                        <p class="texto-comentario">
+                            Excelente atendimento, profissionais com ótimo temperamento, bem organizados!!!
+                        </p>
+
+                        <div class="acoes-comentario">
+                            <button class="btn-responder" type="button">
+                                <i class="fa-solid fa-reply"></i>
+                                Responder
+                            </button>
+
+                            <button class="btn-like" type="button">
+                                <i class="fa-solid fa-thumbs-up"></i>
+                                Like
+                            </button>
+                        </div>
+
+                        <div class="area-respostas"></div>
+                    </div>
+                </article>
+
+                <article class="comentario">
+                    <div class="avatar">
+                        <i class="fa-solid fa-user"></i>
+                    </div>
+
+                    <div class="conteudo-comentario">
+                        <div class="nome-cliente">Nathalia de Souza</div>
+                        <div class="subtitulo">Um comentário</div>
+
+                        <div class="estrelas">
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <span>1 semana atrás</span>
+                        </div>
+
+                        <p class="texto-comentario">
+                            merece 5 estrelas! Adorei o lugar, todo impecável, produtos de marca, profissionais<br class="quebra-texto">
+                            aptos e de confiança.
+                        </p>
+
+                        <div class="acoes-comentario">
+                            <button class="btn-responder" type="button">
+                                <i class="fa-solid fa-reply"></i>
+                                Responder
+                            </button>
+
+                            <button class="btn-like curtido" type="button">
+                                <i class="fa-solid fa-thumbs-up"></i>
+                                Like
+                            </button>
+                        </div>
+
+                        <div class="area-respostas"></div>
+                    </div>
+                </article>
+
+                <article class="comentario">
+                    <div class="avatar">
+                        <i class="fa-solid fa-user"></i>
+                    </div>
+
+                    <div class="conteudo-comentario">
+                        <div class="nome-cliente">Felipe Flausino</div>
+                        <div class="subtitulo">Um comentário</div>
+
+                        <div class="estrelas">
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <span>1 semana atrás</span>
+                        </div>
+
+                        <p class="texto-comentario">
+                            Gostei, ótimo trabalho.
+                        </p>
+
+                        <div class="acoes-comentario">
+                            <button class="btn-responder" type="button">
+                                <i class="fa-solid fa-reply"></i>
+                                Responder
+                            </button>
+
+                            <button class="btn-like" type="button">
+                                <i class="fa-solid fa-thumbs-up"></i>
+                                Like
+                            </button>
+                        </div>
+
+                        <div class="area-respostas"></div>
+                    </div>
+                </article>
+
+                <article class="comentario">
+                    <div class="avatar">
+                        <i class="fa-solid fa-user"></i>
+                    </div>
+
+                    <div class="conteudo-comentario">
+                        <div class="nome-cliente">Allana</div>
+                        <div class="subtitulo"></div>
+
+                        <div class="estrelas">
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <span>1 semana atrás</span>
+                        </div>
+
+                        <p class="texto-comentario">
+                            Eu era careca e sai com cabelo, amei.
+                        </p>
+
+                        <div class="acoes-comentario">
+                            <button class="btn-responder" type="button">
+                                <i class="fa-solid fa-reply"></i>
+                                Responder
+                            </button>
+
+                            <button class="btn-like" type="button">
+                                <i class="fa-solid fa-thumbs-up"></i>
+                                Like
+                            </button>
+                        </div>
+
+                        <div class="area-respostas"></div>
+                    </div>
+                </article>
+
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        const listaComentarios = document.getElementById("listaComentarios");
+        const btnComentar = document.getElementById("btnComentar");
+
+        btnComentar.addEventListener("click", () => {
+            const comentario = prompt("Escreva seu comentário:");
+
+            if (!comentario || !comentario.trim()) {
+                return;
+            }
+
+            const artigo = document.createElement("article");
+            artigo.className = "comentario";
+
+            const avatar = document.createElement("div");
+            avatar.className = "avatar";
+
+            const icone = document.createElement("i");
+            icone.className = "fa-solid fa-user";
+            avatar.appendChild(icone);
+
+            const conteudo = document.createElement("div");
+            conteudo.className = "conteudo-comentario";
+
+            const nome = document.createElement("div");
+            nome.className = "nome-cliente";
+            nome.textContent = "Você";
+
+            const subtitulo = document.createElement("div");
+            subtitulo.className = "subtitulo";
+            subtitulo.textContent = "Um comentário";
+
+            const estrelas = document.createElement("div");
+            estrelas.className = "estrelas";
+
+            for (let i = 0; i < 5; i++) {
+                const estrela = document.createElement("i");
+                estrela.className = "fa-solid fa-star";
+                estrelas.appendChild(estrela);
+            }
+
+            const tempo = document.createElement("span");
+            tempo.textContent = " agora";
+            estrelas.appendChild(tempo);
+
+            const texto = document.createElement("p");
+            texto.className = "texto-comentario";
+            texto.textContent = comentario.trim();
+
+            const acoes = document.createElement("div");
+            acoes.className = "acoes-comentario";
+
+            const responder = document.createElement("button");
+            responder.className = "btn-responder";
+            responder.type = "button";
+            responder.innerHTML = '<i class="fa-solid fa-reply"></i> Responder';
+
+            const like = document.createElement("button");
+            like.className = "btn-like";
+            like.type = "button";
+            like.innerHTML = '<i class="fa-solid fa-thumbs-up"></i> Like';
+
+            const respostas = document.createElement("div");
+            respostas.className = "area-respostas";
+
+            acoes.append(responder, like);
+            conteudo.append(nome, subtitulo, estrelas, texto, acoes, respostas);
+            artigo.append(avatar, conteudo);
+
+            listaComentarios.prepend(artigo);
+        });
+
+        listaComentarios.addEventListener("click", (evento) => {
+            const botao = evento.target.closest("button");
+
+            if (!botao) {
+                return;
+            }
+
+            if (botao.classList.contains("btn-like")) {
+                botao.classList.toggle("curtido");
+            }
+
+            if (botao.classList.contains("btn-responder")) {
+                const comentario = botao.closest(".comentario");
+                const area = comentario.querySelector(".area-respostas");
+
+                const resposta = prompt("Escreva sua resposta:");
+
+                if (!resposta || !resposta.trim()) {
+                    return;
+                }
+
+                const textoResposta = document.createElement("p");
+                textoResposta.className = "texto-resposta";
+                textoResposta.textContent = "Você: " + resposta.trim();
+
+                area.appendChild(textoResposta);
+            }
+        });
+    </script>
+
+</body>
+</html>

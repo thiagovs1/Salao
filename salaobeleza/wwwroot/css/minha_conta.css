@@ -1,0 +1,462 @@
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+[hidden] {
+    display: none !important;
+}
+
+body {
+    min-height: 100vh;
+    background: #f8f8f8;
+    color: #91405f;
+    font-family: Georgia, "Times New Roman", serif;
+}
+
+/* MENU LATERAL */
+
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 210px;
+    height: 100vh;
+    background-color: #f7eeec;
+    background-image: url("../imagens/salao_belleza.png");
+    background-repeat: no-repeat;
+    background-position: center bottom;
+    background-size: 100% auto;
+    z-index: 10;
+}
+
+.logo-area {
+    width: 100%;
+    height: 117px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px 13px;
+}
+
+.logo-belleza {
+    width: 180px;
+    height: 112px;
+    object-fit: contain;
+}
+
+.menu {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+    padding-top: 9px;
+}
+
+.menu-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    width: 100%;
+    min-height: 30px;
+    padding: 5px 16px;
+    text-decoration: none;
+    color: #984763;
+    font-size: 14px;
+}
+
+.menu-item i {
+    width: 18px;
+    text-align: center;
+    font-size: 16px;
+}
+
+.menu-item:hover {
+    background-color: #f0ddda;
+}
+
+.menu-item.ativo {
+    color: white;
+    background-color: #893d5c;
+    border-radius: 0 4px 4px 0;
+    font-weight: bold;
+}
+
+/* ÁREA PRINCIPAL */
+
+.conteudo {
+    margin-left: 210px;
+    min-height: 100vh;
+    padding: 0;
+}
+
+/* POSICIONAMENTO DOS DOIS CARTÕES */
+
+.layout-perfil {
+    width: 734px;
+    margin: 136px auto 0;
+    display: grid;
+    grid-template-columns: 200px 405px;
+    justify-content: space-between;
+    align-items: start;
+    gap: 0;
+}
+
+/* CARTÃO LATERAL */
+
+.menu-perfil {
+    width: 200px;
+    height: 421px;
+    min-height: 421px;
+    padding: 28px 9px 25px;
+    background-color: #893d5c;
+    border-radius: 7px;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+}
+
+.opcao-perfil {
+    min-height: 35px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 8px;
+    border: none;
+    border-radius: 8px;
+    background: transparent;
+    color: #fff7f6;
+    text-align: left;
+    text-decoration: none;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.opcao-perfil i {
+    width: 17px;
+    font-size: 13px;
+}
+
+.opcao-perfil.selecionada {
+    background-color: #f9e9e8;
+    color: #91405f;
+}
+
+.opcao-perfil:not(.selecionada) {
+    margin-top: 17px;
+}
+
+.opcao-perfil:hover {
+    background-color: #f3dcdf;
+    color: #893d5c;
+}
+
+/* IMAGEM DO SALÃO */
+
+.banner-agendamento {
+    position: relative;
+    height: 163px;
+    margin-top: 15px;
+    overflow: hidden;
+    border-radius: 12px;
+    background-color: #d7a39b;
+}
+
+.banner-agendamento img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+}
+
+.texto-banner {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 0 15px 13px 30px;
+    background: linear-gradient(
+        to bottom,
+        transparent 30%,
+        rgba(55, 22, 25, 0.53) 100%
+    );
+    color: #fff;
+    font-size: 16px;
+    line-height: 24px;
+    font-weight: bold;
+}
+
+.btn-inicio {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    align-self: center;
+    min-height: 25px;
+    margin-top: 21px;
+    padding: 4px 16px;
+    border-radius: 10px;
+    background-color: #f9e9e8;
+    color: #91405f;
+    font-size: 13px;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.btn-inicio:hover {
+    background-color: #fff;
+}
+
+/* PAINEL ROSA DO PERFIL */
+
+.painel-perfil {
+    width: 405px;
+    min-height: 409px;
+    padding: 16px 24px 37px;
+    border-radius: 7px;
+    background-color: #f6e9e6;
+}
+
+.cabecalho-perfil {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 31px;
+    padding-top: 0;
+}
+
+.icone-perfil {
+    font-size: 28px;
+    margin-bottom: 8px;
+    color: #764b42;
+}
+
+.cabecalho-perfil h2 {
+    font-size: 14px;
+    font-weight: bold;
+    color: #91405f;
+}
+
+/* INFORMAÇÕES DO CLIENTE */
+
+.dados-perfil {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.campo-perfil {
+    min-height: 30px;
+    width: 100%;
+    padding: 7px 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    background-color: #fff;
+    border-radius: 8px;
+    color: #91405f;
+    font-size: 13px;
+    line-height: 17px;
+    overflow-wrap: anywhere;
+}
+
+.campo-perfil strong {
+    flex-shrink: 0;
+}
+
+.campo-endereco {
+    min-height: 43px;
+    align-items: flex-start;
+    text-align: left;
+}
+
+/* BOTÃO EDITAR */
+
+.btn-editar {
+    width: 187px;
+    height: 24px;
+    margin: 33px auto 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    border: none;
+    border-radius: 7px;
+    background-color: #893d5c;
+    color: #fff;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 13px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.btn-editar:hover,
+.btn-salvar:hover {
+    background-color: #713049;
+}
+
+/* FORMULÁRIO DE EDIÇÃO */
+
+.form-editar {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.form-editar label {
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.form-editar input,
+.form-editar textarea {
+    width: 100%;
+    padding: 8px 10px;
+    border: 1px solid #e0c4cd;
+    border-radius: 7px;
+    outline: none;
+    background: #fff;
+    color: #91405f;
+    font-family: Arial, sans-serif;
+    font-size: 13px;
+}
+
+.form-editar input:focus,
+.form-editar textarea:focus {
+    border-color: #893d5c;
+}
+
+.form-editar textarea {
+    resize: vertical;
+}
+
+.botoes-edicao {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 12px;
+}
+
+.btn-salvar,
+.btn-cancelar {
+    width: 100%;
+    min-height: 30px;
+    border: none;
+    border-radius: 7px;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.btn-salvar {
+    background: #893d5c;
+    color: #fff;
+}
+
+.btn-cancelar {
+    background: #fff;
+    color: #893d5c;
+}
+
+/* TELAS MENORES */
+
+@media (max-width: 950px) {
+    .layout-perfil {
+        width: calc(100% - 40px);
+        max-width: 734px;
+        grid-template-columns: 190px minmax(0, 405px);
+        gap: 24px;
+    }
+
+    .menu-perfil {
+        width: 190px;
+    }
+
+    .painel-perfil {
+        width: 100%;
+    }
+}
+
+@media (max-width: 700px) {
+    .sidebar {
+        width: 68px;
+        background-image: none;
+    }
+
+    .logo-area {
+        height: 75px;
+        padding: 4px;
+    }
+
+    .logo-belleza {
+        width: 60px;
+        height: 65px;
+    }
+
+    .menu {
+        gap: 8px;
+    }
+
+    .menu-item {
+        justify-content: center;
+        padding: 10px 4px;
+    }
+
+    .menu-item i {
+        font-size: 17px;
+    }
+
+    .menu-item span {
+        display: none;
+    }
+
+    .menu-item.ativo {
+        border-radius: 0;
+    }
+
+    .conteudo {
+        margin-left: 68px;
+        padding: 1px 12px 25px;
+    }
+
+    .layout-perfil {
+        width: 100%;
+        margin: 35px auto 0;
+        grid-template-columns: minmax(0, 1fr);
+        justify-items: center;
+        gap: 22px;
+    }
+
+    .menu-perfil {
+        width: 100%;
+        max-width: 300px;
+        min-height: auto;
+    }
+
+    .banner-agendamento {
+        height: 180px;
+    }
+
+    .painel-perfil {
+        width: 100%;
+        max-width: 405px;
+        min-height: auto;
+        padding: 22px 16px 28px;
+    }
+
+    .campo-perfil {
+        flex-wrap: wrap;
+        text-align: center;
+    }
+
+    .campo-endereco {
+        text-align: left;
+    }
+}

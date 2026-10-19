@@ -1,0 +1,414 @@
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Georgia, "Times New Roman", serif;
+    background-color: #f8f8f8;
+    color: #171313;
+    min-height: 100vh;
+}
+
+/* MENU LATERAL */
+
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 210px;
+    height: 100vh;
+    background-color: #f7eeec;
+    background-image: url("../imagens/salao_belleza.png");
+    background-repeat: no-repeat;
+    background-position: center bottom;
+    background-size: 100% auto;
+    z-index: 10;
+    overflow-y: auto;
+}
+
+.logo-area {
+    width: 100%;
+    height: 109px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    border-bottom: 3px solid #91405f;
+    margin-top: 0;
+    padding: 3px 12px 0;
+}
+
+.logo-belleza {
+    width: 150px;
+    height: 103px;
+    object-fit: contain;
+    object-position: center;
+}
+
+.menu {
+    display: flex;
+    flex-direction: column;
+    padding-top: 8px;
+    gap: 2px;
+}
+
+.menu-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    width: calc(100% - 13px);
+    min-height: 27px;
+    padding: 4px 13px;
+    text-decoration: none;
+    color: #984763;
+    font-size: 14px;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.menu-item i {
+    width: 16px;
+    text-align: center;
+    font-size: 14px;
+    flex-shrink: 0;
+}
+
+.menu-item:hover {
+    background-color: #f0dcd9;
+}
+
+.menu-item.ativo {
+    background-color: #893d5c;
+    color: #ffffff;
+    border-radius: 0 4px 4px 0;
+    font-weight: bold;
+}
+
+/* CONTEÚDO PRINCIPAL */
+
+.conteudo {
+    margin-left: 210px;
+    min-height: 100vh;
+    padding: 13px 34px 36px;
+}
+
+.titulo-pagina {
+    color: #a34e6c;
+    font-size: 20px;
+    font-weight: normal;
+    margin: 0 0 23px 4px;
+}
+
+/* PAINEL DE AVALIAÇÕES */
+
+.painel-avaliacoes {
+    width: 100%;
+    max-width: 790px;
+    min-height: 577px;
+    background-color: #f6e9e6;
+    border-radius: 7px;
+    padding: 32px 27px 16px;
+}
+
+.cabecalho-avaliacoes {
+    height: 37px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0 0 24px 9px;
+}
+
+.cabecalho-avaliacoes h2 {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 18px;
+    font-weight: normal;
+    color: #171313;
+}
+
+.icone-ajuda {
+    font-size: 10px;
+    align-self: flex-start;
+    margin-top: 2px;
+    color: #777;
+}
+
+.btn-comentar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    height: 30px;
+    min-width: 87px;
+    padding: 0 10px;
+    border: none;
+    border-radius: 7px;
+    background-color: #893d5c;
+    color: #ffffff;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.btn-comentar:hover {
+    background-color: #713049;
+}
+
+.btn-comentar i {
+    font-size: 12px;
+}
+
+/* LISTA DE COMENTÁRIOS */
+
+.lista-comentarios {
+    display: flex;
+    flex-direction: column;
+    gap: 17px;
+}
+
+.comentario {
+    display: flex;
+    align-items: flex-start;
+    gap: 5px;
+    width: 100%;
+    min-height: 102px;
+    padding: 10px 10px 9px;
+    background-color: #ffffff;
+}
+
+.avatar {
+    width: 31px;
+    height: 31px;
+    flex-shrink: 0;
+    margin-top: 5px;
+    border: 1px solid #91405f;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #91405f;
+    background-color: #ffffff;
+}
+
+.avatar i {
+    font-size: 22px;
+}
+
+.conteudo-comentario {
+    flex: 1;
+    min-width: 0;
+}
+
+.nome-cliente {
+    color: #171313;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    line-height: 15px;
+}
+
+.subtitulo {
+    color: #777777;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 8px;
+    line-height: 10px;
+    min-height: 10px;
+}
+
+.estrelas {
+    display: flex;
+    align-items: center;
+    gap: 1px;
+    height: 16px;
+    color: #ffc928;
+}
+
+.estrelas i {
+    font-size: 12px;
+}
+
+.estrelas span {
+    color: #777777;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 7px;
+    margin-left: 3px;
+}
+
+.texto-comentario {
+    color: #211d1d;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 11px;
+    line-height: 16px;
+    margin-top: 1px;
+    overflow-wrap: anywhere;
+}
+
+.acoes-comentario {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-top: 17px;
+    padding-left: 5px;
+}
+
+.acoes-comentario button {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    border: none;
+    background: transparent;
+    color: #777777;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 9px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.btn-responder i {
+    font-size: 11px;
+    color: #292929;
+}
+
+.btn-like i {
+    font-size: 10px;
+    color: #25a9f8;
+}
+
+.btn-like.curtido i {
+    color: #168ce0;
+}
+
+.acoes-comentario button:hover {
+    color: #893d5c;
+}
+
+.texto-resposta {
+    margin-top: 9px;
+    padding: 7px 10px;
+    border-left: 2px solid #91405f;
+    background-color: #fbf3f1;
+    color: #5e3546;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 11px;
+    overflow-wrap: anywhere;
+}
+
+/* RESPONSIVIDADE */
+
+@media (min-width: 1400px) {
+    .conteudo {
+        padding-left: 34px;
+    }
+
+    .painel-avaliacoes {
+        max-width: 790px;
+    }
+}
+
+@media (max-width: 900px) {
+    .sidebar {
+        width: 180px;
+    }
+
+    .logo-belleza {
+        width: 140px;
+    }
+
+    .conteudo {
+        margin-left: 180px;
+        padding: 16px 20px 30px;
+    }
+
+    .painel-avaliacoes {
+        padding: 25px 18px 16px;
+    }
+}
+
+@media (max-width: 600px) {
+    .sidebar {
+        width: 66px;
+        background-image: none;
+    }
+
+    .logo-area {
+        height: 70px;
+        padding: 5px;
+    }
+
+    .logo-belleza {
+        width: 55px;
+        height: 60px;
+    }
+
+    .menu-item {
+        justify-content: center;
+        width: 100%;
+        padding: 10px 4px;
+    }
+
+    .menu-item i {
+        font-size: 17px;
+    }
+
+    .menu-item span {
+        display: none;
+    }
+
+    .menu-item.ativo {
+        border-radius: 0;
+    }
+
+    .conteudo {
+        margin-left: 66px;
+        padding: 15px 12px 25px;
+    }
+
+    .titulo-pagina {
+        font-size: 19px;
+        margin-bottom: 20px;
+    }
+
+    .painel-avaliacoes {
+        padding: 20px 10px 14px;
+        min-height: auto;
+    }
+
+    .cabecalho-avaliacoes {
+        margin-left: 2px;
+        margin-bottom: 20px;
+    }
+
+    .cabecalho-avaliacoes h2 {
+        font-size: 16px;
+    }
+
+    .btn-comentar {
+        min-width: 80px;
+        font-size: 11px;
+    }
+
+    .lista-comentarios {
+        gap: 12px;
+    }
+
+    .comentario {
+        padding: 9px 7px;
+        min-height: 100px;
+    }
+
+    .texto-comentario {
+        font-size: 10px;
+    }
+
+    .quebra-texto {
+        display: none;
+    }
+
+    .acoes-comentario {
+        gap: 12px;
+        margin-top: 13px;
+    }
+}
