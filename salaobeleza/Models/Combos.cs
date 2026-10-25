@@ -1,3 +1,4 @@
+
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -15,6 +16,9 @@ namespace SalaoBeleza.Models
 
         [Column(TypeName = "decimal(10,2)")]
         public decimal Preco { get; set; }
+
+        [MaxLength(255)]
+        public string? Imagem { get; set; }
 
         public ICollection<ComboServico> ComboServicos { get; set; }
             = new List<ComboServico>();

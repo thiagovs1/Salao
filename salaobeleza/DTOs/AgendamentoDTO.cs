@@ -1,33 +1,12 @@
+
 namespace SalaoBeleza.DTOs;
 
-// Dados necessários para criar um agendamento.
-public record AgendamentoCriarDTO(
-
-    DateTime DataHora,
-
-    int ClienteId,
-
-    int? ServicoId,
-
-    int? ComboId,
-
-    int ProfissionalId
-
-);
-
-// Dados devolvidos pela API.
-public record AgendamentoRespostaDTO(
-
-    int Id,
-
-    DateTime DataHora,
-
-    string NomeCliente,
-
-    string NomeServico,
-
-    decimal Preco,
-
-    string Status
-
-);
+public record AgendamentoCriarDTO
+{
+    public DateTime DataHora { get; init; }
+    public int ClienteId { get; init; }
+    public int ProfissionalId { get; init; }
+    public int? ServicoId { get; init; }
+    public List<int> ServicoIds { get; init; } = new();
+    public int? ComboId { get; init; }
+}

@@ -11,6 +11,9 @@ public class UsuariosController : ControllerBase
 {
     private readonly UsuarioService _service;
 
+    private const string EmailAdmin = "admistrador@salaobeleza.com";
+    private const string SenhaAdmin = "12345";
+
     public UsuariosController(UsuarioService service)
     {
         _service = service;
@@ -40,6 +43,36 @@ public class UsuariosController : ControllerBase
     [HttpPost("login")]
     public async Task<IActionResult> Login(UsuarioLoginDTO dto)
     {
+        // LOGIN DO ADMINISTRADOR
+        if (string.Equals(
+                dto.Email?.Trim(),
+                EmailAdmin,
+                StringComparison.OrdinalIgnoreCase)
+            && dto.Senha == SenhaAdmin)
+        {
+            HttpContext.Session.SetString(
+                "AdministradorAutenticado", "true");
+
+            HttpContext.Session.SetString(
+                "TipoUsuarioAdmin", "Administrador");
+
+            HttpContext.Session.SetString(
+                "EmailAdmin", EmailAdmin);
+
+            HttpContext.Session.SetString(
+                "TipoUsuario", "Administrador");
+
+            return Ok(new
+            {
+                nome = "Administrador",
+                email = EmailAdmin,
+                tipoUsuario = "Administrador",
+                redirecionamento =
+                    "/administrador/html/Painel_administrador.html"
+            });
+        }
+
+        // LOGIN NORMAL
         var usuario = await _service.Login(dto);
 
         if (usuario == null)
@@ -50,25 +83,30 @@ public class UsuariosController : ControllerBase
             });
         }
 
-        HttpContext.Session.Clear();
-
+        // LOGIN DE FUNCIONÁRIO
         if (string.Equals(
-            usuario.TipoUsuario,
-            "Funcionario",
-            StringComparison.OrdinalIgnoreCase))
+                usuario.TipoUsuario,
+                "Funcionario",
+                StringComparison.OrdinalIgnoreCase))
         {
             if (usuario.ProfissionalId == null)
             {
                 return Unauthorized(new
                 {
-                    mensagem = "Esta conta não está vinculada a uma profissional."
+                    mensagem =
+                        "Esta conta não está vinculada a uma profissional."
                 });
             }
 
             HttpContext.Session.SetInt32(
                 "ProfissionalId",
-                usuario.ProfissionalId.Value
-            );
+                usuario.ProfissionalId.Value);
+
+            HttpContext.Session.SetString(
+                "TipoUsuarioFuncionario", "Funcionario");
+
+            HttpContext.Session.SetString(
+                "TipoUsuario", "Funcionario");
 
             return Ok(new
             {
@@ -77,11 +115,14 @@ public class UsuariosController : ControllerBase
                 email = usuario.Email,
                 tipoUsuario = "Funcionario",
                 profissionalId = usuario.ProfissionalId,
-                redirecionamento = "/funcionarios/html/painel_profissional.html"
+                redirecionamento =
+                    "/funcionarios/html/painel_profissional.html"
             });
         }
 
-        var cliente = await _service.BuscarClientePorEmail(usuario.Email);
+        // LOGIN DE CLIENTE
+        var cliente =
+            await _service.BuscarClientePorEmail(usuario.Email);
 
         if (cliente == null)
         {
@@ -93,6 +134,12 @@ public class UsuariosController : ControllerBase
 
         HttpContext.Session.SetInt32("ClienteId", cliente.Id);
 
+        HttpContext.Session.SetString(
+            "TipoUsuarioCliente", "Cliente");
+
+        HttpContext.Session.SetString(
+            "TipoUsuario", "Cliente");
+
         return Ok(new
         {
             id = usuario.Id,
@@ -100,6 +147,32 @@ public class UsuariosController : ControllerBase
             email = usuario.Email,
             tipoUsuario = "Cliente",
             redirecionamento = "/html/tela_inicial.html"
+        });
+    }
+
+    [HttpGet("verificar-admin")]
+    public IActionResult VerificarAdmin()
+    {
+        bool autenticado =
+            HttpContext.Session.GetString(
+                "AdministradorAutenticado") == "true"
+            && HttpContext.Session.GetString(
+                "TipoUsuarioAdmin") == "Administrador"
+            && HttpContext.Session.GetString(
+                "EmailAdmin") == EmailAdmin;
+
+        if (!autenticado)
+        {
+            return Unauthorized(new
+            {
+                mensagem = "Acesso restrito ao administrador."
+            });
+        }
+
+        return Ok(new
+        {
+            autenticado = true,
+            tipoUsuario = "Administrador"
         });
     }
 
@@ -133,10 +206,87 @@ public class UsuariosController : ControllerBase
         }
     }
 
+    // O parâmetro identifica qual conta deve ser desconectada.
+    // Exemplos: /api/Usuarios/logout?tipoUsuario=Administrador
+    //           /api/Usuarios/logout?tipoUsuario=Cliente
+    //           /api/Usuarios/logout?tipoUsuario=Funcionario
     [HttpPost("logout")]
-    public IActionResult Logout()
+    public IActionResult Logout(
+        [FromQuery] string? tipoUsuario)
     {
-        HttpContext.Session.Clear();
+        // Compatibilidade com páginas que ainda não enviam o parâmetro.
+        if (string.IsNullOrWhiteSpace(tipoUsuario))
+        {
+            var referer = Request.Headers.Referer.ToString();
+
+            if (referer.Contains(
+                "/administrador/",
+                StringComparison.OrdinalIgnoreCase))
+            {
+                tipoUsuario = "Administrador";
+            }
+            else if (referer.Contains(
+                "/funcionarios/",
+                StringComparison.OrdinalIgnoreCase))
+            {
+                tipoUsuario = "Funcionario";
+            }
+            else
+            {
+                tipoUsuario = "Cliente";
+            }
+        }
+
+        if (string.Equals(
+            tipoUsuario,
+            "Administrador",
+            StringComparison.OrdinalIgnoreCase))
+        {
+            HttpContext.Session.Remove("AdministradorAutenticado");
+            HttpContext.Session.Remove("TipoUsuarioAdmin");
+            HttpContext.Session.Remove("EmailAdmin");
+
+            if (HttpContext.Session.GetString("TipoUsuario")
+                == "Administrador")
+            {
+                HttpContext.Session.Remove("TipoUsuario");
+            }
+        }
+        else if (string.Equals(
+            tipoUsuario,
+            "Funcionario",
+            StringComparison.OrdinalIgnoreCase))
+        {
+            HttpContext.Session.Remove("ProfissionalId");
+            HttpContext.Session.Remove("TipoUsuarioFuncionario");
+
+            if (HttpContext.Session.GetString("TipoUsuario")
+                == "Funcionario")
+            {
+                HttpContext.Session.Remove("TipoUsuario");
+            }
+        }
+        else if (string.Equals(
+            tipoUsuario,
+            "Cliente",
+            StringComparison.OrdinalIgnoreCase))
+        {
+            HttpContext.Session.Remove("ClienteId");
+            HttpContext.Session.Remove("TipoUsuarioCliente");
+
+            if (HttpContext.Session.GetString("TipoUsuario")
+                == "Cliente")
+            {
+                HttpContext.Session.Remove("TipoUsuario");
+            }
+        }
+        else
+        {
+            return BadRequest(new
+            {
+                mensagem = "Tipo de conta inválido."
+            });
+        }
 
         return Ok(new
         {

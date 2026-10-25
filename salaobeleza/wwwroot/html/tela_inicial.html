@@ -85,7 +85,7 @@
 
             </a>
 
-            <a href="#"
+            <a href="avaliacoes.html"
                 class="menu-item">
 
                 <i class="fa-regular fa-star"></i>
@@ -94,7 +94,7 @@
 
             </a>
 
-            <a href="#"
+            <a href="minha_conta.html"
                 class="menu-item">
 
                 <i class="fa-regular fa-circle-user"></i>
@@ -343,25 +343,14 @@
                     const imagem =
                         document.createElement("img");
 
+                    imagem.src = combo.imagem || "/imagens/combo1.png";
 
-                    if (combo.id === 1) {
+imagem.alt = "Imagem do combo " + combo.nome;
 
-                        imagem.src =
-                            "/imagens/combo1.png";
-
-                    }
-                    else if (combo.id === 2) {
-
-                        imagem.src =
-                            "/imagens/combo2.png";
-
-                    }
-                    else if (combo.id === 3) {
-
-                        imagem.src =
-                            "/imagens/combo3.png";
-
-                    }
+imagem.onerror = function () {
+    this.onerror = null;
+    this.src = "/imagens/combo1.png";
+};
 
 
                     imagem.alt =

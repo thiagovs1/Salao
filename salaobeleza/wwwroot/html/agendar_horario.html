@@ -1,16 +1,22 @@
 
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>Agendar horário - Belleza</title>
-
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <link rel="stylesheet" href="../css/agendar_horario.css">
+
 </head>
 <body>
+    <div id="notificacao" class="notificacao" role="status" aria-live="polite">
+        <i id="notificacaoIcone" class="fa-solid fa-circle-info"></i>
+        <div>
+            <strong id="notificacaoTitulo">Aviso</strong>
+            <p id="notificacaoMensagem"></p>
+        </div>
+    </div>
 
     <aside class="sidebar">
         <div class="logo-area">
@@ -18,50 +24,15 @@
         </div>
 
         <nav class="menu">
-            <a href="tela_inicial.html" class="menu-item">
-                <i class="fa-solid fa-house"></i>
-                <span>Início</span>
-            </a>
-
-            <a href="servicos.html" class="menu-item">
-                <i class="fa-solid fa-scissors"></i>
-                <span>Serviços</span>
-            </a>
-
-            <a href="profissionais.html" class="menu-item">
-                <i class="fa-solid fa-users"></i>
-                <span>Profissionais</span>
-            </a>
-
-            <a href="agendar_horario.html" class="menu-item ativo">
-                <i class="fa-regular fa-calendar"></i>
-                <span>Agendar horário</span>
-            </a>
-
-            <a href="meus_agendamentos.html" class="menu-item">
-                <i class="fa-regular fa-calendar"></i>
-                <span>Meus agendamentos</span>
-            </a>
-
-            <a href="#" class="menu-item">
-                <i class="fa-solid fa-tags"></i>
-                <span>Promoções</span>
-            </a>
-
-            <a href="#" class="menu-item">
-                <i class="fa-regular fa-star"></i>
-                <span>Avaliações</span>
-            </a>
-
-            <a href="#" class="menu-item">
-                <i class="fa-regular fa-circle-user"></i>
-                <span>Minha Conta</span>
-            </a>
-
-            <a href="login_cliente.html" class="menu-item sair">
-                <i class="fa-solid fa-arrow-right-from-bracket"></i>
-                <span>Sair</span>
-            </a>
+            <a href="tela_inicial.html" class="menu-item"><i class="fa-solid fa-house"></i><span>Início</span></a>
+            <a href="servicos.html" class="menu-item"><i class="fa-solid fa-scissors"></i><span>Serviços</span></a>
+            <a href="profissionais.html" class="menu-item"><i class="fa-solid fa-users"></i><span>Profissionais</span></a>
+            <a href="agendar_horario.html" class="menu-item ativo"><i class="fa-regular fa-calendar"></i><span>Agendar horário</span></a>
+            <a href="meus_agendamentos.html" class="menu-item"><i class="fa-regular fa-calendar"></i><span>Meus agendamentos</span></a>
+            <a href="#" class="menu-item"><i class="fa-solid fa-tags"></i><span>Promoções</span></a>
+            <a href="avaliacoes.html" class="menu-item"><i class="fa-regular fa-star"></i><span>Avaliações</span></a>
+            <a href="minha_conta.html" class="menu-item"><i class="fa-regular fa-circle-user"></i><span>Minha Conta</span></a>
+            <a href="login_cliente.html" class="menu-item sair"><i class="fa-solid fa-arrow-right-from-bracket"></i><span>Sair</span></a>
         </nav>
     </aside>
 
@@ -70,108 +41,59 @@
 
         <div class="layout-principal">
             <div class="area-esquerda">
-                <div class="cabecalho-calendario">
-                    Horário e calendário da profissional escolhida
-                </div>
+                <div class="cabecalho-calendario">Horário e calendário da profissional escolhida</div>
 
                 <div class="area-agendamento">
                     <section class="calendario">
-                        <h2>
-                            <i class="fa-regular fa-calendar"></i>
-                            Selecione a data
-                        </h2>
+                        <h2><i class="fa-regular fa-calendar"></i> Selecione a data</h2>
 
                         <div class="mes">
                             <button type="button" id="mesAnterior" aria-label="Mês anterior">
                                 <i class="fa-solid fa-chevron-left"></i>
                             </button>
-
                             <span id="mesAtual">Carregando...</span>
-
                             <button type="button" id="mesProximo" aria-label="Próximo mês">
                                 <i class="fa-solid fa-chevron-right"></i>
                             </button>
                         </div>
 
                         <div class="dias-semana">
-                            <span>Dom</span>
-                            <span>Seg</span>
-                            <span>Ter</span>
-                            <span>Qua</span>
-                            <span>Qui</span>
-                            <span>Sex</span>
-                            <span>Sáb</span>
+                            <span>Dom</span><span>Seg</span><span>Ter</span>
+                            <span>Qua</span><span>Qui</span><span>Sex</span><span>Sáb</span>
                         </div>
 
                         <div class="dias" id="diasCalendario"></div>
 
                         <div class="legenda-calendario">
-                            <div>
-                                <span class="bolinha roxa"></span>
-                                <span>Dia disponível</span>
-                            </div>
-
-                            <div>
-                                <span class="bolinha rosa"></span>
-                                <span>Dia selecionado</span>
-                            </div>
-
-                            <div>
-                                <span class="bolinha clara"></span>
-                                <span>Dia indisponível</span>
-                            </div>
+                            <div><span class="bolinha roxa"></span><span>Dia disponível</span></div>
+                            <div><span class="bolinha rosa"></span><span>Dia selecionado</span></div>
+                            <div><span class="bolinha clara"></span><span>Dia indisponível</span></div>
                         </div>
                     </section>
 
                     <section class="horarios">
-                        <h2>
-                            <i class="fa-regular fa-clock"></i>
-                            Selecione o horário
-                        </h2>
+                        <h2><i class="fa-regular fa-clock"></i> Selecione o horário</h2>
 
                         <div class="lista-horarios">
                             <div class="periodo-horarios">
-                                <div class="titulo-periodo">
-                                    <i class="fa-regular fa-sun"></i>
-                                    Manhã
-                                </div>
-
+                                <div class="titulo-periodo"><i class="fa-regular fa-sun"></i> Manhã</div>
                                 <div class="lista-periodo" id="listaManha">
-                                    <p class="mensagem-horario">
-                                        Selecione uma data para visualizar os horários.
-                                    </p>
+                                    <p class="mensagem-horario">Selecione uma data para visualizar os horários.</p>
                                 </div>
                             </div>
 
                             <div class="periodo-horarios">
-                                <div class="titulo-periodo">
-                                    <i class="fa-solid fa-cloud-sun"></i>
-                                    Tarde
-                                </div>
-
+                                <div class="titulo-periodo"><i class="fa-solid fa-cloud-sun"></i> Tarde</div>
                                 <div class="lista-periodo" id="listaTarde">
-                                    <p class="mensagem-horario">
-                                        Selecione uma data para visualizar os horários.
-                                    </p>
+                                    <p class="mensagem-horario">Selecione uma data para visualizar os horários.</p>
                                 </div>
                             </div>
                         </div>
 
                         <div class="legenda-horarios">
-                            <div>
-                                <span class="bolinha horario-indisponivel"></span>
-                                <span>Horário indisponível</span>
-                            </div>
-
-                            <div>
-                                <span class="bolinha horario-disponivel"></span>
-                                <span>Horário disponível para esse serviço</span>
-                            </div>
-
-                            <div>
-                                <span class="bolinha horario-escolhido"></span>
-                                <span>Horário escolhido</span>
-                            </div>
+                            <div><span class="bolinha horario-indisponivel"></span><span>Horário indisponível</span></div>
+                            <div><span class="bolinha horario-disponivel"></span><span>Horário disponível para esse atendimento</span></div>
+                            <div><span class="bolinha horario-escolhido"></span><span>Horário escolhido</span></div>
                         </div>
                     </section>
                 </div>
@@ -181,41 +103,30 @@
                 <h2>Resumo do atendimento</h2>
 
                 <div class="resumo-item">
-                    <div class="resumo-icone">
-                        <i class="fa-solid fa-scissors"></i>
-                    </div>
-
+                    <div class="resumo-icone"><i class="fa-solid fa-scissors"></i></div>
                     <div class="resumo-texto">
-                        <span>Serviço</span>
-                        <strong id="resumoServico">Não selecionado</strong>
+                        <span>Serviços selecionados</span>
+                        <strong id="resumoServico">Carregando...</strong>
+                        <ul id="listaServicosResumo" class="lista-servicos-resumo"></ul>
                     </div>
-
                     <span class="seta">›</span>
                 </div>
 
                 <div class="resumo-item">
-                    <div class="resumo-icone">
-                        <i class="fa-solid fa-people-group"></i>
-                    </div>
-
+                    <div class="resumo-icone"><i class="fa-solid fa-people-group"></i></div>
                     <div class="resumo-texto">
                         <span>Profissional</span>
                         <strong id="resumoProfissional">Não selecionado</strong>
                     </div>
-
                     <span class="seta">›</span>
                 </div>
 
                 <div class="resumo-item">
-                    <div class="resumo-icone">
-                        <i class="fa-regular fa-calendar"></i>
-                    </div>
-
+                    <div class="resumo-icone"><i class="fa-regular fa-calendar"></i></div>
                     <div class="resumo-texto">
                         <span>Data e horário</span>
                         <strong id="resumoDataHorario">Não selecionado</strong>
                     </div>
-
                     <span class="seta">›</span>
                 </div>
 
@@ -225,59 +136,121 @@
                 </div>
 
                 <button type="button" class="btn-continuar" id="btnContinuar">
-                    Finalizar
-                    <span>➜</span>
+                    Finalizar <span>➜</span>
                 </button>
 
-                <a href="servicos.html" class="btn-adicionar">
-                    adicionar mais serviços
-                </a>
+                <a href="servicos.html" class="btn-adicionar">Adicionar mais serviços</a>
             </aside>
         </div>
 
         <div class="frase-lateral">
             <span>♥</span>
-            <p>
-                Cuidar de você
-                <br>
-                é sempre uma boa
-                <br>
-                ideia
-            </p>
+            <p>Cuidar de você<br>é sempre uma boa<br>ideia</p>
         </div>
     </main>
 
     <script>
-        const API_URL = "http://localhost:5000/api";
+        // Usa o endereço atual do site. Não fixa localhost nem uma porta específica.
+        const API_URL = `${window.location.origin}/api`;
 
         let dataAtual = new Date();
         let dataSelecionada = null;
         let horarioSelecionado = null;
-        let servicoSelecionado = null;
+        let selecao = [];
         let profissionalSelecionado = null;
-        let tipo = null;
-        let itemId = null;
+        let tipo = "";
         let precoSelecionado = 0;
+        let idsServicos = [];
+        let comboSelecionado = null;
+        let notificacaoTimer = null;
 
         const listaManha = document.getElementById("listaManha");
         const listaTarde = document.getElementById("listaTarde");
         const botaoContinuar = document.getElementById("btnContinuar");
 
         function formatarPreco(valor) {
-            return Number(valor).toLocaleString("pt-BR", {
+            return Number(valor || 0).toLocaleString("pt-BR", {
                 style: "currency",
                 currency: "BRL"
             });
         }
 
+        function obterTipo(item) {
+            return String(item.tipo ?? item.Tipo ?? "").trim().toLowerCase();
+        }
+
+        function obterId(item) {
+            return Number(item.id ?? item.Id ?? 0);
+        }
+
+        function obterNome(item) {
+            return item.nome ?? item.Nome ?? "Item";
+        }
+
+        function obterPreco(item) {
+            return Number(item.preco ?? item.Preco ?? 0);
+        }
+
+        function mostrarNotificacao(mensagem, tipoMensagem = "info") {
+            const caixa = document.getElementById("notificacao");
+            const icone = document.getElementById("notificacaoIcone");
+
+            clearTimeout(notificacaoTimer);
+
+            caixa.className = `notificacao ${tipoMensagem}`;
+
+            document.getElementById("notificacaoTitulo").textContent =
+                tipoMensagem === "erro" ? "Não foi possível continuar" :
+                tipoMensagem === "sucesso" ? "Tudo certo!" : "Atenção";
+
+            document.getElementById("notificacaoMensagem").textContent = mensagem;
+
+            icone.className = tipoMensagem === "erro"
+                ? "fa-solid fa-circle-exclamation"
+                : tipoMensagem === "sucesso"
+                    ? "fa-solid fa-circle-check"
+                    : "fa-solid fa-circle-info";
+
+            requestAnimationFrame(() => caixa.classList.add("visivel"));
+
+            notificacaoTimer = setTimeout(() => {
+                caixa.classList.remove("visivel");
+            }, 4500);
+        }
+
+        async function lerResposta(resposta) {
+            const texto = await resposta.text();
+            let dados = null;
+
+            try {
+                dados = texto ? JSON.parse(texto) : null;
+            } catch {
+                dados = null;
+            }
+
+            if (!resposta.ok) {
+                const mensagem =
+                    dados?.mensagem ||
+                    dados?.Mensagem ||
+                    dados?.title ||
+                    dados?.detail ||
+                    (typeof dados === "string" ? dados : null) ||
+                    "Não foi possível concluir a solicitação.";
+
+                throw new Error(mensagem);
+            }
+
+            return dados;
+        }
+
         function mostrarMensagem(container, mensagem) {
-            container.innerHTML = "";
+            container.replaceChildren();
 
-            const paragrafo = document.createElement("p");
-            paragrafo.className = "mensagem-horario";
-            paragrafo.textContent = mensagem;
+            const p = document.createElement("p");
+            p.className = "mensagem-horario";
+            p.textContent = mensagem;
 
-            container.appendChild(paragrafo);
+            container.appendChild(p);
         }
 
         function atualizarResumoDataHorario() {
@@ -288,53 +261,104 @@
                 return;
             }
 
-            const dataFormatada = dataSelecionada.toLocaleDateString("pt-BR");
-
-            elemento.textContent = horarioSelecionado
-                ? `${dataFormatada} às ${horarioSelecionado}`
-                : dataFormatada;
+            elemento.textContent =
+                dataSelecionada.toLocaleDateString("pt-BR") +
+                (horarioSelecionado ? ` às ${horarioSelecionado}` : "");
         }
 
         async function carregarSelecao() {
+            botaoContinuar.disabled = true;
+
             try {
                 const resposta = await fetch(`${API_URL}/Selecao`, {
                     credentials: "include"
                 });
 
-                if (!resposta.ok) {
-                    throw new Error("Não foi possível carregar a seleção.");
-                }
-
-                const dados = await resposta.json();
+                const dados = await lerResposta(resposta);
 
                 if (!Array.isArray(dados) || dados.length === 0) {
-                    throw new Error("Nenhum serviço ou combo foi selecionado.");
-                }
-
-                if (dados.length > 1) {
                     throw new Error(
-                        "A API atual de agendamentos aceita apenas um serviço ou combo por agendamento."
+                        "Nenhum serviço ou combo foi selecionado. Volte à página de serviços."
                     );
                 }
 
-                const selecao = dados[0];
+                selecao = dados;
 
-                servicoSelecionado = selecao;
-                tipo = String(selecao.tipo ?? selecao.Tipo ?? "");
-                itemId = Number(selecao.id ?? selecao.Id);
-                precoSelecionado = Number(selecao.preco ?? selecao.Preco ?? 0);
+                const combos = selecao.filter(item => obterTipo(item) === "combo");
+                const servicos = selecao.filter(item => obterTipo(item) !== "combo");
 
-                if (!itemId || !tipo) {
-                    throw new Error("Os dados do serviço ou combo são inválidos.");
+                if (combos.length > 1) {
+                    throw new Error(
+                        "Selecione no máximo um combo por atendimento. Você pode combiná-lo com serviços individuais."
+                    );
                 }
 
-                document.getElementById("resumoServico").textContent =
-                    selecao.nome ?? selecao.Nome ?? "Não informado";
+                comboSelecionado = combos.length === 1 ? combos[0] : null;
+
+                idsServicos = [...new Set(
+                    servicos.map(obterId).filter(id => id > 0)
+                )];
+
+                if (idsServicos.length !== servicos.length) {
+                    throw new Error(
+                        "Um ou mais serviços individuais selecionados são inválidos. Volte à página de serviços e selecione-os novamente."
+                    );
+                }
+
+                if (!comboSelecionado && idsServicos.length === 0) {
+                    throw new Error("Selecione pelo menos um serviço ou um combo.");
+                }
+
+                if (comboSelecionado && obterId(comboSelecionado) <= 0) {
+                    throw new Error("O combo selecionado possui um identificador inválido.");
+                }
+
+                if (comboSelecionado && idsServicos.length > 0) {
+                    tipo = "misto";
+                } else if (comboSelecionado) {
+                    tipo = "combo";
+                } else {
+                    tipo = "servico";
+                }
+
+                // Soma o preço de todos os itens: combo, serviços individuais ou ambos.
+                precoSelecionado = selecao.reduce(
+                    (total, item) => total + obterPreco(item),
+                    0
+                );
+
+                const resumoServico = document.getElementById("resumoServico");
+
+                if (tipo === "misto") {
+                    resumoServico.textContent =
+                        `${obterNome(comboSelecionado)} + ${idsServicos.length} serviço(s) individual(is)`;
+                } else if (tipo === "combo") {
+                    resumoServico.textContent = obterNome(comboSelecionado);
+                } else {
+                    resumoServico.textContent =
+                        `${idsServicos.length} serviço(s) selecionado(s)`;
+                }
+
+                const lista = document.getElementById("listaServicosResumo");
+                lista.replaceChildren();
+
+                selecao.forEach(item => {
+                    const li = document.createElement("li");
+                    const nome = obterNome(item);
+                    const ehCombo = obterTipo(item) === "combo";
+
+                    li.textContent =
+                        `${ehCombo ? "Combo: " : ""}${nome} · ${formatarPreco(obterPreco(item))}`;
+
+                    lista.appendChild(li);
+                });
 
                 document.getElementById("resumoPreco").textContent =
                     formatarPreco(precoSelecionado);
 
                 await carregarProfissional();
+
+                botaoContinuar.disabled = false;
                 renderizarCalendario();
             } catch (erro) {
                 console.error("Erro ao carregar seleção:", erro);
@@ -346,7 +370,7 @@
                     "Erro ao carregar";
 
                 botaoContinuar.disabled = true;
-                alert(erro.message);
+                mostrarNotificacao(erro.message, "erro");
             }
         }
 
@@ -355,11 +379,7 @@
                 credentials: "include"
             });
 
-            if (!resposta.ok) {
-                throw new Error("Não foi possível carregar a profissional.");
-            }
-
-            const dados = await resposta.json();
+            const dados = await lerResposta(resposta);
 
             if (!dados) {
                 throw new Error("Nenhuma profissional foi selecionada.");
@@ -369,7 +389,7 @@
             const nome = dados.nome ?? dados.Nome ?? "Não informado";
 
             if (!id) {
-                throw new Error("O ID da profissional é inválido.");
+                throw new Error("O ID da profissional selecionada é inválido.");
             }
 
             profissionalSelecionado = { id, nome };
@@ -389,8 +409,8 @@
             document.getElementById("mesAtual").textContent =
                 nomeMes.charAt(0).toUpperCase() + nomeMes.slice(1);
 
-            const diasContainer = document.getElementById("diasCalendario");
-            diasContainer.innerHTML = "";
+            const container = document.getElementById("diasCalendario");
+            container.replaceChildren();
 
             const primeiroDia = new Date(ano, mes, 1).getDay();
             const quantidadeDias = new Date(ano, mes + 1, 0).getDate();
@@ -398,7 +418,7 @@
             for (let i = 0; i < primeiroDia; i++) {
                 const vazio = document.createElement("div");
                 vazio.className = "vazio";
-                diasContainer.appendChild(vazio);
+                container.appendChild(vazio);
             }
 
             const hoje = new Date();
@@ -424,23 +444,21 @@
                     botao.classList.add("selecionado");
                 }
 
-                diasContainer.appendChild(botao);
+                container.appendChild(botao);
             }
 
             document.getElementById("mesAnterior").disabled =
                 ano === hoje.getFullYear() && mes <= hoje.getMonth();
         }
 
-        function mesmaData(data1, data2) {
-            return data1.getFullYear() === data2.getFullYear()
-                && data1.getMonth() === data2.getMonth()
-                && data1.getDate() === data2.getDate();
+        function mesmaData(a, b) {
+            return a.getFullYear() === b.getFullYear() &&
+                a.getMonth() === b.getMonth() &&
+                a.getDate() === b.getDate();
         }
 
         function selecionarData(data) {
-            if (data.getDay() === 0) {
-                return;
-            }
+            if (data.getDay() === 0) return;
 
             dataSelecionada = data;
             horarioSelecionado = null;
@@ -459,64 +477,71 @@
         }
 
         async function carregarHorarios() {
-            if (!dataSelecionada) {
-                return;
-            }
+            if (!dataSelecionada) return;
 
             mostrarMensagem(listaManha, "Carregando horários...");
             mostrarMensagem(listaTarde, "Carregando horários...");
 
             try {
-                const data = formatarDataParaApi(dataSelecionada);
-                const horarios = await buscarHorariosParaData(data);
+                const horarios = await buscarHorariosParaData(
+                    formatarDataParaApi(dataSelecionada)
+                );
+
                 mostrarHorarios(horarios);
             } catch (erro) {
-                console.error("Erro ao carregar horários:", erro);
+                console.error("Erro ao consultar horários:", erro);
+
                 mostrarMensagem(listaManha, erro.message);
                 mostrarMensagem(listaTarde, erro.message);
+
+                mostrarNotificacao(erro.message, "erro");
             }
         }
 
         async function buscarHorariosParaData(data) {
-            if (!profissionalSelecionado || !profissionalSelecionado.id) {
+            if (!profissionalSelecionado?.id) {
                 throw new Error("Profissional não selecionado.");
             }
 
-            let url = `${API_URL}/Agendamentos/horarios-disponiveis`
-                + `?profissionalId=${profissionalSelecionado.id}`
-                + `&data=${data}`;
-
-            if (tipo.toLowerCase() === "combo") {
-                url += `&comboId=${itemId}`;
-            } else {
-                url += `&servicoId=${itemId}`;
-            }
-
-            const resposta = await fetch(url, {
-                credentials: "include"
+            const parametros = new URLSearchParams({
+                profissionalId: String(profissionalSelecionado.id),
+                data
             });
 
-            if (!resposta.ok) {
-                const mensagem = await resposta.text();
-                throw new Error(mensagem || "Erro ao buscar horários.");
+            // Envia o combo e os serviços individuais juntos, quando existirem.
+            if (comboSelecionado) {
+                parametros.set("comboId", String(obterId(comboSelecionado)));
             }
 
-            return await resposta.json();
+            if (idsServicos.length > 0) {
+                parametros.set("servicoIds", idsServicos.join(","));
+            }
+
+            const resposta = await fetch(
+                `${API_URL}/Agendamentos/horarios-disponiveis?${parametros}`,
+                { credentials: "include" }
+            );
+
+            return await lerResposta(resposta);
         }
 
         function mostrarHorarios(horarios) {
-            listaManha.innerHTML = "";
-            listaTarde.innerHTML = "";
+            listaManha.replaceChildren();
+            listaTarde.replaceChildren();
 
-            const horariosManha = horarios.filter(item => item.horario < "12:00");
-            const horariosTarde = horarios.filter(item => item.horario >= "12:00");
+            if (!Array.isArray(horarios)) {
+                throw new Error("A resposta de horários recebida é inválida.");
+            }
 
-            renderizarPeriodo(listaManha, horariosManha);
-            renderizarPeriodo(listaTarde, horariosTarde);
+            const manha = horarios.filter(item => item.horario < "12:00");
+            const tarde = horarios.filter(item => item.horario >= "12:00");
+
+            renderizarPeriodo(listaManha, manha);
+            renderizarPeriodo(listaTarde, tarde);
         }
 
         function renderizarPeriodo(container, horarios) {
-            if (horarios.length === 0) {
+            if (!horarios.length) {
                 mostrarMensagem(container, "Nenhum horário disponível.");
                 return;
             }
@@ -534,10 +559,11 @@
                 } else {
                     botao.addEventListener("click", () => {
                         document.querySelectorAll(".horario.selecionado")
-                            .forEach(elemento => elemento.classList.remove("selecionado"));
+                            .forEach(el => el.classList.remove("selecionado"));
 
                         botao.classList.add("selecionado");
                         horarioSelecionado = item.horario;
+
                         atualizarResumoDataHorario();
                     });
                 }
@@ -550,8 +576,8 @@
             const hoje = new Date();
 
             if (
-                dataAtual.getFullYear() === hoje.getFullYear()
-                && dataAtual.getMonth() <= hoje.getMonth()
+                dataAtual.getFullYear() === hoje.getFullYear() &&
+                dataAtual.getMonth() <= hoje.getMonth()
             ) {
                 return;
             }
@@ -577,28 +603,36 @@
 
         botaoContinuar.addEventListener("click", async () => {
             if (!dataSelecionada) {
-                alert("Selecione uma data.");
+                mostrarNotificacao("Selecione uma data para continuar.", "erro");
                 return;
             }
 
             if (!horarioSelecionado) {
-                alert("Selecione um horário.");
+                mostrarNotificacao("Selecione um horário disponível.", "erro");
                 return;
             }
 
-            if (!profissionalSelecionado || !itemId || !tipo) {
-                alert("Confira o serviço e a profissional selecionados.");
+            if (!profissionalSelecionado?.id || !selecao.length) {
+                mostrarNotificacao(
+                    "Confira os serviços e a profissional selecionada.",
+                    "erro"
+                );
                 return;
             }
 
-            const dataHora = `${formatarDataParaApi(dataSelecionada)}T${horarioSelecionado}:00`;
+            const dataHora =
+                `${formatarDataParaApi(dataSelecionada)}T${horarioSelecionado}:00`;
 
+            // O objeto contém os dois campos quando há combo e serviços individuais.
             const agendamento = {
-                dataHora: dataHora,
-                servicoId: tipo.toLowerCase() === "combo" ? null : itemId,
-                comboId: tipo.toLowerCase() === "combo" ? itemId : null,
+                dataHora,
+                servicoId: idsServicos.length === 1 ? idsServicos[0] : null,
+                servicoIds: idsServicos,
+                comboId: comboSelecionado ? obterId(comboSelecionado) : null,
                 profissionalId: profissionalSelecionado.id
             };
+
+            const textoOriginal = botaoContinuar.innerHTML;
 
             botaoContinuar.disabled = true;
             botaoContinuar.textContent = "Processando...";
@@ -606,37 +640,32 @@
             try {
                 const resposta = await fetch(`${API_URL}/Agendamentos`, {
                     method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
+                    headers: { "Content-Type": "application/json" },
                     credentials: "include",
                     body: JSON.stringify(agendamento)
                 });
 
-                if (!resposta.ok) {
-                    const mensagem = await resposta.text();
-                    throw new Error(mensagem || "Não foi possível realizar o agendamento.");
+                const criado = await lerResposta(resposta);
+                const id = criado.id ?? criado.Id;
+
+                if (!id) {
+                    throw new Error(
+                        "O agendamento foi enviado, mas a resposta não trouxe o identificador."
+                    );
                 }
 
-                const criado = await resposta.json();
-
-                sessionStorage.setItem("agendamentoCriado", JSON.stringify({
-                    id: criado.id ?? criado.Id,
-                    dataHora: criado.dataHora ?? criado.DataHora,
-                    nomeCliente: criado.nomeCliente ?? criado.NomeCliente,
-                    nomeServico: criado.nomeServico ?? criado.NomeServico,
-                    preco: criado.preco ?? criado.Preco ?? precoSelecionado,
-                    status: criado.status ?? criado.Status,
-                    profissional: profissionalSelecionado.nome,
-                    formaPagamento: null
-                }));
-
-                window.location.href = "finalizar_atendimento.html";
+                window.location.href =
+                    `finalizar_atendimento.html?id=${encodeURIComponent(id)}`;
             } catch (erro) {
                 console.error("Erro ao criar agendamento:", erro);
-                alert(erro.message || "Erro ao realizar agendamento.");
+
+                mostrarNotificacao(
+                    erro.message || "Não foi possível realizar o agendamento.",
+                    "erro"
+                );
+
                 botaoContinuar.disabled = false;
-                botaoContinuar.innerHTML = 'Finalizar <span>➜</span>';
+                botaoContinuar.innerHTML = textoOriginal;
             }
         });
 

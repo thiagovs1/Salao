@@ -85,7 +85,7 @@
 
             </a>
 
-            <a href="#" class="menu-item">
+            <a href="avaliacoes.html" class="menu-item">
 
                 <i class="fa-regular fa-star"></i>
 
@@ -93,7 +93,7 @@
 
             </a>
 
-            <a href="#" class="menu-item">
+            <a href="minha_conta.html" class="menu-item">
 
                 <i class="fa-regular fa-circle-user"></i>
 
@@ -627,41 +627,46 @@
            CARREGAR PROFISSIONAIS
         ========================= */
 
-        async function carregarProfissionais() {
+      
+async function carregarProfissionais() {
+    try {
+        if (!selecionados || selecionados.length === 0) {
+            profissionais = [];
+            mostrarProfissionais();
 
-            try {
-
-                const resposta = await fetch(
-                    `${API_URL}/Profissionais`
-                );
-
-                if (!resposta.ok) {
-
-                    throw new Error(
-                        "Erro ao carregar profissionais."
-                    );
-
-                }
-
-                profissionais =
-                    await resposta.json();
-
-                mostrarProfissionais();
-
-                preencherFiltroProfissionais();
-
-            }
-            catch (erro) {
-
-                console.error(
-                    "Erro ao carregar profissionais:",
-                    erro
-                );
-
-            }
-
+            preencherFiltroProfissionais();
+            return;
         }
 
+        const parametros = new URLSearchParams();
+
+        selecionados.forEach(function(item) {
+            parametros.append("servicoIds", item.id);
+        });
+
+        const resposta = await fetch(
+            `${API_URL}/Profissionais/por-servicos?${parametros}`
+        );
+
+        if (!resposta.ok) {
+            throw new Error("Erro ao carregar profissionais autorizados.");
+        }
+
+        profissionais = await resposta.json();
+
+        mostrarProfissionais();
+        preencherFiltroProfissionais();
+
+    } catch (erro) {
+        console.error("Erro ao carregar profissionais:", erro);
+
+        document.getElementById("listaProfissionais").innerHTML = `
+            <p class="nenhum-servico">
+                Não foi possível carregar os profissionais.
+            </p>
+        `;
+    }
+}
 
         /* =========================
            MOSTRAR PROFISSIONAIS
@@ -677,6 +682,15 @@
                 );
 
             container.innerHTML = "";
+            if (!lista || lista.length === 0) {
+    container.innerHTML = `
+        <p class="nenhum-servico">
+            Nenhum profissional realiza todos os serviços selecionados.
+        </p>
+    `;
+    marcarProfissionalSelecionado();
+    return;
+}
 
 
             lista.forEach(
@@ -705,8 +719,16 @@
                     const imagem =
                         document.createElement("img");
 
-                    imagem.src =
-                        `/imagens/${profissional.imagem}`;
+                   imagem.src = profissional.imagem
+    ? (profissional.imagem.startsWith("/")
+        ? profissional.imagem
+        : `/imagens/profissionais/${profissional.imagem}`)
+    : "../imagens/profissional_padrao.png";
+
+imagem.onerror = function () {
+    this.onerror = null;
+    this.src = "../imagens/profissional_padrao.png";
+};
 
                     imagem.alt =
                         profissional.nome;
@@ -1125,49 +1147,95 @@
            CARREGAR PROFISSIONAL
         ========================= */
 
-        async function carregarProfissional() {
+        
+async function carregarProfissionais() {
+    const container = document.getElementById("listaProfissionais");
 
-            try {
-
-                const resposta = await fetch(
-                    `${API_URL}/Selecao/profissional`,
-                    {
-                        credentials: "include"
-                    }
-                );
-
-
-                if (!resposta.ok) {
-                    return;
-                }
-
-
-                const profissional =
-                    await resposta.json();
-
-
-                if (profissional) {
-
-                    profissionalSelecionado =
-                        profissional;
-
-                    marcarProfissionalSelecionado();
-
-                    atualizarResumo();
-
-                }
-
-            }
-            catch (erro) {
-
-                console.error(
-                    "Erro ao carregar profissional:",
-                    erro
-                );
-
-            }
-
+    try {
+        if (!selecionados || selecionados.length === 0) {
+            profissionais = [];
+            mostrarProfissionais();
+            preencherFiltroProfissionais();
+            return;
         }
+
+        // Busca os combos e seus respectivos serviços.
+        const respostaCombos = await fetch(`${API_URL}/Combos`);
+
+        if (!respostaCombos.ok) {
+            throw new Error("Não foi possível carregar os combos.");
+        }
+
+        const combos = await respostaCombos.json();
+        const servicoIds = new Set();
+
+        for (const item of selecionados) {
+            const tipo = String(item.tipo ?? item.Tipo ?? "")
+                .toLowerCase();
+
+            const id = Number(item.id ?? item.Id);
+
+            if (tipo === "combo") {
+                const combo = combos.find(c =>
+                    Number(c.id ?? c.Id) === id
+                );
+
+                const servicosCombo =
+                    combo?.servicos ?? combo?.Servicos ?? [];
+
+                servicosCombo.forEach(servico => {
+                    const servicoId = Number(
+                        servico.id ?? servico.Id
+                    );
+
+                    if (servicoId > 0) {
+                        servicoIds.add(servicoId);
+                    }
+                });
+            } else if (tipo === "servico" || tipo === "serviço") {
+                if (id > 0) {
+                    servicoIds.add(id);
+                }
+            }
+        }
+
+        if (servicoIds.size === 0) {
+            throw new Error(
+                "Não foi possível identificar os serviços selecionados. Verifique se a API de combos retorna a lista de serviços."
+            );
+        }
+
+        const parametros = new URLSearchParams();
+
+        servicoIds.forEach(id => {
+            parametros.append("servicoIds", id);
+        });
+
+        const resposta = await fetch(
+            `${API_URL}/Profissionais/por-servicos?${parametros}`
+        );
+
+        if (!resposta.ok) {
+            throw new Error("Erro ao carregar profissionais.");
+        }
+
+        profissionais = await resposta.json();
+
+        mostrarProfissionais();
+        preencherFiltroProfissionais();
+
+    } catch (erro) {
+        console.error("Erro ao carregar profissionais:", erro);
+
+        container.innerHTML = "";
+
+        const mensagem = document.createElement("p");
+        mensagem.className = "nenhum-servico";
+        mensagem.textContent = erro.message;
+
+        container.appendChild(mensagem);
+    }
+}
 
 
         /* =========================

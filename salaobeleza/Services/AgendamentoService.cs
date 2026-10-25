@@ -25,737 +25,282 @@ public class AgendamentoService
 
     public async Task<List<AgendamentoRespostaDTO>> Listar()
     {
-        var agendamentos =
-            await _repo.ListarTodos();
-
-        await AtualizarStatusAgendamentos(
-            agendamentos
-        );
-
-        return agendamentos
-            .Select(CriarResposta)
-            .ToList();
+        var itens = await _repo.ListarTodos();
+        return itens.Select(CriarResposta).ToList();
     }
 
-    public async Task<List<AgendamentoRespostaDTO>> ListarPorCliente(
-        int clienteId)
+    public async Task<List<AgendamentoRespostaDTO>> ListarPorCliente(int clienteId)
     {
-        var agendamentos =
-            await _repo.ListarPorCliente(
-                clienteId
-            );
-
-        await AtualizarStatusAgendamentos(
-            agendamentos
-        );
-
-        return agendamentos
-            .Select(CriarResposta)
-            .ToList();
+        var itens = await _repo.ListarPorCliente(clienteId);
+        return itens.Select(CriarResposta).ToList();
     }
 
-    public async Task<AgendamentoRespostaDTO> Criar(
-        AgendamentoCriarDTO dto)
+    public async Task<AgendamentoRespostaDTO> Criar(AgendamentoCriarDTO dto)
     {
-        // ---------------------------------------------
-        // VALIDA DATA
-        // ---------------------------------------------
+        if (dto.DataHora <= DateTime.Now)
+            throw new InvalidOperationException("A data e o horário do agendamento devem estar no futuro.");
 
-        if (dto.DataHora < DateTime.Now)
+        if (dto.ClienteId <= 0)
+            throw new InvalidOperationException("Cliente inválido.");
+        if (dto.ProfissionalId <= 0)
+            throw new InvalidOperationException("Selecione uma profissional válida.");
+        if (dto.ComboId.HasValue && dto.ComboId.Value <= 0)
+            throw new InvalidOperationException("O combo selecionado é inválido.");
+
+        var ids = (dto.ServicoIds ?? new List<int>()).Where(id => id > 0).Distinct().ToList();
+        if (ids.Count == 0 && dto.ServicoId.GetValueOrDefault() > 0)
+            ids.Add(dto.ServicoId!.Value);
+
+        bool temServicos = ids.Count > 0;
+        bool temCombo = dto.ComboId.HasValue;
+        if (!temServicos && !temCombo)
+            throw new InvalidOperationException("Selecione pelo menos um serviço ou um combo.");
+
+        var cliente = await _clienteRepo.BuscarPorId(dto.ClienteId)
+            ?? throw new InvalidOperationException("Cliente não encontrado.");
+
+        var servicosSelecionados = new List<Servico>();
+        foreach (var id in ids)
         {
-            throw new Exception(
-                "A data do agendamento não pode estar no passado."
-            );
-        }
-
-        // ---------------------------------------------
-        // VALIDA SERVIÇO OU COMBO
-        // ---------------------------------------------
-
-        if (
-            dto.ServicoId == null &&
-            dto.ComboId == null
-        )
-        {
-            throw new Exception(
-                "É necessário selecionar um serviço ou um combo."
-            );
-        }
-
-        if (
-            dto.ServicoId != null &&
-            dto.ComboId != null
-        )
-        {
-            throw new Exception(
-                "O agendamento não pode possuir serviço e combo ao mesmo tempo."
-            );
-        }
-
-        // ---------------------------------------------
-        // CONFERE CLIENTE
-        // ---------------------------------------------
-
-        var cliente =
-            await _clienteRepo.BuscarPorId(
-                dto.ClienteId
-            );
-
-        if (cliente == null)
-        {
-            throw new Exception(
-                "Cliente não encontrado."
-            );
-        }
-
-        // ---------------------------------------------
-        // VARIÁVEIS DO ATENDIMENTO
-        // ---------------------------------------------
-
-        string nomeAtendimento;
-
-        decimal precoAtendimento;
-
-        int duracaoAtendimento;
-
-        // ---------------------------------------------
-        // SERVIÇO
-        // ---------------------------------------------
-
-        if (dto.ServicoId != null)
-        {
-            var servico =
-                await _servicoRepo.BuscarPorId(
-                    dto.ServicoId.Value
-                );
-
+            var servico = await _servicoRepo.BuscarPorId(id);
             if (servico == null)
-            {
-                throw new Exception(
-                    "Serviço não encontrado."
-                );
-            }
-
-            nomeAtendimento =
-                servico.Nome;
-
-            precoAtendimento =
-                servico.Preco;
-
-            duracaoAtendimento =
-                servico.DuracaoMinutos;
+                throw new InvalidOperationException($"O serviço de ID {id} não foi encontrado.");
+            servicosSelecionados.Add(servico);
         }
 
-        // ---------------------------------------------
-        // COMBO
-        // ---------------------------------------------
-
-        else
+        Combo? combo = null;
+        if (temCombo)
         {
-            var combo =
-                await _repo.BuscarComboPorId(
-                    dto.ComboId!.Value
-                );
-
-            if (combo == null)
-            {
-                throw new Exception(
-                    "Combo não encontrado."
-                );
-            }
-
-            if (
-                combo.ComboServicos == null ||
-                combo.ComboServicos.Count == 0
-            )
-            {
-                throw new Exception(
-                    "O combo selecionado não possui serviços."
-                );
-            }
-
-            nomeAtendimento =
-                combo.Nome;
-
-            precoAtendimento =
-                combo.Preco;
-
-            duracaoAtendimento =
-                ObterDuracaoCombo(combo);
+            combo = await _repo.BuscarComboPorId(dto.ComboId!.Value)
+                ?? throw new InvalidOperationException("Combo não encontrado.");
+            if (combo.ComboServicos == null || combo.ComboServicos.Count == 0)
+                throw new InvalidOperationException("O combo selecionado não possui serviços.");
         }
 
-        // ---------------------------------------------
-        // HORÁRIOS DA PROFISSIONAL
-        // ---------------------------------------------
+        decimal precoTotal = (combo?.Preco ?? 0) + servicosSelecionados.Sum(s => s.Preco);
+        int duracaoTotal = (combo == null ? 0 : ObterDuracaoCombo(combo)) +
+                           servicosSelecionados.Sum(s => s.DuracaoMinutos);
+        if (duracaoTotal <= 0)
+            throw new InvalidOperationException("Não foi possível calcular a duração do atendimento.");
 
-        var horariosTrabalho =
-            await _horarioRepo.BuscarPorProfissionalEDia(
-                dto.ProfissionalId,
-                dto.DataHora.DayOfWeek
-            );
+        var expedientes = await _horarioRepo.BuscarPorProfissionalEDia(dto.ProfissionalId, dto.DataHora.DayOfWeek);
+        if (!expedientes.Any())
+            throw new InvalidOperationException("A profissional não trabalha neste dia.");
 
-        if (!horariosTrabalho.Any())
+        var inicioNovo = dto.DataHora;
+        var fimNovo = inicioNovo.AddMinutes(duracaoTotal);
+        bool dentroDoExpediente = expedientes.Any(h =>
         {
-            throw new Exception(
-                "A profissional não trabalha neste dia."
-            );
-        }
-
-        // ---------------------------------------------
-        // INÍCIO E FIM DO ATENDIMENTO
-        // ---------------------------------------------
-
-        var inicioNovo =
-            dto.DataHora;
-
-        var fimNovo =
-            dto.DataHora.AddMinutes(
-                duracaoAtendimento
-            );
-
-        // ---------------------------------------------
-        // CONFERE EXPEDIENTE
-        // ---------------------------------------------
-
-        var dentroDoExpediente =
-            horariosTrabalho.Any(h =>
-            {
-                var inicioExpediente =
-                    dto.DataHora.Date.Add(
-                        h.HoraInicio
-                    );
-
-                var fimExpediente =
-                    dto.DataHora.Date.Add(
-                        h.HoraFim
-                    );
-
-                return
-                    inicioNovo >= inicioExpediente &&
-                    fimNovo <= fimExpediente;
-            });
+            var inicioExpediente = dto.DataHora.Date.Add(h.HoraInicio);
+            var fimExpediente = dto.DataHora.Date.Add(h.HoraFim);
+            return inicioNovo >= inicioExpediente && fimNovo <= fimExpediente;
+        });
 
         if (!dentroDoExpediente)
+            throw new InvalidOperationException("O horário escolhido não comporta a duração total dos serviços dentro do expediente.");
+
+        var existentes = await _repo.BuscarPorProfissionalEData(dto.ProfissionalId, dto.DataHora);
+        bool conflito = existentes.Where(a => a.Status != "Cancelado").Any(a =>
         {
-            throw new Exception(
-                "O horário escolhido está fora do expediente da profissional."
-            );
-        }
-
-        // ---------------------------------------------
-        // BUSCA AGENDAMENTOS EXISTENTES
-        // ---------------------------------------------
-
-        var agendamentos =
-            await _repo.BuscarPorProfissionalEData(
-                dto.ProfissionalId,
-                dto.DataHora
-            );
-
-        // ---------------------------------------------
-        // CONFERE CONFLITO
-        // ---------------------------------------------
-
-        var conflito =
-            agendamentos.Any(a =>
-            {
-                var inicioExistente =
-                    a.DataHora;
-
-                var duracaoExistente =
-                    ObterDuracao(a);
-
-                var fimExistente =
-                    inicioExistente.AddMinutes(
-                        duracaoExistente
-                    );
-
-                return
-                    inicioNovo < fimExistente &&
-                    fimNovo > inicioExistente;
-            });
+            var inicioExistente = a.DataHora;
+            var fimExistente = inicioExistente.AddMinutes(ObterDuracao(a));
+            return inicioNovo < fimExistente && fimNovo > inicioExistente;
+        });
 
         if (conflito)
+            throw new InvalidOperationException("Este horário está ocupado durante parte do atendimento. Selecione outro horário.");
+
+        var agendamento = new Agendamento
         {
-            throw new Exception(
-                "Este horário já está ocupado."
-            );
-        }
-
-        // ---------------------------------------------
-        // CRIA AGENDAMENTO
-        // ---------------------------------------------
-
-        var agendamento =
-            new Agendamento
+            DataHora = dto.DataHora,
+            ClienteId = dto.ClienteId,
+            ServicoId = !temCombo && servicosSelecionados.Count == 1 ? servicosSelecionados[0].Id : null,
+            ComboId = combo?.Id,
+            ProfissionalId = dto.ProfissionalId,
+            Status = "Aberto",
+            AgendamentoServicos = servicosSelecionados.Select(s => new AgendamentoServico
             {
-                DataHora =
-                    dto.DataHora,
+                ServicoId = s.Id,
+                Servico = s
+            }).ToList()
+        };
 
-                ClienteId =
-                    dto.ClienteId,
-
-                ServicoId =
-                    dto.ServicoId,
-
-                ComboId =
-                    dto.ComboId,
-
-                ProfissionalId =
-                    dto.ProfissionalId,
-
-                Status =
-                    "Aberto"
-            };
-
-        var criado =
-            await _repo.Adicionar(
-                agendamento
-            );
-
-        return new AgendamentoRespostaDTO(
-            criado.Id,
-            criado.DataHora,
-            cliente.Nome,
-            nomeAtendimento,
-            precoAtendimento,
-            criado.Status
-        );
+        var criado = await _repo.Adicionar(agendamento);
+        string nomeAtendimento = MontarNomeAtendimento(combo, servicosSelecionados);
+        return new AgendamentoRespostaDTO(criado.Id, criado.DataHora, cliente.Nome, nomeAtendimento, precoTotal, criado.Status);
     }
-
-    // =====================================================
-    // HORÁRIOS DISPONÍVEIS
-    // =====================================================
 
     public async Task<List<object>> BuscarHorariosDisponiveis(
-        int profissionalId,
-        int? servicoId,
-        int? comboId,
-        DateTime data)
+        int profissionalId, List<int>? servicoIds, int? comboId, DateTime data)
     {
-        // ---------------------------------------------
-        // CONFERE SERVIÇO OU COMBO
-        // ---------------------------------------------
+        if (profissionalId <= 0)
+            throw new InvalidOperationException("Selecione uma profissional válida.");
+        if (comboId.HasValue && comboId.Value <= 0)
+            throw new InvalidOperationException("O combo selecionado é inválido.");
 
-        if (
-            servicoId == null &&
-            comboId == null
-        )
+        var ids = (servicoIds ?? new List<int>()).Where(id => id > 0).Distinct().ToList();
+        bool temServicos = ids.Count > 0;
+        bool temCombo = comboId.HasValue;
+        if (!temServicos && !temCombo)
+            throw new InvalidOperationException("Informe pelo menos um serviço ou um combo.");
+
+        var servicosSelecionados = new List<Servico>();
+        foreach (var id in ids)
         {
-            throw new Exception(
-                "É necessário informar um serviço ou um combo."
-            );
-        }
-
-        if (
-            servicoId != null &&
-            comboId != null
-        )
-        {
-            throw new Exception(
-                "Informe apenas um serviço ou um combo."
-            );
-        }
-
-        // ---------------------------------------------
-        // DESCOBRE DURAÇÃO
-        // ---------------------------------------------
-
-        int duracaoAtendimento;
-
-        if (servicoId != null)
-        {
-            var servico =
-                await _servicoRepo.BuscarPorId(
-                    servicoId.Value
-                );
-
+            var servico = await _servicoRepo.BuscarPorId(id);
             if (servico == null)
-            {
-                throw new Exception(
-                    "Serviço não encontrado."
-                );
-            }
-
-            duracaoAtendimento =
-                servico.DuracaoMinutos;
+                throw new InvalidOperationException($"O serviço de ID {id} não foi encontrado.");
+            servicosSelecionados.Add(servico);
         }
-        else
+
+        Combo? combo = null;
+        if (temCombo)
         {
-            var combo =
-                await _repo.BuscarComboPorId(
-                    comboId!.Value
-                );
-
-            if (combo == null)
-            {
-                throw new Exception(
-                    "Combo não encontrado."
-                );
-            }
-
-            if (
-                combo.ComboServicos == null ||
-                combo.ComboServicos.Count == 0
-            )
-            {
-                throw new Exception(
-                    "O combo selecionado não possui serviços."
-                );
-            }
-
-            duracaoAtendimento =
-                ObterDuracaoCombo(combo);
+            combo = await _repo.BuscarComboPorId(comboId!.Value)
+                ?? throw new InvalidOperationException("Combo não encontrado.");
+            if (combo.ComboServicos == null || combo.ComboServicos.Count == 0)
+                throw new InvalidOperationException("O combo selecionado não possui serviços.");
         }
 
-        // ---------------------------------------------
-        // BUSCA EXPEDIENTE
-        // ---------------------------------------------
+        int duracaoTotal = (combo == null ? 0 : ObterDuracaoCombo(combo)) +
+                           servicosSelecionados.Sum(s => s.DuracaoMinutos);
+        if (duracaoTotal <= 0)
+            throw new InvalidOperationException("Não foi possível calcular a duração do atendimento.");
 
-        var horariosTrabalho =
-            await _horarioRepo.BuscarPorProfissionalEDia(
-                profissionalId,
-                data.DayOfWeek
-            );
+        var expedientes = await _horarioRepo.BuscarPorProfissionalEDia(profissionalId, data.DayOfWeek);
+        var existentes = await _repo.BuscarPorProfissionalEData(profissionalId, data);
+        var resultado = new List<object>();
+        var agora = DateTime.Now;
 
-        // ---------------------------------------------
-        // BUSCA AGENDAMENTOS EXISTENTES
-        // ---------------------------------------------
-
-        var agendamentos =
-            await _repo.BuscarPorProfissionalEData(
-                profissionalId,
-                data
-            );
-
-        var horarios =
-            new List<object>();
-
-        // ---------------------------------------------
-        // PERCORRE CADA HORÁRIO DE TRABALHO
-        // ---------------------------------------------
-
-        foreach (var horarioTrabalho in horariosTrabalho)
+        foreach (var expediente in expedientes)
         {
-            var inicio =
-                data.Date.Add(
-                    horarioTrabalho.HoraInicio
-                );
+            var inicioExpediente = data.Date.Add(expediente.HoraInicio);
+            var fimExpediente = data.Date.Add(expediente.HoraFim);
 
-            var fim =
-                data.Date.Add(
-                    horarioTrabalho.HoraFim
-                );
-
-            // Horários começam de 30 em 30 minutos.
-            //
-            // A duração do serviço NÃO é 30 minutos.
-            // 30 minutos é apenas o intervalo entre
-            // os horários possíveis de início.
-
-            for (
-                var horario = inicio;
-                horario.AddMinutes(
-                    duracaoAtendimento
-                ) <= fim;
-                horario = horario.AddMinutes(30)
-            )
+            for (var horario = inicioExpediente;
+                 horario.AddMinutes(duracaoTotal) <= fimExpediente;
+                 horario = horario.AddMinutes(30))
             {
-                var inicioNovo =
-                    horario;
+                // Não exibe horários que já passaram no dia atual.
+                if (data.Date == agora.Date && horario <= agora)
+                    continue;
 
-                var fimNovo =
-                    horario.AddMinutes(
-                        duracaoAtendimento
-                    );
+                var fimNovo = horario.AddMinutes(duracaoTotal);
+                bool conflito = existentes.Where(a => a.Status != "Cancelado").Any(a =>
+                {
+                    var inicioExistente = a.DataHora;
+                    var fimExistente = inicioExistente.AddMinutes(ObterDuracao(a));
+                    return horario < fimExistente && fimNovo > inicioExistente;
+                });
 
-                // -------------------------------------
-                // CONFERE CONFLITOS
-                // -------------------------------------
-
-                var conflito =
-                    agendamentos.Any(a =>
-                    {
-                        var inicioExistente =
-                            a.DataHora;
-
-                        var duracaoExistente =
-                            ObterDuracao(a);
-
-                        var fimExistente =
-                            inicioExistente.AddMinutes(
-                                duracaoExistente
-                            );
-
-                        return
-                            inicioNovo < fimExistente &&
-                            fimNovo > inicioExistente;
-                    });
-
-                horarios.Add(
-                    new
-                    {
-                        horario =
-                            horario.ToString("HH:mm"),
-
-                        disponivel =
-                            !conflito
-                    }
-                );
+                resultado.Add(new { horario = horario.ToString("HH:mm"), disponivel = !conflito });
             }
         }
 
-        return horarios;
+        return resultado;
     }
 
-    // =====================================================
-    // DURAÇÃO DO COMBO
-    // =====================================================
-
-    private int ObterDuracaoCombo(
-        Combo combo)
+    private int ObterDuracaoCombo(Combo combo)
     {
-        // Belleza completa possui duração fixa de 4 horas.
-        if (
-            combo.Nome.Equals(
-                "Belleza completa",
-                StringComparison.OrdinalIgnoreCase
-            )
-        )
-        {
+        if (combo.Nome.Equals("Belleza completa", StringComparison.OrdinalIgnoreCase))
             return 240;
-        }
-
-        // Os demais combos continuam usando
-        // a soma das durações dos serviços.
-        return combo.ComboServicos
-            .Sum(cs =>
-                cs.Servico.DuracaoMinutos
-            );
+        return combo.ComboServicos.Sum(cs => cs.Servico?.DuracaoMinutos ?? 0);
     }
 
-    // =====================================================
-    // DURAÇÃO DE UM AGENDAMENTO EXISTENTE
-    // =====================================================
-
-    private int ObterDuracao(
-        Agendamento agendamento)
+    private int ObterDuracao(Agendamento agendamento)
     {
-        // Serviço normal.
-        if (agendamento.Servico != null)
-        {
-            return agendamento.Servico.DuracaoMinutos;
-        }
+        int duracaoServicos = 0;
+        if (agendamento.AgendamentoServicos != null && agendamento.AgendamentoServicos.Count > 0)
+            duracaoServicos = agendamento.AgendamentoServicos.Sum(x => x.Servico?.DuracaoMinutos ?? 0);
+        else if (agendamento.Servico != null)
+            duracaoServicos = agendamento.Servico.DuracaoMinutos;
 
-        // Combo.
-        if (agendamento.Combo != null)
-        {
-            return ObterDuracaoCombo(
-                agendamento.Combo
-            );
-        }
-
-        return 0;
+        int duracaoCombo = agendamento.Combo != null ? ObterDuracaoCombo(agendamento.Combo) : 0;
+        return duracaoCombo + duracaoServicos;
     }
 
-    // =====================================================
-    // RESPOSTA DA API
-    // =====================================================
-
-    private AgendamentoRespostaDTO CriarResposta(
-        Agendamento agendamento)
+    private string MontarNomeAtendimento(Combo? combo, List<Servico> servicos)
     {
-        if (agendamento.Combo != null)
-        {
-            return new AgendamentoRespostaDTO(
-                agendamento.Id,
-                agendamento.DataHora,
-                agendamento.Cliente?.Nome ?? "",
-                agendamento.Combo.Nome,
-                agendamento.Combo.Preco,
-                agendamento.Status
-            );
-        }
+        var nomes = new List<string>();
+        if (combo != null) nomes.Add(combo.Nome);
+        nomes.AddRange(servicos.Select(s => s.Nome));
+        return string.Join(" + ", nomes);
+    }
+
+    private AgendamentoRespostaDTO CriarResposta(Agendamento agendamento)
+    {
+        var servicos = agendamento.AgendamentoServicos?.Where(x => x.Servico != null)
+            .Select(x => x.Servico!).ToList() ?? new List<Servico>();
+        if (servicos.Count == 0 && agendamento.Servico != null)
+            servicos.Add(agendamento.Servico);
+
+        var combo = agendamento.Combo;
+        decimal precoTotal = (combo?.Preco ?? 0) + servicos.Sum(s => s.Preco);
+        string nomeAtendimento = MontarNomeAtendimento(combo, servicos);
 
         return new AgendamentoRespostaDTO(
-            agendamento.Id,
-            agendamento.DataHora,
-            agendamento.Cliente?.Nome ?? "",
-            agendamento.Servico?.Nome ?? "",
-            agendamento.Servico?.Preco ?? 0,
-            agendamento.Status
-        );
+            agendamento.Id, agendamento.DataHora, agendamento.Cliente?.Nome ?? "",
+            nomeAtendimento, precoTotal, agendamento.Status, agendamento.Profissional?.Nome ?? "");
     }
 
-    // =====================================================
-    // CANCELAR
-    // =====================================================
-
-    public async Task<bool> Cancelar(
-        int id,
-        int clienteId)
+    public async Task<bool> MarcarComoAtendido(int id, int? profissionalId)
     {
-        var agendamento =
-            await _repo.BuscarPorId(id);
+        var agendamento = await _repo.BuscarPorId(id);
+        if (agendamento == null) return false;
 
-        if (agendamento == null)
-            return false;
-
-        if (agendamento.ClienteId != clienteId)
-            return false;
+        if (profissionalId.HasValue && agendamento.ProfissionalId != profissionalId.Value)
+            throw new InvalidOperationException("Você não pode alterar o atendimento de outra profissional.");
 
         if (agendamento.Status == "Cancelado")
+            throw new InvalidOperationException("Não é possível marcar um agendamento cancelado como atendido.");
+
+        if (agendamento.Status == "Atendido")
             return true;
 
-        agendamento.Status =
-            "Cancelado";
+        if (agendamento.DataHora > DateTime.Now)
+            throw new InvalidOperationException("Só é possível marcar como atendido depois do horário agendado.");
 
-        await _repo.Atualizar(
-            agendamento
-        );
-
+        agendamento.Status = "Atendido";
+        await _repo.Atualizar(agendamento);
         return true;
     }
 
-    // =====================================================
-    // REMOVER
-    // =====================================================
-
-    public async Task<bool> Remover(
-        int id)
+    public async Task<bool> Cancelar(int id, int clienteId)
     {
-        var agendamento =
-            await _repo.BuscarPorId(id);
+        var agendamento = await _repo.BuscarPorId(id);
+        if (agendamento == null || agendamento.ClienteId != clienteId) return false;
+        if (agendamento.Status == "Cancelado") return true;
+        if (agendamento.Status == "Atendido")
+            throw new InvalidOperationException("Não é possível cancelar um atendimento já realizado.");
 
-        if (agendamento == null)
-            return false;
-
-        await _repo.Remover(
-            agendamento
-        );
-
+        agendamento.Status = "Cancelado";
+        await _repo.Atualizar(agendamento);
         return true;
     }
 
-    // =====================================================
-    // VERIFICAR DIA DE TRABALHO
-    // =====================================================
-
-    public async Task<bool> VerificarDiaTrabalho(
-        int profissionalId,
-        int diaSemana)
+    public async Task<bool> Remover(int id)
     {
-        if (
-            diaSemana < 0 ||
-            diaSemana > 6
-        )
-        {
-            return false;
-        }
+        var agendamento = await _repo.BuscarPorId(id);
+        if (agendamento == null) return false;
+        await _repo.Remover(agendamento);
+        return true;
+    }
 
-        var dia =
-            (DayOfWeek)diaSemana;
-
-        var horarios =
-            await _horarioRepo.BuscarPorProfissionalEDia(
-                profissionalId,
-                dia
-            );
-
+    public async Task<bool> VerificarDiaTrabalho(int profissionalId, int diaSemana)
+    {
+        if (diaSemana < 0 || diaSemana > 6) return false;
+        var horarios = await _horarioRepo.BuscarPorProfissionalEDia(profissionalId, (DayOfWeek)diaSemana);
         return horarios.Any();
     }
 
-    // =====================================================
-    // ATUALIZA STATUS
-    // =====================================================
-
-    private async Task AtualizarStatusAgendamentos(
-        List<Agendamento> agendamentos)
+    public async Task<bool> RegistrarFormaPagamento(int id, int clienteId, string formaPagamento)
     {
-        var houveAlteracao =
-            false;
-
-        foreach (var agendamento in agendamentos)
-        {
-            if (
-                agendamento.Status ==
-                "Cancelado"
-            )
-            {
-                continue;
-            }
-
-            if (
-                agendamento.DataHora <= DateTime.Now &&
-                agendamento.Status != "Confirmado"
-            )
-            {
-                agendamento.Status =
-                    "Confirmado";
-
-                houveAlteracao =
-                    true;
-            }
-
-            if (
-                agendamento.DataHora > DateTime.Now &&
-                string.IsNullOrWhiteSpace(
-                    agendamento.Status
-                )
-            )
-            {
-                agendamento.Status =
-                    "Aberto";
-
-                houveAlteracao =
-                    true;
-            }
-        }
-
-        if (houveAlteracao)
-        {
-            await SalvarStatus(
-                agendamentos
-            );
-        }
+        var agendamento = await _repo.BuscarPorId(id);
+        if (agendamento == null || agendamento.ClienteId != clienteId) return false;
+        if (formaPagamento != "Pix" && formaPagamento != "No salão")
+            throw new InvalidOperationException("Forma de pagamento inválida.");
+        agendamento.FormaPagamento = formaPagamento;
+        await _repo.Atualizar(agendamento);
+        return true;
     }
-
-    private async Task SalvarStatus(
-        List<Agendamento> agendamentos)
-    {
-        foreach (var agendamento in agendamentos)
-        {
-            if (
-                agendamento.Status ==
-                    "Confirmado"
-                ||
-                agendamento.Status ==
-                    "Aberto"
-            )
-            {
-                await _repo.Atualizar(
-                    agendamento
-                );
-            }
-        }
-    }
-    public async Task<bool> RegistrarFormaPagamento(
-    int id,
-    int clienteId,
-    string formaPagamento)
-{
-    var agendamento = await _repo.BuscarPorId(id);
-
-    if (agendamento == null || agendamento.ClienteId != clienteId)
-        return false;
-
-    if (formaPagamento != "Pix" && formaPagamento != "No salão")
-        throw new Exception("Forma de pagamento inválida.");
-
-    agendamento.FormaPagamento = formaPagamento;
-
-    await _repo.Atualizar(agendamento);
-
-    return true;
-}
 }

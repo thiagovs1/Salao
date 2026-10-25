@@ -1,0 +1,1021 @@
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profissionais - Belleza</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" href="../css/profissionais.css">
+</head>
+<body>
+    <div class="layout">
+        <aside class="sidebar" id="sidebar">
+    <div class="logo-area">
+        <img src="/imagens/logo_belleza.png"
+             alt="Belleza Salão de Beleza"
+             class="logo-belleza">
+    </div>
+
+    <div class="linha-logo"></div>
+
+    <nav class="menu">
+        <a href="Painel_administrador.html" class="menu-item">
+            <i class="fa-solid fa-house"></i>
+            <span>Início</span>
+        </a>
+
+        <a href="agendamentos.html" class="menu-item">
+            <i class="fa-regular fa-calendar"></i>
+            <span>Agendamentos</span>
+        </a>
+
+        <a href="clientes.html" class="menu-item">
+            <i class="fa-solid fa-circle-user"></i>
+            <span>Clientes</span>
+        </a>
+
+        <a href="servicos.html" class="menu-item">
+            <i class="fa-solid fa-scissors"></i>
+            <span>Serviços</span>
+        </a>
+
+        <a href="profissionais.html" class="menu-item ativo">
+            <i class="fa-solid fa-users"></i>
+            <span>Profissionais</span>
+        </a>
+
+        <a href="financeiro.html" class="menu-item">
+            <i class="fa-solid fa-wallet"></i>
+            <span>Financeiro</span>
+        </a>
+
+        <a href="estoque.html" class="menu-item">
+            <i class="fa-solid fa-box"></i>
+            <span>Estoque e compras</span>
+        </a>
+
+        <a href="promocoes.html" class="menu-item">
+            <i class="fa-solid fa-tags"></i>
+            <span>Promoções</span>
+        </a>
+
+        <a href="avaliacoes.html" class="menu-item">
+            <i class="fa-regular fa-star"></i>
+            <span>Avaliações</span>
+        </a>
+
+        <a href="relatorios.html" class="menu-item">
+            <i class="fa-solid fa-chart-column"></i>
+            <span>Relatórios</span>
+        </a>
+
+        <a href="configuracoes.html" class="menu-item">
+            <i class="fa-solid fa-gear"></i>
+            <span>Configurações</span>
+        </a>
+
+        <a href="#" id="btnSair" class="menu-item sair">
+            <i class="fa-solid fa-arrow-right-from-bracket"></i>
+            <span>Sair</span>
+        </a>
+    </nav>
+</aside>
+
+        <main class="main">
+            <header class="topbar">
+                <button class="menu-toggle" id="menuToggle" aria-label="Abrir menu">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+                <div class="breadcrumb">
+                    <span>Administração</span>
+                    <i class="fa-solid fa-chevron-right"></i>
+                    <strong>Profissionais</strong>
+                </div>
+                <div class="topbar-tag">
+                    <i class="fa-solid fa-user-tie"></i>
+                    Equipe
+                </div>
+            </header>
+
+            <section class="content">
+                <div class="page-heading">
+                    <div>
+                        <span class="eyebrow">GESTÃO DA EQUIPE</span>
+                        <h1>Profissionais</h1>
+                        <p>Cadastre e gerencie as profissionais do seu salão.</p>
+                    </div>
+
+                    <button class="btn btn-primary" id="btnNovaProfissional">
+                        <i class="fa-solid fa-plus"></i>
+                        Nova profissional
+                    </button>
+                </div>
+
+                <div class="stats-grid">
+                    <article class="stat-card">
+                        <div class="stat-icon stat-icon-rose">
+                            <i class="fa-solid fa-user-group"></i>
+                        </div>
+                        <div>
+                            <span>Profissionais ativas</span>
+                            <strong id="totalProfissionais">0</strong>
+                        </div>
+                    </article>
+
+                    <article class="stat-card">
+                        <div class="stat-icon stat-icon-purple">
+                            <i class="fa-solid fa-scissors"></i>
+                        </div>
+                        <div>
+                            <span>Serviços cadastrados</span>
+                            <strong id="totalServicos">0</strong>
+                        </div>
+                    </article>
+                </div>
+
+                <section class="panel">
+                    <div class="panel-heading">
+                        <div>
+                            <h2>Equipe cadastrada</h2>
+                            <p>Consulte os dados e gerencie os cadastros.</p>
+                        </div>
+
+                        <div class="search-box">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                            <input type="search" id="pesquisaProfissional"
+                                   placeholder="Buscar profissional..." autocomplete="off">
+                        </div>
+                    </div>
+
+                    <div id="mensagem" class="message" role="status" hidden></div>
+
+                    <div class="loading-state" id="carregando">
+                        <i class="fa-solid fa-spinner fa-spin"></i>
+                        <span>Carregando profissionais...</span>
+                    </div>
+
+                    <div class="table-wrapper" id="tabelaWrapper" hidden>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>PROFISSIONAL</th>
+                                    <th>PROFISSÃO</th>
+                                    <th>SERVIÇOS</th>
+                                    <th>TAXA</th>
+                                    <th class="actions-heading">AÇÕES</th>
+                                </tr>
+                            </thead>
+                            <tbody id="listaProfissionais"></tbody>
+                        </table>
+                    </div>
+
+                    <div class="empty-state" id="listaVazia" hidden>
+                        <div class="empty-icon">
+                            <i class="fa-solid fa-user-group"></i>
+                        </div>
+                        <h3>Nenhuma profissional encontrada</h3>
+                        <p>Cadastre uma profissional ou altere sua pesquisa.</p>
+                    </div>
+                </section>
+            </section>
+        </main>
+    </div>
+
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <!-- Modal de cadastro e edição -->
+    <div class="modal-overlay" id="modalProfissional" hidden>
+        <section class="modal modal-large" role="dialog"
+                 aria-modal="true" aria-labelledby="modalTitulo">
+            <div class="modal-header">
+                <div>
+                    <span class="eyebrow">EQUIPE BELLEZA</span>
+                    <h2 id="modalTitulo">Nova profissional</h2>
+                    <p id="modalDescricao">Preencha os dados para cadastrar uma profissional.</p>
+                </div>
+                <button type="button" class="modal-close" data-fechar="modalProfissional"
+                        aria-label="Fechar">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <form id="formProfissional" enctype="multipart/form-data">
+                <input type="hidden" id="profissionalId">
+
+                <div class="form-section">
+                    <h3><i class="fa-regular fa-id-card"></i> Dados pessoais</h3>
+
+                    <div class="form-grid">
+                        <div class="field field-full">
+                            <label for="nome">Nome completo *</label>
+                            <input type="text" id="nome" name="Nome"
+                                   maxlength="100" required placeholder="Nome da profissional">
+                        </div>
+
+                        <div class="field">
+                            <label for="profissao">Profissão *</label>
+                            <input type="text" id="profissao" name="Profissao"
+                                   maxlength="100" required placeholder="Ex.: Cabeleireira">
+                        </div>
+
+                        <div class="field">
+                            <label for="taxaAtendimento">Taxa de atendimento (R$)</label>
+                            <input type="number" id="taxaAtendimento" name="TaxaAtendimento"
+                                   min="0" step="0.01" value="0" required>
+                        </div>
+
+                        <div class="field">
+                            <label for="cpf">CPF</label>
+                            <input type="text" id="cpf" name="CPF"
+                                   maxlength="14" placeholder="000.000.000-00">
+                        </div>
+
+                        <div class="field">
+                            <label for="telefone">Telefone</label>
+                            <input type="tel" id="telefone" name="Telefone"
+                                   maxlength="15" placeholder="(00) 00000-0000">
+                        </div>
+
+                        <div class="field field-full">
+                            <label for="endereco">Endereço</label>
+                            <input type="text" id="endereco" name="Endereco"
+                                   maxlength="255" placeholder="Rua, número, bairro...">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h3><i class="fa-solid fa-scissors"></i> Serviços oferecidos</h3>
+                    <p class="section-description">
+                        Selecione os serviços que essa profissional realiza.
+                    </p>
+                    <div class="service-options" id="opcoesServicos">
+                        <span class="muted">Carregando serviços...</span>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h3><i class="fa-regular fa-image"></i> Foto e acesso</h3>
+
+                    <div class="form-grid">
+                        <div class="field field-full">
+                            <label for="foto">Foto da profissional</label>
+                            <input type="file" id="foto" name="Foto"
+                                   accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp">
+                            <small>JPG, PNG ou WEBP. Máximo de 2 MB.</small>
+                            <div id="fotoAtual" class="current-photo" hidden></div>
+                        </div>
+
+                        <div class="field field-full">
+                            <label for="senha">Senha de acesso</label>
+                            <input type="password" id="senha" name="Senha"
+                                   minlength="6" autocomplete="new-password"
+                                   placeholder="Senha para acessar o sistema">
+                            <small id="senhaAjuda">
+                                Se deixar em branco, a API utilizará a senha padrão configurada.
+                            </small>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-error" id="erroFormulario" role="alert" hidden></div>
+
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-light" data-fechar="modalProfissional">
+                        Cancelar
+                    </button>
+                    <button type="submit" class="btn btn-primary" id="btnSalvar">
+                        <i class="fa-solid fa-floppy-disk"></i>
+                        Salvar profissional
+                    </button>
+                </div>
+            </form>
+        </section>
+    </div>
+
+    <!-- Modal de confirmação de exclusão -->
+    <div class="modal-overlay" id="modalExcluir" hidden>
+        <section class="modal modal-confirm" role="dialog"
+                 aria-modal="true" aria-labelledby="excluirTitulo">
+            <div class="confirm-icon">
+                <i class="fa-solid fa-user-slash"></i>
+            </div>
+            <h2 id="excluirTitulo">Desativar profissional?</h2>
+            <p>
+                A profissional <strong id="nomeExcluir"></strong> deixará de aparecer
+                na lista de profissionais ativas. O histórico de agendamentos será preservado.
+            </p>
+            <div class="modal-actions">
+                <button type="button" class="btn btn-light" data-fechar="modalExcluir">
+                    Cancelar
+                </button>
+                <button type="button" class="btn btn-danger" id="btnConfirmarExclusao">
+                    <i class="fa-solid fa-user-slash"></i>
+                    Desativar
+                </button>
+            </div>
+        </section>
+    </div>
+    <script>
+
+        
+const API_BASE = "http://localhost:5000/api";
+const API_PROFISSIONAIS = `${API_BASE}/Profissionais`;
+const API_SERVICOS = `${API_PROFISSIONAIS}/servicos-disponiveis`;
+
+const formProfissional = document.getElementById("formProfissional");
+const modalProfissional = document.getElementById("modalProfissional");
+const modalExcluir = document.getElementById("modalExcluir");
+const listaProfissionais = document.getElementById("listaProfissionais");
+const opcoesServicos = document.getElementById("opcoesServicos");
+const pesquisaProfissional = document.getElementById("pesquisaProfissional");
+const mensagem = document.getElementById("mensagem");
+const carregando = document.getElementById("carregando");
+const tabelaWrapper = document.getElementById("tabelaWrapper");
+const listaVazia = document.getElementById("listaVazia");
+const erroFormulario = document.getElementById("erroFormulario");
+const btnSalvar = document.getElementById("btnSalvar");
+const fotoInput = document.getElementById("foto");
+const fotoAtual = document.getElementById("fotoAtual");
+
+let profissionais = [];
+let servicos = [];
+let profissionalParaExcluir = null;
+let modoEdicao = false;
+let mensagemTimer = null;
+
+document.addEventListener("DOMContentLoaded", inicializar);
+
+async function inicializar() {
+    configurarEventos();
+    await carregarServicos();
+    await carregarProfissionais();
+}
+
+function configurarEventos() {
+    document.getElementById("btnNovaProfissional").addEventListener("click", abrirCadastro);
+    formProfissional.addEventListener("submit", salvarProfissional);
+    pesquisaProfissional.addEventListener("input", renderizarProfissionais);
+
+    document.getElementById("btnConfirmarExclusao")
+        .addEventListener("click", confirmarExclusao);
+
+    document.querySelectorAll("[data-fechar]").forEach(botao => {
+        botao.addEventListener("click", () => fecharModal(botao.dataset.fechar));
+    });
+
+    [modalProfissional, modalExcluir].forEach(modal => {
+        modal.addEventListener("click", evento => {
+            if (evento.target === modal) {
+                fecharModal(modal.id);
+            }
+        });
+    });
+
+    document.addEventListener("keydown", evento => {
+        if (evento.key === "Escape") {
+            fecharModal("modalProfissional");
+            fecharModal("modalExcluir");
+        }
+    });
+
+    document.getElementById("menuToggle").addEventListener("click", () => {
+        document.getElementById("sidebar").classList.toggle("open");
+        document.getElementById("sidebarOverlay").classList.toggle("visible");
+    });
+
+    document.getElementById("sidebarOverlay").addEventListener("click", fecharMenu);
+
+    document.getElementById("cpf").addEventListener("input", evento => {
+        evento.target.value = formatarCPF(evento.target.value);
+    });
+
+    document.getElementById("telefone").addEventListener("input", evento => {
+        evento.target.value = formatarTelefone(evento.target.value);
+    });
+
+    fotoInput.addEventListener("change", validarFoto);
+}
+
+function fecharMenu() {
+    document.getElementById("sidebar").classList.remove("open");
+    document.getElementById("sidebarOverlay").classList.remove("visible");
+}
+
+async function lerResposta(resposta) {
+    const texto = await resposta.text();
+
+    if (!texto) return null;
+
+    try {
+        return JSON.parse(texto);
+    } catch {
+        return texto;
+    }
+}
+
+function mensagemErro(dados, fallback) {
+    if (typeof dados === "string" && dados.trim()) {
+        return dados;
+    }
+
+    if (dados?.mensagem) return dados.mensagem;
+    if (dados?.message) return dados.message;
+    if (dados?.title) return dados.title;
+    if (dados?.errors) {
+        return Object.values(dados.errors).flat().join(" ");
+    }
+
+    return fallback;
+}
+
+async function requisicao(url, opcoes = {}) {
+    let resposta;
+
+    try {
+        resposta = await fetch(url, opcoes);
+    } catch {
+        throw new Error(
+            "Não foi possível conectar à API. Verifique se o projeto está executando em http://localhost:5000."
+        );
+    }
+
+    const dados = await lerResposta(resposta);
+
+    if (!resposta.ok) {
+        throw new Error(
+            mensagemErro(dados, `A API retornou o erro ${resposta.status}.`)
+        );
+    }
+
+    return dados;
+}
+
+async function carregarServicos() {
+    opcoesServicos.innerHTML = '<span class="muted">Carregando serviços...</span>';
+
+    try {
+        const dados = await requisicao(API_SERVICOS);
+        servicos = Array.isArray(dados) ? dados : [];
+
+        document.getElementById("totalServicos").textContent = servicos.length;
+        renderizarOpcoesServicos();
+    } catch (erro) {
+        servicos = [];
+        opcoesServicos.innerHTML = `
+            <span class="muted">
+                Não foi possível carregar os serviços.
+                ${escaparHTML(erro.message)}
+            </span>`;
+        mostrarMensagem(erro.message, "error");
+    }
+}
+
+function renderizarOpcoesServicos(selecionados = []) {
+    if (!servicos.length) {
+        opcoesServicos.innerHTML =
+            '<span class="muted">Nenhum serviço disponível para vincular.</span>';
+        return;
+    }
+
+    const idsSelecionados = selecionados.map(Number);
+
+    opcoesServicos.innerHTML = servicos.map(servico => {
+        const id = Number(servico.id);
+        const nome = servico.nome || "Serviço sem nome";
+        const preco = Number(servico.preco ?? 0);
+        const duracao = Number(servico.duracaoMinutos ?? 0);
+        const checked = idsSelecionados.includes(id) ? "checked" : "";
+
+        return `
+            <label class="service-option">
+                <input type="checkbox" name="ServicoIds"
+                       value="${id}" ${checked}>
+                <span>
+                    ${escaparHTML(nome)}
+                    <small>
+                        ${formatarMoeda(preco)}
+                        ${duracao > 0 ? ` · ${duracao} min` : ""}
+                    </small>
+                </span>
+            </label>`;
+    }).join("");
+}
+
+async function carregarProfissionais() {
+    carregando.hidden = false;
+    tabelaWrapper.hidden = true;
+    listaVazia.hidden = true;
+
+    try {
+        const dados = await requisicao(API_PROFISSIONAIS);
+        profissionais = Array.isArray(dados) ? dados : [];
+        document.getElementById("totalProfissionais").textContent = profissionais.length;
+        renderizarProfissionais();
+    } catch (erro) {
+        profissionais = [];
+        renderizarProfissionais();
+        mostrarMensagem(erro.message, "error");
+    } finally {
+        carregando.hidden = true;
+    }
+}
+
+function renderizarProfissionais() {
+    const busca = normalizar(pesquisaProfissional.value);
+
+    const filtradas = profissionais.filter(profissional => {
+        const servicosTexto = (profissional.servicos || [])
+            .map(servico => servico.nome || "")
+            .join(" ");
+
+        const texto = normalizar([
+            profissional.nome,
+            profissional.profissao,
+            profissional.email,
+            profissional.telefone,
+            servicosTexto
+        ].join(" "));
+
+        return texto.includes(busca);
+    });
+
+    listaProfissionais.innerHTML = filtradas.map(profissional => {
+        const id = Number(profissional.id);
+        const nome = profissional.nome || "Sem nome";
+        const profissao = profissional.profissao || "Não informada";
+        const email = profissional.email || "";
+        const foto = obterFoto(profissional);
+        const taxa = Number(profissional.taxaAtendimento ?? 0);
+        const listaServicos = Array.isArray(profissional.servicos)
+            ? profissional.servicos
+            : [];
+
+        const tagsVisiveis = listaServicos.slice(0, 2).map(servico => `
+            <span class="service-tag">${escaparHTML(servico.nome || "Serviço")}</span>
+        `).join("");
+
+        const restantes = listaServicos.length > 2
+            ? `<span class="service-more">+${listaServicos.length - 2}</span>`
+            : "";
+
+        const servicosHTML = listaServicos.length
+            ? `${tagsVisiveis}${restantes}`
+            : '<span class="muted">Nenhum vinculado</span>';
+
+        const avatar = foto
+            ? `<img src="${escaparHTML(foto)}" alt="${escaparHTML(nome)}"
+                    onerror="this.parentElement.textContent='${escaparJS(iniciais(nome))}'">`
+            : escaparHTML(iniciais(nome));
+
+        return `
+            <tr>
+                <td>
+                    <div class="professional-cell">
+                        <div class="professional-avatar">${avatar}</div>
+                        <div class="professional-info">
+                            <strong>${escaparHTML(nome)}</strong>
+                            <span>${escaparHTML(email || "Conta vinculada")}</span>
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <span class="profession-badge">${escaparHTML(profissao)}</span>
+                </td>
+                <td>
+                    <div class="service-tags">${servicosHTML}</div>
+                </td>
+                <td><span class="fee-value">${formatarMoeda(taxa)}</span></td>
+                <td>
+                    <div class="action-buttons">
+                        <button class="action-btn" type="button"
+                                title="Editar profissional"
+                                aria-label="Editar ${escaparHTML(nome)}"
+                                data-editar="${id}">
+                            <i class="fa-regular fa-pen-to-square"></i>
+                        </button>
+                        <button class="action-btn delete" type="button"
+                                title="Desativar profissional"
+                                aria-label="Desativar ${escaparHTML(nome)}"
+                                data-excluir="${id}">
+                            <i class="fa-regular fa-trash-can"></i>
+                        </button>
+                    </div>
+                </td>
+            </tr>`;
+    }).join("");
+
+    listaProfissionais.querySelectorAll("[data-editar]").forEach(botao => {
+        botao.addEventListener("click", () => abrirEdicao(Number(botao.dataset.editar)));
+    });
+
+    listaProfissionais.querySelectorAll("[data-excluir]").forEach(botao => {
+        botao.addEventListener("click", () => abrirExclusao(Number(botao.dataset.excluir)));
+    });
+
+    const temResultados = filtradas.length > 0;
+    tabelaWrapper.hidden = !temResultados;
+    listaVazia.hidden = temResultados || carregando.hidden === false;
+
+    if (!temResultados && busca) {
+        listaVazia.querySelector("h3").textContent = "Nenhum resultado encontrado";
+        listaVazia.querySelector("p").textContent = "Tente pesquisar por outro nome ou serviço.";
+    } else {
+        listaVazia.querySelector("h3").textContent = "Nenhuma profissional encontrada";
+        listaVazia.querySelector("p").textContent =
+            "Cadastre uma profissional para ela aparecer nesta lista.";
+    }
+}
+
+function abrirCadastro() {
+    modoEdicao = false;
+    formProfissional.reset();
+
+    document.getElementById("profissionalId").value = "";
+    document.getElementById("modalTitulo").textContent = "Nova profissional";
+    document.getElementById("modalDescricao").textContent =
+        "Preencha os dados para cadastrar uma profissional.";
+    document.getElementById("senhaAjuda").textContent =
+        "Se deixar em branco, a API utilizará a senha padrão configurada.";
+    btnSalvar.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Salvar profissional';
+    fotoAtual.hidden = true;
+    fotoAtual.innerHTML = "";
+    limparErroFormulario();
+    renderizarOpcoesServicos();
+    abrirModal("modalProfissional");
+}
+
+async function abrirEdicao(id) {
+    const profissionalLista = profissionais.find(item => Number(item.id) === id);
+
+    if (!profissionalLista) {
+        mostrarMensagem("Profissional não encontrada na lista.", "error");
+        return;
+    }
+
+    modoEdicao = true;
+    formProfissional.reset();
+    limparErroFormulario();
+
+    document.getElementById("profissionalId").value = id;
+    document.getElementById("modalTitulo").textContent = "Editar profissional";
+    document.getElementById("modalDescricao").textContent =
+        "Atualize os dados da profissional.";
+    document.getElementById("senhaAjuda").textContent =
+        "Deixe em branco para manter a senha atual.";
+    btnSalvar.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Salvar alterações';
+
+    preencherFormulario(profissionalLista);
+
+    let profissional = profissionalLista;
+
+    try {
+        profissional = await requisicao(`${API_PROFISSIONAIS}/${id}`);
+        preencherFormulario(profissional);
+    } catch (erro) {
+        mostrarMensagem(
+            `Não foi possível carregar os detalhes completos: ${erro.message}`,
+            "error"
+        );
+    }
+
+    abrirModal("modalProfissional");
+}
+
+function preencherFormulario(profissional) {
+    document.getElementById("nome").value = profissional.nome || "";
+    document.getElementById("profissao").value = profissional.profissao || "";
+    document.getElementById("cpf").value = formatarCPF(profissional.cpf || "");
+    document.getElementById("telefone").value =
+        formatarTelefone(profissional.telefone || "");
+    document.getElementById("endereco").value = profissional.endereco || "";
+    document.getElementById("taxaAtendimento").value =
+        Number(profissional.taxaAtendimento ?? 0);
+
+    const ids = Array.isArray(profissional.servicoIds)
+        ? profissional.servicoIds
+        : (profissional.servicos || []).map(servico => servico.id);
+
+    renderizarOpcoesServicos(ids);
+
+    const foto = obterFoto(profissional);
+
+    if (foto) {
+        fotoAtual.innerHTML = `
+            <img src="${escaparHTML(foto)}" alt="Foto atual da profissional"
+                 onerror="this.style.display='none'">
+            <span>Foto atual. Selecione outro arquivo para substituí-la.</span>`;
+        fotoAtual.hidden = false;
+    } else {
+        fotoAtual.innerHTML = "";
+        fotoAtual.hidden = true;
+    }
+
+    fotoInput.value = "";
+}
+
+async function salvarProfissional(evento) {
+    evento.preventDefault();
+    limparErroFormulario();
+
+    const nome = document.getElementById("nome").value.trim();
+    const profissao = document.getElementById("profissao").value.trim();
+    const cpf = document.getElementById("cpf").value.trim();
+    const telefone = document.getElementById("telefone").value.trim();
+    const taxa = Number(document.getElementById("taxaAtendimento").value);
+    const senha = document.getElementById("senha").value;
+
+    if (!nome || !profissao) {
+        mostrarErroFormulario("Preencha o nome e a profissão.");
+        return;
+    }
+
+    if (!Number.isFinite(taxa) || taxa < 0) {
+        mostrarErroFormulario("Informe uma taxa de atendimento válida.");
+        return;
+    }
+
+    if (cpf && somenteNumeros(cpf).length !== 11) {
+        mostrarErroFormulario("O CPF deve conter 11 números.");
+        return;
+    }
+
+    if (telefone) {
+        const quantidade = somenteNumeros(telefone).length;
+
+        if (quantidade < 10 || quantidade > 13) {
+            mostrarErroFormulario("Informe um telefone válido.");
+            return;
+        }
+    }
+
+    if (senha && senha.length < 6) {
+        mostrarErroFormulario("A senha deve ter pelo menos 6 caracteres.");
+        return;
+    }
+
+    const foto = fotoInput.files[0];
+
+    if (foto) {
+        const erroFoto = validarArquivoFoto(foto);
+
+        if (erroFoto) {
+            mostrarErroFormulario(erroFoto);
+            return;
+        }
+    }
+
+    const dados = new FormData(formProfissional);
+    dados.set("Nome", nome);
+    dados.set("Profissao", profissao);
+    dados.set("CPF", somenteNumeros(cpf));
+    dados.set("Telefone", somenteNumeros(telefone));
+    dados.set("Endereco", document.getElementById("endereco").value.trim());
+    dados.set("TaxaAtendimento", String(taxa));
+
+    const id = document.getElementById("profissionalId").value;
+    const url = modoEdicao
+        ? `${API_PROFISSIONAIS}/${id}`
+        : API_PROFISSIONAIS;
+
+    const metodo = modoEdicao ? "PUT" : "POST";
+
+    btnSalvar.disabled = true;
+    btnSalvar.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Salvando...';
+
+    try {
+        const resposta = await requisicao(url, {
+            method: metodo,
+            body: dados
+        });
+
+        fecharModal("modalProfissional");
+        mostrarMensagem(
+            resposta?.mensagem ||
+            (modoEdicao
+                ? "Profissional atualizada com sucesso."
+                : "Profissional cadastrada com sucesso."),
+            "success"
+        );
+
+        await carregarProfissionais();
+        await carregarServicos();
+    } catch (erro) {
+        mostrarErroFormulario(erro.message);
+    } finally {
+        btnSalvar.disabled = false;
+        btnSalvar.innerHTML = modoEdicao
+            ? '<i class="fa-solid fa-floppy-disk"></i> Salvar alterações'
+            : '<i class="fa-solid fa-floppy-disk"></i> Salvar profissional';
+    }
+}
+
+function abrirExclusao(id) {
+    const profissional = profissionais.find(item => Number(item.id) === id);
+
+    if (!profissional) {
+        mostrarMensagem("Profissional não encontrada.", "error");
+        return;
+    }
+
+    profissionalParaExcluir = id;
+    document.getElementById("nomeExcluir").textContent =
+        profissional.nome || "esta profissional";
+
+    abrirModal("modalExcluir");
+}
+
+async function confirmarExclusao() {
+    if (!profissionalParaExcluir) return;
+
+    const botao = document.getElementById("btnConfirmarExclusao");
+    const id = profissionalParaExcluir;
+
+    botao.disabled = true;
+    botao.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Desativando...';
+
+    try {
+        const resposta = await requisicao(`${API_PROFISSIONAIS}/${id}`, {
+            method: "DELETE"
+        });
+
+        fecharModal("modalExcluir");
+        profissionalParaExcluir = null;
+
+        mostrarMensagem(
+            resposta?.mensagem || "Profissional desativada com sucesso.",
+            "success"
+        );
+
+        await carregarProfissionais();
+    } catch (erro) {
+        mostrarMensagem(erro.message, "error");
+    } finally {
+        botao.disabled = false;
+        botao.innerHTML = '<i class="fa-solid fa-user-slash"></i> Desativar';
+    }
+}
+
+function abrirModal(id) {
+    document.getElementById(id).hidden = false;
+    document.body.style.overflow = "hidden";
+}
+
+function fecharModal(id) {
+    const modal = document.getElementById(id);
+
+    if (!modal) return;
+
+    modal.hidden = true;
+
+    if (modalProfissional.hidden && modalExcluir.hidden) {
+        document.body.style.overflow = "";
+    }
+}
+
+function validarFoto() {
+    const foto = fotoInput.files[0];
+
+    if (!foto) return;
+
+    const erro = validarArquivoFoto(foto);
+
+    if (erro) {
+        fotoInput.value = "";
+        mostrarErroFormulario(erro);
+    } else {
+        limparErroFormulario();
+    }
+}
+
+function validarArquivoFoto(foto) {
+    const extensaoValida = /\.(jpe?g|png|webp)$/i.test(foto.name);
+    const tipoValido = [
+        "image/jpeg",
+        "image/png",
+        "image/webp"
+    ].includes(foto.type);
+
+    if (!extensaoValida || !tipoValido) {
+        return "A foto deve estar no formato JPG, PNG ou WEBP.";
+    }
+
+    if (foto.size > 2 * 1024 * 1024) {
+        return "A foto deve ter no máximo 2 MB.";
+    }
+
+    return "";
+}
+
+function obterFoto(profissional) {
+    const valor = profissional.foto || profissional.imagem || "";
+
+    if (!valor) return "";
+
+    if (/^https?:\/\//i.test(valor)) {
+        return valor;
+    }
+
+    if (valor.startsWith("/")) {
+        return `http://localhost:5000${valor}`;
+    }
+
+    return `http://localhost:5000/imagens/profissionais/${valor}`;
+}
+
+function mostrarMensagem(texto, tipo = "success") {
+    clearTimeout(mensagemTimer);
+
+    mensagem.className = `message ${tipo}`;
+    mensagem.textContent = texto;
+    mensagem.hidden = false;
+
+    mensagemTimer = setTimeout(() => {
+        mensagem.hidden = true;
+    }, 6000);
+}
+
+function mostrarErroFormulario(texto) {
+    erroFormulario.textContent = texto;
+    erroFormulario.hidden = false;
+}
+
+function limparErroFormulario() {
+    erroFormulario.textContent = "";
+    erroFormulario.hidden = true;
+}
+
+function formatarMoeda(valor) {
+    return Number(valor || 0).toLocaleString("pt-BR", {
+        style: "currency",
+        currency: "BRL"
+    });
+}
+
+function formatarCPF(valor) {
+    const numeros = somenteNumeros(valor).slice(0, 11);
+
+    return numeros
+        .replace(/^(\d{3})(\d)/, "$1.$2")
+        .replace(/^(\d{3})\.(\d{3})(\d)/, "$1.$2.$3")
+        .replace(/\.(\d{3})(\d)/, ".$1-$2");
+}
+
+function formatarTelefone(valor) {
+    const numeros = somenteNumeros(valor).slice(0, 11);
+
+    if (numeros.length <= 10) {
+        return numeros
+            .replace(/^(\d{2})(\d)/, "($1) $2")
+            .replace(/(\d{4})(\d)/, "$1-$2");
+    }
+
+    return numeros
+        .replace(/^(\d{2})(\d)/, "($1) $2")
+        .replace(/(\d{5})(\d)/, "$1-$2");
+}
+
+function somenteNumeros(valor) {
+    return String(valor || "").replace(/\D/g, "");
+}
+
+function normalizar(valor) {
+    return String(valor || "")
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .toLowerCase()
+        .trim();
+}
+
+function iniciais(nome) {
+    return String(nome || "P")
+        .trim()
+        .split(/\s+/)
+        .slice(0, 2)
+        .map(parte => parte[0] || "")
+        .join("")
+        .toUpperCase();
+}
+
+function escaparHTML(valor) {
+    return String(valor ?? "").replace(/[&<>"']/g, caractere => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+    })[caractere]);
+}
+
+function escaparJS(valor) {
+    return String(valor ?? "")
+        .replace(/\\/g, "\\\\")
+        .replace(/'/g, "\\'")
+        .replace(/"/g, '\\"')
+        .replace(/[\r\n]/g, " ");
+}
+
+    </script>
+</body>
+</html>

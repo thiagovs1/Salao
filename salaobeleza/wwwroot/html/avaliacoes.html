@@ -4,14 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>Avaliações - Belleza</title>
-
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <link rel="stylesheet" href="../css/avaliacoes.css">
 </head>
 <body>
-
     <aside class="sidebar">
         <div class="logo-area">
             <img src="../imagens/logo_belleza.png" alt="Belleza" class="logo-belleza">
@@ -19,322 +16,521 @@
 
         <nav class="menu">
             <a href="tela_inicial.html" class="menu-item">
-                <i class="fa-solid fa-house"></i>
-                <span>Início</span>
+                <i class="fa-solid fa-house"></i><span>Início</span>
             </a>
-
             <a href="servicos.html" class="menu-item">
-                <i class="fa-solid fa-scissors"></i>
-                <span>Serviços</span>
+                <i class="fa-solid fa-scissors"></i><span>Serviços</span>
             </a>
-
             <a href="profissionais.html" class="menu-item">
-                <i class="fa-solid fa-users"></i>
-                <span>Profissionais</span>
+                <i class="fa-solid fa-users"></i><span>Profissionais</span>
             </a>
-
             <a href="agendar_horario.html" class="menu-item">
-                <i class="fa-regular fa-calendar"></i>
-                <span>Agendar horário</span>
+                <i class="fa-regular fa-calendar"></i><span>Agendar horário</span>
             </a>
-
             <a href="meus_agendamentos.html" class="menu-item">
-                <i class="fa-regular fa-calendar"></i>
-                <span>Meus agendamentos</span>
+                <i class="fa-regular fa-calendar-check"></i><span>Meus agendamentos</span>
             </a>
-
             <a href="avaliacoes.html" class="menu-item ativo">
-                <i class="fa-regular fa-star"></i>
-                <span>Avaliações</span>
+                <i class="fa-regular fa-star"></i><span>Avaliações</span>
             </a>
-
             <a href="minha_conta.html" class="menu-item">
-                <i class="fa-regular fa-circle-user"></i>
-                <span>Minha Conta</span>
+                <i class="fa-regular fa-circle-user"></i><span>Minha conta</span>
             </a>
+            <button type="button" id="btnSair" class="menu-item menu-sair">
+                <i class="fa-solid fa-arrow-right-from-bracket"></i><span>Sair</span>
+            </button>
         </nav>
     </aside>
 
     <main class="conteudo">
+        <header class="titulo-area">
+            <div>
+                <span class="etiqueta">SUA OPINIÃO IMPORTA</span>
+                <h1 class="titulo-pagina">Avaliações</h1>
+                <p class="descricao-pagina">Compartilhe sua experiência e conheça as opiniões dos nossos clientes.</p>
+            </div>
+            <div class="icone-titulo"><i class="fa-regular fa-star"></i></div>
+        </header>
 
-        <h1 class="titulo-pagina">Avaliações</h1>
+        <section class="resumo-avaliacoes">
+            <div class="resumo-icone"><i class="fa-solid fa-heart"></i></div>
+            <div>
+                <h2>Um espaço para sua opinião</h2>
+                <p>Seu comentário ajuda outras pessoas a conhecerem o Belleza.</p>
+            </div>
+            <button id="btnComentar" class="btn-principal" type="button">
+                <i class="fa-solid fa-pen-to-square"></i> Escrever avaliação
+            </button>
+        </section>
 
         <section class="painel-avaliacoes">
-
             <div class="cabecalho-avaliacoes">
-                <h2>
-                    Comentários
-                    <i class="fa-regular fa-circle-question icone-ajuda"
-                       title="Veja as opiniões dos clientes sobre o salão"></i>
-                </h2>
+                <div>
+                    <h2>Comentários dos clientes</h2>
+                    <p id="totalAvaliacoes">Carregando avaliações...</p>
+                </div>
+                <i class="fa-regular fa-comments icone-comentarios"></i>
+            </div>
 
-                <button class="btn-comentar" id="btnComentar" type="button">
-                    <i class="fa-solid fa-pen-to-square"></i>
-                    Comentar
+            <div id="carregando" class="estado-lista">
+                <i class="fa-solid fa-spinner girando"></i>
+                <p>Carregando comentários...</p>
+            </div>
+
+            <div id="listaComentarios" class="lista-comentarios"></div>
+
+            <div id="semAvaliacoes" class="estado-lista" hidden>
+                <i class="fa-regular fa-comment-dots"></i>
+                <h3>Seja a primeira pessoa a avaliar!</h3>
+                <p>Seu comentário será o primeiro a aparecer por aqui.</p>
+                <button class="btn-principal" type="button" id="btnPrimeiraAvaliacao">
+                    Escrever avaliação
                 </button>
             </div>
 
-            <div class="lista-comentarios" id="listaComentarios">
-
-                <article class="comentario">
-                    <div class="avatar">
-                        <i class="fa-solid fa-user"></i>
-                    </div>
-
-                    <div class="conteudo-comentario">
-                        <div class="nome-cliente">Otávio Pereira de Rosa</div>
-                        <div class="subtitulo">Um comentário</div>
-
-                        <div class="estrelas">
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <span>1 semana atrás</span>
-                        </div>
-
-                        <p class="texto-comentario">
-                            Excelente atendimento, profissionais com ótimo temperamento, bem organizados!!!
-                        </p>
-
-                        <div class="acoes-comentario">
-                            <button class="btn-responder" type="button">
-                                <i class="fa-solid fa-reply"></i>
-                                Responder
-                            </button>
-
-                            <button class="btn-like" type="button">
-                                <i class="fa-solid fa-thumbs-up"></i>
-                                Like
-                            </button>
-                        </div>
-
-                        <div class="area-respostas"></div>
-                    </div>
-                </article>
-
-                <article class="comentario">
-                    <div class="avatar">
-                        <i class="fa-solid fa-user"></i>
-                    </div>
-
-                    <div class="conteudo-comentario">
-                        <div class="nome-cliente">Nathalia de Souza</div>
-                        <div class="subtitulo">Um comentário</div>
-
-                        <div class="estrelas">
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <span>1 semana atrás</span>
-                        </div>
-
-                        <p class="texto-comentario">
-                            merece 5 estrelas! Adorei o lugar, todo impecável, produtos de marca, profissionais<br class="quebra-texto">
-                            aptos e de confiança.
-                        </p>
-
-                        <div class="acoes-comentario">
-                            <button class="btn-responder" type="button">
-                                <i class="fa-solid fa-reply"></i>
-                                Responder
-                            </button>
-
-                            <button class="btn-like curtido" type="button">
-                                <i class="fa-solid fa-thumbs-up"></i>
-                                Like
-                            </button>
-                        </div>
-
-                        <div class="area-respostas"></div>
-                    </div>
-                </article>
-
-                <article class="comentario">
-                    <div class="avatar">
-                        <i class="fa-solid fa-user"></i>
-                    </div>
-
-                    <div class="conteudo-comentario">
-                        <div class="nome-cliente">Felipe Flausino</div>
-                        <div class="subtitulo">Um comentário</div>
-
-                        <div class="estrelas">
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <span>1 semana atrás</span>
-                        </div>
-
-                        <p class="texto-comentario">
-                            Gostei, ótimo trabalho.
-                        </p>
-
-                        <div class="acoes-comentario">
-                            <button class="btn-responder" type="button">
-                                <i class="fa-solid fa-reply"></i>
-                                Responder
-                            </button>
-
-                            <button class="btn-like" type="button">
-                                <i class="fa-solid fa-thumbs-up"></i>
-                                Like
-                            </button>
-                        </div>
-
-                        <div class="area-respostas"></div>
-                    </div>
-                </article>
-
-                <article class="comentario">
-                    <div class="avatar">
-                        <i class="fa-solid fa-user"></i>
-                    </div>
-
-                    <div class="conteudo-comentario">
-                        <div class="nome-cliente">Allana</div>
-                        <div class="subtitulo"></div>
-
-                        <div class="estrelas">
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <span>1 semana atrás</span>
-                        </div>
-
-                        <p class="texto-comentario">
-                            Eu era careca e sai com cabelo, amei.
-                        </p>
-
-                        <div class="acoes-comentario">
-                            <button class="btn-responder" type="button">
-                                <i class="fa-solid fa-reply"></i>
-                                Responder
-                            </button>
-
-                            <button class="btn-like" type="button">
-                                <i class="fa-solid fa-thumbs-up"></i>
-                                Like
-                            </button>
-                        </div>
-
-                        <div class="area-respostas"></div>
-                    </div>
-                </article>
-
+            <div id="erroLista" class="estado-lista erro-lista" hidden>
+                <i class="fa-solid fa-cloud-arrow-down"></i>
+                <h3>Não conseguimos carregar as avaliações</h3>
+                <p>Tente novamente em instantes.</p>
+                <button class="btn-secundario" id="btnTentarNovamente" type="button">Tentar novamente</button>
             </div>
         </section>
-
     </main>
 
+    <div id="modalAvaliacao" class="modal-fundo" hidden>
+        <section class="modal-caixa" role="dialog" aria-modal="true" aria-labelledby="tituloModal">
+            <button class="modal-fechar" type="button" data-fechar-modal aria-label="Fechar">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+            <div class="modal-icone"><i class="fa-solid fa-heart"></i></div>
+            <h2 id="tituloModal">Como foi sua experiência?</h2>
+            <p class="modal-descricao">Conte para nós o que achou do atendimento.</p>
+
+            <form id="formAvaliacao">
+                <label class="label-formulario">Sua nota</label>
+                <div class="seletor-estrelas" id="seletorEstrelas" role="radiogroup" aria-label="Nota de 1 a 5">
+                    <button type="button" data-nota="1" aria-label="1 estrela"><i class="fa-regular fa-star"></i></button>
+                    <button type="button" data-nota="2" aria-label="2 estrelas"><i class="fa-regular fa-star"></i></button>
+                    <button type="button" data-nota="3" aria-label="3 estrelas"><i class="fa-regular fa-star"></i></button>
+                    <button type="button" data-nota="4" aria-label="4 estrelas"><i class="fa-regular fa-star"></i></button>
+                    <button type="button" data-nota="5" aria-label="5 estrelas"><i class="fa-regular fa-star"></i></button>
+                </div>
+                <p id="textoNota" class="texto-nota">Selecione uma nota</p>
+
+                <label for="campoComentario" class="label-formulario">Seu comentário</label>
+                <textarea id="campoComentario" maxlength="1000" minlength="2"
+                    placeholder="Conte como foi sua experiência..." required></textarea>
+                <div class="contador-caracteres"><span id="contadorCaracteres">0</span>/1000</div>
+
+                <button class="btn-principal btn-enviar" id="btnEnviarAvaliacao" type="submit">
+                    <i class="fa-solid fa-paper-plane"></i> Publicar avaliação
+                </button>
+            </form>
+        </section>
+    </div>
+
+    <div id="modalResposta" class="modal-fundo" hidden>
+        <section class="modal-caixa modal-resposta" role="dialog" aria-modal="true" aria-labelledby="tituloResposta">
+            <button class="modal-fechar" type="button" data-fechar-modal aria-label="Fechar">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div class="modal-icone"><i class="fa-solid fa-reply"></i></div>
+            <h2 id="tituloResposta">Responder comentário</h2>
+            <p class="modal-descricao">Sua resposta ficará visível abaixo da avaliação.</p>
+            <form id="formResposta">
+                <label for="campoResposta" class="label-formulario">Sua resposta</label>
+                <textarea id="campoResposta" maxlength="1000" minlength="1"
+                    placeholder="Escreva sua resposta..." required></textarea>
+                <div class="contador-caracteres"><span id="contadorResposta">0</span>/1000</div>
+                <button class="btn-principal btn-enviar" id="btnEnviarResposta" type="submit">
+                    <i class="fa-solid fa-paper-plane"></i> Enviar resposta
+                </button>
+            </form>
+        </section>
+    </div>
+
+    <div id="areaNotificacoes" class="area-notificacoes" aria-live="polite"></div>
+
     <script>
+        const API = "/api/avaliacoes";
         const listaComentarios = document.getElementById("listaComentarios");
-        const btnComentar = document.getElementById("btnComentar");
+        const modalAvaliacao = document.getElementById("modalAvaliacao");
+        const modalResposta = document.getElementById("modalResposta");
 
-        btnComentar.addEventListener("click", () => {
-            const comentario = prompt("Escreva seu comentário:");
+        let notaSelecionada = 0;
+        let avaliacaoRespostaId = null;
+        let enviandoAvaliacao = false;
+        let enviandoResposta = false;
 
-            if (!comentario || !comentario.trim()) {
-                return;
-            }
-
-            const artigo = document.createElement("article");
-            artigo.className = "comentario";
-
-            const avatar = document.createElement("div");
-            avatar.className = "avatar";
+        function notificar(mensagem, tipo = "sucesso") {
+            const item = document.createElement("div");
+            item.className = `notificacao ${tipo}`;
 
             const icone = document.createElement("i");
-            icone.className = "fa-solid fa-user";
-            avatar.appendChild(icone);
+            icone.className = tipo === "sucesso"
+                ? "fa-solid fa-circle-check"
+                : tipo === "erro"
+                    ? "fa-solid fa-circle-exclamation"
+                    : "fa-solid fa-circle-info";
 
-            const conteudo = document.createElement("div");
-            conteudo.className = "conteudo-comentario";
+            const texto = document.createElement("span");
+            texto.textContent = String(mensagem)
+                .replace(/https?:\/\/\S+/gi, "o servidor")
+                .replace(/\blocalhost(?::\d+)?\b/gi, "o servidor")
+                .replace(/\b127\.0\.0\.1(?::\d+)?\b/gi, "o servidor");
 
-            const nome = document.createElement("div");
-            nome.className = "nome-cliente";
-            nome.textContent = "Você";
+            const fechar = document.createElement("button");
+            fechar.type = "button";
+            fechar.innerHTML = "&times;";
+            fechar.setAttribute("aria-label", "Fechar notificação");
+            fechar.addEventListener("click", () => item.remove());
 
-            const subtitulo = document.createElement("div");
-            subtitulo.className = "subtitulo";
-            subtitulo.textContent = "Um comentário";
+            item.append(icone, texto, fechar);
+            document.getElementById("areaNotificacoes").appendChild(item);
+            setTimeout(() => item.remove(), 4500);
+        }
 
-            const estrelas = document.createElement("div");
-            estrelas.className = "estrelas";
+        async function requisicao(url, opcoes = {}) {
+            const resposta = await fetch(url, {
+                credentials: "include",
+                ...opcoes,
+                headers: {
+                    ...(opcoes.body ? { "Content-Type": "application/json" } : {}),
+                    ...(opcoes.headers || {})
+                }
+            });
 
-            for (let i = 0; i < 5; i++) {
-                const estrela = document.createElement("i");
-                estrela.className = "fa-solid fa-star";
-                estrelas.appendChild(estrela);
+            if (resposta.status === 401) {
+                notificar("Entre na sua conta para realizar essa ação.", "aviso");
+                throw new Error("LOGIN_NECESSARIO");
             }
 
-            const tempo = document.createElement("span");
-            tempo.textContent = " agora";
-            estrelas.appendChild(tempo);
+            if (!resposta.ok) {
+                const dados = await resposta.json().catch(() => ({}));
+                throw new Error(dados.mensagem || "Não foi possível concluir a operação.");
+            }
 
-            const texto = document.createElement("p");
-            texto.className = "texto-comentario";
-            texto.textContent = comentario.trim();
+            if (resposta.status === 204) return null;
+            return resposta.json();
+        }
 
-            const acoes = document.createElement("div");
-            acoes.className = "acoes-comentario";
+        function abrirModal(modal) {
+            modal.hidden = false;
+            document.body.classList.add("modal-aberto");
+        }
 
-            const responder = document.createElement("button");
-            responder.className = "btn-responder";
-            responder.type = "button";
-            responder.innerHTML = '<i class="fa-solid fa-reply"></i> Responder';
+        function fecharModal(modal) {
+            modal.hidden = true;
 
-            const like = document.createElement("button");
-            like.className = "btn-like";
-            like.type = "button";
-            like.innerHTML = '<i class="fa-solid fa-thumbs-up"></i> Like';
+            if (modalAvaliacao.hidden && modalResposta.hidden) {
+                document.body.classList.remove("modal-aberto");
+            }
+        }
 
-            const respostas = document.createElement("div");
-            respostas.className = "area-respostas";
-
-            acoes.append(responder, like);
-            conteudo.append(nome, subtitulo, estrelas, texto, acoes, respostas);
-            artigo.append(avatar, conteudo);
-
-            listaComentarios.prepend(artigo);
+        document.querySelectorAll("[data-fechar-modal]").forEach(botao => {
+            botao.addEventListener("click", () => {
+                fecharModal(botao.closest(".modal-fundo"));
+            });
         });
 
-        listaComentarios.addEventListener("click", (evento) => {
-            const botao = evento.target.closest("button");
+        document.querySelectorAll(".modal-fundo").forEach(modal => {
+            modal.addEventListener("click", evento => {
+                if (evento.target === modal) fecharModal(modal);
+            });
+        });
 
-            if (!botao) {
-                return;
+        document.addEventListener("keydown", evento => {
+            if (evento.key === "Escape") {
+                fecharModal(modalAvaliacao);
+                fecharModal(modalResposta);
+            }
+        });
+
+        function abrirAvaliacao() {
+            notaSelecionada = 0;
+            atualizarEstrelas();
+            document.getElementById("campoComentario").value = "";
+            document.getElementById("contadorCaracteres").textContent = "0";
+            document.getElementById("textoNota").textContent = "Selecione uma nota";
+            abrirModal(modalAvaliacao);
+        }
+
+        document.getElementById("btnComentar").addEventListener("click", abrirAvaliacao);
+        document.getElementById("btnPrimeiraAvaliacao").addEventListener("click", abrirAvaliacao);
+        document.getElementById("campoComentario").addEventListener("input", evento => {
+            document.getElementById("contadorCaracteres").textContent = evento.target.value.length;
+        });
+
+        const descricoesNotas = {
+            1: "Péssimo",
+            2: "Ruim",
+            3: "Regular",
+            4: "Muito bom",
+            5: "Excelente!"
+        };
+
+        document.querySelectorAll("[data-nota]").forEach(botao => {
+            botao.addEventListener("click", () => {
+                notaSelecionada = Number(botao.dataset.nota);
+                atualizarEstrelas();
+                document.getElementById("textoNota").textContent = descricoesNotas[notaSelecionada];
+            });
+        });
+
+        function atualizarEstrelas() {
+            document.querySelectorAll("[data-nota]").forEach(botao => {
+                const ativa = Number(botao.dataset.nota) <= notaSelecionada;
+                const icone = botao.querySelector("i");
+                icone.className = ativa ? "fa-solid fa-star" : "fa-regular fa-star";
+                botao.classList.toggle("selecionada", ativa);
+                botao.setAttribute("aria-checked", String(Number(botao.dataset.nota) === notaSelecionada));
+            });
+        }
+
+        function dataRelativa(valor) {
+            const data = new Date(valor);
+            if (Number.isNaN(data.getTime())) return "";
+
+            const segundos = Math.max(0, Math.floor((Date.now() - data.getTime()) / 1000));
+            if (segundos < 60) return "Agora mesmo";
+            if (segundos < 3600) return `Há ${Math.floor(segundos / 60)} min`;
+            if (segundos < 86400) return `Há ${Math.floor(segundos / 3600)} h`;
+            if (segundos < 604800) return `Há ${Math.floor(segundos / 86400)} dia(s)`;
+
+            return data.toLocaleDateString("pt-BR");
+        }
+
+        function criarElemento(tag, classe, texto) {
+            const elemento = document.createElement(tag);
+            if (classe) elemento.className = classe;
+            if (texto !== undefined) elemento.textContent = texto;
+            return elemento;
+        }
+
+        function criarEstrelas(nota) {
+            const container = criarElemento("div", "estrelas-avaliacao");
+            for (let i = 1; i <= 5; i++) {
+                const estrela = document.createElement("i");
+                estrela.className = i <= nota ? "fa-solid fa-star" : "fa-regular fa-star estrela-vazia";
+                container.appendChild(estrela);
+            }
+            return container;
+        }
+
+        function criarAvaliacao(avaliacao) {
+            const artigo = criarElemento("article", "comentario");
+            const avatar = criarElemento("div", "avatar");
+            avatar.innerHTML = '<i class="fa-solid fa-user"></i>';
+
+            const conteudo = criarElemento("div", "conteudo-comentario");
+            const topo = criarElemento("div", "topo-comentario");
+            const dadosCliente = criarElemento("div", "dados-cliente");
+            const nome = criarElemento("div", "nome-cliente", avaliacao.nomeCliente || "Cliente");
+            const data = criarElemento("span", "data-comentario", dataRelativa(avaliacao.dataCriacao));
+
+            dadosCliente.append(nome, data);
+            topo.append(dadosCliente, criarEstrelas(Number(avaliacao.nota) || 0));
+
+            const texto = criarElemento("p", "texto-comentario", avaliacao.comentario);
+            const acoes = criarElemento("div", "acoes-comentario");
+
+            const botaoLike = document.createElement("button");
+            botaoLike.type = "button";
+            botaoLike.className = `btn-like${avaliacao.curtidoPorMim ? " curtido" : ""}`;
+            botaoLike.disabled = Boolean(avaliacao.curtidoPorMim);
+            botaoLike.innerHTML = '<i class="fa-solid fa-thumbs-up"></i> <span>Curtir</span> <span class="contador-curtidas"></span>';
+            botaoLike.querySelector(".contador-curtidas").textContent = `(${avaliacao.curtidas || 0})`;
+            botaoLike.addEventListener("click", () => curtirAvaliacao(avaliacao.id, botaoLike));
+
+            const botaoResponder = document.createElement("button");
+            botaoResponder.type = "button";
+            botaoResponder.className = "btn-responder";
+            botaoResponder.innerHTML = '<i class="fa-solid fa-reply"></i> Responder';
+            botaoResponder.addEventListener("click", () => {
+                avaliacaoRespostaId = avaliacao.id;
+                document.getElementById("campoResposta").value = "";
+                document.getElementById("contadorResposta").textContent = "0";
+                abrirModal(modalResposta);
+            });
+
+            acoes.append(botaoLike, botaoResponder);
+
+            const areaRespostas = criarElemento("div", "area-respostas");
+            const respostas = Array.isArray(avaliacao.respostas) ? avaliacao.respostas : [];
+
+            if (respostas.length > 0) {
+                const tituloRespostas = criarElemento("h4", "titulo-respostas", `Respostas (${respostas.length})`);
+                areaRespostas.appendChild(tituloRespostas);
+
+                respostas.forEach(resposta => {
+                    const item = criarElemento("div", "resposta");
+                    const cabecalho = criarElemento("div", "cabecalho-resposta");
+                    const nomeResposta = criarElemento("strong", "", resposta.nomeCliente || "Cliente");
+                    const dataResposta = criarElemento("span", "data-comentario", dataRelativa(resposta.dataCriacao));
+                    const textoResposta = criarElemento("p", "texto-resposta", resposta.resposta);
+                    cabecalho.append(nomeResposta, dataResposta);
+                    item.append(cabecalho, textoResposta);
+                    areaRespostas.appendChild(item);
+                });
             }
 
-            if (botao.classList.contains("btn-like")) {
-                botao.classList.toggle("curtido");
-            }
+            conteudo.append(topo, texto, acoes, areaRespostas);
+            artigo.append(avatar, conteudo);
+            return artigo;
+        }
 
-            if (botao.classList.contains("btn-responder")) {
-                const comentario = botao.closest(".comentario");
-                const area = comentario.querySelector(".area-respostas");
+        async function carregarAvaliacoes() {
+            const carregando = document.getElementById("carregando");
+            const semAvaliacoes = document.getElementById("semAvaliacoes");
+            const erroLista = document.getElementById("erroLista");
 
-                const resposta = prompt("Escreva sua resposta:");
+            carregando.hidden = false;
+            semAvaliacoes.hidden = true;
+            erroLista.hidden = true;
+            listaComentarios.innerHTML = "";
 
-                if (!resposta || !resposta.trim()) {
+            try {
+                const avaliacoes = await requisicao(API);
+                document.getElementById("totalAvaliacoes").textContent =
+                    `${avaliacoes.length} avaliação(ões) publicada(s)`;
+
+                carregando.hidden = true;
+
+                if (avaliacoes.length === 0) {
+                    semAvaliacoes.hidden = false;
                     return;
                 }
 
-                const textoResposta = document.createElement("p");
-                textoResposta.className = "texto-resposta";
-                textoResposta.textContent = "Você: " + resposta.trim();
+                avaliacoes.forEach(avaliacao => {
+                    listaComentarios.appendChild(criarAvaliacao(avaliacao));
+                });
+            } catch (erro) {
+                carregando.hidden = true;
+                if (erro.message === "LOGIN_NECESSARIO") return;
 
-                area.appendChild(textoResposta);
+                erroLista.hidden = false;
+                document.getElementById("totalAvaliacoes").textContent = "Não foi possível carregar";
+            }
+        }
+
+        document.getElementById("formAvaliacao").addEventListener("submit", async evento => {
+            evento.preventDefault();
+
+            if (enviandoAvaliacao) return;
+
+            const comentario = document.getElementById("campoComentario").value.trim();
+
+            if (notaSelecionada < 1 || notaSelecionada > 5) {
+                notificar("Selecione uma nota de 1 a 5 estrelas.", "aviso");
+                return;
+            }
+
+            if (comentario.length < 2) {
+                notificar("Escreva um comentário com pelo menos 2 caracteres.", "aviso");
+                return;
+            }
+
+            enviandoAvaliacao = true;
+            const botao = document.getElementById("btnEnviarAvaliacao");
+            botao.disabled = true;
+            botao.innerHTML = '<i class="fa-solid fa-spinner girando"></i> Publicando...';
+
+            try {
+                await requisicao(API, {
+                    method: "POST",
+                    body: JSON.stringify({ nota: notaSelecionada, comentario })
+                });
+
+                fecharModal(modalAvaliacao);
+                notificar("Sua avaliação foi publicada com sucesso!");
+                await carregarAvaliacoes();
+            } catch (erro) {
+                if (erro.message !== "LOGIN_NECESSARIO") {
+                    notificar(erro.message, "erro");
+                }
+            } finally {
+                enviandoAvaliacao = false;
+                botao.disabled = false;
+                botao.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Publicar avaliação';
             }
         });
-    </script>
 
+        async function curtirAvaliacao(id, botao) {
+            if (botao.disabled) return;
+
+            botao.disabled = true;
+
+            try {
+                const resultado = await requisicao(`${API}/${id}/curtidas`, {
+                    method: "POST"
+                });
+
+                botao.classList.add("curtido");
+                botao.querySelector(".contador-curtidas").textContent = `(${resultado.curtidas})`;
+                notificar("Curtida registrada!");
+            } catch (erro) {
+                botao.disabled = false;
+                if (erro.message !== "LOGIN_NECESSARIO") {
+                    notificar(erro.message, "erro");
+                }
+            }
+        }
+
+        document.getElementById("campoResposta").addEventListener("input", evento => {
+            document.getElementById("contadorResposta").textContent = evento.target.value.length;
+        });
+
+        document.getElementById("formResposta").addEventListener("submit", async evento => {
+            evento.preventDefault();
+
+            if (enviandoResposta || !avaliacaoRespostaId) return;
+
+            const respostaTexto = document.getElementById("campoResposta").value.trim();
+            if (!respostaTexto) {
+                notificar("Escreva sua resposta antes de enviar.", "aviso");
+                return;
+            }
+
+            enviandoResposta = true;
+            const botao = document.getElementById("btnEnviarResposta");
+            botao.disabled = true;
+            botao.innerHTML = '<i class="fa-solid fa-spinner girando"></i> Enviando...';
+
+            try {
+                await requisicao(`${API}/${avaliacaoRespostaId}/respostas`, {
+                    method: "POST",
+                    body: JSON.stringify({ resposta: respostaTexto })
+                });
+
+                fecharModal(modalResposta);
+                notificar("Sua resposta foi publicada!");
+                await carregarAvaliacoes();
+            } catch (erro) {
+                if (erro.message !== "LOGIN_NECESSARIO") {
+                    notificar(erro.message, "erro");
+                }
+            } finally {
+                enviandoResposta = false;
+                botao.disabled = false;
+                botao.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Enviar resposta';
+            }
+        });
+
+        document.getElementById("btnTentarNovamente").addEventListener("click", carregarAvaliacoes);
+
+        document.getElementById("btnSair").addEventListener("click", async () => {
+            try {
+                await fetch("/api/usuarios/logout", {
+                    method: "POST",
+                    credentials: "include"
+                });
+            } finally {
+                window.location.href = "login_cliente.html";
+            }
+        });
+
+        carregarAvaliacoes();
+    </script>
 </body>
 </html>

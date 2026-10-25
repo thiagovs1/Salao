@@ -13,6 +13,9 @@ CREATE TABLE IF NOT EXISTS Clientes (
     Nome VARCHAR(100) NOT NULL,
     Telefone VARCHAR(20) NOT NULL,
     Email VARCHAR(150) NOT NULL,
+    CPF VARCHAR(14) NULL,
+    Endereco VARCHAR(255) NULL,
+    DataCadastro DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     UNIQUE KEY UQ_Clientes_Email (Email),
     UNIQUE KEY UQ_Clientes_Telefone (Telefone)
 );
@@ -42,8 +45,7 @@ CREATE TABLE IF NOT EXISTS Profissionais (
 );
 
 -- =========================================
--- HORÁRIOS DE TRABALHO
--- DiaSemana: 1 = segunda ... 5 = sexta
+-- HORÁRIOS DAS PROFISSIONAIS
 -- =========================================
 
 CREATE TABLE IF NOT EXISTS HorariosProfissionais (
@@ -60,12 +62,7 @@ CREATE TABLE IF NOT EXISTS HorariosProfissionais (
         CHECK (HoraInicio < HoraFim),
 
     CONSTRAINT UQ_Horarios_Profissional_Dia_Hora
-        UNIQUE (
-            ProfissionalId,
-            DiaSemana,
-            HoraInicio,
-            HoraFim
-        ),
+        UNIQUE (ProfissionalId, DiaSemana, HoraInicio, HoraFim),
 
     CONSTRAINT FK_HorariosProfissionais_Profissionais
         FOREIGN KEY (ProfissionalId)
@@ -156,8 +153,26 @@ CREATE TABLE IF NOT EXISTS Agendamentos (
         ON DELETE SET NULL
 );
 
-ALTER TABLE Agendamentos
-ADD COLUMN FormaPagamento VARCHAR(30) NULL;
+-- =========================================
+-- VÁRIOS SERVIÇOS POR AGENDAMENTO
+-- =========================================
+
+CREATE TABLE IF NOT EXISTS AgendamentoServicos (
+    AgendamentoId INT NOT NULL,
+    ServicoId INT NOT NULL,
+
+    PRIMARY KEY (AgendamentoId, ServicoId),
+
+    CONSTRAINT FK_AgendamentoServicos_Agendamentos
+        FOREIGN KEY (AgendamentoId)
+        REFERENCES Agendamentos(Id)
+        ON DELETE CASCADE,
+
+    CONSTRAINT FK_AgendamentoServicos_Servicos
+        FOREIGN KEY (ServicoId)
+        REFERENCES Servicos(Id)
+        ON DELETE RESTRICT
+);
 
 -- =========================================
 -- DADOS DOS SERVIÇOS
@@ -179,7 +194,7 @@ ON DUPLICATE KEY UPDATE
     DuracaoMinutos = VALUES(DuracaoMinutos);
 
 -- =========================================
--- PROFISSIONAIS
+-- DADOS DAS PROFISSIONAIS
 -- =========================================
 
 INSERT INTO Profissionais
@@ -197,7 +212,7 @@ ON DUPLICATE KEY UPDATE
     Imagem = VALUES(Imagem);
 
 -- =========================================
--- COMBOS
+-- DADOS DOS COMBOS
 -- =========================================
 
 INSERT INTO `Combo` (Id, Nome, Preco)
@@ -222,9 +237,7 @@ ON DUPLICATE KEY UPDATE
     ServicoId = VALUES(ServicoId);
 
 -- =========================================
--- HORÁRIOS DAS PROFISSIONAIS
--- Segunda a sexta:
--- 08:00 às 12:00 e 13:00 às 18:00
+-- HORÁRIOS: SEGUNDA A SÁBADO
 -- =========================================
 
 INSERT INTO HorariosProfissionais
@@ -246,6 +259,8 @@ CROSS JOIN (
     UNION ALL SELECT 4, '13:00:00', '18:00:00'
     UNION ALL SELECT 5, '08:00:00', '12:00:00'
     UNION ALL SELECT 5, '13:00:00', '18:00:00'
+    UNION ALL SELECT 6, '08:00:00', '12:00:00'
+    UNION ALL SELECT 6, '13:00:00', '18:00:00'
 ) d
 WHERE NOT EXISTS (
     SELECT 1
@@ -274,7 +289,253 @@ ON DUPLICATE KEY UPDATE
     ProfissionalId = VALUES(ProfissionalId);
 
 -- =========================================
--- CONFERÊNCIA DOS VÍNCULOS
+-- AVALIAÇÕES
+-- =========================================
+
+CREATE TABLE IF NOT EXISTS Avaliacoes (
+    Id INT AUTO_INCREMENT PRIMARY KEY,
+    ClienteId INT NOT NULL,
+    Nota INT NOT NULL,
+    Comentario VARCHAR(1000) NOT NULL,
+    DataCriacao DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT CK_Avaliacoes_Nota
+        CHECK (Nota BETWEEN 1 AND 5),
+
+    CONSTRAINT FK_Avaliacoes_Clientes
+        FOREIGN KEY (ClienteId)
+        REFERENCES Clientes(Id)
+        ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS AvaliacaoCurtidas (
+    Id INT AUTO_INCREMENT PRIMARY KEY,
+    AvaliacaoId INT NOT NULL,
+    ClienteId INT NOT NULL,
+    DataCriacao DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT UQ_AvaliacaoCurtidas_Cliente
+        UNIQUE (AvaliacaoId, ClienteId),
+
+    CONSTRAINT FK_AvaliacaoCurtidas_Avaliacoes
+        FOREIGN KEY (AvaliacaoId)
+        REFERENCES Avaliacoes(Id)
+        ON DELETE CASCADE,
+
+    CONSTRAINT FK_AvaliacaoCurtidas_Clientes
+        FOREIGN KEY (ClienteId)
+        REFERENCES Clientes(Id)
+        ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS AvaliacaoRespostas (
+    Id INT AUTO_INCREMENT PRIMARY KEY,
+    AvaliacaoId INT NOT NULL,
+    ClienteId INT NOT NULL,
+    Resposta VARCHAR(1000) NOT NULL,
+    DataCriacao DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT FK_AvaliacaoRespostas_Avaliacoes
+        FOREIGN KEY (AvaliacaoId)
+        REFERENCES Avaliacoes(Id)
+        ON DELETE CASCADE,
+
+    CONSTRAINT FK_AvaliacaoRespostas_Clientes
+        FOREIGN KEY (ClienteId)
+        REFERENCES Clientes(Id)
+        ON DELETE CASCADE
+);
+
+-- =========================================
+-- SERVIÇOS E PROFISSIONAIS
+-- =========================================
+
+CREATE TABLE IF NOT EXISTS ServicoProfissional (
+    ServicoId INT NOT NULL,
+    ProfissionalId INT NOT NULL,
+    NomeServico VARCHAR(100) NULL,
+    NomeProfissional VARCHAR(100) NULL,
+
+    PRIMARY KEY (ServicoId, ProfissionalId),
+
+    CONSTRAINT FK_ServicoProfissional_Servicos
+        FOREIGN KEY (ServicoId)
+        REFERENCES Servicos(Id)
+        ON DELETE CASCADE,
+
+    CONSTRAINT FK_ServicoProfissional_Profissionais
+        FOREIGN KEY (ProfissionalId)
+        REFERENCES Profissionais(Id)
+        ON DELETE CASCADE
+);
+
+-- =========================================
+-- ATUALIZAÇÃO SEGURA DA ESTRUTURA EXISTENTE
+-- =========================================
+
+DROP PROCEDURE IF EXISTS AtualizarServicoProfissional;
+
+DELIMITER $$
+
+CREATE PROCEDURE AtualizarServicoProfissional()
+BEGIN
+    IF NOT EXISTS (
+        SELECT 1
+        FROM INFORMATION_SCHEMA.COLUMNS
+        WHERE TABLE_SCHEMA = DATABASE()
+          AND TABLE_NAME = 'ServicoProfissional'
+          AND COLUMN_NAME = 'NomeServico'
+    ) THEN
+        ALTER TABLE ServicoProfissional
+        ADD COLUMN NomeServico VARCHAR(100) NULL;
+    END IF;
+
+    IF NOT EXISTS (
+        SELECT 1
+        FROM INFORMATION_SCHEMA.COLUMNS
+        WHERE TABLE_SCHEMA = DATABASE()
+          AND TABLE_NAME = 'ServicoProfissional'
+          AND COLUMN_NAME = 'NomeProfissional'
+    ) THEN
+        ALTER TABLE ServicoProfissional
+        ADD COLUMN NomeProfissional VARCHAR(100) NULL;
+    END IF;
+END$$
+
+DELIMITER ;
+
+CALL AtualizarServicoProfissional();
+
+DROP PROCEDURE IF EXISTS AtualizarServicoProfissional;
+
+-- =========================================
+-- VINCULAR SERVIÇOS ÀS PROFISSIONAIS
+-- =========================================
+
+INSERT IGNORE INTO ServicoProfissional
+    (ServicoId, ProfissionalId, NomeServico, NomeProfissional)
+SELECT
+    s.Id,
+    p.Id,
+    s.Nome,
+    p.Nome
+FROM Servicos s
+CROSS JOIN Profissionais p
+WHERE p.Nome IN ('Camila Ferreira', 'Beatriz Costa');
+
+-- =========================================
+-- PREENCHER OS NOMES DOS VÍNCULOS EXISTENTES
+-- =========================================
+
+UPDATE ServicoProfissional sp
+INNER JOIN Servicos s
+    ON s.Id = sp.ServicoId
+INNER JOIN Profissionais p
+    ON p.Id = sp.ProfissionalId
+SET
+    sp.NomeServico = s.Nome,
+    sp.NomeProfissional = p.Nome;
+
+-- =========================================
+-- TRIGGERS PARA MANTER OS NOMES ATUALIZADOS
+-- =========================================
+
+DROP TRIGGER IF EXISTS trg_servico_atualizar_nome;
+DROP TRIGGER IF EXISTS trg_profissional_atualizar_nome;
+DROP TRIGGER IF EXISTS trg_vinculo_preencher_nomes;
+
+DELIMITER $$
+
+CREATE TRIGGER trg_servico_atualizar_nome
+AFTER UPDATE ON Servicos
+FOR EACH ROW
+BEGIN
+    UPDATE ServicoProfissional
+    SET NomeServico = NEW.Nome
+    WHERE ServicoId = NEW.Id;
+END$$
+
+CREATE TRIGGER trg_profissional_atualizar_nome
+AFTER UPDATE ON Profissionais
+FOR EACH ROW
+BEGIN
+    UPDATE ServicoProfissional
+    SET NomeProfissional = NEW.Nome
+    WHERE ProfissionalId = NEW.Id;
+END$$
+
+CREATE TRIGGER trg_vinculo_preencher_nomes
+BEFORE INSERT ON ServicoProfissional
+FOR EACH ROW
+BEGIN
+    SET NEW.NomeServico = (
+        SELECT Nome
+        FROM Servicos
+        WHERE Id = NEW.ServicoId
+    );
+
+    SET NEW.NomeProfissional = (
+        SELECT Nome
+        FROM Profissionais
+        WHERE Id = NEW.ProfissionalId
+    );
+END$$
+
+DELIMITER ;
+
+-- =========================================
+-- CONSULTAR SERVIÇOS E PROFISSIONAIS
+-- =========================================
+
+SELECT
+    ServicoId,
+    NomeServico,
+    ProfissionalId,
+    NomeProfissional
+FROM ServicoProfissional
+ORDER BY NomeServico, NomeProfissional;
+
+INSERT INTO HorariosProfissionais
+    (ProfissionalId, DiaSemana, HoraInicio, HoraFim)
+SELECT
+    p.Id,
+    dias.DiaSemana,
+    dias.HoraInicio,
+    dias.HoraFim
+FROM Profissionais p
+CROSS JOIN (
+    SELECT 1 AS DiaSemana, '08:00:00' AS HoraInicio, '12:00:00' AS HoraFim
+    UNION ALL
+    SELECT 1, '13:00:00', '18:00:00'
+    UNION ALL
+    SELECT 2, '08:00:00', '12:00:00'
+    UNION ALL
+    SELECT 2, '13:00:00', '18:00:00'
+    UNION ALL
+    SELECT 3, '08:00:00', '12:00:00'
+    UNION ALL
+    SELECT 3, '13:00:00', '18:00:00'
+    UNION ALL
+    SELECT 4, '08:00:00', '12:00:00'
+    UNION ALL
+    SELECT 4, '13:00:00', '18:00:00'
+    UNION ALL
+    SELECT 5, '08:00:00', '12:00:00'
+    UNION ALL
+    SELECT 5, '13:00:00', '18:00:00'
+    UNION ALL
+    SELECT 6, '08:00:00', '12:00:00'
+    UNION ALL
+    SELECT 6, '13:00:00', '18:00:00'
+) dias
+WHERE NOT EXISTS (
+    SELECT 1
+    FROM HorariosProfissionais h
+    WHERE h.ProfissionalId = p.Id
+);
+
+-- =========================================
+-- CONFERIR CONTAS DAS FUNCIONÁRIAS
 -- =========================================
 
 SELECT
@@ -288,3 +549,66 @@ FROM Usuario u
 LEFT JOIN Profissionais p
     ON p.Id = u.ProfissionalId
 ORDER BY u.Id;
+
+USE Belleza;
+
+ALTER TABLE `Combo`
+ADD COLUMN Imagem VARCHAR(255) NULL;
+
+USE Belleza;
+
+DROP PROCEDURE IF EXISTS AtualizarProfissionais;
+
+DELIMITER $$
+
+CREATE PROCEDURE AtualizarProfissionais()
+BEGIN
+    IF NOT EXISTS (
+        SELECT 1 FROM INFORMATION_SCHEMA.COLUMNS
+        WHERE TABLE_SCHEMA = DATABASE()
+          AND TABLE_NAME = 'Profissionais'
+          AND COLUMN_NAME = 'CPF'
+    ) THEN
+        ALTER TABLE Profissionais
+        ADD COLUMN CPF VARCHAR(14) NULL;
+    END IF;
+
+    IF NOT EXISTS (
+        SELECT 1 FROM INFORMATION_SCHEMA.COLUMNS
+        WHERE TABLE_SCHEMA = DATABASE()
+          AND TABLE_NAME = 'Profissionais'
+          AND COLUMN_NAME = 'Telefone'
+    ) THEN
+        ALTER TABLE Profissionais
+        ADD COLUMN Telefone VARCHAR(20) NULL;
+    END IF;
+
+    IF NOT EXISTS (
+        SELECT 1 FROM INFORMATION_SCHEMA.COLUMNS
+        WHERE TABLE_SCHEMA = DATABASE()
+          AND TABLE_NAME = 'Profissionais'
+          AND COLUMN_NAME = 'Endereco'
+    ) THEN
+        ALTER TABLE Profissionais
+        ADD COLUMN Endereco VARCHAR(255) NULL;
+    END IF;
+
+    IF NOT EXISTS (
+        SELECT 1 FROM INFORMATION_SCHEMA.COLUMNS
+        WHERE TABLE_SCHEMA = DATABASE()
+          AND TABLE_NAME = 'Profissionais'
+          AND COLUMN_NAME = 'TaxaAtendimento'
+    ) THEN
+        ALTER TABLE Profissionais
+        ADD COLUMN TaxaAtendimento DECIMAL(10,2) NOT NULL DEFAULT 0.00;
+    END IF;
+END$$
+
+DELIMITER ;
+
+CALL AtualizarProfissionais();
+
+DROP PROCEDURE IF EXISTS AtualizarProfissionais;
+
+-- Conferir as colunas
+DESCRIBE Profissionais;

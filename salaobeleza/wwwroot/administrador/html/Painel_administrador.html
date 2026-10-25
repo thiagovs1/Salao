@@ -1,0 +1,697 @@
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel Administrativo - Belleza</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" href="../css/painel_administrador.css">
+</head>
+<body>
+
+    <aside class="sidebar">
+        <div class="logo-area">
+            <img src="/imagens/logo_belleza.png" alt="Belleza Salão de Beleza" class="logo-belleza">
+        </div>
+
+        <div class="linha-logo"></div>
+
+        <nav class="menu">
+            <a href="Painel_administrador.html" class="menu-item ativo">
+                <i class="fa-solid fa-house"></i><span>Início</span>
+            </a>
+            <a href="agendamentos.html" class="menu-item">
+                <i class="fa-regular fa-calendar"></i><span>Agendamentos</span>
+            </a>
+            <a href="clientes.html" class="menu-item">
+                <i class="fa-solid fa-circle-user"></i><span>Clientes</span>
+            </a>
+            <a href="servicos.html" class="menu-item">
+                <i class="fa-solid fa-scissors"></i><span>Serviços</span>
+            </a>
+            <a href="profissionais.html" class="menu-item">
+                <i class="fa-solid fa-users"></i><span>Profissionais</span>
+            </a>
+            <a href="financeiro.html" class="menu-item">
+                <i class="fa-solid fa-wallet"></i><span>Financeiro</span>
+            </a>
+            <a href="estoque.html" class="menu-item">
+                <i class="fa-solid fa-box"></i><span>Estoque e compras</span>
+            </a>
+            <a href="promocoes.html" class="menu-item">
+                <i class="fa-solid fa-tags"></i><span>Promoções</span>
+            </a>
+            <a href="avaliacoes.html" class="menu-item">
+                <i class="fa-regular fa-star"></i><span>Avaliações</span>
+            </a>
+            <a href="relatorios.html" class="menu-item">
+                <i class="fa-solid fa-chart-column"></i><span>Relatórios</span>
+            </a>
+            <a href="configuracoes.html" class="menu-item">
+                <i class="fa-solid fa-gear"></i><span>Configurações</span>
+            </a>
+            <a href="#" id="btnSair" class="menu-item sair">
+                <i class="fa-solid fa-arrow-right-from-bracket"></i><span>Sair</span>
+            </a>
+        </nav>
+    </aside>
+
+    <main class="conteudo">
+        <header class="cabecalho">
+            <div>
+                <h1>Olá, Administrador!</h1>
+                <p>Aqui está o resumo do seu salão.</p>
+                <div class="data-atual">
+                    <i class="fa-regular fa-calendar"></i>
+                    <span id="dataAtual"></span>
+                </div>
+            </div>
+
+            <button type="button" id="btnAtualizar" class="btn-atualizar">
+                <i class="fa-solid fa-rotate"></i> Atualizar
+            </button>
+        </header>
+
+        <div id="mensagem" class="mensagem" role="status" aria-live="polite" hidden></div>
+
+        <section class="indicadores">
+            <article class="indicador">
+                <h2>Agendamentos hoje</h2>
+                <div class="indicador-valor">
+                    <i class="fa-regular fa-calendar-check"></i>
+                    <strong id="totalHoje">0</strong>
+                </div>
+                <p>Total de todos os profissionais</p>
+            </article>
+
+            <article class="indicador">
+                <h2>Clientes atendidos</h2>
+                <div class="indicador-valor">
+                    <i class="fa-solid fa-circle-user"></i>
+                    <strong id="clientesAtendidos">0</strong>
+                </div>
+                <p>Atendimentos concluídos hoje</p>
+            </article>
+
+            <article class="indicador">
+                <h2>Valor dos serviços no mês</h2>
+                <div class="indicador-valor">
+                    <strong id="valorMes" class="valor-financeiro">R$ 0,00</strong>
+                </div>
+                <p>Agendamentos não cancelados</p>
+            </article>
+
+            <article class="indicador">
+                <h2>Pendentes</h2>
+                <div class="indicador-valor">
+                    <i class="fa-regular fa-clock"></i>
+                    <strong id="totalPendentes">0</strong>
+                </div>
+                <p>Aguardando atendimento ou confirmação</p>
+            </article>
+        </section>
+
+        <section class="painel-principal">
+            <article class="cartao movimentacao">
+                <h2>Movimentação do salão</h2>
+                <p class="subtitulo">Agendamentos dos últimos 7 dias</p>
+                <div id="graficoBarras" class="grafico-barras">
+                    <p class="texto-vazio">Carregando dados...</p>
+                </div>
+            </article>
+
+            <article class="cartao servicos-realizados">
+                <h2>Serviços mais realizados</h2>
+                <div class="grafico-servicos">
+                    <div id="roscaServicos" class="rosca rosca-servicos">
+                        <div class="centro-rosca">
+                            <strong>Total no mês</strong>
+                            <span id="totalServicosMes">0</span>
+                        </div>
+                    </div>
+                    <div id="legendaServicos" class="legenda legenda-servicos"></div>
+                </div>
+            </article>
+
+            <article class="cartao proximos">
+                <h2>Próximos agendamentos</h2>
+                <div id="listaProximos">
+                    <p class="texto-vazio">Carregando agendamentos...</p>
+                </div>
+                <div id="avisoPendente" class="aviso-pendente" hidden></div>
+            </article>
+
+            <article class="cartao status-agendamentos">
+                <h2>Status dos agendamentos de hoje</h2>
+                <div class="grafico-status">
+                    <div id="roscaStatus" class="rosca rosca-status">
+                        <div class="centro-rosca">
+                            <strong id="totalStatusHoje">0</strong>
+                            <span>Total do dia</span>
+                        </div>
+                    </div>
+                    <div id="legendaStatus" class="legenda legenda-status"></div>
+                </div>
+            </article>
+
+            <article class="cartao resumo-financeiro">
+                <h2>Resumo de valores</h2>
+                <div class="financeiro-valores">
+                    <div class="financeiro-bloco">
+                        <span>Hoje</span>
+                        <strong id="valorHoje">R$ 0,00</strong>
+                    </div>
+                    <div class="financeiro-bloco">
+                        <span>Este mês</span>
+                        <strong id="valorMesResumo">R$ 0,00</strong>
+                    </div>
+                </div>
+                <div class="formas-pagamento">
+                    <h3>Resumo dos agendamentos do mês</h3>
+                    <div id="resumoStatusMes" class="resumo-status-mes">
+                        Carregando dados...
+                    </div>
+                </div>
+            </article>
+        </section>
+    </main>
+
+    <script>
+        const API = "/api";
+        const mensagem = document.getElementById("mensagem");
+
+        const cores = [
+            "#a77c80", "#e99bb4", "#665f4b", "#f3b5b2",
+            "#f9d8d0", "#d9a4aa", "#b98b91"
+        ];
+
+        function mostrarMensagem(texto, tipo = "erro") {
+            mensagem.textContent = texto;
+            mensagem.className = `mensagem ${tipo}`;
+            mensagem.hidden = false;
+        }
+
+        function ocultarMensagem() {
+            mensagem.hidden = true;
+            mensagem.textContent = "";
+        }
+
+        function dataLocal(data) {
+            return new Date(data.getFullYear(), data.getMonth(), data.getDate());
+        }
+
+        function mesmaData(a, b) {
+            return a.getFullYear() === b.getFullYear() &&
+                a.getMonth() === b.getMonth() &&
+                a.getDate() === b.getDate();
+        }
+
+        function lerData(valor) {
+            if (!valor) return null;
+
+            const data = new Date(valor);
+            return Number.isNaN(data.getTime()) ? null : data;
+        }
+
+        function formatarMoeda(valor) {
+            return Number(valor || 0).toLocaleString("pt-BR", {
+                style: "currency",
+                currency: "BRL"
+            });
+        }
+
+        function formatarHora(valor) {
+            const data = lerData(valor);
+            return data ? data.toLocaleTimeString("pt-BR", {
+                hour: "2-digit",
+                minute: "2-digit"
+            }) : "--:--";
+        }
+
+        function formatarDataCurta(data) {
+            return data.toLocaleDateString("pt-BR", {
+                day: "2-digit",
+                month: "2-digit"
+            });
+        }
+
+        function normalizar(texto) {
+            return String(texto || "")
+                .normalize("NFD")
+                .replace(/[\u0300-\u036f]/g, "")
+                .toLowerCase()
+                .trim();
+        }
+
+        function statusCancelado(status) {
+            return normalizar(status).includes("cancel");
+        }
+
+        function statusPendente(status) {
+            const s = normalizar(status);
+            return s.includes("pendente") ||
+                s.includes("aberto") ||
+                s.includes("aguardando");
+        }
+
+        function statusConcluido(status) {
+            const s = normalizar(status);
+            return s.includes("concluido") ||
+                s.includes("realizado") ||
+                s.includes("atendido") ||
+                s.includes("finalizado");
+        }
+
+        function atualizarData() {
+            document.getElementById("dataAtual").textContent =
+                new Date().toLocaleDateString("pt-BR", {
+                    day: "numeric",
+                    month: "long",
+                    year: "numeric"
+                });
+        }
+
+        async function requisicao(url, opcoes = {}) {
+            const resposta = await fetch(url, {
+                credentials: "include",
+                ...opcoes
+            });
+
+            if (resposta.status === 401) {
+                window.location.replace("/html/login_cliente.html");
+                throw new Error("Sessão administrativa encerrada.");
+            }
+
+            if (!resposta.ok) {
+                throw new Error(`Não foi possível carregar os dados (${resposta.status}).`);
+            }
+
+            return resposta.json();
+        }
+
+        function obterCampo(objeto, ...nomes) {
+            for (const nome of nomes) {
+                if (objeto && objeto[nome] !== undefined && objeto[nome] !== null) {
+                    return objeto[nome];
+                }
+
+                const chave = Object.keys(objeto || {}).find(
+                    k => k.toLowerCase() === nome.toLowerCase()
+                );
+
+                if (chave && objeto[chave] !== undefined && objeto[chave] !== null) {
+                    return objeto[chave];
+                }
+            }
+
+            return "";
+        }
+
+        function prepararAgendamentos(lista) {
+            if (!Array.isArray(lista)) {
+                throw new Error("A API de agendamentos não retornou uma lista válida.");
+            }
+
+            return lista.map(item => ({
+                id: obterCampo(item, "id"),
+                dataHora: lerData(obterCampo(item, "dataHora", "datahora")),
+                nomeCliente: obterCampo(item, "nomeCliente", "clienteNome") || "Cliente",
+                nomeServico: obterCampo(item, "nomeServico", "servicoNome") || "Serviço não informado",
+                preco: Number(obterCampo(item, "preco", "valor") || 0),
+                status: obterCampo(item, "status", "statusTipo") || "Pendente",
+                nomeProfissional: obterCampo(item, "nomeProfissional", "profissionalNome") || ""
+            })).filter(item => item.dataHora);
+        }
+
+        function desenharBarras(agendamentos, hoje) {
+            const area = document.getElementById("graficoBarras");
+            area.replaceChildren();
+
+            const dias = [];
+
+            for (let i = 6; i >= 0; i--) {
+                const dia = new Date(hoje);
+                dia.setDate(dia.getDate() - i);
+
+                dias.push({
+                    data: dia,
+                    total: agendamentos.filter(a =>
+                        mesmaData(dataLocal(a.dataHora), dataLocal(dia)) &&
+                        !statusCancelado(a.status)
+                    ).length
+                });
+            }
+
+            const maior = Math.max(1, ...dias.map(d => d.total));
+            const eixo = document.createElement("div");
+            eixo.className = "eixo-y";
+
+            [maior, Math.ceil(maior * 0.66), Math.ceil(maior * 0.33), 0]
+                .forEach(valor => {
+                    const span = document.createElement("span");
+                    span.textContent = valor;
+                    eixo.appendChild(span);
+                });
+
+            const areaBarras = document.createElement("div");
+            areaBarras.className = "area-barras";
+
+            const linhas = document.createElement("div");
+            linhas.className = "linhas-grafico";
+            for (let i = 0; i < 4; i++) {
+                linhas.appendChild(document.createElement("span"));
+            }
+
+            const barras = document.createElement("div");
+            barras.className = "barras";
+
+            dias.forEach(dia => {
+                const grupo = document.createElement("div");
+                grupo.className = "barra-grupo";
+
+                const barra = document.createElement("div");
+                barra.className = "barra";
+                barra.style.height = `${dia.total / maior * 100}%`;
+                barra.title = `${dia.total} agendamento(s)`;
+
+                const rotulo = document.createElement("span");
+                rotulo.textContent = formatarDataCurta(dia.data);
+
+                grupo.append(barra, rotulo);
+                barras.appendChild(grupo);
+            });
+
+            areaBarras.append(linhas, barras);
+            area.append(eixo, areaBarras);
+        }
+
+        function desenharRoscaServicos(agendamentos, inicioMes, inicioProximoMes) {
+            const lista = agendamentos.filter(a =>
+                a.dataHora >= inicioMes &&
+                a.dataHora < inicioProximoMes &&
+                !statusCancelado(a.status)
+            );
+
+            const contagem = new Map();
+
+            lista.forEach(a => {
+                const nome = a.nomeServico || "Serviço não informado";
+                contagem.set(nome, (contagem.get(nome) || 0) + 1);
+            });
+
+            const ordenados = [...contagem.entries()]
+                .sort((a, b) => b[1] - a[1]);
+
+            const top = ordenados.slice(0, 7);
+            const total = top.reduce((soma, item) => soma + item[1], 0);
+
+            document.getElementById("totalServicosMes").textContent = total;
+
+            const rosca = document.getElementById("roscaServicos");
+            const legenda = document.getElementById("legendaServicos");
+            legenda.replaceChildren();
+
+            if (total === 0) {
+                rosca.style.background = "#eadbd7";
+                legenda.textContent = "Nenhum serviço registrado neste mês.";
+                return;
+            }
+
+            let angulo = 0;
+            const partes = [];
+
+            top.forEach(([nome, quantidade], i) => {
+                const fim = angulo + quantidade / total * 360;
+                partes.push(`${cores[i % cores.length]} ${angulo}deg ${fim}deg`);
+                angulo = fim;
+
+                const item = document.createElement("span");
+                const bolinha = document.createElement("i");
+                bolinha.className = "cor";
+                bolinha.style.background = cores[i % cores.length];
+
+                const texto = document.createElement("span");
+                texto.textContent = `${nome} (${quantidade})`;
+                texto.className = "texto-legenda";
+
+                item.append(bolinha, texto);
+                legenda.appendChild(item);
+            });
+
+            rosca.style.background = `conic-gradient(${partes.join(", ")})`;
+        }
+
+       function desenharStatus(agendamentosHoje) {
+    const contagem = {
+        Concluidos: 0,
+        Pendentes: 0,
+        Cancelados: 0
+    };
+
+    agendamentosHoje.forEach(a => {
+        const status = normalizar(a.status);
+
+        if (status.includes("cancel")) {
+            contagem.Cancelados++;
+        } else if (statusConcluido(status)) {
+            contagem.Concluidos++;
+        } else {
+            // Aberto, pendente e confirmado ficam como pendentes.
+            contagem.Pendentes++;
+        }
+    });
+
+    const total = agendamentosHoje.length;
+
+    document.getElementById("totalStatusHoje").textContent = total;
+
+    const legenda = document.getElementById("legendaStatus");
+    const rosca = document.getElementById("roscaStatus");
+
+    legenda.replaceChildren();
+
+    const itens = [
+        ["Concluídos", contagem.Concluidos, "#a77c80"],
+        ["Pendentes", contagem.Pendentes, "#e99bb4"],
+        ["Cancelados", contagem.Cancelados, "#665f4b"]
+    ];
+
+    if (total === 0) {
+        rosca.style.background = "#eadbd7";
+    } else {
+        let angulo = 0;
+        const partes = [];
+
+        itens.forEach(([nome, quantidade, cor]) => {
+            if (quantidade === 0) return;
+
+            const fim = angulo + (quantidade / total) * 360;
+
+            partes.push(`${cor} ${angulo}deg ${fim}deg`);
+            angulo = fim;
+        });
+
+        rosca.style.background =
+            `conic-gradient(${partes.join(", ")})`;
+    }
+
+    itens.forEach(([nome, quantidade, cor]) => {
+        const item = document.createElement("span");
+        const bolinha = document.createElement("i");
+
+        bolinha.className = "cor";
+        bolinha.style.background = cor;
+
+        item.append(
+            bolinha,
+            document.createTextNode(`${nome}: ${quantidade}`)
+        );
+
+        legenda.appendChild(item);
+    });
+}
+        function desenharProximos(agendamentos, agora) {
+            const lista = document.getElementById("listaProximos");
+            lista.replaceChildren();
+
+            const proximos = agendamentos
+                .filter(a => a.dataHora >= agora && !statusCancelado(a.status))
+                .sort((a, b) => a.dataHora - b.dataHora)
+                .slice(0, 5);
+
+            if (proximos.length === 0) {
+                const vazio = document.createElement("p");
+                vazio.className = "texto-vazio";
+                vazio.textContent = "Não há próximos agendamentos.";
+                lista.appendChild(vazio);
+            }
+
+            proximos.forEach(a => {
+                const linha = document.createElement("div");
+                linha.className = "agendamento";
+
+                const hora = document.createElement("span");
+                hora.className = "hora";
+                hora.textContent = formatarHora(a.dataHora);
+
+                const dados = document.createElement("div");
+                dados.className = "dados-agendamento";
+
+                const cliente = document.createElement("strong");
+                cliente.textContent = a.nomeCliente;
+
+                const servico = document.createElement("span");
+                servico.textContent = a.nomeServico;
+
+                const profissional = document.createElement("span");
+                profissional.textContent = a.nomeProfissional || "Profissional não informado pela API";
+
+                dados.append(cliente, servico, profissional);
+
+                const estado = document.createElement("strong");
+                estado.className = "estado";
+                estado.textContent = a.status;
+
+                if (statusPendente(a.status)) estado.classList.add("nao-confirmado");
+                else estado.classList.add("confirmado");
+
+                linha.append(hora, dados, estado);
+                lista.appendChild(linha);
+            });
+
+            const pendentes = agendamentos.filter(a =>
+                !statusCancelado(a.status) && statusPendente(a.status)
+            ).length;
+
+            const aviso = document.getElementById("avisoPendente");
+            aviso.hidden = pendentes === 0;
+            aviso.textContent = pendentes === 1
+                ? "Existe 1 agendamento pendente."
+                : `Existem ${pendentes} agendamentos pendentes.`;
+        }
+
+        function atualizarResumoMes(agendamentosMes) {
+            const resumo = document.getElementById("resumoStatusMes");
+            resumo.replaceChildren();
+
+            const total = agendamentosMes.length;
+            const concluidos = agendamentosMes.filter(a => statusConcluido(a.status)).length;
+            const pendentes = agendamentosMes.filter(a => statusPendente(a.status)).length;
+            const cancelados = agendamentosMes.filter(a => statusCancelado(a.status)).length;
+
+            [
+                `Total: ${total}`,
+                `Concluídos: ${concluidos}`,
+                `Pendentes: ${pendentes}`,
+                `Cancelados: ${cancelados}`
+            ].forEach(texto => {
+                const span = document.createElement("span");
+                span.textContent = texto;
+                resumo.appendChild(span);
+            });
+        }
+
+        function atualizarPainel(agendamentos) {
+            const agora = new Date();
+            const hoje = dataLocal(agora);
+            const inicioMes = new Date(agora.getFullYear(), agora.getMonth(), 1);
+            const inicioProximoMes = new Date(agora.getFullYear(), agora.getMonth() + 1, 1);
+
+            const agendamentosHoje = agendamentos.filter(a =>
+                mesmaData(dataLocal(a.dataHora), hoje)
+            );
+
+            const agendamentosMes = agendamentos.filter(a =>
+                a.dataHora >= inicioMes && a.dataHora < inicioProximoMes
+            );
+
+            const hojeAtivos = agendamentosHoje.filter(a => !statusCancelado(a.status));
+            const mesAtivos = agendamentosMes.filter(a => !statusCancelado(a.status));
+
+            const atendidos = agendamentosHoje.filter(a => statusConcluido(a.status));
+            const pendentes = agendamentos.filter(a =>
+                !statusCancelado(a.status) && statusPendente(a.status)
+            );
+
+            document.getElementById("totalHoje").textContent = hojeAtivos.length;
+
+            document.getElementById("clientesAtendidos").textContent =
+                new Set(atendidos.map(a => a.nomeCliente)).size;
+
+            document.getElementById("totalPendentes").textContent = pendentes.length;
+
+            const valorHoje = hojeAtivos.reduce((soma, a) => soma + a.preco, 0);
+            const valorMes = mesAtivos.reduce((soma, a) => soma + a.preco, 0);
+
+            document.getElementById("valorHoje").textContent = formatarMoeda(valorHoje);
+            document.getElementById("valorMes").textContent = formatarMoeda(valorMes);
+            document.getElementById("valorMesResumo").textContent = formatarMoeda(valorMes);
+
+            desenharBarras(agendamentos, hoje);
+            desenharRoscaServicos(agendamentos, inicioMes, inicioProximoMes);
+            desenharStatus(agendamentosHoje);
+            desenharProximos(agendamentos, agora);
+            atualizarResumoMes(agendamentosMes);
+        }
+
+        async function carregarPainel() {
+            const botao = document.getElementById("btnAtualizar");
+            botao.disabled = true;
+            botao.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Atualizando';
+            ocultarMensagem();
+
+            try {
+                const verificacao = await requisicao(`${API}/Usuarios/verificar-admin`);
+
+                if (!verificacao || verificacao.autenticado !== true) {
+                    window.location.replace("/html/login_cliente.html");
+                    return;
+                }
+
+                const dados = await requisicao(`${API}/Agendamentos`);
+                const agendamentos = prepararAgendamentos(dados);
+
+                atualizarPainel(agendamentos);
+            } catch (erro) {
+                console.error("Erro ao carregar painel:", erro);
+                mostrarMensagem(
+                    erro.message || "Não foi possível carregar os dados do painel."
+                );
+            } finally {
+                botao.disabled = false;
+                botao.innerHTML = '<i class="fa-solid fa-rotate"></i> Atualizar';
+            }
+        }
+
+        document.getElementById("btnAtualizar").addEventListener("click", carregarPainel);
+
+        document.getElementById("btnSair").addEventListener("click", async function (event) {
+            event.preventDefault();
+
+            const confirmado = window.confirm("Deseja realmente sair do painel administrativo?");
+            if (!confirmado) return;
+
+            try {
+                const resposta = await fetch(`${API}/Usuarios/logout`, {
+                    method: "POST",
+                    credentials: "include"
+                });
+
+                if (!resposta.ok) {
+                    throw new Error("Não foi possível encerrar a sessão.");
+                }
+
+                window.location.replace("/html/login_cliente.html");
+            } catch (erro) {
+                console.error("Erro ao sair:", erro);
+                mostrarMensagem("Não foi possível sair da conta. Tente novamente.", "erro");
+            }
+        });
+
+        atualizarData();
+        carregarPainel();
+    </script>
+</body>
+</html>

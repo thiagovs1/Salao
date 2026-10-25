@@ -1,14 +1,17 @@
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace SalaoBeleza.Models;
 
-// Representa a tabela de clientes no banco.
-// Cada propriedade vira uma coluna.
+[Table("Clientes")]
 public class Cliente
 {
     public int Id { get; set; }
     public string Nome { get; set; } = string.Empty;
     public string Telefone { get; set; } = string.Empty;
     public string Email { get; set; } = string.Empty;
+    public string? CPF { get; set; }
+    public string? Endereco { get; set; }
+    public DateTime DataCadastro { get; set; } = DateTime.Now;
 
-    // Um cliente pode ter varios agendamentos.
     public List<Agendamento> Agendamentos { get; set; } = new();
 }

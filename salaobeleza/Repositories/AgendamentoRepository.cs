@@ -1,3 +1,4 @@
+
 using Microsoft.EntityFrameworkCore;
 using SalaoBeleza.Data;
 using SalaoBeleza.Models;
@@ -11,6 +12,19 @@ public class AgendamentoRepository : IAgendamentoRepository
     public AgendamentoRepository(AppDbContext context)
     {
         _context = context;
+    }
+
+    private IQueryable<Agendamento> ConsultaCompleta()
+    {
+        return _context.Agendamentos
+            .Include(a => a.Cliente)
+            .Include(a => a.Servico)
+            .Include(a => a.AgendamentoServicos)
+                .ThenInclude(ag => ag.Servico)
+            .Include(a => a.Combo)
+                .ThenInclude(c => c!.ComboServicos)
+                    .ThenInclude(cs => cs.Servico)
+            .Include(a => a.Profissional);
     }
 
     public async Task<List<Agendamento>> ListarTodos()
@@ -37,14 +51,10 @@ public class AgendamentoRepository : IAgendamentoRepository
         int profissionalId,
         DateTime data)
     {
-        var inicio = data.Date;
-        var fim = inicio.AddDays(1);
-
         return await ConsultaCompleta()
             .Where(a =>
                 a.ProfissionalId == profissionalId &&
-                a.DataHora >= inicio &&
-                a.DataHora < fim &&
+                a.DataHora.Date == data.Date &&
                 a.Status != "Cancelado")
             .OrderBy(a => a.DataHora)
             .ToListAsync();
@@ -59,8 +69,7 @@ public class AgendamentoRepository : IAgendamentoRepository
             .Where(a =>
                 a.ProfissionalId == profissionalId &&
                 a.DataHora >= inicio &&
-                a.DataHora < fim &&
-                a.Status != "Cancelado")
+                a.DataHora < fim)
             .OrderBy(a => a.DataHora)
             .ToListAsync();
     }
@@ -94,16 +103,5 @@ public class AgendamentoRepository : IAgendamentoRepository
         _context.Agendamentos.Remove(agendamento);
 
         await _context.SaveChangesAsync();
-    }
-
-    private IQueryable<Agendamento> ConsultaCompleta()
-    {
-        return _context.Agendamentos
-            .Include(a => a.Cliente)
-            .Include(a => a.Servico)
-            .Include(a => a.Combo)
-                .ThenInclude(c => c.ComboServicos)
-                    .ThenInclude(cs => cs.Servico)
-            .Include(a => a.Profissional);
     }
 }

@@ -10,8 +10,12 @@ public class Agendamento
     public int ClienteId { get; set; }
     public Cliente? Cliente { get; set; }
 
+    // Compatibilidade com agendamentos antigos de um serviço.
     public int? ServicoId { get; set; }
     public Servico? Servico { get; set; }
+
+    // Serviços individuais do novo agendamento.
+    public List<AgendamentoServico> AgendamentoServicos { get; set; } = new();
 
     public int? ComboId { get; set; }
     public Combo? Combo { get; set; }

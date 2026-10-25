@@ -1,0 +1,612 @@
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clientes - Belleza</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" href="../css/painel_administrador.css">
+    <link rel="stylesheet" href="../css/clientes.css">
+</head>
+<body>
+    <aside class="sidebar">
+        <div class="logo-area">
+            <img src="/imagens/logo_belleza.png" alt="Belleza Salão de Beleza" class="logo-belleza">
+        </div>
+        <div class="linha-logo"></div>
+        <nav class="menu">
+            <a href="Painel_administrador.html" class="menu-item"><i class="fa-solid fa-house"></i><span>Início</span></a>
+            <a href="agendamentos.html" class="menu-item"><i class="fa-regular fa-calendar"></i><span>Agendamentos</span></a>
+            <a href="clientes.html" class="menu-item ativo"><i class="fa-solid fa-circle-user"></i><span>Clientes</span></a>
+            <a href="servicos.html" class="menu-item"><i class="fa-solid fa-scissors"></i><span>Serviços</span></a>
+            <a href="profissionais.html" class="menu-item"><i class="fa-solid fa-users"></i><span>Profissionais</span></a>
+            <a href="financeiro.html" class="menu-item"><i class="fa-solid fa-wallet"></i><span>Financeiro</span></a>
+            <a href="estoque.html" class="menu-item"><i class="fa-solid fa-box"></i><span>Estoque e compras</span></a>
+            <a href="promocoes.html" class="menu-item"><i class="fa-solid fa-tags"></i><span>Promoções</span></a>
+            <a href="avaliacoes.html" class="menu-item"><i class="fa-regular fa-star"></i><span>Avaliações</span></a>
+            <a href="relatorios.html" class="menu-item"><i class="fa-solid fa-chart-column"></i><span>Relatórios</span></a>
+            <a href="configuracoes.html" class="menu-item"><i class="fa-solid fa-gear"></i><span>Configurações</span></a>
+            <a href="#" id="btnSair" class="menu-item sair"><i class="fa-solid fa-arrow-right-from-bracket"></i><span>Sair</span></a>
+        </nav>
+    </aside>
+
+    <main class="conteudo">
+        <header class="cabecalho">
+            <div>
+                <h1>Clientes cadastrados</h1>
+                <p>Gerencie os clientes e acompanhe o histórico de serviços do salão.</p>
+                <div class="data-atual">
+                    <i class="fa-regular fa-calendar"></i>
+                    <span id="dataAtual"></span>
+                </div>
+            </div>
+
+            <div class="acoes-cabecalho">
+                <button type="button" id="btnNovoCliente" class="btn-novo-cliente">
+                    <i class="fa-solid fa-user-plus"></i> Cadastrar cliente
+                </button>
+                <button type="button" id="btnAtualizar" class="btn-atualizar">
+                    <i class="fa-solid fa-rotate"></i> Atualizar
+                </button>
+            </div>
+        </header>
+
+        <div id="mensagem" class="mensagem" role="status" aria-live="polite" hidden></div>
+
+        <section class="indicadores">
+            <article class="indicador">
+                <h2>Total de clientes</h2>
+                <div class="indicador-valor"><i class="fa-solid fa-users"></i><strong id="totalClientes">0</strong></div>
+                <p>Clientes cadastrados no sistema</p>
+            </article>
+            <article class="indicador">
+                <h2>Valor acumulado</h2>
+                <div class="indicador-valor"><i class="fa-solid fa-wallet"></i><strong id="valorAcumulado" class="valor-financeiro">R$ 0,00</strong></div>
+                <p>Valores de agendamentos não cancelados</p>
+            </article>
+            <article class="indicador">
+                <h2>Serviços solicitados</h2>
+                <div class="indicador-valor"><i class="fa-solid fa-scissors"></i><strong id="totalServicos">0</strong></div>
+                <p>Quantidade total de serviços registrados</p>
+            </article>
+            <article class="indicador">
+                <h2>Clientes encontrados</h2>
+                <div class="indicador-valor"><i class="fa-solid fa-magnifying-glass"></i><strong id="clientesEncontrados">0</strong></div>
+                <p>Resultado da pesquisa atual</p>
+            </article>
+        </section>
+
+        <section class="cartao cartao-clientes">
+            <div class="titulo-lista">
+                <div>
+                    <h2>Lista de clientes</h2>
+                    <p class="subtitulo">Consulte os cadastros, valores e serviços.</p>
+                </div>
+                <span class="contador" id="contador">0 clientes</span>
+            </div>
+
+            <div class="barra-pesquisa">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="search" id="pesquisa" placeholder="Pesquisar por nome ou e-mail..." autocomplete="off">
+                <button type="button" id="limparPesquisa" title="Limpar pesquisa" aria-label="Limpar pesquisa">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <div id="carregando" class="estado-vazio">
+                <i class="fa-solid fa-spinner fa-spin"></i>
+                <p>Carregando clientes...</p>
+            </div>
+
+            <div class="tabela-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Cliente</th>
+                            <th>Cadastro</th>
+                            <th>Serviços</th>
+                            <th>Total gasto*</th>
+                            <th class="coluna-acoes">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="listaClientes"></tbody>
+                </table>
+            </div>
+
+            <div id="semResultados" class="estado-vazio" hidden>
+                <i class="fa-regular fa-face-frown"></i>
+                <p>Nenhum cliente encontrado.</p>
+                <span>Tente pesquisar por outro nome ou e-mail.</span>
+            </div>
+
+            <p class="observacao">
+                <i class="fa-solid fa-circle-info"></i>
+                * Valores estimados com base nos preços atuais dos agendamentos não cancelados.
+                Não representam necessariamente pagamentos recebidos.
+            </p>
+        </section>
+    </main>
+
+    <dialog id="modalNovoCliente" class="modal">
+        <form id="formNovoCliente">
+            <div class="modal-cabecalho">
+                <div class="icone-modal"><i class="fa-solid fa-user-plus"></i></div>
+                <div>
+                    <h2>Cadastrar cliente</h2>
+                    <p>Preencha os dados do novo cliente.</p>
+                </div>
+                <button type="button" id="fecharModalNovo" class="fechar-modal" aria-label="Fechar">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <label for="novoNome">Nome completo</label>
+            <input type="text" id="novoNome" maxlength="100" autocomplete="name" required>
+
+            <label for="novoEmail">E-mail</label>
+            <input type="email" id="novoEmail" maxlength="150" autocomplete="email" required>
+
+            <label for="novoTelefone">Telefone</label>
+            <input type="tel" id="novoTelefone" maxlength="20" autocomplete="tel" required>
+
+            <label for="novaSenha">Senha</label>
+            <input type="password" id="novaSenha" minlength="6" autocomplete="new-password" required>
+
+            <label for="confirmarNovaSenha">Confirmar senha</label>
+            <input type="password" id="confirmarNovaSenha" minlength="6" autocomplete="new-password" required>
+
+            <div id="erroNovoCliente" class="erro-modal" hidden></div>
+
+            <div class="acoes-modal">
+                <button type="button" id="btnCancelarNovo" class="btn-modal-cancelar">Cancelar</button>
+                <button type="submit" id="btnSalvarNovo" class="btn-modal-salvar">
+                    <i class="fa-solid fa-check"></i> Cadastrar cliente
+                </button>
+            </div>
+        </form>
+    </dialog>
+
+    <dialog id="modalEditar" class="modal">
+        <form id="formEditar">
+            <div class="modal-cabecalho">
+                <div class="icone-modal"><i class="fa-solid fa-user-pen"></i></div>
+                <div>
+                    <h2>Editar cliente</h2>
+                    <p>Atualize as informações cadastrais.</p>
+                </div>
+                <button type="button" id="fecharModal" class="fechar-modal" aria-label="Fechar">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <input type="hidden" id="clienteId">
+
+            <label for="nome">Nome completo</label>
+            <input type="text" id="nome" maxlength="100" required>
+
+            <label for="email">E-mail</label>
+            <input type="email" id="email" maxlength="150" required>
+
+            <label for="telefone">Telefone</label>
+            <input type="text" id="telefone" maxlength="20" required>
+
+            <div id="erroModal" class="erro-modal" hidden></div>
+
+            <div class="acoes-modal">
+                <button type="button" id="btnCancelar" class="btn-modal-cancelar">Cancelar</button>
+                <button type="submit" id="btnSalvar" class="btn-modal-salvar">
+                    <i class="fa-solid fa-check"></i> Salvar alterações
+                </button>
+            </div>
+        </form>
+    </dialog>
+
+    <dialog id="modalExcluir" class="modal modal-confirmacao">
+        <div class="confirmacao-conteudo">
+            <div class="icone-excluir"><i class="fa-solid fa-trash-can"></i></div>
+            <h2>Excluir cliente</h2>
+            <p id="textoExcluir">Deseja realmente excluir este cliente?</p>
+            <p class="aviso-exclusao">Essa ação não pode ser desfeita e também pode remover os agendamentos vinculados.</p>
+            <div class="acoes-modal">
+                <button type="button" id="btnCancelarExclusao" class="btn-modal-cancelar">Cancelar</button>
+                <button type="button" id="btnConfirmarExclusao" class="btn-modal-excluir">
+                    <i class="fa-solid fa-trash-can"></i> Excluir cliente
+                </button>
+            </div>
+        </div>
+    </dialog>
+
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+    <script>
+        const API = "/api";
+        const mensagem = document.getElementById("mensagem");
+        const listaClientes = document.getElementById("listaClientes");
+        const pesquisa = document.getElementById("pesquisa");
+        const carregando = document.getElementById("carregando");
+        const semResultados = document.getElementById("semResultados");
+        const modalEditar = document.getElementById("modalEditar");
+        const modalExcluir = document.getElementById("modalExcluir");
+        const modalNovoCliente = document.getElementById("modalNovoCliente");
+        const formEditar = document.getElementById("formEditar");
+        const formNovoCliente = document.getElementById("formNovoCliente");
+        const toast = document.getElementById("toast");
+
+        let clientes = [];
+        let clienteParaExcluir = null;
+        let timerToast = null;
+
+        function normalizar(texto) {
+            return String(texto || "").normalize("NFD")
+                .replace(/[\u0300-\u036f]/g, "").toLowerCase().trim();
+        }
+
+        function formatarMoeda(valor) {
+            return Number(valor || 0).toLocaleString("pt-BR", {
+                style: "currency", currency: "BRL"
+            });
+        }
+
+        function formatarData(valor) {
+            if (!valor) return "Não informado";
+            const data = new Date(valor);
+            if (Number.isNaN(data.getTime())) return "Não informado";
+            return data.toLocaleDateString("pt-BR");
+        }
+
+        function mostrarMensagem(texto, tipo = "erro") {
+            mensagem.textContent = texto;
+            mensagem.className = `mensagem ${tipo}`;
+            mensagem.hidden = false;
+        }
+
+        function ocultarMensagem() {
+            mensagem.hidden = true;
+            mensagem.textContent = "";
+        }
+
+        function mostrarToast(texto, tipo = "sucesso") {
+            clearTimeout(timerToast);
+            toast.textContent = texto;
+            toast.className = `toast visivel ${tipo}`;
+            timerToast = setTimeout(() => toast.classList.remove("visivel"), 3500);
+        }
+
+        async function requisicao(url, opcoes = {}) {
+            const resposta = await fetch(url, {
+                credentials: "include",
+                ...opcoes,
+                headers: {
+                    "Content-Type": "application/json",
+                    ...(opcoes.headers || {})
+                }
+            });
+
+            if (resposta.status === 401 || resposta.status === 403) {
+                window.location.replace("/html/login_cliente.html");
+                throw new Error("Sua sessão administrativa expirou.");
+            }
+
+            if (!resposta.ok) {
+                let texto = `Não foi possível concluir a operação (${resposta.status}).`;
+                try {
+                    const dados = await resposta.json();
+                    texto = dados.mensagem || dados.message || dados.title || texto;
+                } catch {}
+                throw new Error(texto);
+            }
+
+            if (resposta.status === 204) return null;
+            const tipo = resposta.headers.get("content-type") || "";
+            if (tipo.includes("application/json")) return resposta.json();
+            return null;
+        }
+
+        async function carregarClientes() {
+            const botao = document.getElementById("btnAtualizar");
+            botao.disabled = true;
+            botao.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Atualizando';
+            carregando.hidden = false;
+            semResultados.hidden = true;
+            listaClientes.replaceChildren();
+            ocultarMensagem();
+
+            try {
+                const verificacao = await requisicao(`${API}/Usuarios/verificar-admin`);
+                if (!verificacao || verificacao.autenticado !== true) {
+                    window.location.replace("/html/login_cliente.html");
+                    return;
+                }
+
+                const dados = await requisicao(`${API}/ClientesAdministracao`);
+                if (!Array.isArray(dados)) {
+                    throw new Error("A API não retornou uma lista válida de clientes.");
+                }
+
+                clientes = dados;
+                atualizarIndicadores();
+                renderizarClientes();
+            } catch (e) {
+                console.error("Erro ao carregar clientes:", e);
+                mostrarMensagem(e.message || "Não foi possível carregar os clientes.");
+            } finally {
+                carregando.hidden = true;
+                botao.disabled = false;
+                botao.innerHTML = '<i class="fa-solid fa-rotate"></i> Atualizar';
+            }
+        }
+
+        function atualizarIndicadores() {
+            const gastos = clientes.reduce((soma, c) => soma + Number(c.totalGasto || 0), 0);
+            const servicos = clientes.reduce((soma, c) => soma + Number(c.quantidadeServicos || 0), 0);
+            document.getElementById("totalClientes").textContent = clientes.length;
+            document.getElementById("valorAcumulado").textContent = formatarMoeda(gastos);
+            document.getElementById("totalServicos").textContent = servicos;
+        }
+
+        function criarCelula(texto, classe = "") {
+            const td = document.createElement("td");
+            td.textContent = texto;
+            if (classe) td.className = classe;
+            return td;
+        }
+
+        function renderizarClientes() {
+            const termo = normalizar(pesquisa.value);
+            const filtrados = clientes.filter(c =>
+                normalizar(c.nome).includes(termo) || normalizar(c.email).includes(termo)
+            );
+
+            document.getElementById("contador").textContent =
+                `${filtrados.length} ${filtrados.length === 1 ? "cliente" : "clientes"}`;
+            document.getElementById("clientesEncontrados").textContent = filtrados.length;
+            listaClientes.replaceChildren();
+            semResultados.hidden = filtrados.length !== 0;
+
+            filtrados.forEach(cliente => {
+                const linha = document.createElement("tr");
+                const celulaCliente = document.createElement("td");
+                const bloco = document.createElement("div");
+                bloco.className = "cliente-identificacao";
+
+                const avatar = document.createElement("div");
+                avatar.className = "avatar-cliente";
+                avatar.textContent = String(cliente.nome || "?").trim().charAt(0).toUpperCase();
+
+                const dados = document.createElement("div");
+                dados.className = "dados-cliente";
+                const nome = document.createElement("strong");
+                nome.textContent = cliente.nome || "Sem nome";
+                const email = document.createElement("span");
+                email.textContent = cliente.email || "Sem e-mail";
+
+                dados.append(nome, email);
+                bloco.append(avatar, dados);
+                celulaCliente.appendChild(bloco);
+
+                const cadastro = criarCelula(formatarData(cliente.dataCadastro));
+                const quantidade = criarCelula(String(cliente.quantidadeServicos ?? 0), "celula-quantidade");
+                const gasto = criarCelula(formatarMoeda(cliente.totalGasto), "celula-valor");
+                const acoes = document.createElement("td");
+                acoes.className = "celula-acoes";
+                const grupo = document.createElement("div");
+                grupo.className = "grupo-acoes";
+
+                const editar = document.createElement("button");
+                editar.type = "button";
+                editar.className = "acao-editar";
+                editar.title = "Editar cliente";
+                editar.innerHTML = '<i class="fa-solid fa-pen"></i>';
+                editar.addEventListener("click", () => abrirEdicao(cliente));
+
+                const excluir = document.createElement("button");
+                excluir.type = "button";
+                excluir.className = "acao-excluir";
+                excluir.title = "Excluir cliente";
+                excluir.innerHTML = '<i class="fa-solid fa-trash-can"></i>';
+                excluir.addEventListener("click", () => abrirExclusao(cliente));
+
+                grupo.append(editar, excluir);
+                acoes.appendChild(grupo);
+                linha.append(celulaCliente, cadastro, quantidade, gasto, acoes);
+                listaClientes.appendChild(linha);
+            });
+        }
+
+        document.getElementById("btnNovoCliente").addEventListener("click", () => {
+            formNovoCliente.reset();
+            document.getElementById("erroNovoCliente").hidden = true;
+            document.getElementById("erroNovoCliente").textContent = "";
+            modalNovoCliente.showModal();
+        });
+
+        function fecharNovoCliente() {
+            modalNovoCliente.close();
+            formNovoCliente.reset();
+            document.getElementById("erroNovoCliente").hidden = true;
+        }
+
+        document.getElementById("fecharModalNovo").addEventListener("click", fecharNovoCliente);
+        document.getElementById("btnCancelarNovo").addEventListener("click", fecharNovoCliente);
+
+        formNovoCliente.addEventListener("submit", async evento => {
+            evento.preventDefault();
+
+            const erro = document.getElementById("erroNovoCliente");
+            const botao = document.getElementById("btnSalvarNovo");
+            const nome = document.getElementById("novoNome").value.trim();
+            const email = document.getElementById("novoEmail").value.trim();
+            const telefone = document.getElementById("novoTelefone").value.trim();
+            const senha = document.getElementById("novaSenha").value;
+            const confirmarSenha = document.getElementById("confirmarNovaSenha").value;
+
+            erro.hidden = true;
+            erro.textContent = "";
+
+            if (!nome || !email || !telefone || !senha || !confirmarSenha) {
+                erro.textContent = "Preencha todos os campos.";
+                erro.hidden = false;
+                return;
+            }
+
+            if (senha.length < 6) {
+                erro.textContent = "A senha deve ter pelo menos 6 caracteres.";
+                erro.hidden = false;
+                return;
+            }
+
+            if (senha !== confirmarSenha) {
+                erro.textContent = "As senhas não coincidem.";
+                erro.hidden = false;
+                return;
+            }
+
+            botao.disabled = true;
+            botao.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Cadastrando';
+
+            try {
+                await requisicao(`${API}/Usuarios`, {
+                    method: "POST",
+                    body: JSON.stringify({ nome, email, telefone, senha })
+                });
+
+                fecharNovoCliente();
+                mostrarToast("Cliente cadastrado com sucesso.");
+                await carregarClientes();
+            } catch (e) {
+                erro.textContent = e.message || "Não foi possível cadastrar o cliente.";
+                erro.hidden = false;
+            } finally {
+                botao.disabled = false;
+                botao.innerHTML = '<i class="fa-solid fa-check"></i> Cadastrar cliente';
+            }
+        });
+
+        function abrirEdicao(cliente) {
+            document.getElementById("clienteId").value = cliente.id;
+            document.getElementById("nome").value = cliente.nome || "";
+            document.getElementById("email").value = cliente.email || "";
+            document.getElementById("telefone").value = cliente.telefone || "";
+            document.getElementById("erroModal").hidden = true;
+            document.getElementById("erroModal").textContent = "";
+            modalEditar.showModal();
+        }
+
+        function fecharEdicao() {
+            modalEditar.close();
+            formEditar.reset();
+        }
+
+        formEditar.addEventListener("submit", async evento => {
+            evento.preventDefault();
+            const botao = document.getElementById("btnSalvar");
+            const erroModal = document.getElementById("erroModal");
+            const id = document.getElementById("clienteId").value;
+            const dados = {
+                nome: document.getElementById("nome").value.trim(),
+                email: document.getElementById("email").value.trim(),
+                telefone: document.getElementById("telefone").value.trim()
+            };
+
+            erroModal.hidden = true;
+            if (!dados.nome || !dados.email || !dados.telefone) {
+                erroModal.textContent = "Preencha todos os campos.";
+                erroModal.hidden = false;
+                return;
+            }
+
+            botao.disabled = true;
+            botao.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Salvando';
+
+            try {
+                await requisicao(`${API}/ClientesAdministracao/${id}`, {
+                    method: "PUT",
+                    body: JSON.stringify(dados)
+                });
+                fecharEdicao();
+                mostrarToast("Cliente atualizado com sucesso.");
+                await carregarClientes();
+            } catch (e) {
+                erroModal.textContent = e.message;
+                erroModal.hidden = false;
+            } finally {
+                botao.disabled = false;
+                botao.innerHTML = '<i class="fa-solid fa-check"></i> Salvar alterações';
+            }
+        });
+
+        function abrirExclusao(cliente) {
+            clienteParaExcluir = cliente;
+            document.getElementById("textoExcluir").textContent =
+                `Deseja realmente excluir o cadastro de ${cliente.nome}?`;
+            modalExcluir.showModal();
+        }
+
+        async function confirmarExclusao() {
+            if (!clienteParaExcluir) return;
+
+            const botao = document.getElementById("btnConfirmarExclusao");
+            botao.disabled = true;
+            botao.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Excluindo';
+
+            try {
+                await requisicao(`${API}/ClientesAdministracao/${clienteParaExcluir.id}`, {
+                    method: "DELETE"
+                });
+                modalExcluir.close();
+                mostrarToast("Cliente excluído com sucesso.");
+                clienteParaExcluir = null;
+                await carregarClientes();
+            } catch (e) {
+                modalExcluir.close();
+                mostrarMensagem(e.message);
+            } finally {
+                botao.disabled = false;
+                botao.innerHTML = '<i class="fa-solid fa-trash-can"></i> Excluir cliente';
+            }
+        }
+
+        document.getElementById("btnAtualizar").addEventListener("click", carregarClientes);
+        document.getElementById("btnCancelar").addEventListener("click", fecharEdicao);
+        document.getElementById("fecharModal").addEventListener("click", fecharEdicao);
+
+        document.getElementById("btnCancelarExclusao").addEventListener("click", () => {
+            modalExcluir.close();
+            clienteParaExcluir = null;
+        });
+
+        document.getElementById("btnConfirmarExclusao").addEventListener("click", confirmarExclusao);
+        pesquisa.addEventListener("input", renderizarClientes);
+
+        document.getElementById("limparPesquisa").addEventListener("click", () => {
+            pesquisa.value = "";
+            renderizarClientes();
+            pesquisa.focus();
+        });
+
+        document.getElementById("btnSair").addEventListener("click", async evento => {
+            evento.preventDefault();
+            if (!confirm("Deseja realmente sair do painel administrativo?")) return;
+
+            try {
+                const resposta = await fetch(`${API}/Usuarios/logout`, {
+                    method: "POST",
+                    credentials: "include"
+                });
+                if (!resposta.ok) throw new Error("Não foi possível encerrar a sessão.");
+                window.location.replace("/html/login_cliente.html");
+            } catch (e) {
+                mostrarMensagem(e.message || "Não foi possível sair da conta.");
+            }
+        });
+
+        document.getElementById("dataAtual").textContent = new Date().toLocaleDateString("pt-BR", {
+            day: "numeric", month: "long", year: "numeric"
+        });
+
+        carregarClientes();
+    </script>
+</body>
+</html>
