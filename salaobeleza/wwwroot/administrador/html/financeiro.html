@@ -1,0 +1,674 @@
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Financeiro - Belleza</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" href="../css/financeiro.css">
+</head>
+<body>
+    <aside class="sidebar">
+        <div class="logo-area">
+            <img src="../../imagens/logo_belleza.png" alt="Belleza" class="logo-belleza">
+        </div>
+        <div class="linha-logo"></div>
+        <nav class="menu">
+            <a href="Painel_administrador.html" class="menu-item"><i class="fa-solid fa-house"></i><span>Início</span></a>
+            <a href="agendamentos.html" class="menu-item"><i class="fa-regular fa-calendar"></i><span>Agendamentos</span></a>
+            <a href="clientes.html" class="menu-item"><i class="fa-solid fa-circle-user"></i><span>Clientes</span></a>
+            <a href="servicos.html" class="menu-item"><i class="fa-solid fa-scissors"></i><span>Serviços e combos</span></a>
+            <a href="profissionais.html" class="menu-item"><i class="fa-solid fa-users"></i><span>Profissionais</span></a>
+            <a href="financeiro.html" class="menu-item ativo"><i class="fa-solid fa-wallet"></i><span>Financeiro</span></a>
+            <a href="#" class="menu-item indisponivel" title="Página ainda não implementada"><i class="fa-solid fa-box"></i><span>Estoque e compras</span></a>
+            <a href="#" class="menu-item indisponivel" title="Página ainda não implementada"><i class="fa-solid fa-tags"></i><span>Promoções</span></a>
+            <a href="#" class="menu-item indisponivel" title="Página ainda não implementada"><i class="fa-regular fa-star"></i><span>Avaliações</span></a>
+            <a href="#" class="menu-item indisponivel" title="Página ainda não implementada"><i class="fa-solid fa-chart-column"></i><span>Relatórios</span></a>
+            <a href="#" class="menu-item indisponivel" title="Página ainda não implementada"><i class="fa-solid fa-gear"></i><span>Configurações</span></a>
+            <a href="#" id="btnSair" class="menu-item sair"><i class="fa-solid fa-arrow-right-from-bracket"></i><span>Sair</span></a>
+        </nav>
+    </aside>
+
+    <main class="conteudo">
+        <header class="top-bar">
+            <div class="titulo-pagina">
+                <i class="fa-solid fa-wallet icone-titulo"></i>
+                <div>
+                    <h1>Financeiro</h1>
+                    <p>Controle de receitas, despesas e movimentações do salão.</p>
+                </div>
+            </div>
+            <span class="status-atualizacao" id="statusAtualizacao">
+                <i class="fa-solid fa-circle-check"></i> Conectando...
+            </span>
+        </header>
+
+        <div id="mensagem" class="mensagem" role="status" aria-live="polite" hidden></div>
+
+        <section class="filtros-bar">
+            <label class="select-box">
+                <i class="fa-regular fa-calendar"></i>
+                <span class="sr-only">Data inicial</span>
+                <input type="date" id="dataInicio" aria-label="Data inicial">
+                <span>até</span>
+                <input type="date" id="dataFim" aria-label="Data final">
+            </label>
+            <label class="select-box">
+                <i class="fa-solid fa-filter"></i>
+                <span class="sr-only">Filtrar tipo</span>
+                <select id="filtroTipo">
+                    <option value="">Todos os tipos</option>
+                    <option value="receita">Receitas</option>
+                    <option value="despesa">Despesas</option>
+                </select>
+            </label>
+            <button type="button" id="btnFiltrar" class="btn-principal">
+                <i class="fa-solid fa-magnifying-glass"></i> Filtrar
+            </button>
+            <button type="button" id="btnNovaDespesa" class="btn-secundario">
+                <i class="fa-solid fa-plus"></i> Nova despesa
+            </button>
+        </section>
+
+        <section class="grid-metricas">
+            <article class="card-metrica receitas">
+                <div class="icone-card"><i class="fa-solid fa-arrow-trend-up"></i></div>
+                <div class="info-card">
+                    <span>Receitas</span>
+                    <h3 id="totalReceitas">R$ 0,00</h3>
+                    <small>Atendimentos concluídos</small>
+                </div>
+            </article>
+            <article class="card-metrica despesas">
+                <div class="icone-card"><i class="fa-solid fa-arrow-trend-down"></i></div>
+                <div class="info-card">
+                    <span>Despesas</span>
+                    <h3 id="totalDespesas">R$ 0,00</h3>
+                    <small>Despesas cadastradas</small>
+                </div>
+            </article>
+            <article class="card-metrica saldo">
+                <div class="icone-card"><i class="fa-solid fa-wallet"></i></div>
+                <div class="info-card">
+                    <span>Saldo do período</span>
+                    <h3 id="saldoAtual">R$ 0,00</h3>
+                    <small>Receitas menos despesas</small>
+                </div>
+            </article>
+            <article class="card-metrica faturamento">
+                <div class="icone-card"><i class="fa-solid fa-receipt"></i></div>
+                <div class="info-card">
+                    <span>Faturamento</span>
+                    <h3 id="faturamentoMes">R$ 0,00</h3>
+                    <small><span id="quantidadeAtendimentos">0</span> atendimentos concluídos</small>
+                </div>
+            </article>
+        </section>
+
+        <section class="grid-painel">
+            <div class="coluna-principal">
+                <article class="card-grafico">
+                    <div class="cabecalho-card">
+                        <div>
+                            <h3>Movimentação financeira</h3>
+                            <p>Receitas e despesas por dia no período selecionado.</p>
+                        </div>
+                    </div>
+                    <div class="area-grafico area-linha">
+                        <canvas id="graficoMovimentacao" aria-label="Gráfico de receitas e despesas"></canvas>
+                    </div>
+                    <div class="legenda-grafico">
+                        <span><i class="ponto receita"></i> Receitas</span>
+                        <span><i class="ponto despesa"></i> Despesas</span>
+                    </div>
+                </article>
+
+                <article class="tabela-container">
+                    <div class="cabecalho-card">
+                        <div>
+                            <h3>Movimentações financeiras</h3>
+                            <p id="textoMovimentacoes">Carregando movimentações...</p>
+                        </div>
+                        <button type="button" id="btnAtualizar" class="btn-icone" title="Atualizar agora">
+                            <i class="fa-solid fa-rotate"></i>
+                        </button>
+                    </div>
+                    <div class="tabela-scroll">
+                        <table class="tabela-financeiro">
+                            <thead>
+                                <tr>
+                                    <th>Data</th>
+                                    <th>Descrição</th>
+                                    <th>Categoria</th>
+                                    <th>Tipo</th>
+                                    <th>Valor</th>
+                                </tr>
+                            </thead>
+                            <tbody id="listaMovimentacoes">
+                                <tr><td colspan="5" class="estado-tabela">Carregando dados...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </article>
+            </div>
+
+            <div class="coluna-lateral">
+                <article class="card-grafico">
+                    <h3>Despesas por categoria</h3>
+                    <div class="area-grafico area-rosca">
+                        <canvas id="graficoDespesas" aria-label="Gráfico de despesas por categoria"></canvas>
+                    </div>
+                    <div id="legendaDespesas" class="legenda-categorias"></div>
+                </article>
+
+                <article class="card-resumo">
+                    <h3><i class="fa-solid fa-chart-pie"></i> Resumo do período</h3>
+                    <div class="item-resumo">
+                        <span><i class="fa-solid fa-arrow-up" style="color:#39734c"></i> Receitas</span>
+                        <strong id="resumoReceitas">R$ 0,00</strong>
+                    </div>
+                    <div class="item-resumo">
+                        <span><i class="fa-solid fa-arrow-down" style="color:#a43f5d"></i> Despesas</span>
+                        <strong id="resumoDespesas">R$ 0,00</strong>
+                    </div>
+                    <div class="caixa-saldo">
+                        <span>Saldo</span>
+                        <strong id="resumoSaldo">R$ 0,00</strong>
+                    </div>
+                    <p class="nota-resumo">Os valores consideram o período selecionado e os atendimentos registrados como concluídos.</p>
+                </article>
+
+                <article class="card-resumo">
+                    <h3><i class="fa-solid fa-circle-info"></i> Como funciona</h3>
+                    <p class="nota-resumo">
+                        As receitas são calculadas a partir dos preços atuais dos serviços e combos marcados como Atendido. As despesas são os lançamentos registrados neste financeiro.
+                    </p>
+                </article>
+            </div>
+        </section>
+    </main>
+
+    <div id="modalDespesa" class="modal-overlay" hidden>
+        <section class="modal-conteudo" role="dialog" aria-modal="true" aria-labelledby="tituloModalDespesa">
+            <div class="modal-cabecalho">
+                <div>
+                    <h2 id="tituloModalDespesa">Cadastrar despesa</h2>
+                    <p>Registre uma saída financeira do salão.</p>
+                </div>
+                <button type="button" id="btnFecharModal" class="btn-fechar" aria-label="Fechar">&times;</button>
+            </div>
+            <form id="formDespesa">
+                <label for="despesaDescricao">Descrição</label>
+                <input id="despesaDescricao" name="descricao" type="text" maxlength="200" placeholder="Ex.: Compra de shampoo" required>
+
+                <label for="despesaCategoria">Categoria</label>
+                <select id="despesaCategoria" name="categoria" required>
+                    <option value="Produtos">Produtos</option>
+                    <option value="Compras">Compras</option>
+                    <option value="Contas">Contas</option>
+                    <option value="Salários">Salários</option>
+                    <option value="Manutenção">Manutenção</option>
+                    <option value="Impostos">Impostos</option>
+                    <option value="Outros">Outros</option>
+                </select>
+
+                <label for="despesaValor">Valor (R$)</label>
+                <input id="despesaValor" name="valor" type="number" min="0.01" step="0.01" placeholder="0,00" required>
+
+                <label for="despesaData">Data da despesa</label>
+                <input id="despesaData" name="data" type="date" required>
+
+                <div class="modal-acoes">
+                    <button type="button" id="btnCancelarDespesa" class="btn-cancelar">Cancelar</button>
+                    <button type="submit" id="btnSalvarDespesa" class="btn-principal">Salvar despesa</button>
+                </div>
+            </form>
+        </section>
+    </div>
+
+    <script>
+        const API_FINANCEIRO = `${window.location.origin}/api/Financeiro`;
+        const $ = id => document.getElementById(id);
+
+        const dinheiro = valor => Number(valor || 0).toLocaleString("pt-BR", {
+            style: "currency",
+            currency: "BRL"
+        });
+
+        const dataLocal = data => {
+            const ano = data.getFullYear();
+            const mes = String(data.getMonth() + 1).padStart(2, "0");
+            const dia = String(data.getDate()).padStart(2, "0");
+            return `${ano}-${mes}-${dia}`;
+        };
+
+        const dataExibicao = valor => {
+            if (!valor) return "-";
+            const [ano, mes, dia] = valor.substring(0, 10).split("-");
+            return `${dia}/${mes}/${ano}`;
+        };
+
+        let carregando = false;
+        let ultimoResumo = null;
+        let timerAtualizacao = null;
+
+        function mostrarMensagem(texto, tipo = "sucesso") {
+            const elemento = $("mensagem");
+            elemento.textContent = texto;
+            elemento.className = `mensagem ${tipo}`;
+            elemento.hidden = false;
+
+            if (elemento._timer) clearTimeout(elemento._timer);
+            elemento._timer = setTimeout(() => elemento.hidden = true, 5000);
+        }
+
+        function atualizarStatus(texto, erro = false) {
+            $("statusAtualizacao").innerHTML = erro
+                ? `<i class="fa-solid fa-circle-exclamation"></i> ${texto}`
+                : `<i class="fa-solid fa-circle-check"></i> ${texto}`;
+            $("statusAtualizacao").classList.toggle("erro", erro);
+        }
+
+        async function requisicao(url, opcoes = {}) {
+            const resposta = await fetch(url, {
+                credentials: "include",
+                ...opcoes,
+                headers: {
+                    ...(opcoes.body ? { "Content-Type": "application/json" } : {}),
+                    ...(opcoes.headers || {})
+                }
+            });
+
+            if (resposta.status === 401 || resposta.status === 403) {
+                window.location.href = "/html/login_cliente.html";
+                throw new Error("Sessão expirada. Entre novamente.");
+            }
+
+            const texto = await resposta.text();
+            let dados = {};
+
+            try {
+                dados = texto ? JSON.parse(texto) : {};
+            } catch {
+                throw new Error(`A API retornou uma resposta inválida (HTTP ${resposta.status}).`);
+            }
+
+            if (!resposta.ok) {
+                throw new Error(dados.mensagem || dados.title || `Erro HTTP ${resposta.status}.`);
+            }
+
+            return dados;
+        }
+
+        function obterFiltros() {
+            const inicio = $("dataInicio").value;
+            const fim = $("dataFim").value;
+
+            if (!inicio || !fim) throw new Error("Selecione as duas datas.");
+            if (inicio > fim) throw new Error("A data inicial deve ser anterior à data final.");
+
+            return { inicio, fim, tipo: $("filtroTipo").value };
+        }
+
+        async function carregarFinanceiro(silencioso = false) {
+            if (carregando) return;
+            carregando = true;
+            $("btnAtualizar").disabled = true;
+
+            try {
+                const filtros = obterFiltros();
+                const parametros = new URLSearchParams({
+                    inicio: filtros.inicio,
+                    fim: filtros.fim
+                });
+
+                const dados = await requisicao(`${API_FINANCEIRO}?${parametros}`);
+
+                ultimoResumo = dados;
+                renderizarIndicadores(dados);
+                renderizarMovimentacoes(dados.movimentacoes || []);
+                desenharGraficoLinha(dados.grafico || []);
+                desenharGraficoDespesas(dados.despesasPorCategoria || []);
+                atualizarStatus(`Atualizado às ${new Date().toLocaleTimeString("pt-BR")}`);
+
+                if (!silencioso) {
+                    $("textoMovimentacoes").textContent =
+                        `${(dados.movimentacoes || []).length} movimentação(ões) no período`;
+                }
+
+                aplicarFiltroVisual();
+            } catch (erro) {
+                atualizarStatus("Falha na atualização", true);
+                if (!silencioso) mostrarMensagem(erro.message, "erro");
+            } finally {
+                carregando = false;
+                $("btnAtualizar").disabled = false;
+            }
+        }
+
+        function renderizarIndicadores(dados) {
+            $("totalReceitas").textContent = dinheiro(dados.receitas);
+            $("totalDespesas").textContent = dinheiro(dados.despesas);
+            $("saldoAtual").textContent = dinheiro(dados.saldo);
+            $("faturamentoMes").textContent = dinheiro(dados.faturamento);
+            $("quantidadeAtendimentos").textContent = dados.quantidadeAtendimentos || 0;
+            $("resumoReceitas").textContent = dinheiro(dados.receitas);
+            $("resumoDespesas").textContent = dinheiro(dados.despesas);
+            $("resumoSaldo").textContent = dinheiro(dados.saldo);
+
+            $("saldoAtual").classList.toggle("valor-negativo", Number(dados.saldo) < 0);
+            $("resumoSaldo").classList.toggle("valor-negativo", Number(dados.saldo) < 0);
+        }
+
+        function renderizarMovimentacoes(movimentacoes) {
+            const corpo = $("listaMovimentacoes");
+            corpo.replaceChildren();
+
+            if (!movimentacoes.length) {
+                const linha = document.createElement("tr");
+                const celula = document.createElement("td");
+                celula.colSpan = 5;
+                celula.className = "estado-tabela";
+                celula.textContent = "Nenhuma movimentação encontrada neste período.";
+                linha.appendChild(celula);
+                corpo.appendChild(linha);
+                return;
+            }
+
+            movimentacoes.forEach(m => {
+                const linha = document.createElement("tr");
+                const valores = [
+                    dataExibicao(m.data),
+                    m.descricao,
+                    m.categoria,
+                    m.tipo === "receita" ? "Receita" : "Despesa"
+                ];
+
+                valores.forEach((valor, indice) => {
+                    const celula = document.createElement("td");
+
+                    if (indice === 2) {
+                        const badge = document.createElement("span");
+                        badge.className = "badge " + (
+                            m.tipo === "receita" ? "badge-servicos" :
+                            m.categoria.toLowerCase().includes("conta") ? "badge-contas" :
+                            "badge-produtos"
+                        );
+                        badge.textContent = valor;
+                        celula.appendChild(badge);
+                    } else if (indice === 3) {
+                        const badge = document.createElement("span");
+                        badge.className = `badge-tipo ${m.tipo}`;
+                        badge.textContent = valor;
+                        celula.appendChild(badge);
+                    } else {
+                        celula.textContent = valor ?? "";
+                    }
+
+                    linha.appendChild(celula);
+                });
+
+                const valorCelula = document.createElement("td");
+                valorCelula.className = m.tipo === "receita" ? "valor-receita" : "valor-despesa";
+                valorCelula.textContent = `${m.tipo === "despesa" ? "- " : "+ "}${dinheiro(m.valor)}`;
+                linha.appendChild(valorCelula);
+                corpo.appendChild(linha);
+            });
+        }
+
+        function aplicarFiltroVisual() {
+            if (!ultimoResumo) return;
+            const tipo = $("filtroTipo").value;
+            let itens = ultimoResumo.movimentacoes || [];
+
+            if (tipo) itens = itens.filter(m => m.tipo === tipo);
+
+            renderizarMovimentacoes(itens);
+            $("textoMovimentacoes").textContent = `${itens.length} movimentação(ões) encontrada(s)`;
+        }
+
+        function desenharGraficoLinha(dados) {
+            const canvas = $("graficoMovimentacao");
+            const ctx = canvas.getContext("2d");
+            const largura = Math.max(canvas.parentElement.clientWidth - 30, 280);
+            const altura = 220;
+            const escala = window.devicePixelRatio || 1;
+
+            canvas.width = largura * escala;
+            canvas.height = altura * escala;
+            canvas.style.width = `${largura}px`;
+            canvas.style.height = `${altura}px`;
+            ctx.scale(escala, escala);
+            ctx.clearRect(0, 0, largura, altura);
+
+            const margem = { topo: 18, direita: 12, baixo: 35, esquerda: 58 };
+            const w = largura - margem.esquerda - margem.direita;
+            const h = altura - margem.topo - margem.baixo;
+            const maximo = Math.max(1, ...dados.flatMap(d => [Number(d.receitas), Number(d.despesas)]));
+            const passos = 4;
+
+            ctx.font = "10px Arial";
+            ctx.textAlign = "right";
+            ctx.textBaseline = "middle";
+
+            for (let i = 0; i <= passos; i++) {
+                const y = margem.topo + h - h * i / passos;
+                const valor = maximo * i / passos;
+
+                ctx.strokeStyle = "#eadbd7";
+                ctx.beginPath();
+                ctx.moveTo(margem.esquerda, y);
+                ctx.lineTo(largura - margem.direita, y);
+                ctx.stroke();
+
+                ctx.fillStyle = "#92777e";
+                ctx.fillText(valor.toLocaleString("pt-BR", {
+                    notation: "compact",
+                    maximumFractionDigits: 1
+                }), margem.esquerda - 7, y);
+            }
+
+            if (!dados.length) {
+                ctx.fillStyle = "#92777e";
+                ctx.textAlign = "center";
+                ctx.fillText("Sem dados para o período", largura / 2, altura / 2);
+                return;
+            }
+
+            const series = [
+                { chave: "receitas", cor: "#39734c" },
+                { chave: "despesas", cor: "#a43f5d" }
+            ];
+
+            series.forEach(serie => {
+                ctx.strokeStyle = serie.cor;
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+
+                dados.forEach((d, i) => {
+                    const x = margem.esquerda + (dados.length === 1 ? w / 2 : w * i / (dados.length - 1));
+                    const y = margem.topo + h - h * Number(d[serie.chave]) / maximo;
+                    if (i === 0) ctx.moveTo(x, y);
+                    else ctx.lineTo(x, y);
+                });
+
+                ctx.stroke();
+            });
+
+            const intervalo = Math.max(1, Math.ceil(dados.length / 6));
+            ctx.fillStyle = "#92777e";
+            ctx.textAlign = "center";
+
+            dados.forEach((d, i) => {
+                if (i % intervalo !== 0 && i !== dados.length - 1) return;
+                const x = margem.esquerda + (dados.length === 1 ? w / 2 : w * i / (dados.length - 1));
+                ctx.fillText(dataExibicao(d.data).substring(0, 5), x, altura - 13);
+            });
+        }
+
+        function desenharGraficoDespesas(categorias) {
+            const canvas = $("graficoDespesas");
+            const ctx = canvas.getContext("2d");
+            const tamanho = 230;
+            const escala = window.devicePixelRatio || 1;
+
+            canvas.width = tamanho * escala;
+            canvas.height = tamanho * escala;
+            canvas.style.width = `${tamanho}px`;
+            canvas.style.height = `${tamanho}px`;
+            ctx.scale(escala, escala);
+            ctx.clearRect(0, 0, tamanho, tamanho);
+
+            const total = categorias.reduce((s, c) => s + Number(c.valor), 0);
+            const cores = ["#8f3d5e", "#39734c", "#c18b61", "#a43f5d", "#8e83a8", "#d2ad65", "#92777e"];
+            const cx = tamanho / 2;
+            const cy = tamanho / 2;
+            const raio = 82;
+
+            if (total <= 0) {
+                ctx.beginPath();
+                ctx.arc(cx, cy, raio, 0, Math.PI * 2);
+                ctx.strokeStyle = "#eadbd7";
+                ctx.lineWidth = 25;
+                ctx.stroke();
+                ctx.fillStyle = "#92777e";
+                ctx.font = "12px Arial";
+                ctx.textAlign = "center";
+                ctx.fillText("Sem despesas", cx, cy + 4);
+            } else {
+                let angulo = -Math.PI / 2;
+
+                categorias.forEach((categoria, i) => {
+                    const fatia = Number(categoria.valor) / total * Math.PI * 2;
+                    ctx.beginPath();
+                    ctx.moveTo(cx, cy);
+                    ctx.arc(cx, cy, raio, angulo, angulo + fatia);
+                    ctx.closePath();
+                    ctx.fillStyle = cores[i % cores.length];
+                    ctx.fill();
+                    angulo += fatia;
+                });
+
+                ctx.beginPath();
+                ctx.arc(cx, cy, 52, 0, Math.PI * 2);
+                ctx.fillStyle = "#fffafa";
+                ctx.fill();
+
+                ctx.fillStyle = "#713049";
+                ctx.font = "bold 12px Arial";
+                ctx.textAlign = "center";
+                ctx.fillText(dinheiro(total), cx, cy + 4);
+            }
+
+            const legenda = $("legendaDespesas");
+            legenda.replaceChildren();
+
+            categorias.forEach((categoria, i) => {
+                const linha = document.createElement("div");
+                linha.className = "item-legenda";
+
+                const nome = document.createElement("span");
+                const ponto = document.createElement("i");
+                ponto.className = "ponto";
+                ponto.style.backgroundColor = cores[i % cores.length];
+                nome.append(ponto, document.createTextNode(categoria.categoria));
+
+                const valor = document.createElement("strong");
+                valor.textContent = dinheiro(categoria.valor);
+
+                linha.append(nome, valor);
+                legenda.appendChild(linha);
+            });
+        }
+
+        function abrirModal() {
+            $("formDespesa").reset();
+            $("despesaData").value = dataLocal(new Date());
+            $("modalDespesa").hidden = false;
+            $("despesaDescricao").focus();
+        }
+
+        function fecharModal() {
+            $("modalDespesa").hidden = true;
+        }
+
+        $("btnFiltrar").addEventListener("click", () => carregarFinanceiro());
+        $("btnAtualizar").addEventListener("click", () => carregarFinanceiro());
+        $("filtroTipo").addEventListener("change", aplicarFiltroVisual);
+        $("btnNovaDespesa").addEventListener("click", abrirModal);
+        $("btnFecharModal").addEventListener("click", fecharModal);
+        $("btnCancelarDespesa").addEventListener("click", fecharModal);
+
+        $("modalDespesa").addEventListener("click", evento => {
+            if (evento.target === $("modalDespesa")) fecharModal();
+        });
+
+        $("formDespesa").addEventListener("submit", async evento => {
+            evento.preventDefault();
+
+            const botao = $("btnSalvarDespesa");
+            botao.disabled = true;
+
+            try {
+                const dados = {
+                    descricao: $("despesaDescricao").value.trim(),
+                    categoria: $("despesaCategoria").value,
+                    valor: Number($("despesaValor").value),
+                    data: `${$("despesaData").value}T12:00:00`
+                };
+
+                await requisicao(`${API_FINANCEIRO}/despesas`, {
+                    method: "POST",
+                    body: JSON.stringify(dados)
+                });
+
+                fecharModal();
+                const dataDespesa = $("despesaData").value;
+
+                if (dataDespesa < $("dataInicio").value || dataDespesa > $("dataFim").value) {
+                    $("dataInicio").value = dataDespesa;
+                    $("dataFim").value = dataDespesa;
+                }
+
+                await carregarFinanceiro();
+                mostrarMensagem("Despesa cadastrada com sucesso.");
+            } catch (erro) {
+                mostrarMensagem(erro.message, "erro");
+            } finally {
+                botao.disabled = false;
+            }
+        });
+
+        $("btnSair").addEventListener("click", async evento => {
+            evento.preventDefault();
+
+            try {
+                await requisicao(`${window.location.origin}/api/Usuarios/logout`, {
+                    method: "POST"
+                });
+            } catch (erro) {
+                console.error("Erro ao encerrar sessão:", erro);
+            }
+
+            window.location.href = "/html/login_cliente.html";
+        });
+
+        window.addEventListener("resize", () => {
+            if (!ultimoResumo) return;
+            desenharGraficoLinha(ultimoResumo.grafico || []);
+            desenharGraficoDespesas(ultimoResumo.despesasPorCategoria || []);
+        });
+
+        const hoje = new Date();
+        const primeiroDia = new Date(hoje.getFullYear(), hoje.getMonth(), 1);
+
+        $("dataInicio").value = dataLocal(primeiroDia);
+        $("dataFim").value = dataLocal(hoje);
+        $("despesaData").value = dataLocal(hoje);
+
+        carregarFinanceiro();
+        timerAtualizacao = setInterval(() => carregarFinanceiro(true), 15000);
+    </script>
+</body>
+</html>
