@@ -299,7 +299,7 @@
 
     <script>
 
-        const API_URL = "http://localhost:5000/api";
+        const API_URL = "/api";
 
         let comboSelecionado = null;
 
@@ -734,7 +734,7 @@ document.getElementById("btnSair").addEventListener("click", async function (eve
     event.preventDefault();
 
     try {
-        const resposta = await fetch("http://localhost:5000/api/Usuarios/logout", {
+        const resposta = await fetch("/api/Usuarios/logout", {
             method: "POST",
             credentials: "include"
         });

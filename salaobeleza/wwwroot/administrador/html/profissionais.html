@@ -320,7 +320,7 @@
     <script>
 
         
-const API_BASE = "http://localhost:5000/api";
+const API_BASE = "/api";
 const API_PROFISSIONAIS = `${API_BASE}/Profissionais`;
 const API_SERVICOS = `${API_PROFISSIONAIS}/servicos-disponiveis`;
 
@@ -437,7 +437,7 @@ async function requisicao(url, opcoes = {}) {
         resposta = await fetch(url, opcoes);
     } catch {
         throw new Error(
-            "Não foi possível conectar à API. Verifique se o projeto está executando em http://localhost:5000."
+            "Não foi possível conectar à API. Verifique sua conexão e tente novamente."
         );
     }
 
@@ -918,10 +918,10 @@ function obterFoto(profissional) {
     }
 
     if (valor.startsWith("/")) {
-        return `http://localhost:5000${valor}`;
+        return valor;
     }
 
-    return `http://localhost:5000/imagens/profissionais/${valor}`;
+    return `/imagens/profissionais/${valor}`;
 }
 
 function mostrarMensagem(texto, tipo = "success") {

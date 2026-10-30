@@ -64,7 +64,7 @@
             }
 
             try {
-                const resposta = await fetch("http://localhost:5000/api/Usuarios/login", {
+                const resposta = await fetch("/api/Usuarios/login", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json"

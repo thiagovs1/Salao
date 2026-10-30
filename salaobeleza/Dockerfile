@@ -17,4 +17,3 @@ ENV ASPNETCORE_HTTP_PORTS=10000
 EXPOSE 10000
 
 ENTRYPOINT ["dotnet", "SalaoBeleza.dll"]
-'@ | Set-Content -Path Dockerfile -Encoding utf8
