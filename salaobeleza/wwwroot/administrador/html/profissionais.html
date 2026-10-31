@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -7,319 +6,505 @@
     <title>Profissionais - Belleza</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <link rel="stylesheet" href="../css/profissionais.css">
+
+    <style>
+        .schedule-options {
+            display: grid;
+            gap: 12px;
+        }
+
+        .schedule-day {
+            padding: 14px;
+            border: 1px solid #eadde2;
+            border-radius: 10px;
+            background: #fff;
+        }
+
+        .schedule-day-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+        }
+
+        .schedule-periods {
+            margin-top: 14px;
+            display: grid;
+            gap: 12px;
+        }
+
+        .schedule-period {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            padding-left: 26px;
+        }
+
+        .schedule-period span {
+            font-size: 13px;
+            color: #713049;
+        }
+
+        .schedule-period input {
+            padding: 9px;
+            border: 1px solid #ddd;
+            border-radius: 7px;
+            font: inherit;
+        }
+
+        .schedule-period input:focus {
+            outline: 2px solid #8f3d5e;
+            outline-offset: 1px;
+        }
+
+        .schedule-periods[hidden] {
+            display: none !important;
+        }
+    </style>
 </head>
 <body>
-    <div class="layout">
-        <aside class="sidebar" id="sidebar">
-    <div class="logo-area">
-        <img src="/imagens/logo_belleza.png"
-             alt="Belleza Salão de Beleza"
-             class="logo-belleza">
-    </div>
 
-    <div class="linha-logo"></div>
+<div class="layout">
 
-    <nav class="menu">
-        <a href="Painel_administrador.html" class="menu-item">
-            <i class="fa-solid fa-house"></i>
-            <span>Início</span>
-        </a>
+    <aside class="sidebar" id="sidebar">
+        <div class="logo-area">
+            <img src="/imagens/logo_belleza.png"
+                alt="Belleza Salão de Beleza"
+                class="logo-belleza">
+        </div>
 
-        <a href="agendamentos.html" class="menu-item">
-            <i class="fa-regular fa-calendar"></i>
-            <span>Agendamentos</span>
-        </a>
+        <div class="linha-logo"></div>
 
-        <a href="clientes.html" class="menu-item">
-            <i class="fa-solid fa-circle-user"></i>
-            <span>Clientes</span>
-        </a>
+        <nav class="menu">
+            <a href="Painel_administrador.html" class="menu-item">
+                <i class="fa-solid fa-house"></i>
+                <span>Início</span>
+            </a>
 
-        <a href="servicos.html" class="menu-item">
-            <i class="fa-solid fa-scissors"></i>
-            <span>Serviços</span>
-        </a>
+            <a href="agendamentos.html" class="menu-item">
+                <i class="fa-regular fa-calendar"></i>
+                <span>Agendamentos</span>
+            </a>
 
-        <a href="profissionais.html" class="menu-item ativo">
-            <i class="fa-solid fa-users"></i>
-            <span>Profissionais</span>
-        </a>
+            <a href="clientes.html" class="menu-item">
+                <i class="fa-solid fa-circle-user"></i>
+                <span>Clientes</span>
+            </a>
 
-        <a href="financeiro.html" class="menu-item">
-            <i class="fa-solid fa-wallet"></i>
-            <span>Financeiro</span>
-        </a>
+            <a href="servicos.html" class="menu-item">
+                <i class="fa-solid fa-scissors"></i>
+                <span>Serviços</span>
+            </a>
 
-        <a href="estoque.html" class="menu-item">
-            <i class="fa-solid fa-box"></i>
-            <span>Estoque e compras</span>
-        </a>
+            <a href="profissionais.html" class="menu-item ativo">
+                <i class="fa-solid fa-users"></i>
+                <span>Profissionais</span>
+            </a>
 
-        <a href="promocoes.html" class="menu-item">
-            <i class="fa-solid fa-tags"></i>
-            <span>Promoções</span>
-        </a>
+            <a href="financeiro.html" class="menu-item">
+                <i class="fa-solid fa-wallet"></i>
+                <span>Financeiro</span>
+            </a>
 
-        <a href="avaliacoes.html" class="menu-item">
-            <i class="fa-regular fa-star"></i>
-            <span>Avaliações</span>
-        </a>
+            <a href="estoque.html" class="menu-item">
+                <i class="fa-solid fa-box"></i>
+                <span>Estoque e compras</span>
+            </a>
 
-        <a href="relatorios.html" class="menu-item">
-            <i class="fa-solid fa-chart-column"></i>
-            <span>Relatórios</span>
-        </a>
+            <a href="promocoes.html" class="menu-item">
+                <i class="fa-solid fa-tags"></i>
+                <span>Promoções</span>
+            </a>
 
-        <a href="configuracoes.html" class="menu-item">
-            <i class="fa-solid fa-gear"></i>
-            <span>Configurações</span>
-        </a>
+            <a href="avaliacoes.html" class="menu-item">
+                <i class="fa-regular fa-star"></i>
+                <span>Avaliações</span>
+            </a>
 
-        <a href="#" id="btnSair" class="menu-item sair">
-            <i class="fa-solid fa-arrow-right-from-bracket"></i>
-            <span>Sair</span>
-        </a>
-    </nav>
-</aside>
+            <a href="relatorios.html" class="menu-item">
+                <i class="fa-solid fa-chart-column"></i>
+                <span>Relatórios</span>
+            </a>
 
-        <main class="main">
-            <header class="topbar">
-                <button class="menu-toggle" id="menuToggle" aria-label="Abrir menu">
-                    <i class="fa-solid fa-bars"></i>
-                </button>
-                <div class="breadcrumb">
-                    <span>Administração</span>
-                    <i class="fa-solid fa-chevron-right"></i>
-                    <strong>Profissionais</strong>
-                </div>
-                <div class="topbar-tag">
-                    <i class="fa-solid fa-user-tie"></i>
-                    Equipe
-                </div>
-            </header>
+            <a href="configuracoes.html" class="menu-item">
+                <i class="fa-solid fa-gear"></i>
+                <span>Configurações</span>
+            </a>
 
-            <section class="content">
-                <div class="page-heading">
-                    <div>
-                        <span class="eyebrow">GESTÃO DA EQUIPE</span>
-                        <h1>Profissionais</h1>
-                        <p>Cadastre e gerencie as profissionais do seu salão.</p>
-                    </div>
+            <a href="#" id="btnSair" class="menu-item sair">
+                <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                <span>Sair</span>
+            </a>
+        </nav>
+    </aside>
 
-                    <button class="btn btn-primary" id="btnNovaProfissional">
-                        <i class="fa-solid fa-plus"></i>
-                        Nova profissional
-                    </button>
-                </div>
+    <main class="main">
 
-                <div class="stats-grid">
-                    <article class="stat-card">
-                        <div class="stat-icon stat-icon-rose">
-                            <i class="fa-solid fa-user-group"></i>
-                        </div>
-                        <div>
-                            <span>Profissionais ativas</span>
-                            <strong id="totalProfissionais">0</strong>
-                        </div>
-                    </article>
+        <header class="topbar">
+            <button class="menu-toggle" id="menuToggle" aria-label="Abrir menu">
+                <i class="fa-solid fa-bars"></i>
+            </button>
 
-                    <article class="stat-card">
-                        <div class="stat-icon stat-icon-purple">
-                            <i class="fa-solid fa-scissors"></i>
-                        </div>
-                        <div>
-                            <span>Serviços cadastrados</span>
-                            <strong id="totalServicos">0</strong>
-                        </div>
-                    </article>
-                </div>
+            <div class="breadcrumb">
+                <span>Administração</span>
+                <i class="fa-solid fa-chevron-right"></i>
+                <strong>Profissionais</strong>
+            </div>
 
-                <section class="panel">
-                    <div class="panel-heading">
-                        <div>
-                            <h2>Equipe cadastrada</h2>
-                            <p>Consulte os dados e gerencie os cadastros.</p>
-                        </div>
+            <div class="topbar-tag">
+                <i class="fa-solid fa-user-tie"></i>
+                Equipe
+            </div>
+        </header>
 
-                        <div class="search-box">
-                            <i class="fa-solid fa-magnifying-glass"></i>
-                            <input type="search" id="pesquisaProfissional"
-                                   placeholder="Buscar profissional..." autocomplete="off">
-                        </div>
-                    </div>
+        <section class="content">
 
-                    <div id="mensagem" class="message" role="status" hidden></div>
-
-                    <div class="loading-state" id="carregando">
-                        <i class="fa-solid fa-spinner fa-spin"></i>
-                        <span>Carregando profissionais...</span>
-                    </div>
-
-                    <div class="table-wrapper" id="tabelaWrapper" hidden>
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>PROFISSIONAL</th>
-                                    <th>PROFISSÃO</th>
-                                    <th>SERVIÇOS</th>
-                                    <th>TAXA</th>
-                                    <th class="actions-heading">AÇÕES</th>
-                                </tr>
-                            </thead>
-                            <tbody id="listaProfissionais"></tbody>
-                        </table>
-                    </div>
-
-                    <div class="empty-state" id="listaVazia" hidden>
-                        <div class="empty-icon">
-                            <i class="fa-solid fa-user-group"></i>
-                        </div>
-                        <h3>Nenhuma profissional encontrada</h3>
-                        <p>Cadastre uma profissional ou altere sua pesquisa.</p>
-                    </div>
-                </section>
-            </section>
-        </main>
-    </div>
-
-    <div class="sidebar-overlay" id="sidebarOverlay"></div>
-
-    <!-- Modal de cadastro e edição -->
-    <div class="modal-overlay" id="modalProfissional" hidden>
-        <section class="modal modal-large" role="dialog"
-                 aria-modal="true" aria-labelledby="modalTitulo">
-            <div class="modal-header">
+            <div class="page-heading">
                 <div>
-                    <span class="eyebrow">EQUIPE BELLEZA</span>
-                    <h2 id="modalTitulo">Nova profissional</h2>
-                    <p id="modalDescricao">Preencha os dados para cadastrar uma profissional.</p>
+                    <span class="eyebrow">GESTÃO DA EQUIPE</span>
+                    <h1>Profissionais</h1>
+                    <p>Cadastre e gerencie as profissionais do seu salão.</p>
                 </div>
-                <button type="button" class="modal-close" data-fechar="modalProfissional"
-                        aria-label="Fechar">
-                    <i class="fa-solid fa-xmark"></i>
+
+                <button class="btn btn-primary" id="btnNovaProfissional">
+                    <i class="fa-solid fa-plus"></i>
+                    Nova profissional
                 </button>
             </div>
 
-            <form id="formProfissional" enctype="multipart/form-data">
-                <input type="hidden" id="profissionalId">
+            <div class="stats-grid">
 
-                <div class="form-section">
-                    <h3><i class="fa-regular fa-id-card"></i> Dados pessoais</h3>
-
-                    <div class="form-grid">
-                        <div class="field field-full">
-                            <label for="nome">Nome completo *</label>
-                            <input type="text" id="nome" name="Nome"
-                                   maxlength="100" required placeholder="Nome da profissional">
-                        </div>
-
-                        <div class="field">
-                            <label for="profissao">Profissão *</label>
-                            <input type="text" id="profissao" name="Profissao"
-                                   maxlength="100" required placeholder="Ex.: Cabeleireira">
-                        </div>
-
-                        <div class="field">
-                            <label for="taxaAtendimento">Taxa de atendimento (R$)</label>
-                            <input type="number" id="taxaAtendimento" name="TaxaAtendimento"
-                                   min="0" step="0.01" value="0" required>
-                        </div>
-
-                        <div class="field">
-                            <label for="cpf">CPF</label>
-                            <input type="text" id="cpf" name="CPF"
-                                   maxlength="14" placeholder="000.000.000-00">
-                        </div>
-
-                        <div class="field">
-                            <label for="telefone">Telefone</label>
-                            <input type="tel" id="telefone" name="Telefone"
-                                   maxlength="15" placeholder="(00) 00000-0000">
-                        </div>
-
-                        <div class="field field-full">
-                            <label for="endereco">Endereço</label>
-                            <input type="text" id="endereco" name="Endereco"
-                                   maxlength="255" placeholder="Rua, número, bairro...">
-                        </div>
+                <article class="stat-card">
+                    <div class="stat-icon stat-icon-rose">
+                        <i class="fa-solid fa-user-group"></i>
                     </div>
-                </div>
 
-                <div class="form-section">
-                    <h3><i class="fa-solid fa-scissors"></i> Serviços oferecidos</h3>
-                    <p class="section-description">
-                        Selecione os serviços que essa profissional realiza.
-                    </p>
-                    <div class="service-options" id="opcoesServicos">
-                        <span class="muted">Carregando serviços...</span>
+                    <div>
+                        <span>Profissionais ativas</span>
+                        <strong id="totalProfissionais">0</strong>
                     </div>
-                </div>
+                </article>
 
-                <div class="form-section">
-                    <h3><i class="fa-regular fa-image"></i> Foto e acesso</h3>
-
-                    <div class="form-grid">
-                        <div class="field field-full">
-                            <label for="foto">Foto da profissional</label>
-                            <input type="file" id="foto" name="Foto"
-                                   accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp">
-                            <small>JPG, PNG ou WEBP. Máximo de 2 MB.</small>
-                            <div id="fotoAtual" class="current-photo" hidden></div>
-                        </div>
-
-                        <div class="field field-full">
-                            <label for="senha">Senha de acesso</label>
-                            <input type="password" id="senha" name="Senha"
-                                   minlength="6" autocomplete="new-password"
-                                   placeholder="Senha para acessar o sistema">
-                            <small id="senhaAjuda">
-                                Se deixar em branco, a API utilizará a senha padrão configurada.
-                            </small>
-                        </div>
+                <article class="stat-card">
+                    <div class="stat-icon stat-icon-purple">
+                        <i class="fa-solid fa-scissors"></i>
                     </div>
-                </div>
 
-                <div class="form-error" id="erroFormulario" role="alert" hidden></div>
+                    <div>
+                        <span>Serviços cadastrados</span>
+                        <strong id="totalServicos">0</strong>
+                    </div>
+                </article>
 
-                <div class="modal-actions">
-                    <button type="button" class="btn btn-light" data-fechar="modalProfissional">
-                        Cancelar
-                    </button>
-                    <button type="submit" class="btn btn-primary" id="btnSalvar">
-                        <i class="fa-solid fa-floppy-disk"></i>
-                        Salvar profissional
-                    </button>
-                </div>
-            </form>
-        </section>
-    </div>
-
-    <!-- Modal de confirmação de exclusão -->
-    <div class="modal-overlay" id="modalExcluir" hidden>
-        <section class="modal modal-confirm" role="dialog"
-                 aria-modal="true" aria-labelledby="excluirTitulo">
-            <div class="confirm-icon">
-                <i class="fa-solid fa-user-slash"></i>
             </div>
-            <h2 id="excluirTitulo">Desativar profissional?</h2>
-            <p>
-                A profissional <strong id="nomeExcluir"></strong> deixará de aparecer
-                na lista de profissionais ativas. O histórico de agendamentos será preservado.
-            </p>
+
+            <section class="panel">
+
+                <div class="panel-heading">
+                    <div>
+                        <h2>Equipe cadastrada</h2>
+                        <p>Consulte os dados e gerencie os cadastros.</p>
+                    </div>
+
+                    <div class="search-box">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <input type="search"
+                            id="pesquisaProfissional"
+                            placeholder="Buscar profissional..."
+                            autocomplete="off">
+                    </div>
+                </div>
+
+                <div id="mensagem" class="message" role="status" hidden></div>
+
+                <div class="loading-state" id="carregando">
+                    <i class="fa-solid fa-spinner fa-spin"></i>
+                    <span>Carregando profissionais...</span>
+                </div>
+
+                <div class="table-wrapper" id="tabelaWrapper" hidden>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>PROFISSIONAL</th>
+                                <th>PROFISSÃO</th>
+                                <th>SERVIÇOS</th>
+                                <th>TAXA</th>
+                                <th class="actions-heading">AÇÕES</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="listaProfissionais"></tbody>
+                    </table>
+                </div>
+
+                <div class="empty-state" id="listaVazia" hidden>
+                    <div class="empty-icon">
+                        <i class="fa-solid fa-user-group"></i>
+                    </div>
+
+                    <h3>Nenhuma profissional encontrada</h3>
+                    <p>Cadastre uma profissional ou altere sua pesquisa.</p>
+                </div>
+
+            </section>
+
+        </section>
+
+    </main>
+</div>
+
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+<!-- MODAL CADASTRO E EDIÇÃO -->
+
+<div class="modal-overlay" id="modalProfissional" hidden>
+
+    <section class="modal modal-large"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="modalTitulo">
+
+        <div class="modal-header">
+            <div>
+                <span class="eyebrow">EQUIPE BELLEZA</span>
+                <h2 id="modalTitulo">Nova profissional</h2>
+                <p id="modalDescricao">
+                    Preencha os dados para cadastrar uma profissional.
+                </p>
+            </div>
+
+            <button type="button"
+                class="modal-close"
+                data-fechar="modalProfissional"
+                aria-label="Fechar">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+
+        <form id="formProfissional" enctype="multipart/form-data">
+
+            <input type="hidden" id="profissionalId">
+
+            <!-- DADOS PESSOAIS -->
+
+            <div class="form-section">
+
+                <h3>
+                    <i class="fa-regular fa-id-card"></i>
+                    Dados pessoais
+                </h3>
+
+                <div class="form-grid">
+
+                    <div class="field field-full">
+                        <label for="nome">Nome completo *</label>
+                        <input type="text"
+                            id="nome"
+                            name="Nome"
+                            maxlength="100"
+                            required
+                            placeholder="Nome da profissional">
+                    </div>
+
+                    <div class="field">
+                        <label for="profissao">Profissão *</label>
+                        <input type="text"
+                            id="profissao"
+                            name="Profissao"
+                            maxlength="100"
+                            required
+                            placeholder="Ex.: Cabeleireira">
+                    </div>
+
+                    <div class="field">
+                        <label for="taxaAtendimento">Taxa de atendimento (R$)</label>
+                        <input type="number"
+                            id="taxaAtendimento"
+                            name="TaxaAtendimento"
+                            min="0"
+                            step="0.01"
+                            value="0"
+                            required>
+                    </div>
+
+                    <div class="field">
+                        <label for="cpf">CPF</label>
+                        <input type="text"
+                            id="cpf"
+                            name="CPF"
+                            maxlength="14"
+                            placeholder="000.000.000-00">
+                    </div>
+
+                    <div class="field">
+                        <label for="telefone">Telefone</label>
+                        <input type="tel"
+                            id="telefone"
+                            name="Telefone"
+                            maxlength="15"
+                            placeholder="(00) 00000-0000">
+                    </div>
+
+                    <div class="field field-full">
+                        <label for="endereco">Endereço</label>
+                        <input type="text"
+                            id="endereco"
+                            name="Endereco"
+                            maxlength="255"
+                            placeholder="Rua, número, bairro...">
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- SERVIÇOS -->
+
+            <div class="form-section">
+
+                <h3>
+                    <i class="fa-solid fa-scissors"></i>
+                    Serviços oferecidos
+                </h3>
+
+                <p class="section-description">
+                    Selecione os serviços que essa profissional realiza.
+                </p>
+
+                <div class="service-options" id="opcoesServicos">
+                    <span class="muted">Carregando serviços...</span>
+                </div>
+
+            </div>
+
+            <!-- HORÁRIOS -->
+
+            <div class="form-section">
+
+                <h3>
+                    <i class="fa-regular fa-clock"></i>
+                    Horários de trabalho
+                </h3>
+
+                <p class="section-description">
+                    Selecione os dias e informe os períodos em que a profissional trabalha.
+                    É possível cadastrar dois períodos por dia.
+                </p>
+
+                <div id="opcoesHorarios" class="schedule-options"></div>
+
+            </div>
+
+            <!-- FOTO E ACESSO -->
+
+            <div class="form-section">
+
+                <h3>
+                    <i class="fa-regular fa-image"></i>
+                    Foto e acesso
+                </h3>
+
+                <div class="form-grid">
+
+                    <div class="field field-full">
+                        <label for="foto">Foto da profissional</label>
+
+                        <input type="file"
+                            id="foto"
+                            name="Foto"
+                            accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp">
+
+                        <small>JPG, PNG ou WEBP. Máximo de 2 MB.</small>
+
+                        <div id="fotoAtual" class="current-photo" hidden></div>
+                    </div>
+
+                    <div class="field field-full">
+                        <label for="senha">Senha de acesso</label>
+
+                        <input type="password"
+                            id="senha"
+                            name="Senha"
+                            minlength="6"
+                            autocomplete="new-password"
+                            placeholder="Senha para acessar o sistema">
+
+                        <small id="senhaAjuda">
+                            Se deixar em branco, a API utilizará a senha padrão configurada.
+                        </small>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="form-error" id="erroFormulario" role="alert" hidden></div>
+
             <div class="modal-actions">
-                <button type="button" class="btn btn-light" data-fechar="modalExcluir">
+
+                <button type="button"
+                    class="btn btn-light"
+                    data-fechar="modalProfissional">
                     Cancelar
                 </button>
-                <button type="button" class="btn btn-danger" id="btnConfirmarExclusao">
-                    <i class="fa-solid fa-user-slash"></i>
-                    Desativar
-                </button>
-            </div>
-        </section>
-    </div>
-    <script>
 
-        
+                <button type="submit" class="btn btn-primary" id="btnSalvar">
+                    <i class="fa-solid fa-floppy-disk"></i>
+                    Salvar profissional
+                </button>
+
+            </div>
+
+        </form>
+
+    </section>
+
+</div>
+
+<!-- MODAL EXCLUSÃO -->
+
+<div class="modal-overlay" id="modalExcluir" hidden>
+
+    <section class="modal modal-confirm"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="excluirTitulo">
+
+        <div class="confirm-icon">
+            <i class="fa-solid fa-user-slash"></i>
+        </div>
+
+        <h2 id="excluirTitulo">Desativar profissional?</h2>
+
+        <p>
+            A profissional <strong id="nomeExcluir"></strong> deixará de aparecer
+            na lista de profissionais ativas. O histórico de agendamentos será preservado.
+        </p>
+
+        <div class="modal-actions">
+
+            <button type="button"
+                class="btn btn-light"
+                data-fechar="modalExcluir">
+                Cancelar
+            </button>
+
+            <button type="button"
+                class="btn btn-danger"
+                id="btnConfirmarExclusao">
+                <i class="fa-solid fa-user-slash"></i>
+                Desativar
+            </button>
+
+        </div>
+
+    </section>
+
+</div>
+
+<script>
+
 const API_BASE = "/api";
 const API_PROFISSIONAIS = `${API_BASE}/Profissionais`;
 const API_SERVICOS = `${API_PROFISSIONAIS}/servicos-disponiveis`;
@@ -345,17 +530,31 @@ let profissionalParaExcluir = null;
 let modoEdicao = false;
 let mensagemTimer = null;
 
+const diasSemana = [
+    { id: 1, nome: "Segunda-feira" },
+    { id: 2, nome: "Terça-feira" },
+    { id: 3, nome: "Quarta-feira" },
+    { id: 4, nome: "Quinta-feira" },
+    { id: 5, nome: "Sexta-feira" },
+    { id: 6, nome: "Sábado" },
+    { id: 0, nome: "Domingo" }
+];
+
 document.addEventListener("DOMContentLoaded", inicializar);
 
 async function inicializar() {
     configurarEventos();
+    renderizarHorarios();
     await carregarServicos();
     await carregarProfissionais();
 }
 
 function configurarEventos() {
-    document.getElementById("btnNovaProfissional").addEventListener("click", abrirCadastro);
+    document.getElementById("btnNovaProfissional")
+        .addEventListener("click", abrirCadastro);
+
     formProfissional.addEventListener("submit", salvarProfissional);
+
     pesquisaProfissional.addEventListener("input", renderizarProfissionais);
 
     document.getElementById("btnConfirmarExclusao")
@@ -367,9 +566,7 @@ function configurarEventos() {
 
     [modalProfissional, modalExcluir].forEach(modal => {
         modal.addEventListener("click", evento => {
-            if (evento.target === modal) {
-                fecharModal(modal.id);
-            }
+            if (evento.target === modal) fecharModal(modal.id);
         });
     });
 
@@ -416,13 +613,11 @@ async function lerResposta(resposta) {
 }
 
 function mensagemErro(dados, fallback) {
-    if (typeof dados === "string" && dados.trim()) {
-        return dados;
-    }
-
+    if (typeof dados === "string" && dados.trim()) return dados;
     if (dados?.mensagem) return dados.mensagem;
     if (dados?.message) return dados.message;
     if (dados?.title) return dados.title;
+
     if (dados?.errors) {
         return Object.values(dados.errors).flat().join(" ");
     }
@@ -452,6 +647,8 @@ async function requisicao(url, opcoes = {}) {
     return dados;
 }
 
+/* SERVIÇOS */
+
 async function carregarServicos() {
     opcoesServicos.innerHTML = '<span class="muted">Carregando serviços...</span>';
 
@@ -460,14 +657,17 @@ async function carregarServicos() {
         servicos = Array.isArray(dados) ? dados : [];
 
         document.getElementById("totalServicos").textContent = servicos.length;
+
         renderizarOpcoesServicos();
     } catch (erro) {
         servicos = [];
+
         opcoesServicos.innerHTML = `
             <span class="muted">
                 Não foi possível carregar os serviços.
                 ${escaparHTML(erro.message)}
             </span>`;
+
         mostrarMensagem(erro.message, "error");
     }
 }
@@ -491,7 +691,7 @@ function renderizarOpcoesServicos(selecionados = []) {
         return `
             <label class="service-option">
                 <input type="checkbox" name="ServicoIds"
-                       value="${id}" ${checked}>
+                    value="${id}" ${checked}>
                 <span>
                     ${escaparHTML(nome)}
                     <small>
@@ -503,6 +703,155 @@ function renderizarOpcoesServicos(selecionados = []) {
     }).join("");
 }
 
+/* HORÁRIOS DE TRABALHO */
+
+function renderizarHorarios(horarios = []) {
+    const container = document.getElementById("opcoesHorarios");
+
+    container.innerHTML = diasSemana.map(dia => {
+        const periodos = horarios
+            .filter(h => Number(h.diaSemana) === dia.id)
+            .sort((a, b) => String(a.horaInicio).localeCompare(String(b.horaInicio)));
+
+        const ativo = periodos.length > 0;
+
+        return `
+            <div class="schedule-day">
+
+                <label class="schedule-day-header">
+                    <input type="checkbox"
+                        class="dia-checkbox"
+                        value="${dia.id}"
+                        ${ativo ? "checked" : ""}
+                        onchange="alternarDia(this)">
+
+                    <strong>${dia.nome}</strong>
+                </label>
+
+                <div class="schedule-periods"
+                    id="periodos-${dia.id}"
+                    ${ativo ? "" : "hidden"}>
+
+                    <div class="schedule-period">
+                        <span>Período 1</span>
+
+                        <input type="time"
+                            class="hora-inicio"
+                            aria-label="Início do primeiro período de ${dia.nome}"
+                            value="${periodos[0]?.horaInicio?.substring(0, 5) || "08:00"}">
+
+                        <span>até</span>
+
+                        <input type="time"
+                            class="hora-fim"
+                            aria-label="Fim do primeiro período de ${dia.nome}"
+                            value="${periodos[0]?.horaFim?.substring(0, 5) || "12:00"}">
+                    </div>
+
+                    <div class="schedule-period">
+                        <span>Período 2</span>
+
+                        <input type="time"
+                            class="hora-inicio"
+                            aria-label="Início do segundo período de ${dia.nome}"
+                            value="${periodos[1]?.horaInicio?.substring(0, 5) || "13:00"}">
+
+                        <span>até</span>
+
+                        <input type="time"
+                            class="hora-fim"
+                            aria-label="Fim do segundo período de ${dia.nome}"
+                            value="${periodos[1]?.horaFim?.substring(0, 5) || "18:00"}">
+                    </div>
+
+                </div>
+
+            </div>`;
+    }).join("");
+}
+
+function alternarDia(checkbox) {
+    const container = document.getElementById(
+        `periodos-${checkbox.value}`
+    );
+
+    container.hidden = !checkbox.checked;
+}
+
+function adicionarHorariosFormData(dados) {
+    const diasSelecionados = document.querySelectorAll(
+        ".dia-checkbox:checked"
+    );
+
+    if (diasSelecionados.length === 0) {
+        throw new Error("Selecione pelo menos um dia de trabalho.");
+    }
+
+    let indice = 0;
+
+    for (const checkbox of diasSelecionados) {
+        const dia = Number(checkbox.value);
+
+        const container = document.getElementById(`periodos-${dia}`);
+
+        const inicios = container.querySelectorAll(".hora-inicio");
+        const fins = container.querySelectorAll(".hora-fim");
+
+        let possuiPeriodo = false;
+
+        for (let i = 0; i < 2; i++) {
+            const inicio = inicios[i].value;
+            const fim = fins[i].value;
+
+            if (!inicio && !fim) continue;
+
+            if (!inicio || !fim) {
+                throw new Error(
+                    `Preencha o início e o fim dos períodos de ${diasSemana.find(d => d.id === dia).nome}.`
+                );
+            }
+
+            if (inicio >= fim) {
+                throw new Error(
+                    `O horário final deve ser maior que o inicial em ${diasSemana.find(d => d.id === dia).nome}.`
+                );
+            }
+
+            if (i === 1) {
+                const primeiroInicio = inicios[0].value;
+                const primeiroFim = fins[0].value;
+
+                if (!primeiroInicio || !primeiroFim) {
+                    throw new Error(
+                        "Preencha o primeiro período antes do segundo."
+                    );
+                }
+
+                if (inicio < primeiroFim) {
+                    throw new Error(
+                        `Os períodos de ${diasSemana.find(d => d.id === dia).nome} não podem se sobrepor.`
+                    );
+                }
+            }
+
+            dados.append(`Horarios[${indice}].DiaSemana`, dia);
+            dados.append(`Horarios[${indice}].HoraInicio`, inicio);
+            dados.append(`Horarios[${indice}].HoraFim`, fim);
+
+            indice++;
+            possuiPeriodo = true;
+        }
+
+        if (!possuiPeriodo) {
+            throw new Error(
+                `Informe pelo menos um período para ${diasSemana.find(d => d.id === dia).nome}.`
+            );
+        }
+    }
+}
+
+/* PROFISSIONAIS */
+
 async function carregarProfissionais() {
     carregando.hidden = false;
     tabelaWrapper.hidden = true;
@@ -510,8 +859,12 @@ async function carregarProfissionais() {
 
     try {
         const dados = await requisicao(API_PROFISSIONAIS);
+
         profissionais = Array.isArray(dados) ? dados : [];
-        document.getElementById("totalProfissionais").textContent = profissionais.length;
+
+        document.getElementById("totalProfissionais").textContent =
+            profissionais.length;
+
         renderizarProfissionais();
     } catch (erro) {
         profissionais = [];
@@ -548,12 +901,15 @@ function renderizarProfissionais() {
         const email = profissional.email || "";
         const foto = obterFoto(profissional);
         const taxa = Number(profissional.taxaAtendimento ?? 0);
+
         const listaServicos = Array.isArray(profissional.servicos)
             ? profissional.servicos
             : [];
 
         const tagsVisiveis = listaServicos.slice(0, 2).map(servico => `
-            <span class="service-tag">${escaparHTML(servico.nome || "Serviço")}</span>
+            <span class="service-tag">
+                ${escaparHTML(servico.nome || "Serviço")}
+            </span>
         `).join("");
 
         const restantes = listaServicos.length > 2
@@ -565,8 +921,9 @@ function renderizarProfissionais() {
             : '<span class="muted">Nenhum vinculado</span>';
 
         const avatar = foto
-            ? `<img src="${escaparHTML(foto)}" alt="${escaparHTML(nome)}"
-                    onerror="this.parentElement.textContent='${escaparJS(iniciais(nome))}'">`
+            ? `<img src="${escaparHTML(foto)}"
+                alt="${escaparHTML(nome)}"
+                onerror="this.parentElement.textContent='${escaparJS(iniciais(nome))}'">`
             : escaparHTML(iniciais(nome));
 
         return `
@@ -574,80 +931,122 @@ function renderizarProfissionais() {
                 <td>
                     <div class="professional-cell">
                         <div class="professional-avatar">${avatar}</div>
+
                         <div class="professional-info">
                             <strong>${escaparHTML(nome)}</strong>
                             <span>${escaparHTML(email || "Conta vinculada")}</span>
                         </div>
                     </div>
                 </td>
+
                 <td>
-                    <span class="profession-badge">${escaparHTML(profissao)}</span>
+                    <span class="profession-badge">
+                        ${escaparHTML(profissao)}
+                    </span>
                 </td>
+
                 <td>
                     <div class="service-tags">${servicosHTML}</div>
                 </td>
-                <td><span class="fee-value">${formatarMoeda(taxa)}</span></td>
+
+                <td>
+                    <span class="fee-value">${formatarMoeda(taxa)}</span>
+                </td>
+
                 <td>
                     <div class="action-buttons">
-                        <button class="action-btn" type="button"
-                                title="Editar profissional"
-                                aria-label="Editar ${escaparHTML(nome)}"
-                                data-editar="${id}">
+
+                        <button class="action-btn"
+                            type="button"
+                            title="Editar profissional"
+                            aria-label="Editar ${escaparHTML(nome)}"
+                            data-editar="${id}">
                             <i class="fa-regular fa-pen-to-square"></i>
                         </button>
-                        <button class="action-btn delete" type="button"
-                                title="Desativar profissional"
-                                aria-label="Desativar ${escaparHTML(nome)}"
-                                data-excluir="${id}">
+
+                        <button class="action-btn delete"
+                            type="button"
+                            title="Desativar profissional"
+                            aria-label="Desativar ${escaparHTML(nome)}"
+                            data-excluir="${id}">
                             <i class="fa-regular fa-trash-can"></i>
                         </button>
+
                     </div>
                 </td>
             </tr>`;
     }).join("");
 
     listaProfissionais.querySelectorAll("[data-editar]").forEach(botao => {
-        botao.addEventListener("click", () => abrirEdicao(Number(botao.dataset.editar)));
+        botao.addEventListener("click", () =>
+            abrirEdicao(Number(botao.dataset.editar))
+        );
     });
 
     listaProfissionais.querySelectorAll("[data-excluir]").forEach(botao => {
-        botao.addEventListener("click", () => abrirExclusao(Number(botao.dataset.excluir)));
+        botao.addEventListener("click", () =>
+            abrirExclusao(Number(botao.dataset.excluir))
+        );
     });
 
     const temResultados = filtradas.length > 0;
+
     tabelaWrapper.hidden = !temResultados;
     listaVazia.hidden = temResultados || carregando.hidden === false;
 
     if (!temResultados && busca) {
-        listaVazia.querySelector("h3").textContent = "Nenhum resultado encontrado";
-        listaVazia.querySelector("p").textContent = "Tente pesquisar por outro nome ou serviço.";
+        listaVazia.querySelector("h3").textContent =
+            "Nenhum resultado encontrado";
+
+        listaVazia.querySelector("p").textContent =
+            "Tente pesquisar por outro nome ou serviço.";
     } else {
-        listaVazia.querySelector("h3").textContent = "Nenhuma profissional encontrada";
+        listaVazia.querySelector("h3").textContent =
+            "Nenhuma profissional encontrada";
+
         listaVazia.querySelector("p").textContent =
             "Cadastre uma profissional para ela aparecer nesta lista.";
     }
 }
 
+/* CADASTRO */
+
 function abrirCadastro() {
     modoEdicao = false;
+
     formProfissional.reset();
 
     document.getElementById("profissionalId").value = "";
-    document.getElementById("modalTitulo").textContent = "Nova profissional";
+
+    document.getElementById("modalTitulo").textContent =
+        "Nova profissional";
+
     document.getElementById("modalDescricao").textContent =
         "Preencha os dados para cadastrar uma profissional.";
+
     document.getElementById("senhaAjuda").textContent =
         "Se deixar em branco, a API utilizará a senha padrão configurada.";
-    btnSalvar.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Salvar profissional';
+
+    btnSalvar.innerHTML =
+        '<i class="fa-solid fa-floppy-disk"></i> Salvar profissional';
+
     fotoAtual.hidden = true;
     fotoAtual.innerHTML = "";
+
     limparErroFormulario();
+
     renderizarOpcoesServicos();
+    renderizarHorarios();
+
     abrirModal("modalProfissional");
 }
 
+/* EDIÇÃO */
+
 async function abrirEdicao(id) {
-    const profissionalLista = profissionais.find(item => Number(item.id) === id);
+    const profissionalLista = profissionais.find(
+        item => Number(item.id) === id
+    );
 
     if (!profissionalLista) {
         mostrarMensagem("Profissional não encontrada na lista.", "error");
@@ -655,16 +1054,23 @@ async function abrirEdicao(id) {
     }
 
     modoEdicao = true;
+
     formProfissional.reset();
     limparErroFormulario();
 
     document.getElementById("profissionalId").value = id;
-    document.getElementById("modalTitulo").textContent = "Editar profissional";
+
+    document.getElementById("modalTitulo").textContent =
+        "Editar profissional";
+
     document.getElementById("modalDescricao").textContent =
         "Atualize os dados da profissional.";
+
     document.getElementById("senhaAjuda").textContent =
         "Deixe em branco para manter a senha atual.";
-    btnSalvar.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Salvar alterações';
+
+    btnSalvar.innerHTML =
+        '<i class="fa-solid fa-floppy-disk"></i> Salvar alterações';
 
     preencherFormulario(profissionalLista);
 
@@ -684,12 +1090,21 @@ async function abrirEdicao(id) {
 }
 
 function preencherFormulario(profissional) {
-    document.getElementById("nome").value = profissional.nome || "";
-    document.getElementById("profissao").value = profissional.profissao || "";
-    document.getElementById("cpf").value = formatarCPF(profissional.cpf || "");
+    document.getElementById("nome").value =
+        profissional.nome || "";
+
+    document.getElementById("profissao").value =
+        profissional.profissao || "";
+
+    document.getElementById("cpf").value =
+        formatarCPF(profissional.cpf || "");
+
     document.getElementById("telefone").value =
         formatarTelefone(profissional.telefone || "");
-    document.getElementById("endereco").value = profissional.endereco || "";
+
+    document.getElementById("endereco").value =
+        profissional.endereco || "";
+
     document.getElementById("taxaAtendimento").value =
         Number(profissional.taxaAtendimento ?? 0);
 
@@ -699,13 +1114,21 @@ function preencherFormulario(profissional) {
 
     renderizarOpcoesServicos(ids);
 
+    // Preenche os horários existentes.
+    renderizarHorarios(profissional.horarios || []);
+
     const foto = obterFoto(profissional);
 
     if (foto) {
         fotoAtual.innerHTML = `
-            <img src="${escaparHTML(foto)}" alt="Foto atual da profissional"
-                 onerror="this.style.display='none'">
-            <span>Foto atual. Selecione outro arquivo para substituí-la.</span>`;
+            <img src="${escaparHTML(foto)}"
+                alt="Foto atual da profissional"
+                onerror="this.style.display='none'">
+
+            <span>
+                Foto atual. Selecione outro arquivo para substituí-la.
+            </span>`;
+
         fotoAtual.hidden = false;
     } else {
         fotoAtual.innerHTML = "";
@@ -715,8 +1138,11 @@ function preencherFormulario(profissional) {
     fotoInput.value = "";
 }
 
+/* SALVAR */
+
 async function salvarProfissional(evento) {
     evento.preventDefault();
+
     limparErroFormulario();
 
     const nome = document.getElementById("nome").value.trim();
@@ -767,14 +1193,27 @@ async function salvarProfissional(evento) {
     }
 
     const dados = new FormData(formProfissional);
+
     dados.set("Nome", nome);
     dados.set("Profissao", profissao);
     dados.set("CPF", somenteNumeros(cpf));
     dados.set("Telefone", somenteNumeros(telefone));
-    dados.set("Endereco", document.getElementById("endereco").value.trim());
+    dados.set(
+        "Endereco",
+        document.getElementById("endereco").value.trim()
+    );
     dados.set("TaxaAtendimento", String(taxa));
 
+    try {
+        // Envia os horários junto com os demais dados.
+        adicionarHorariosFormData(dados);
+    } catch (erro) {
+        mostrarErroFormulario(erro.message);
+        return;
+    }
+
     const id = document.getElementById("profissionalId").value;
+
     const url = modoEdicao
         ? `${API_PROFISSIONAIS}/${id}`
         : API_PROFISSIONAIS;
@@ -782,7 +1221,9 @@ async function salvarProfissional(evento) {
     const metodo = modoEdicao ? "PUT" : "POST";
 
     btnSalvar.disabled = true;
-    btnSalvar.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Salvando...';
+
+    btnSalvar.innerHTML =
+        '<i class="fa-solid fa-spinner fa-spin"></i> Salvando...';
 
     try {
         const resposta = await requisicao(url, {
@@ -791,6 +1232,7 @@ async function salvarProfissional(evento) {
         });
 
         fecharModal("modalProfissional");
+
         mostrarMensagem(
             resposta?.mensagem ||
             (modoEdicao
@@ -801,18 +1243,25 @@ async function salvarProfissional(evento) {
 
         await carregarProfissionais();
         await carregarServicos();
+
     } catch (erro) {
         mostrarErroFormulario(erro.message);
+
     } finally {
         btnSalvar.disabled = false;
+
         btnSalvar.innerHTML = modoEdicao
             ? '<i class="fa-solid fa-floppy-disk"></i> Salvar alterações'
             : '<i class="fa-solid fa-floppy-disk"></i> Salvar profissional';
     }
 }
 
+/* EXCLUSÃO */
+
 function abrirExclusao(id) {
-    const profissional = profissionais.find(item => Number(item.id) === id);
+    const profissional = profissionais.find(
+        item => Number(item.id) === id
+    );
 
     if (!profissional) {
         mostrarMensagem("Profissional não encontrada.", "error");
@@ -820,6 +1269,7 @@ function abrirExclusao(id) {
     }
 
     profissionalParaExcluir = id;
+
     document.getElementById("nomeExcluir").textContent =
         profissional.nome || "esta profissional";
 
@@ -833,14 +1283,18 @@ async function confirmarExclusao() {
     const id = profissionalParaExcluir;
 
     botao.disabled = true;
-    botao.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Desativando...';
+
+    botao.innerHTML =
+        '<i class="fa-solid fa-spinner fa-spin"></i> Desativando...';
 
     try {
-        const resposta = await requisicao(`${API_PROFISSIONAIS}/${id}`, {
-            method: "DELETE"
-        });
+        const resposta = await requisicao(
+            `${API_PROFISSIONAIS}/${id}`,
+            { method: "DELETE" }
+        );
 
         fecharModal("modalExcluir");
+
         profissionalParaExcluir = null;
 
         mostrarMensagem(
@@ -849,13 +1303,19 @@ async function confirmarExclusao() {
         );
 
         await carregarProfissionais();
+
     } catch (erro) {
         mostrarMensagem(erro.message, "error");
+
     } finally {
         botao.disabled = false;
-        botao.innerHTML = '<i class="fa-solid fa-user-slash"></i> Desativar';
+
+        botao.innerHTML =
+            '<i class="fa-solid fa-user-slash"></i> Desativar';
     }
 }
+
+/* MODAIS */
 
 function abrirModal(id) {
     document.getElementById(id).hidden = false;
@@ -874,6 +1334,8 @@ function fecharModal(id) {
     }
 }
 
+/* FOTO */
+
 function validarFoto() {
     const foto = fotoInput.files[0];
 
@@ -891,6 +1353,7 @@ function validarFoto() {
 
 function validarArquivoFoto(foto) {
     const extensaoValida = /\.(jpe?g|png|webp)$/i.test(foto.name);
+
     const tipoValido = [
         "image/jpeg",
         "image/png",
@@ -913,16 +1376,14 @@ function obterFoto(profissional) {
 
     if (!valor) return "";
 
-    if (/^https?:\/\//i.test(valor)) {
-        return valor;
-    }
+    if (/^https?:\/\//i.test(valor)) return valor;
 
-    if (valor.startsWith("/")) {
-        return valor;
-    }
+    if (valor.startsWith("/")) return valor;
 
     return `/imagens/profissionais/${valor}`;
 }
+
+/* MENSAGENS */
 
 function mostrarMensagem(texto, tipo = "success") {
     clearTimeout(mensagemTimer);
@@ -945,6 +1406,8 @@ function limparErroFormulario() {
     erroFormulario.textContent = "";
     erroFormulario.hidden = true;
 }
+
+/* FORMATAÇÃO */
 
 function formatarMoeda(valor) {
     return Number(valor || 0).toLocaleString("pt-BR", {
@@ -1016,6 +1479,7 @@ function escaparJS(valor) {
         .replace(/[\r\n]/g, " ");
 }
 
-    </script>
+</script>
+
 </body>
 </html>

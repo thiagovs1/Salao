@@ -1,4 +1,3 @@
-
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SalaoBeleza.Data;
@@ -34,6 +33,14 @@ public class ProfissionaisController : ControllerBase
         public string? Senha { get; set; }
         public IFormFile? Foto { get; set; }
         public List<int> ServicoIds { get; set; } = new();
+        public List<HorarioFormulario> Horarios { get; set; } = new();
+    }
+
+    public class HorarioFormulario
+    {
+        public int DiaSemana { get; set; }
+        public string HoraInicio { get; set; } = "";
+        public string HoraFim { get; set; } = "";
     }
 
     [HttpGet]
@@ -64,6 +71,7 @@ public class ProfissionaisController : ControllerBase
                     }).ToList(),
                 horarios = p.HorariosProfissionais
                     .OrderBy(h => h.DiaSemana)
+                    .ThenBy(h => h.HoraInicio)
                     .Select(h => new
                     {
                         diaSemana = h.DiaSemana,
@@ -116,6 +124,7 @@ public class ProfissionaisController : ControllerBase
                     .Select(sp => sp.ServicoId).ToList(),
                 horarios = p.HorariosProfissionais
                     .OrderBy(h => h.DiaSemana)
+                    .ThenBy(h => h.HoraInicio)
                     .Select(h => new
                     {
                         diaSemana = h.DiaSemana,
@@ -126,7 +135,10 @@ public class ProfissionaisController : ControllerBase
             .FirstOrDefaultAsync();
 
         if (profissional == null)
-            return NotFound(new { mensagem = "Profissional não encontrada." });
+            return NotFound(new
+            {
+                mensagem = "Profissional não encontrada."
+            });
 
         return Ok(profissional);
     }
@@ -137,21 +149,35 @@ public class ProfissionaisController : ControllerBase
         [FromForm] ProfissionalFormulario dados)
     {
         var erro = Validar(dados);
+
         if (erro != null)
             return BadRequest(new { mensagem = erro });
+
+        var horariosValidados = ValidarHorarios(
+            dados.Horarios,
+            out var erroHorarios);
+
+        if (erroHorarios != null)
+            return BadRequest(new { mensagem = erroHorarios });
 
         if (!string.IsNullOrWhiteSpace(dados.CPF) &&
             await _context.Profissionais.AnyAsync(
                 p => p.CPF == dados.CPF))
         {
-            return Conflict(new { mensagem = "Este CPF já está cadastrado." });
+            return Conflict(new
+            {
+                mensagem = "Este CPF já está cadastrado."
+            });
         }
 
         if (!string.IsNullOrWhiteSpace(dados.Telefone) &&
             await _context.Profissionais.AnyAsync(
                 p => p.Telefone == dados.Telefone))
         {
-            return Conflict(new { mensagem = "Este telefone já está cadastrado." });
+            return Conflict(new
+            {
+                mensagem = "Este telefone já está cadastrado."
+            });
         }
 
         var nome = dados.Nome.Trim();
@@ -170,8 +196,12 @@ public class ProfissionaisController : ControllerBase
         if (dados.Foto != null)
         {
             var caminhoFoto = await SalvarFoto(dados.Foto);
+
             if (caminhoFoto == null)
-                return BadRequest(new { mensagem = "Foto inválida. Envie JPG, PNG ou WEBP de até 2 MB." });
+                return BadRequest(new
+                {
+                    mensagem = "Foto inválida. Envie JPG, PNG ou WEBP de até 2 MB."
+                });
 
             profissional.Foto = caminhoFoto;
         }
@@ -186,7 +216,11 @@ public class ProfissionaisController : ControllerBase
         if (servicosValidos.Count != servicosIds.Count)
         {
             ApagarFotoSeExistir(profissional.Foto);
-            return BadRequest(new { mensagem = "Um ou mais serviços selecionados não existem." });
+
+            return BadRequest(new
+            {
+                mensagem = "Um ou mais serviços selecionados não existem."
+            });
         }
 
         var email = await GerarEmail(nome);
@@ -212,11 +246,20 @@ public class ProfissionaisController : ControllerBase
 
             foreach (var servicoId in servicosIds)
             {
-                _context.ServicoProfissionais.Add(new ServicoProfissional
-                {
-                    Profissional = profissional,
-                    ServicoId = servicoId
-                });
+                _context.ServicoProfissionais.Add(
+                    new ServicoProfissional
+                    {
+                        Profissional = profissional,
+                        ServicoId = servicoId
+                    });
+            }
+
+            // NOVO: grava os horários da profissional.
+            foreach (var horario in horariosValidados)
+            {
+                horario.Profissional = profissional;
+
+                _context.HorariosProfissionais.Add(horario);
             }
 
             await _context.SaveChangesAsync();
@@ -252,27 +295,45 @@ public class ProfissionaisController : ControllerBase
     {
         var profissional = await _context.Profissionais
             .Include(p => p.ServicosProfissionais)
+            .Include(p => p.HorariosProfissionais)
             .FirstOrDefaultAsync(p => p.Id == id);
 
         if (profissional == null)
-            return NotFound(new { mensagem = "Profissional não encontrada." });
+            return NotFound(new
+            {
+                mensagem = "Profissional não encontrada."
+            });
 
         var erro = Validar(dados);
+
         if (erro != null)
             return BadRequest(new { mensagem = erro });
+
+        var horariosValidados = ValidarHorarios(
+            dados.Horarios,
+            out var erroHorarios);
+
+        if (erroHorarios != null)
+            return BadRequest(new { mensagem = erroHorarios });
 
         if (!string.IsNullOrWhiteSpace(dados.CPF) &&
             await _context.Profissionais.AnyAsync(
                 p => p.Id != id && p.CPF == dados.CPF))
         {
-            return Conflict(new { mensagem = "Este CPF já está cadastrado." });
+            return Conflict(new
+            {
+                mensagem = "Este CPF já está cadastrado."
+            });
         }
 
         if (!string.IsNullOrWhiteSpace(dados.Telefone) &&
             await _context.Profissionais.AnyAsync(
                 p => p.Id != id && p.Telefone == dados.Telefone))
         {
-            return Conflict(new { mensagem = "Este telefone já está cadastrado." });
+            return Conflict(new
+            {
+                mensagem = "Este telefone já está cadastrado."
+            });
         }
 
         var servicosIds = dados.ServicoIds.Distinct().ToList();
@@ -283,7 +344,10 @@ public class ProfissionaisController : ControllerBase
             .ToListAsync();
 
         if (servicosValidos.Count != servicosIds.Count)
-            return BadRequest(new { mensagem = "Um ou mais serviços não existem." });
+            return BadRequest(new
+            {
+                mensagem = "Um ou mais serviços não existem."
+            });
 
         string? novaFoto = null;
 
@@ -292,7 +356,10 @@ public class ProfissionaisController : ControllerBase
             novaFoto = await SalvarFoto(dados.Foto);
 
             if (novaFoto == null)
-                return BadRequest(new { mensagem = "Foto inválida. Envie JPG, PNG ou WEBP de até 2 MB." });
+                return BadRequest(new
+                {
+                    mensagem = "Foto inválida. Envie JPG, PNG ou WEBP de até 2 MB."
+                });
         }
 
         profissional.Nome = dados.Nome.Trim();
@@ -338,11 +405,23 @@ public class ProfissionaisController : ControllerBase
 
         foreach (var servicoId in servicosIds)
         {
-            _context.ServicoProfissionais.Add(new ServicoProfissional
-            {
-                ProfissionalId = profissional.Id,
-                ServicoId = servicoId
-            });
+            _context.ServicoProfissionais.Add(
+                new ServicoProfissional
+                {
+                    ProfissionalId = profissional.Id,
+                    ServicoId = servicoId
+                });
+        }
+
+        // NOVO: substitui os horários antigos pelos horários enviados.
+        _context.HorariosProfissionais.RemoveRange(
+            profissional.HorariosProfissionais);
+
+        foreach (var horario in horariosValidados)
+        {
+            horario.ProfissionalId = profissional.Id;
+
+            _context.HorariosProfissionais.Add(horario);
         }
 
         try
@@ -352,7 +431,10 @@ public class ProfissionaisController : ControllerBase
             if (novaFoto != null)
                 ApagarFotoSeExistir(fotoAntiga);
 
-            return Ok(new { mensagem = "Profissional atualizada com sucesso." });
+            return Ok(new
+            {
+                mensagem = "Profissional atualizada com sucesso."
+            });
         }
         catch
         {
@@ -373,7 +455,10 @@ public class ProfissionaisController : ControllerBase
             .FirstOrDefaultAsync(p => p.Id == id);
 
         if (profissional == null)
-            return NotFound(new { mensagem = "Profissional não encontrada." });
+            return NotFound(new
+            {
+                mensagem = "Profissional não encontrada."
+            });
 
         profissional.Ativo = false;
 
@@ -391,35 +476,35 @@ public class ProfissionaisController : ControllerBase
         });
     }
 
-   [HttpGet("por-servicos")]
-public async Task<IActionResult> PorServicos(
-    [FromQuery] List<int> servicoIds)
-{
-    var ids = servicoIds
-        .Where(id => id > 0)
-        .Distinct()
-        .ToList();
-
-    if (ids.Count == 0)
-        return Ok(new List<object>());
-
-    var profissionais = await _context.Profissionais
-        .Where(p => p.Ativo)
-        .Where(p => p.ServicosProfissionais
-            .Select(sp => sp.ServicoId)
+    [HttpGet("por-servicos")]
+    public async Task<IActionResult> PorServicos(
+        [FromQuery] List<int> servicoIds)
+    {
+        var ids = servicoIds
+            .Where(id => id > 0)
             .Distinct()
-            .Count(id => ids.Contains(id)) == ids.Count)
-        .Select(p => new
-        {
-            id = p.Id,
-            nome = p.Nome,
-            profissao = p.Profissao,
-            imagem = p.Foto
-        })
-        .ToListAsync();
+            .ToList();
 
-    return Ok(profissionais);
-}
+        if (ids.Count == 0)
+            return Ok(new List<object>());
+
+        var profissionais = await _context.Profissionais
+            .Where(p => p.Ativo)
+            .Where(p => p.ServicosProfissionais
+                .Select(sp => sp.ServicoId)
+                .Distinct()
+                .Count(id => ids.Contains(id)) == ids.Count)
+            .Select(p => new
+            {
+                id = p.Id,
+                nome = p.Nome,
+                profissao = p.Profissao,
+                imagem = p.Foto
+            })
+            .ToListAsync();
+
+        return Ok(profissionais);
+    }
 
     [HttpGet("painel")]
     public async Task<IActionResult> Painel()
@@ -428,7 +513,10 @@ public async Task<IActionResult> PorServicos(
             HttpContext.Session.GetInt32("ProfissionalId");
 
         if (profissionalId == null)
-            return Unauthorized(new { mensagem = "Profissional não está logada." });
+            return Unauthorized(new
+            {
+                mensagem = "Profissional não está logada."
+            });
 
         var profissional = await _context.Profissionais
             .FirstOrDefaultAsync(p =>
@@ -437,7 +525,11 @@ public async Task<IActionResult> PorServicos(
         if (profissional == null)
         {
             HttpContext.Session.Remove("ProfissionalId");
-            return NotFound(new { mensagem = "Profissional não encontrada ou inativa." });
+
+            return NotFound(new
+            {
+                mensagem = "Profissional não encontrada ou inativa."
+            });
         }
 
         var horarios = await _context.HorariosProfissionais
@@ -531,7 +623,8 @@ public async Task<IActionResult> PorServicos(
 
         if (!string.IsNullOrWhiteSpace(dados.CPF))
         {
-            var cpf = new string(dados.CPF.Where(char.IsDigit).ToArray());
+            var cpf = new string(
+                dados.CPF.Where(char.IsDigit).ToArray());
 
             if (cpf.Length != 11)
                 return "O CPF deve conter 11 números.";
@@ -551,6 +644,78 @@ public async Task<IActionResult> PorServicos(
         }
 
         return null;
+    }
+
+    // Valida e converte os horários recebidos pelo formulário.
+    private static List<HorarioProfissional> ValidarHorarios(
+        List<HorarioFormulario>? horarios,
+        out string? erro)
+    {
+        erro = null;
+
+        var resultado = new List<HorarioProfissional>();
+
+        if (horarios == null || horarios.Count == 0)
+        {
+            erro = "Informe pelo menos um dia e horário de trabalho.";
+            return resultado;
+        }
+
+        foreach (var item in horarios)
+        {
+            if (item.DiaSemana < 0 || item.DiaSemana > 6)
+            {
+                erro = "Um dos dias da semana informados é inválido.";
+                return new List<HorarioProfissional>();
+            }
+
+            if (!TimeSpan.TryParse(
+                    item.HoraInicio,
+                    CultureInfo.InvariantCulture,
+                    out var inicio) ||
+                !TimeSpan.TryParse(
+                    item.HoraFim,
+                    CultureInfo.InvariantCulture,
+                    out var fim))
+            {
+                erro = "Informe horários válidos para todos os períodos selecionados.";
+                return new List<HorarioProfissional>();
+            }
+
+            if (inicio < TimeSpan.Zero ||
+                fim > TimeSpan.FromDays(1) ||
+                inicio >= fim)
+            {
+                erro = "O horário final deve ser maior que o horário inicial.";
+                return new List<HorarioProfissional>();
+            }
+
+            resultado.Add(new HorarioProfissional
+            {
+                DiaSemana = (DayOfWeek)item.DiaSemana,
+                HoraInicio = inicio,
+                HoraFim = fim
+            });
+        }
+
+        foreach (var grupo in resultado.GroupBy(h => h.DiaSemana))
+        {
+            var ordenados = grupo
+                .OrderBy(h => h.HoraInicio)
+                .ToList();
+
+            for (int i = 1; i < ordenados.Count; i++)
+            {
+                if (ordenados[i].HoraInicio <
+                    ordenados[i - 1].HoraFim)
+                {
+                    erro = $"Os períodos de {grupo.Key} não podem se sobrepor.";
+                    return new List<HorarioProfissional>();
+                }
+            }
+        }
+
+        return resultado;
     }
 
     private async Task<string> GerarEmail(string nome)
@@ -597,9 +762,16 @@ public async Task<IActionResult> PorServicos(
         if (foto.Length == 0 || foto.Length > 2 * 1024 * 1024)
             return null;
 
-        var extensao = Path.GetExtension(foto.FileName).ToLowerInvariant();
+        var extensao = Path.GetExtension(foto.FileName)
+            .ToLowerInvariant();
 
-        var extensoesPermitidas = new[] { ".jpg", ".jpeg", ".png", ".webp" };
+        var extensoesPermitidas = new[]
+        {
+            ".jpg",
+            ".jpeg",
+            ".png",
+            ".webp"
+        };
 
         if (!extensoesPermitidas.Contains(extensao))
             return null;
@@ -614,7 +786,9 @@ public async Task<IActionResult> PorServicos(
         var nomeArquivo = $"{Guid.NewGuid():N}{extensao}";
         var caminho = Path.Combine(pasta, nomeArquivo);
 
-        await using (var stream = new FileStream(caminho, FileMode.Create))
+        await using (var stream = new FileStream(
+            caminho,
+            FileMode.Create))
         {
             await foto.CopyToAsync(stream);
         }
