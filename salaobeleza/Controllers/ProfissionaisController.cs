@@ -1,3 +1,6 @@
+
+using CloudinaryDotNet;
+using CloudinaryDotNet.Actions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SalaoBeleza.Data;
@@ -12,14 +15,17 @@ namespace SalaoBeleza.Controllers;
 public class ProfissionaisController : ControllerBase
 {
     private readonly AppDbContext _context;
-    private readonly IWebHostEnvironment _environment;
+    private readonly Cloudinary _cloudinary;
+    private readonly ILogger<ProfissionaisController> _logger;
 
     public ProfissionaisController(
         AppDbContext context,
-        IWebHostEnvironment environment)
+        Cloudinary cloudinary,
+        ILogger<ProfissionaisController> logger)
     {
         _context = context;
-        _environment = environment;
+        _cloudinary = cloudinary;
+        _logger = logger;
     }
 
     public class ProfissionalFormulario
@@ -116,6 +122,7 @@ public class ProfissionaisController : ControllerBase
                 endereco = p.Endereco,
                 taxaAtendimento = p.TaxaAtendimento,
                 foto = p.Foto,
+                imagem = p.Foto,
                 email = _context.Usuarios
                     .Where(u => u.ProfissionalId == p.Id)
                     .Select(u => u.Email)
@@ -135,10 +142,12 @@ public class ProfissionaisController : ControllerBase
             .FirstOrDefaultAsync();
 
         if (profissional == null)
+        {
             return NotFound(new
             {
                 mensagem = "Profissional não encontrada."
             });
+        }
 
         return Ok(profissional);
     }
@@ -193,20 +202,9 @@ public class ProfissionaisController : ControllerBase
             Ativo = true
         };
 
-        if (dados.Foto != null)
-        {
-            var caminhoFoto = await SalvarFoto(dados.Foto);
-
-            if (caminhoFoto == null)
-                return BadRequest(new
-                {
-                    mensagem = "Foto inválida. Envie JPG, PNG ou WEBP de até 2 MB."
-                });
-
-            profissional.Foto = caminhoFoto;
-        }
-
-        var servicosIds = dados.ServicoIds.Distinct().ToList();
+        var servicosIds = dados.ServicoIds
+            .Distinct()
+            .ToList();
 
         var servicosValidos = await _context.Servicos
             .Where(s => servicosIds.Contains(s.Id))
@@ -215,8 +213,6 @@ public class ProfissionaisController : ControllerBase
 
         if (servicosValidos.Count != servicosIds.Count)
         {
-            ApagarFotoSeExistir(profissional.Foto);
-
             return BadRequest(new
             {
                 mensagem = "Um ou mais serviços selecionados não existem."
@@ -254,7 +250,6 @@ public class ProfissionaisController : ControllerBase
                     });
             }
 
-            // NOVO: grava os horários da profissional.
             foreach (var horario in horariosValidados)
             {
                 horario.Profissional = profissional;
@@ -262,7 +257,22 @@ public class ProfissionaisController : ControllerBase
                 _context.HorariosProfissionais.Add(horario);
             }
 
+            // Salva primeiro para obter o ID da profissional.
             await _context.SaveChangesAsync();
+
+            // Envia a foto ao Cloudinary.
+            if (dados.Foto != null)
+            {
+                var urlFoto = await SalvarFoto(
+                    dados.Foto,
+                    profissional.Id
+                );
+
+                profissional.Foto = urlFoto;
+
+                await _context.SaveChangesAsync();
+            }
+
             await transacao.CommitAsync();
 
             return CreatedAtAction(
@@ -272,17 +282,23 @@ public class ProfissionaisController : ControllerBase
                 {
                     mensagem = "Profissional cadastrada com sucesso.",
                     id = profissional.Id,
-                    email = usuario.Email
+                    email = usuario.Email,
+                    imagem = profissional.Foto
                 });
         }
-        catch
+        catch (Exception erroCadastro)
         {
             await transacao.RollbackAsync();
-            ApagarFotoSeExistir(profissional.Foto);
+
+            _logger.LogError(
+                erroCadastro,
+                "Erro ao cadastrar profissional."
+            );
 
             return StatusCode(500, new
             {
-                mensagem = "Não foi possível cadastrar a profissional."
+                mensagem = "Não foi possível cadastrar a profissional: " +
+                           erroCadastro.Message
             });
         }
     }
@@ -299,10 +315,12 @@ public class ProfissionaisController : ControllerBase
             .FirstOrDefaultAsync(p => p.Id == id);
 
         if (profissional == null)
+        {
             return NotFound(new
             {
                 mensagem = "Profissional não encontrada."
             });
+        }
 
         var erro = Validar(dados);
 
@@ -336,7 +354,9 @@ public class ProfissionaisController : ControllerBase
             });
         }
 
-        var servicosIds = dados.ServicoIds.Distinct().ToList();
+        var servicosIds = dados.ServicoIds
+            .Distinct()
+            .ToList();
 
         var servicosValidos = await _context.Servicos
             .Where(s => servicosIds.Contains(s.Id))
@@ -344,22 +364,38 @@ public class ProfissionaisController : ControllerBase
             .ToListAsync();
 
         if (servicosValidos.Count != servicosIds.Count)
+        {
             return BadRequest(new
             {
                 mensagem = "Um ou mais serviços não existem."
             });
+        }
 
         string? novaFoto = null;
 
         if (dados.Foto != null)
         {
-            novaFoto = await SalvarFoto(dados.Foto);
+            try
+            {
+                novaFoto = await SalvarFoto(
+                    dados.Foto,
+                    profissional.Id
+                );
+            }
+            catch (Exception erroFoto)
+            {
+                _logger.LogError(
+                    erroFoto,
+                    "Erro ao atualizar foto da profissional {Id}.",
+                    id
+                );
 
-            if (novaFoto == null)
-                return BadRequest(new
+                return StatusCode(500, new
                 {
-                    mensagem = "Foto inválida. Envie JPG, PNG ou WEBP de até 2 MB."
+                    mensagem = "Não foi possível enviar a foto ao Cloudinary: " +
+                               erroFoto.Message
                 });
+            }
         }
 
         profissional.Nome = dados.Nome.Trim();
@@ -368,8 +404,6 @@ public class ProfissionaisController : ControllerBase
         profissional.Telefone = Limpar(dados.Telefone);
         profissional.Endereco = Limpar(dados.Endereco);
         profissional.TaxaAtendimento = dados.TaxaAtendimento;
-
-        var fotoAntiga = profissional.Foto;
 
         if (novaFoto != null)
             profissional.Foto = novaFoto;
@@ -413,7 +447,6 @@ public class ProfissionaisController : ControllerBase
                 });
         }
 
-        // NOVO: substitui os horários antigos pelos horários enviados.
         _context.HorariosProfissionais.RemoveRange(
             profissional.HorariosProfissionais);
 
@@ -428,18 +461,19 @@ public class ProfissionaisController : ControllerBase
         {
             await _context.SaveChangesAsync();
 
-            if (novaFoto != null)
-                ApagarFotoSeExistir(fotoAntiga);
-
             return Ok(new
             {
-                mensagem = "Profissional atualizada com sucesso."
+                mensagem = "Profissional atualizada com sucesso.",
+                imagem = profissional.Foto
             });
         }
-        catch
+        catch (Exception erroAtualizacao)
         {
-            if (novaFoto != null)
-                ApagarFotoSeExistir(novaFoto);
+            _logger.LogError(
+                erroAtualizacao,
+                "Erro ao atualizar profissional {Id}.",
+                id
+            );
 
             return StatusCode(500, new
             {
@@ -455,10 +489,12 @@ public class ProfissionaisController : ControllerBase
             .FirstOrDefaultAsync(p => p.Id == id);
 
         if (profissional == null)
+        {
             return NotFound(new
             {
                 mensagem = "Profissional não encontrada."
             });
+        }
 
         profissional.Ativo = false;
 
@@ -513,10 +549,12 @@ public class ProfissionaisController : ControllerBase
             HttpContext.Session.GetInt32("ProfissionalId");
 
         if (profissionalId == null)
+        {
             return Unauthorized(new
             {
                 mensagem = "Profissional não está logada."
             });
+        }
 
         var profissional = await _context.Profissionais
             .FirstOrDefaultAsync(p =>
@@ -646,7 +684,6 @@ public class ProfissionaisController : ControllerBase
         return null;
     }
 
-    // Valida e converte os horários recebidos pelo formulário.
     private static List<HorarioProfissional> ValidarHorarios(
         List<HorarioFormulario>? horarios,
         out string? erro)
@@ -718,6 +755,62 @@ public class ProfissionaisController : ControllerBase
         return resultado;
     }
 
+    private async Task<string> SalvarFoto(
+        IFormFile foto,
+        int profissionalId)
+    {
+        if (foto == null ||
+            foto.Length == 0 ||
+            foto.Length > 5 * 1024 * 1024)
+        {
+            throw new InvalidOperationException(
+                "Foto inválida. Envie JPG, PNG ou WEBP de até 5 MB."
+            );
+        }
+
+        var extensao = Path.GetExtension(foto.FileName)
+            .ToLowerInvariant();
+
+        var extensoesPermitidas = new[]
+        {
+            ".jpg",
+            ".jpeg",
+            ".png",
+            ".webp"
+        };
+
+        if (!extensoesPermitidas.Contains(extensao))
+        {
+            throw new InvalidOperationException(
+                "Formato de foto inválido. Envie JPG, PNG ou WEBP."
+            );
+        }
+
+        await using var stream = foto.OpenReadStream();
+
+        var parametros = new ImageUploadParams
+        {
+            File = new FileDescription(
+                foto.FileName,
+                stream
+            ),
+            PublicId = $"belleza/profissionais/profissional_{profissionalId}",
+            Overwrite = true,
+            Invalidate = true
+        };
+
+        var resultado = await _cloudinary.UploadAsync(parametros);
+
+        if (resultado.Error != null)
+        {
+            throw new InvalidOperationException(
+                resultado.Error.Message
+            );
+        }
+
+        return resultado.SecureUrl.ToString();
+    }
+
     private async Task<string> GerarEmail(string nome)
     {
         var baseNome = RemoverAcentos(nome)
@@ -755,65 +848,6 @@ public class ProfissionaisController : ControllerBase
         }
 
         return $"{baseNome}{contador}@beleza.com";
-    }
-
-    private async Task<string?> SalvarFoto(IFormFile foto)
-    {
-        if (foto.Length == 0 || foto.Length > 2 * 1024 * 1024)
-            return null;
-
-        var extensao = Path.GetExtension(foto.FileName)
-            .ToLowerInvariant();
-
-        var extensoesPermitidas = new[]
-        {
-            ".jpg",
-            ".jpeg",
-            ".png",
-            ".webp"
-        };
-
-        if (!extensoesPermitidas.Contains(extensao))
-            return null;
-
-        var pasta = Path.Combine(
-            _environment.WebRootPath ?? "wwwroot",
-            "imagens",
-            "profissionais");
-
-        Directory.CreateDirectory(pasta);
-
-        var nomeArquivo = $"{Guid.NewGuid():N}{extensao}";
-        var caminho = Path.Combine(pasta, nomeArquivo);
-
-        await using (var stream = new FileStream(
-            caminho,
-            FileMode.Create))
-        {
-            await foto.CopyToAsync(stream);
-        }
-
-        return $"/imagens/profissionais/{nomeArquivo}";
-    }
-
-    private void ApagarFotoSeExistir(string? caminhoFoto)
-    {
-        if (string.IsNullOrWhiteSpace(caminhoFoto))
-            return;
-
-        var nomeArquivo = Path.GetFileName(caminhoFoto);
-
-        if (string.IsNullOrWhiteSpace(nomeArquivo))
-            return;
-
-        var caminho = Path.Combine(
-            _environment.WebRootPath ?? "wwwroot",
-            "imagens",
-            "profissionais",
-            nomeArquivo);
-
-        if (System.IO.File.Exists(caminho))
-            System.IO.File.Delete(caminho);
     }
 
     private static string? Limpar(string? valor)

@@ -719,9 +719,7 @@ async function carregarProfissionais() {
                         document.createElement("img");
 
                    imagem.src = profissional.imagem
-    ? (profissional.imagem.startsWith("/")
-        ? profissional.imagem
-        : `/imagens/profissionais/${profissional.imagem}`)
+    ? profissional.imagem
     : "../imagens/profissional_padrao.png";
 
 imagem.onerror = function () {
