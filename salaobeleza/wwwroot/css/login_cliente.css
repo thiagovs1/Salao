@@ -233,9 +233,7 @@ body {
 }
 
 
-body {
-    background: red !important;
-}
+
 
 @media (max-width: 600px) {
 
