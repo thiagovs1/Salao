@@ -232,8 +232,10 @@ body {
     margin-top: 38px;
 }
 
-body { background: red !important; }
 
+body {
+    background: red !important;
+}
 
 @media (max-width: 600px) {
 
