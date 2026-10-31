@@ -1,3 +1,4 @@
+
 namespace SalaoBeleza.Models;
 
 public class AgendamentoServico
