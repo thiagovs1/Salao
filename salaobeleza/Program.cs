@@ -1,3 +1,5 @@
+
+using CloudinaryDotNet;
 using Microsoft.EntityFrameworkCore;
 using SalaoBeleza.Data;
 using SalaoBeleza.Repositories;
@@ -14,6 +16,32 @@ if (string.IsNullOrWhiteSpace(connectionString))
     );
 }
 
+// CLOUDINARY
+var cloudName = builder.Configuration["CLOUDINARY_CLOUD_NAME"];
+var apiKey = builder.Configuration["CLOUDINARY_API_KEY"];
+var apiSecret = builder.Configuration["CLOUDINARY_API_SECRET"];
+
+if (string.IsNullOrWhiteSpace(cloudName) ||
+    string.IsNullOrWhiteSpace(apiKey) ||
+    string.IsNullOrWhiteSpace(apiSecret))
+{
+    throw new InvalidOperationException(
+        "As credenciais do Cloudinary não foram configuradas."
+    );
+}
+
+var cloudinaryAccount = new Account(
+    cloudName,
+    apiKey,
+    apiSecret
+);
+
+var cloudinary = new Cloudinary(cloudinaryAccount);
+cloudinary.Api.Secure = true;
+
+builder.Services.AddSingleton(cloudinary);
+
+// SESSION
 builder.Services.AddDistributedMemoryCache();
 
 builder.Services.AddSession(options =>
@@ -28,21 +56,25 @@ builder.Services.AddSession(options =>
         : CookieSecurePolicy.Always;
 });
 
+// DATABASE
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseMySQL(connectionString)
 );
 
+// REPOSITORIES
 builder.Services.AddScoped<IClienteRepository, ClienteRepository>();
 builder.Services.AddScoped<IServicoRepository, ServicoRepository>();
 builder.Services.AddScoped<IAgendamentoRepository, AgendamentoRepository>();
 builder.Services.AddScoped<IHorarioProfissionalRepository, HorarioProfissionalRepository>();
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 
+// SERVICES
 builder.Services.AddScoped<ClienteService>();
 builder.Services.AddScoped<ServicoService>();
 builder.Services.AddScoped<AgendamentoService>();
 builder.Services.AddScoped<UsuarioService>();
 
+// CONTROLLERS
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

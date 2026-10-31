@@ -1,4 +1,6 @@
 
+using CloudinaryDotNet;
+using CloudinaryDotNet.Actions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SalaoBeleza.Data;
@@ -11,14 +13,17 @@ namespace SalaoBeleza.Controllers;
 public class CombosController : ControllerBase
 {
     private readonly AppDbContext _context;
-    private readonly IWebHostEnvironment _environment;
+    private readonly Cloudinary _cloudinary;
+    private readonly ILogger<CombosController> _logger;
 
     public CombosController(
         AppDbContext context,
-        IWebHostEnvironment environment)
+        Cloudinary cloudinary,
+        ILogger<CombosController> logger)
     {
         _context = context;
-        _environment = environment;
+        _cloudinary = cloudinary;
+        _logger = logger;
     }
 
     public class ComboSalvarDTO
@@ -160,6 +165,8 @@ public class CombosController : ControllerBase
         });
     }
 
+    // ENVIO DA IMAGEM PARA O CLOUDINARY
+
     [HttpPost("{id:int}/imagem")]
     [Consumes("multipart/form-data")]
     [RequestSizeLimit(5 * 1024 * 1024)]
@@ -179,7 +186,8 @@ public class CombosController : ControllerBase
         if (arquivo.Length > 5 * 1024 * 1024)
             return BadRequest(new { mensagem = "A imagem deve ter no máximo 5 MB." });
 
-        var extensao = Path.GetExtension(arquivo.FileName).ToLowerInvariant();
+        var extensao = Path.GetExtension(arquivo.FileName)
+            .ToLowerInvariant();
 
         var tiposPermitidos = new Dictionary<string, string>
         {
@@ -190,7 +198,10 @@ public class CombosController : ControllerBase
         };
 
         if (!tiposPermitidos.TryGetValue(extensao, out var tipoEsperado) ||
-            arquivo.ContentType != tipoEsperado)
+            !string.Equals(
+                arquivo.ContentType,
+                tipoEsperado,
+                StringComparison.OrdinalIgnoreCase))
         {
             return BadRequest(new
             {
@@ -198,44 +209,76 @@ public class CombosController : ControllerBase
             });
         }
 
-        var pastaWeb = _environment.WebRootPath
-            ?? Path.Combine(_environment.ContentRootPath, "wwwroot");
-
-        var pastaImagens = Path.Combine(
-            pastaWeb, "imagens", "combos");
-
-        Directory.CreateDirectory(pastaImagens);
-
-        var nomeArquivo = $"{Guid.NewGuid():N}{extensao}";
-        var caminhoCompleto = Path.Combine(pastaImagens, nomeArquivo);
-        var imagemAntiga = combo.Imagem;
-
-        await using (var stream = new FileStream(caminhoCompleto, FileMode.Create))
-        {
-            await arquivo.CopyToAsync(stream);
-        }
-
-        combo.Imagem = $"/imagens/combos/{nomeArquivo}";
-
         try
         {
+            await using var stream = arquivo.OpenReadStream();
+
+            // Cada combo possui um endereço próprio no Cloudinary.
+            // Ao trocar a imagem, o arquivo anterior é substituído.
+
+            var publicId = $"belleza/combos/combo_{combo.Id}";
+
+            var parametros = new ImageUploadParams
+            {
+                File = new FileDescription(
+                    arquivo.FileName,
+                    stream
+                ),
+
+                PublicId = publicId,
+                Overwrite = true,
+                Invalidate = true
+            };
+
+            var resultado = await _cloudinary.UploadAsync(parametros);
+
+            if (resultado.Error != null)
+            {
+                _logger.LogError(
+                    "Erro no Cloudinary: {Erro}",
+                    resultado.Error.Message
+                );
+
+                return StatusCode(502, new
+                {
+                    mensagem = "Não foi possível enviar a imagem para o Cloudinary.",
+                    erro = resultado.Error.Message
+                });
+            }
+
+            if (resultado.SecureUrl == null)
+            {
+                return StatusCode(502, new
+                {
+                    mensagem = "O Cloudinary não retornou o endereço da imagem."
+                });
+            }
+
+            // Salva o endereço permanente no MySQL.
+
+            combo.Imagem = resultado.SecureUrl.ToString();
+
             await _context.SaveChangesAsync();
+
+            return Ok(new
+            {
+                mensagem = "Imagem do combo atualizada com sucesso.",
+                imagem = combo.Imagem
+            });
         }
-        catch
+        catch (Exception ex)
         {
-            if (System.IO.File.Exists(caminhoCompleto))
-                System.IO.File.Delete(caminhoCompleto);
+            _logger.LogError(
+                ex,
+                "Erro ao atualizar imagem do combo {ComboId}",
+                id
+            );
 
-            throw;
+            return StatusCode(500, new
+            {
+                mensagem = "Ocorreu um erro ao atualizar a imagem do combo."
+            });
         }
-
-        ExcluirArquivoImagem(imagemAntiga);
-
-        return Ok(new
-        {
-            mensagem = "Imagem do combo atualizada com sucesso.",
-            imagem = combo.Imagem
-        });
     }
 
     [HttpDelete("{id:int}")]
@@ -248,16 +291,36 @@ public class CombosController : ControllerBase
         if (combo == null)
             return NotFound(new { mensagem = "Combo não encontrado." });
 
-        var imagem = combo.Imagem;
-
         try
         {
-            _context.Set<ComboServico>().RemoveRange(combo.ComboServicos);
+            _context.Set<ComboServico>()
+                .RemoveRange(combo.ComboServicos);
+
             _context.Combos.Remove(combo);
 
             await _context.SaveChangesAsync();
 
-            ExcluirArquivoImagem(imagem);
+            // Remove também a imagem armazenada na nuvem.
+
+            try
+            {
+                await _cloudinary.DestroyAsync(
+                    new DeletionParams(
+                        $"belleza/combos/combo_{id}"
+                    )
+                    {
+                        Invalidate = true
+                    }
+                );
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWarning(
+                    ex,
+                    "Não foi possível excluir a imagem do combo {ComboId} no Cloudinary.",
+                    id
+                );
+            }
 
             return NoContent();
         }
@@ -268,25 +331,5 @@ public class CombosController : ControllerBase
                 mensagem = "Não foi possível excluir este combo. Ele pode estar vinculado a agendamentos."
             });
         }
-    }
-
-    private void ExcluirArquivoImagem(string? caminhoImagem)
-    {
-        if (string.IsNullOrWhiteSpace(caminhoImagem))
-            return;
-
-        var nomeArquivo = Path.GetFileName(caminhoImagem);
-
-        if (string.IsNullOrWhiteSpace(nomeArquivo))
-            return;
-
-        var pastaWeb = _environment.WebRootPath
-            ?? Path.Combine(_environment.ContentRootPath, "wwwroot");
-
-        var caminhoCompleto = Path.Combine(
-            pastaWeb, "imagens", "combos", nomeArquivo);
-
-        if (System.IO.File.Exists(caminhoCompleto))
-            System.IO.File.Delete(caminhoCompleto);
     }
 }
