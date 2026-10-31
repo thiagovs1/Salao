@@ -1,0 +1,698 @@
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Serviços - Belleza</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" href="../css/servicos.css">
+
+    <style>
+        .notificacao-belleza {
+            position: fixed;
+            top: 24px;
+            right: 24px;
+            z-index: 99999;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            width: min(380px, calc(100vw - 32px));
+            padding: 18px;
+            background: #fff;
+            border-radius: 14px;
+            box-shadow: 0 10px 35px rgba(0,0,0,.16);
+            border-left: 5px solid #b76e79;
+            font-family: Arial, sans-serif;
+            animation: entrarNotificacao .3s ease;
+        }
+
+        .notificacao-belleza .icone {
+            width: 42px;
+            height: 42px;
+            flex-shrink: 0;
+            display: grid;
+            place-items: center;
+            border-radius: 50%;
+            background: #f9e8ec;
+            color: #a64d61;
+            font-size: 20px;
+        }
+
+        .notificacao-belleza .texto {
+            flex: 1;
+            color: #444;
+            font-size: 14px;
+            line-height: 1.5;
+            overflow-wrap: anywhere;
+        }
+
+        .notificacao-belleza .texto strong {
+            display: block;
+            margin-bottom: 3px;
+            color: #713b49;
+            font-size: 15px;
+        }
+
+        .notificacao-belleza .fechar {
+            align-self: flex-start;
+            border: 0;
+            background: transparent;
+            color: #888;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        @keyframes entrarNotificacao {
+            from {
+                opacity: 0;
+                transform: translateX(25px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .notificacao-belleza {
+                top: 12px;
+                right: 12px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <aside class="sidebar">
+        <div class="logo-area">
+            <img src="../imagens/logo_belleza.png" alt="Belleza" class="logo-belleza">
+        </div>
+
+        <nav class="menu">
+            <a href="tela_inicial.html" class="menu-item">
+                <i class="fa-solid fa-house"></i>
+                <span>Início</span>
+            </a>
+
+            <a href="servicos.html" class="menu-item ativo">
+                <i class="fa-solid fa-scissors"></i>
+                <span>Serviços</span>
+            </a>
+
+            <a href="profissionais.html" class="menu-item">
+                <i class="fa-solid fa-users"></i>
+                <span>Profissionais</span>
+            </a>
+
+            <a href="agendar_horario.html" class="menu-item">
+                <i class="fa-regular fa-calendar"></i>
+                <span>Agendar horário</span>
+            </a>
+
+            <a href="meus_agendamentos.html" class="menu-item">
+                <i class="fa-regular fa-calendar"></i>
+                <span>Meus agendamentos</span>
+            </a>
+
+            <a href="#" class="menu-item">
+                <i class="fa-solid fa-tags"></i>
+                <span>Promoções</span>
+            </a>
+
+            <a href="#" class="menu-item">
+                <i class="fa-regular fa-star"></i>
+                <span>Avaliações</span>
+            </a>
+
+            <a href="#" class="menu-item">
+                <i class="fa-regular fa-circle-user"></i>
+                <span>Minha Conta</span>
+            </a>
+
+            <a href="#" class="menu-item sair">
+                <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                <span>Sair</span>
+            </a>
+        </nav>
+    </aside>
+
+    <main class="conteudo">
+        <section class="area-servicos">
+            <div class="conteudo-servicos">
+                <h1 class="titulo-pagina">Escolha o serviço</h1>
+
+                <div class="categorias-escolha">
+                    <button type="button" id="btn-servicos" class="categoria ativa">
+                        <span class="nome-categoria">Serviços</span>
+                        <span class="quantidade" id="quantidade-servicos">Carregando...</span>
+                    </button>
+
+                    <button type="button" id="btn-combos" class="categoria">
+                        <span class="nome-categoria">Combos</span>
+                        <span class="quantidade" id="quantidade-combos">Carregando...</span>
+                    </button>
+                </div>
+
+                <div id="area-servicos" class="area-lista">
+                    <h2 class="titulo-servicos">Serviços disponíveis</h2>
+                    <div id="lista-servicos" class="lista-servicos"></div>
+                </div>
+
+                <div id="area-combos" class="area-lista oculto">
+                    <h2 class="titulo-servicos">Combos disponíveis</h2>
+                    <div id="lista-combos" class="lista-servicos"></div>
+                </div>
+            </div>
+
+            <aside class="resumo">
+                <h2>Resumo do atendimento</h2>
+
+                <div id="itens-selecionados" class="itens-selecionados">
+                    <p class="nenhum-item">Nenhum serviço selecionado.</p>
+                </div>
+
+                <div class="resumo-item">
+                    <div class="resumo-icone">
+                        <i class="fa-solid fa-people-group"></i>
+                    </div>
+                    <div class="resumo-texto">
+                        <span>Profissional</span>
+                        <strong>Não selecionado</strong>
+                    </div>
+                </div>
+
+                <div class="resumo-item">
+                    <div class="resumo-icone">
+                        <i class="fa-regular fa-calendar"></i>
+                    </div>
+                    <div class="resumo-texto">
+                        <span>Data e horário</span>
+                        <strong>Não selecionado</strong>
+                    </div>
+                </div>
+
+                <div class="total">
+                    <span class="titulo-total">Total do atendimento</span>
+                    <div class="valor">
+                        <strong id="valorTotal">R$ 0,00</strong>
+                    </div>
+                </div>
+
+                <button type="button" id="btn-excluir-pedido" class="btn-limpar">
+                    Limpar seleção
+                </button>
+
+                <button type="button" id="btn-continuar" class="btn-continuar">
+                    <span>Continuar</span>
+                    <span>➜</span>
+                </button>
+            </aside>
+        </section>
+    </main>
+
+    <script>
+        const API_URL = `${window.location.origin}/api`;
+
+        let servicos = [];
+        let combos = [];
+        let selecionados = [];
+        let temporizadorNotificacao;
+
+        function mostrarNotificacao(mensagem, tipo = "aviso") {
+            const anterior = document.querySelector(".notificacao-belleza");
+            if (anterior) anterior.remove();
+
+            clearTimeout(temporizadorNotificacao);
+
+            const configuracoes = {
+                sucesso: { icone: "✓", titulo: "Tudo certo!" },
+                aviso: { icone: "!", titulo: "Atenção" },
+                erro: { icone: "×", titulo: "Não foi possível concluir" }
+            };
+
+            const config = configuracoes[tipo] || configuracoes.aviso;
+            const notificacao = document.createElement("div");
+            notificacao.className = "notificacao-belleza";
+
+            const icone = document.createElement("div");
+            icone.className = "icone";
+            icone.textContent = config.icone;
+
+            const texto = document.createElement("div");
+            texto.className = "texto";
+
+            const titulo = document.createElement("strong");
+            titulo.textContent = config.titulo;
+
+            const descricao = document.createElement("span");
+            descricao.textContent = String(mensagem)
+                .replace(/https?:\/\/\S+/gi, "o servidor")
+                .replace(/\blocalhost(?::\d+)?\b/gi, "o servidor")
+                .replace(/\b127\.0\.0\.1(?::\d+)?\b/gi, "o servidor");
+
+            const fechar = document.createElement("button");
+            fechar.className = "fechar";
+            fechar.type = "button";
+            fechar.textContent = "×";
+            fechar.setAttribute("aria-label", "Fechar notificação");
+            fechar.addEventListener("click", () => notificacao.remove());
+
+            texto.append(titulo, descricao);
+            notificacao.append(icone, texto, fechar);
+            document.body.appendChild(notificacao);
+
+            temporizadorNotificacao = setTimeout(() => {
+                notificacao.remove();
+            }, 4500);
+        }
+
+        document.getElementById("btn-servicos").addEventListener("click", () => {
+            document.getElementById("btn-servicos").classList.add("ativa");
+            document.getElementById("btn-combos").classList.remove("ativa");
+            document.getElementById("area-servicos").classList.remove("oculto");
+            document.getElementById("area-combos").classList.add("oculto");
+        });
+
+        document.getElementById("btn-combos").addEventListener("click", () => {
+            document.getElementById("btn-combos").classList.add("ativa");
+            document.getElementById("btn-servicos").classList.remove("ativa");
+            document.getElementById("area-combos").classList.remove("oculto");
+            document.getElementById("area-servicos").classList.add("oculto");
+        });
+
+        function criarCardServico(servico) {
+            const container = document.getElementById("lista-servicos");
+            const card = document.createElement("div");
+            card.className = "servico";
+
+            const nome = servico.nome ?? servico.Nome;
+            const preco = servico.preco ?? servico.Preco;
+            const id = servico.id ?? servico.Id;
+            const duracao = servico.duracaoMinutos ?? servico.DuracaoMinutos ?? 0;
+
+            const titulo = document.createElement("h3");
+            titulo.textContent = nome;
+
+            const descricao = document.createElement("p");
+            descricao.textContent = "Serviço disponível no salão.";
+
+            const precoTexto = document.createElement("span");
+            precoTexto.textContent = `Preço: ${formatarPreco(preco)}`;
+
+            const duracaoTexto = document.createElement("span");
+            duracaoTexto.textContent = `Tempo: ${formatarDuracao(duracao)}`;
+
+            const botao = document.createElement("button");
+            botao.type = "button";
+            botao.className = "btn-servico";
+            botao.textContent = "Selecionar";
+            botao.addEventListener("click", () => {
+                selecionarItem(id, nome, preco, duracao, "servico");
+            });
+
+            card.append(titulo, descricao, precoTexto, duracaoTexto, botao);
+            container.appendChild(card);
+        }
+
+        function criarCardCombo(combo) {
+            const container = document.getElementById("lista-combos");
+            const card = document.createElement("div");
+            card.className = "servico";
+
+            const nome = combo.nome ?? combo.Nome;
+            const preco = combo.preco ?? combo.Preco;
+            const id = combo.id ?? combo.Id;
+            const listaCombo = combo.servicos ?? combo.Servicos ?? [];
+
+            const descricao = listaCombo.length
+                ? listaCombo.map(s => s.nome ?? s.Nome).join(" + ")
+                : "Combo de serviços";
+
+            const totalMinutos = listaCombo.reduce((total, servico) => {
+                return total + Number(
+                    servico.duracaoMinutos ?? servico.DuracaoMinutos ?? 0
+                );
+            }, 0);
+
+            const titulo = document.createElement("h3");
+            titulo.textContent = nome;
+
+            const descricaoTexto = document.createElement("p");
+            descricaoTexto.textContent = descricao;
+
+            const precoTexto = document.createElement("span");
+            precoTexto.textContent = `Preço: ${formatarPreco(preco)}`;
+
+            const duracaoTexto = document.createElement("span");
+            duracaoTexto.textContent = `Tempo: ${formatarDuracao(totalMinutos)}`;
+
+            const botao = document.createElement("button");
+            botao.type = "button";
+            botao.className = "btn-servico";
+            botao.textContent = "Selecionar";
+            botao.addEventListener("click", () => {
+                selecionarItem(id, nome, preco, totalMinutos, "combo");
+            });
+
+            card.append(titulo, descricaoTexto, precoTexto, duracaoTexto, botao);
+            container.appendChild(card);
+        }
+
+        function formatarPreco(preco) {
+            return Number(preco).toLocaleString("pt-BR", {
+                style: "currency",
+                currency: "BRL"
+            });
+        }
+
+        function formatarDuracao(minutos) {
+            minutos = Number(minutos) || 0;
+
+            if (minutos === 0) return "Tempo não informado";
+
+            const horas = Math.floor(minutos / 60);
+            const minutosRestantes = minutos % 60;
+
+            if (horas === 0) return `${minutosRestantes}min`;
+            if (minutosRestantes === 0) return `${horas}h`;
+
+            return `${horas}h ${minutosRestantes}min`;
+        }
+
+        function encontrarComboDoServico(id, nome) {
+            for (const combo of combos) {
+                const listaCombo = combo.servicos ?? combo.Servicos ?? [];
+                const encontrado = listaCombo.some(servico => {
+                    const servicoId = servico.id ?? servico.Id;
+                    const servicoNome = servico.nome ?? servico.Nome;
+
+                    return Number(servicoId) === Number(id) || servicoNome === nome;
+                });
+
+                if (encontrado) return combo;
+            }
+
+            return null;
+        }
+
+        function comboContemServico(combo, item) {
+            const listaCombo = combo.servicos ?? combo.Servicos ?? [];
+
+            return listaCombo.some(servico => {
+                const servicoId = servico.id ?? servico.Id;
+                const servicoNome = servico.nome ?? servico.Nome;
+
+                return Number(servicoId) === Number(item.id) ||
+                    servicoNome === item.nome;
+            });
+        }
+
+        async function selecionarItem(id, nome, preco, duracao, tipo) {
+            const jaSelecionado = selecionados.some(item =>
+                Number(item.id ?? item.Id) === Number(id) &&
+                (item.tipo ?? item.Tipo) === tipo
+            );
+
+            if (jaSelecionado) {
+                mostrarNotificacao(
+                    tipo === "servico"
+                        ? "Este serviço já foi selecionado."
+                        : "Este combo já foi selecionado.",
+                    "aviso"
+                );
+                return;
+            }
+
+            if (tipo === "servico") {
+                const comboDoServico = encontrarComboDoServico(id, nome);
+
+                if (comboDoServico) {
+                    const nomeCombo = comboDoServico.nome ?? comboDoServico.Nome;
+                    const comboSelecionado = selecionados.find(item =>
+                        (item.tipo ?? item.Tipo) === "combo" &&
+                        (item.nome ?? item.Nome) === nomeCombo
+                    );
+
+                    if (comboSelecionado) {
+                        mostrarNotificacao(
+                            `Este serviço já está incluído no combo "${nomeCombo}". Remova o combo para selecionar este serviço separadamente.`,
+                            "aviso"
+                        );
+                        return;
+                    }
+                }
+            }
+
+            if (tipo === "combo") {
+                const comboAtual = combos.find(combo =>
+                    Number(combo.id ?? combo.Id) === Number(id)
+                );
+
+                if (comboAtual) {
+                    const nomeComboAtual = comboAtual.nome ?? comboAtual.Nome;
+
+                    if (nomeComboAtual.toLowerCase().includes("belleza completa")) {
+                        const outrosCombos = selecionados.filter(item =>
+                            (item.tipo ?? item.Tipo) === "combo"
+                        );
+
+                        if (outrosCombos.length > 0) {
+                            const nomes = outrosCombos
+                                .map(item => item.nome ?? item.Nome)
+                                .join(", ");
+
+                            mostrarNotificacao(
+                                `O combo Belleza Completa já inclui os serviços dos combos ${nomes}. Remova os outros combos antes de selecioná-lo.`,
+                                "aviso"
+                            );
+                            return;
+                        }
+                    }
+
+                    const servicosSelecionados = selecionados.filter(item =>
+                        (item.tipo ?? item.Tipo) === "servico"
+                    );
+
+                    const servicosConflitantes = servicosSelecionados.filter(item =>
+                        comboContemServico(comboAtual, item)
+                    );
+
+                    if (servicosConflitantes.length > 0) {
+                        const nomes = servicosConflitantes
+                            .map(item => item.nome ?? item.Nome)
+                            .join(", ");
+
+                        mostrarNotificacao(
+                            `O serviço ${nomes} já está incluído no combo "${nomeComboAtual}". Remova esse serviço antes de selecionar o combo.`,
+                            "aviso"
+                        );
+                        return;
+                    }
+                }
+            }
+
+            const item = {
+                id: Number(id),
+                nome,
+                preco: Number(preco),
+                duracaoMinutos: Number(duracao),
+                tipo
+            };
+
+            try {
+                const resposta = await fetch(`${API_URL}/Selecao`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    credentials: "include",
+                    body: JSON.stringify(item)
+                });
+
+                const dados = await resposta.json().catch(() => ({}));
+
+                if (!resposta.ok) {
+                    throw new Error(dados.mensagem || "Não foi possível adicionar o item à seleção.");
+                }
+
+                await carregarSelecao();
+                mostrarNotificacao(`${nome} foi adicionado à sua seleção.`, "sucesso");
+            } catch (erro) {
+                console.error("Erro ao selecionar item:", erro);
+                mostrarNotificacao(
+                    erro.message || "Não foi possível selecionar o item. Tente novamente.",
+                    "erro"
+                );
+            }
+        }
+
+        async function carregarServicos() {
+            try {
+                const resposta = await fetch(`${API_URL}/Servicos`);
+
+                if (!resposta.ok) {
+                    throw new Error("Não foi possível carregar os serviços.");
+                }
+
+                servicos = await resposta.json();
+
+                const container = document.getElementById("lista-servicos");
+                container.innerHTML = "";
+
+                servicos.forEach(criarCardServico);
+
+                document.getElementById("quantidade-servicos").textContent =
+                    `${servicos.length} ${servicos.length === 1 ? "serviço" : "serviços"}`;
+            } catch (erro) {
+                console.error("Erro ao carregar serviços:", erro);
+                document.getElementById("lista-servicos").textContent =
+                    "Não foi possível carregar os serviços. Tente atualizar a página.";
+                mostrarNotificacao("Não foi possível carregar os serviços.", "erro");
+            }
+        }
+
+        async function carregarCombos() {
+            try {
+                const resposta = await fetch(`${API_URL}/Combos`);
+
+                if (!resposta.ok) {
+                    throw new Error("Não foi possível carregar os combos.");
+                }
+
+                combos = await resposta.json();
+
+                const container = document.getElementById("lista-combos");
+                container.innerHTML = "";
+
+                combos.forEach(criarCardCombo);
+
+                document.getElementById("quantidade-combos").textContent =
+                    `${combos.length} ${combos.length === 1 ? "combo" : "combos"}`;
+            } catch (erro) {
+                console.error("Erro ao carregar combos:", erro);
+                document.getElementById("lista-combos").textContent =
+                    "Não foi possível carregar os combos. Tente atualizar a página.";
+                mostrarNotificacao("Não foi possível carregar os combos.", "erro");
+            }
+        }
+
+        async function carregarSelecao() {
+            try {
+                const resposta = await fetch(`${API_URL}/Selecao`, {
+                    method: "GET",
+                    credentials: "include"
+                });
+
+                if (!resposta.ok) {
+                    throw new Error("Não foi possível carregar sua seleção.");
+                }
+
+                const dados = await resposta.json();
+                selecionados = Array.isArray(dados) ? dados : [];
+
+                atualizarResumo();
+                atualizarBotoes();
+            } catch (erro) {
+                console.error("Erro ao carregar seleção:", erro);
+                mostrarNotificacao("Não foi possível atualizar sua seleção.", "erro");
+            }
+        }
+
+        function atualizarResumo() {
+            const container = document.getElementById("itens-selecionados");
+            const valorTotal = document.getElementById("valorTotal");
+
+            container.innerHTML = "";
+
+            if (!selecionados || selecionados.length === 0) {
+                container.innerHTML = '<p class="nenhum-item">Nenhum serviço selecionado.</p>';
+                valorTotal.textContent = "R$ 0,00";
+                return;
+            }
+
+            let total = 0;
+
+            selecionados.forEach(item => {
+                const nome = item.nome ?? item.Nome;
+                const preco = Number(item.preco ?? item.Preco ?? 0);
+                total += preco;
+
+                const div = document.createElement("div");
+                div.className = "item-selecionado";
+
+                const detalhes = document.createElement("div");
+                detalhes.className = "pedido-detalhes";
+
+                const titulo = document.createElement("strong");
+                titulo.textContent = nome;
+                detalhes.appendChild(titulo);
+
+                const precoItem = document.createElement("div");
+                precoItem.className = "pedido-preco";
+                precoItem.textContent = formatarPreco(preco);
+
+                div.append(detalhes, precoItem);
+                container.appendChild(div);
+            });
+
+            valorTotal.textContent = formatarPreco(total);
+        }
+
+        function atualizarBotoes() {
+            document.querySelectorAll(".btn-servico").forEach(botao => {
+                const card = botao.closest(".servico");
+                const titulo = card?.querySelector("h3");
+
+                if (!titulo) return;
+
+                const nome = titulo.textContent.trim();
+                const selecionado = selecionados.some(item =>
+                    (item.nome ?? item.Nome) === nome
+                );
+
+                botao.textContent = selecionado ? "Selecionado" : "Selecionar";
+                botao.classList.toggle("selecionado-btn", selecionado);
+            });
+        }
+
+        document.getElementById("btn-excluir-pedido").addEventListener("click", async () => {
+            try {
+                const resposta = await fetch(`${API_URL}/Selecao`, {
+                    method: "DELETE",
+                    credentials: "include"
+                });
+
+                if (!resposta.ok) {
+                    throw new Error("Não foi possível limpar sua seleção.");
+                }
+
+                selecionados = [];
+                atualizarResumo();
+                atualizarBotoes();
+                mostrarNotificacao("Sua seleção foi limpa.", "sucesso");
+            } catch (erro) {
+                console.error("Erro ao limpar seleção:", erro);
+                mostrarNotificacao("Não foi possível limpar a seleção. Tente novamente.", "erro");
+            }
+        });
+
+        document.getElementById("btn-continuar").addEventListener("click", () => {
+            if (!selecionados || selecionados.length === 0) {
+                mostrarNotificacao("Selecione pelo menos um serviço ou combo para continuar.", "aviso");
+                return;
+            }
+
+            window.location.href = "profissionais.html";
+        });
+
+        async function iniciar() {
+            await Promise.all([
+                carregarServicos(),
+                carregarCombos(),
+                carregarSelecao()
+            ]);
+        }
+
+        iniciar();
+    </script>
+</body>
+</html>

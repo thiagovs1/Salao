@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+<title>Recuperar Senha - Belleza</title>
+
+<link rel="stylesheet" href="../css/recuperar_senha.css">
+
+
+</head>
+
+<body>
+
+
+<main class="recuperar-card">
+
+    <div class="logo-area">
+
+        <img
+            src="../imagens/logo_belleza_login.png"
+            alt="Logo Belleza"
+            class="logo"
+        >
+
+    </div>
+
+    <h2>Recuperar</h2>
+
+    <p class="texto-recuperar">
+        Preencha os dados abaixo para alterar sua senha
+    </p>
+
+
+    <form id="form-recuperar">
+
+        <div class="campo">
+
+            <label for="email">
+                E-mail:
+            </label>
+
+            <input
+                type="email"
+                id="email"
+                name="email"
+                placeholder="Digite seu e-mail"
+                required
+            >
+
+        </div>
+
+
+        <div class="campo">
+
+            <label for="nova-senha">
+                Nova senha
+            </label>
+
+            <input
+                type="password"
+                id="nova-senha"
+                name="nova-senha"
+                placeholder="Nova senha"
+                required
+            >
+
+        </div>
+
+
+        <div class="campo">
+
+            <label for="confirmar-senha">
+                Confirmar senha:
+            </label>
+
+            <input
+                type="password"
+                id="confirmar-senha"
+                name="confirmar-senha"
+                placeholder="Confirme sua senha"
+                required
+            >
+
+        </div>
+
+
+        <div id="mensagem"></div>
+
+
+        <button
+            type="submit"
+            class="btn-salvar">
+
+            Salvar senha
+
+        </button>
+
+
+        <a
+            href="login_cliente.html"
+            class="voltar">
+
+            Voltar
+
+        </a>
+
+    </form>
+
+</main>
+
+
+<script>
+
+    document
+        .getElementById("form-recuperar")
+        .addEventListener("submit", async function(event) {
+
+            event.preventDefault();
+
+
+            const email =
+                document.getElementById("email").value;
+
+            const novaSenha =
+                document.getElementById("nova-senha").value;
+
+            const confirmarSenha =
+                document.getElementById("confirmar-senha").value;
+
+            const mensagem =
+                document.getElementById("mensagem");
+
+
+            mensagem.textContent = "";
+            mensagem.className = "";
+
+
+            // Verifica se as senhas são iguais
+            if (novaSenha !== confirmarSenha) {
+
+                mensagem.textContent =
+                    "As senhas não são iguais.";
+
+                mensagem.className =
+                    "mensagem-erro";
+
+                return;
+            }
+
+
+            try {
+
+                const resposta = await fetch(
+                    "/api/Usuarios/recuperar-senha",
+                    {
+                        method: "POST",
+
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+
+                        body: JSON.stringify({
+                            email: email,
+                            novaSenha: novaSenha,
+                            confirmarSenha: confirmarSenha
+                        })
+                    }
+                );
+
+
+                const dados = await resposta.json();
+
+
+                // Se o servidor retornar erro
+                if (!resposta.ok) {
+
+                    mensagem.textContent =
+                        dados.mensagem;
+
+                    mensagem.className =
+                        "mensagem-erro";
+
+                    return;
+                }
+
+
+                // Senha alterada com sucesso
+                mensagem.textContent =
+                    dados.mensagem;
+
+                mensagem.className =
+                    "mensagem-sucesso";
+
+
+                // Aguarda 2 segundos e volta para o login
+                setTimeout(function() {
+
+                    window.location.href =
+                        "login_cliente.html";
+
+                }, 2000);
+
+
+            } catch (erro) {
+
+                mensagem.textContent =
+                    "Não foi possível conectar ao servidor.";
+
+                mensagem.className =
+                    "mensagem-erro";
+
+                console.error(erro);
+
+            }
+
+        });
+
+</script>
+
+
+</body>
+
+</html>

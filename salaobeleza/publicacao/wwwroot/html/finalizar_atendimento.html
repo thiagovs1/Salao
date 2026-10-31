@@ -1,0 +1,344 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finalizar Atendimento - Belleza</title>
+    <link rel="stylesheet" href="../css/finalizar_atendimento.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        .notificacao {
+            position: fixed;
+            top: 22px;
+            right: 22px;
+            z-index: 9999;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            width: min(390px, calc(100% - 32px));
+            padding: 16px 18px;
+            color: #34243a;
+            background: #fff;
+            border-left: 5px solid #8b5cf6;
+            border-radius: 12px;
+            box-shadow: 0 12px 35px #24152b26;
+            opacity: 0;
+            transform: translateY(-12px);
+            pointer-events: none;
+            transition: opacity .25s ease, transform .25s ease;
+        }
+        .notificacao.visivel {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .notificacao.erro { border-left-color: #dc4562; }
+        .notificacao.sucesso { border-left-color: #23966b; }
+        .notificacao i { margin-top: 3px; font-size: 20px; }
+        .notificacao strong { display: block; margin-bottom: 4px; }
+        .notificacao p { margin: 0; line-height: 1.45; font-size: 14px; }
+        #btnFinalizar:disabled { opacity: .65; cursor: not-allowed; }
+    </style>
+</head>
+<body>
+    <div id="notificacao" class="notificacao" role="status" aria-live="polite">
+        <i id="notificacaoIcone" class="fa-solid fa-circle-info"></i>
+        <div>
+            <strong id="notificacaoTitulo">Aviso</strong>
+            <p id="notificacaoMensagem"></p>
+        </div>
+    </div>
+
+    <aside class="sidebar">
+        <div class="logo">
+            <img src="../imagens/logo_belleza.png" alt="Belleza">
+        </div>
+
+        <nav class="menu">
+            <a href="tela_inicial.html"><i class="fa-solid fa-house"></i><span>Início</span></a>
+            <a href="servicos.html"><i class="fa-solid fa-scissors"></i><span>Serviços</span></a>
+            <a href="profissionais.html"><i class="fa-solid fa-people-group"></i><span>Profissionais</span></a>
+            <a href="agendar_horario.html" class="ativo"><i class="fa-regular fa-calendar"></i><span>Agendar horário</span></a>
+            <a href="meus_agendamentos.html"><i class="fa-regular fa-calendar-check"></i><span>Meus agendamentos</span></a>
+            <a href="#"><i class="fa-solid fa-tags"></i><span>Promoções</span></a>
+            <a href="avaliacoes.html"><i class="fa-regular fa-star"></i><span>Avaliações</span></a>
+            <a href="minha_conta.html"><i class="fa-regular fa-circle-user"></i><span>Minha Conta</span></a>
+            <a href="login_cliente.html" class="sair"><i class="fa-solid fa-arrow-right-from-bracket"></i><span>Sair</span></a>
+        </nav>
+
+        <div class="foto-sidebar">
+            <img src="../imagens/salao_belleza.png" alt="Interior do salão Belleza">
+        </div>
+    </aside>
+
+    <main class="conteudo">
+        <h1>Finalizar Atendimento</h1>
+
+        <div class="layout">
+            <section class="coluna-esquerda">
+                <div class="card pagamento">
+                    <h2>Forma de Pagamento</h2>
+
+                    <label class="opcao-pagamento">
+                        <span class="icone-pagamento pix"><i class="fa-brands fa-pix"></i></span>
+                        <span class="detalhes-pagamento">
+                            <span>Pix</span>
+                            <small>50% do valor pago agora e os outros 50% no salão</small>
+                        </span>
+                        <input type="radio" name="pagamento" value="Pix" checked>
+                    </label>
+
+                    <label class="opcao-pagamento">
+                        <span class="icone-pagamento"><i class="fa-solid fa-money-bill-wave"></i></span>
+                        <span class="detalhes-pagamento">
+                            <span>No salão</span>
+                            <small>Valor pago no local</small>
+                        </span>
+                        <input type="radio" name="pagamento" value="No salão">
+                    </label>
+                </div>
+
+                <div class="card resumo-atendimento">
+                    <h2>Resumo do Atendimento</h2>
+
+                    <div class="linha-resumo">
+                        <span>Serviços:</span>
+                        <strong id="servico">Carregando...</strong>
+                    </div>
+                    <div class="linha-resumo">
+                        <span>Profissional:</span>
+                        <strong id="profissional">Carregando...</strong>
+                    </div>
+                    <div class="linha-resumo">
+                        <span>Data e horário:</span>
+                        <strong id="dataHorario">Carregando...</strong>
+                    </div>
+                    <div class="linha-resumo total-atendimento">
+                        <span>Total do atendimento:</span>
+                        <strong id="totalAtendimento">R$ 0,00</strong>
+                    </div>
+                </div>
+            </section>
+
+            <section class="coluna-direita">
+                <div class="card dados-cliente">
+                    <h2>Dados do Cliente</h2>
+                    <div class="dado"><span>Nome:</span><strong id="nomeCliente">Carregando...</strong></div>
+                    <div class="dado"><span>E-mail:</span><strong id="emailCliente">Carregando...</strong></div>
+                    <div class="dado"><span>Telefone:</span><strong id="telefoneCliente">Carregando...</strong></div>
+                </div>
+
+                <div class="card resumo-pedido">
+                    <h2>Resumo do Pedido</h2>
+                    <div class="valor-linha"><span>Serviços:</span><strong id="valorServicos">R$ 0,00</strong></div>
+                    <div class="valor-linha"><span>Taxa de Atendimento:</span><strong id="taxaAtendimento">R$ 0,00</strong></div>
+                    <div class="total-pedido"><span>Total:</span><strong id="totalPedido">R$ 0,00</strong></div>
+                    <button type="button" id="btnFinalizar">Finalizar</button>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <script>
+        const API_URL = "/api";
+        const botaoFinalizar = document.getElementById("btnFinalizar");
+        let agendamento = null;
+        let timerNotificacao = null;
+
+        function formatarPreco(valor) {
+            return Number(valor || 0).toLocaleString("pt-BR", {
+                style: "currency",
+                currency: "BRL"
+            });
+        }
+
+        function preencher(id, valor) {
+            const elemento = document.getElementById(id);
+            if (elemento) elemento.textContent = valor || "Não informado";
+        }
+
+        function mostrarNotificacao(mensagem, tipo = "info") {
+            const caixa = document.getElementById("notificacao");
+            const icone = document.getElementById("notificacaoIcone");
+
+            clearTimeout(timerNotificacao);
+
+            caixa.className = `notificacao ${tipo}`;
+            document.getElementById("notificacaoTitulo").textContent =
+                tipo === "erro" ? "Não foi possível continuar"
+                : tipo === "sucesso" ? "Tudo certo!"
+                : "Atenção";
+
+            document.getElementById("notificacaoMensagem").textContent = mensagem;
+
+            icone.className = tipo === "erro"
+                ? "fa-solid fa-circle-exclamation"
+                : tipo === "sucesso"
+                    ? "fa-solid fa-circle-check"
+                    : "fa-solid fa-circle-info";
+
+            requestAnimationFrame(() => caixa.classList.add("visivel"));
+
+            timerNotificacao = setTimeout(
+                () => caixa.classList.remove("visivel"),
+                4500
+            );
+        }
+
+        async function requisicao(url, opcoes = {}) {
+            const resposta = await fetch(url, {
+                credentials: "include",
+                ...opcoes
+            });
+
+            const texto = await resposta.text();
+            let dados = null;
+
+            try {
+                dados = texto ? JSON.parse(texto) : null;
+            } catch {
+                dados = null;
+            }
+
+            if (!resposta.ok) {
+                throw new Error(
+                    dados?.mensagem ||
+                    dados?.title ||
+                    texto ||
+                    "Ocorreu um erro na solicitação."
+                );
+            }
+
+            return dados;
+        }
+
+        async function carregarDados() {
+            const parametros = new URLSearchParams(window.location.search);
+            const id = Number(parametros.get("id"));
+
+            if (!Number.isInteger(id) || id <= 0) {
+                throw new Error("O identificador do agendamento não foi informado. Faça o agendamento novamente.");
+            }
+
+            const [agendamentos, cliente, profissional] = await Promise.all([
+                requisicao(`${API_URL}/Agendamentos/meus`),
+                requisicao(`${API_URL}/Clientes/meu-perfil`),
+                requisicao(`${API_URL}/Selecao/profissional`)
+            ]);
+
+            if (!Array.isArray(agendamentos))
+                throw new Error("Não foi possível carregar seus agendamentos.");
+
+            agendamento = agendamentos.find(item =>
+                Number(item.id ?? item.Id) === id
+            );
+
+            if (!agendamento)
+                throw new Error("O agendamento não foi encontrado na sua conta.");
+
+            const nomeServico =
+                agendamento.nomeServico ?? agendamento.NomeServico ?? "Não informado";
+
+            const nomeProfissional =
+                agendamento.nomeProfissional ??
+                agendamento.NomeProfissional ??
+                profissional?.nome ??
+                profissional?.Nome ??
+                "Não informado";
+
+            const dataValor = agendamento.dataHora ?? agendamento.DataHora;
+            const data = new Date(dataValor);
+
+            preencher("servico", nomeServico);
+            preencher("profissional", nomeProfissional);
+            preencher(
+                "dataHorario",
+                Number.isNaN(data.getTime())
+                    ? "Não informado"
+                    : data.toLocaleString("pt-BR", {
+                        dateStyle: "short",
+                        timeStyle: "short"
+                    })
+            );
+
+            preencher("nomeCliente", cliente?.nome ?? cliente?.Nome);
+            preencher("emailCliente", cliente?.email ?? cliente?.Email);
+            preencher("telefoneCliente", cliente?.telefone ?? cliente?.Telefone);
+
+            const preco = Number(agendamento.preco ?? agendamento.Preco ?? 0);
+
+            preencher("totalAtendimento", formatarPreco(preco));
+            preencher("valorServicos", formatarPreco(preco));
+            preencher("taxaAtendimento", formatarPreco(0));
+            preencher("totalPedido", formatarPreco(preco));
+
+            const formaPagamento =
+                agendamento.formaPagamento ?? agendamento.FormaPagamento;
+
+            if (formaPagamento) {
+                const radio = document.querySelector(
+                    `input[name="pagamento"][value="${formaPagamento}"]`
+                );
+
+                if (radio) radio.checked = true;
+            }
+        }
+
+        botaoFinalizar.addEventListener("click", async () => {
+            if (!agendamento) {
+                mostrarNotificacao("O agendamento ainda não foi carregado.", "erro");
+                return;
+            }
+
+            const pagamento = document.querySelector(
+                'input[name="pagamento"]:checked'
+            );
+
+            if (!pagamento) {
+                mostrarNotificacao("Selecione uma forma de pagamento.", "erro");
+                return;
+            }
+
+            const textoOriginal = botaoFinalizar.textContent;
+            botaoFinalizar.disabled = true;
+            botaoFinalizar.textContent = "Finalizando...";
+
+            try {
+                const id = agendamento.id ?? agendamento.Id;
+
+                await requisicao(`${API_URL}/Agendamentos/${id}/pagamento`, {
+                    method: "PUT",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        formaPagamento: pagamento.value
+                    })
+                });
+
+                mostrarNotificacao("Forma de pagamento registrada com sucesso!", "sucesso");
+
+                setTimeout(() => {
+                    window.location.href = "meus_agendamentos.html";
+                }, 1000);
+            } catch (erro) {
+                console.error(erro);
+                mostrarNotificacao(
+                    erro.message || "Não foi possível finalizar o atendimento.",
+                    "erro"
+                );
+                botaoFinalizar.disabled = false;
+                botaoFinalizar.textContent = textoOriginal;
+            }
+        });
+
+        carregarDados().catch(erro => {
+            console.error(erro);
+            mostrarNotificacao(
+                erro.message || "Erro ao carregar os dados do atendimento.",
+                "erro"
+            );
+            botaoFinalizar.disabled = true;
+        });
+    </script>
+</body>
+</html>

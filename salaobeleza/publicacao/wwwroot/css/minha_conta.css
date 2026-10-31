@@ -1,0 +1,695 @@
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+[hidden] {
+    display: none !important;
+}
+
+:root {
+    --vinho: #893d5c;
+    --vinho-escuro: #713049;
+    --rosa: #f6e9e6;
+    --texto: #653449;
+}
+
+body {
+    min-height: 100vh;
+    background: #faf7f6;
+    color: var(--texto);
+    font-family: Georgia, "Times New Roman", serif;
+}
+
+/* MENU LATERAL */
+
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 210px;
+    height: 100vh;
+    background: #f7eeec url("../imagens/salao_belleza.png") no-repeat center bottom;
+    background-size: 100% auto;
+    z-index: 10;
+}
+
+.logo-area {
+    height: 117px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px 13px;
+}
+
+.logo-belleza {
+    width: 180px;
+    height: 112px;
+    object-fit: contain;
+}
+
+.menu {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    padding-top: 9px;
+}
+
+.menu-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    width: 100%;
+    min-height: 36px;
+    padding: 7px 16px;
+    color: #984763;
+    font-size: 13px;
+    text-decoration: none;
+    transition: background 0.2s;
+}
+
+.menu-item i {
+    width: 18px;
+    text-align: center;
+    font-size: 15px;
+}
+
+.menu-item:hover {
+    background: #f0ddda;
+}
+
+.menu-item.ativo {
+    color: white;
+    background: var(--vinho);
+    border-radius: 0 5px 5px 0;
+    font-weight: bold;
+}
+
+/* CONTEÚDO */
+
+.conteudo {
+    margin-left: 210px;
+    min-height: 100vh;
+    padding: 55px 25px;
+}
+
+.layout-perfil {
+    width: 100%;
+    max-width: 760px;
+    margin: 55px auto 0;
+    display: grid;
+    grid-template-columns: 205px minmax(0, 405px);
+    justify-content: center;
+    align-items: start;
+    gap: 22px;
+}
+
+/* MENU DO PERFIL */
+
+.menu-perfil {
+    width: 205px;
+    min-height: 390px;
+    padding: 20px 10px;
+    background: var(--vinho);
+    border-radius: 9px;
+    display: flex;
+    flex-direction: column;
+}
+
+.titulo-menu-perfil {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 2px 9px 15px;
+    margin-bottom: 8px;
+    color: #f9e9ee;
+    font-size: 12px;
+    font-weight: bold;
+    border-bottom: 1px solid rgba(255,255,255,0.2);
+}
+
+.opcao-perfil {
+    min-height: 36px;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 8px 9px;
+    border: none;
+    border-radius: 6px;
+    background: transparent;
+    color: #fff7f6;
+    text-align: left;
+    text-decoration: none;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.opcao-perfil i {
+    width: 17px;
+    text-align: center;
+}
+
+.opcao-perfil:not(.selecionada) {
+    margin-top: 7px;
+}
+
+.opcao-perfil.selecionada,
+.opcao-perfil:hover {
+    background: #f9e9e8;
+    color: var(--vinho);
+}
+
+.opcao-excluir {
+    color: #ffe0e4;
+}
+
+.banner-agendamento {
+    position: relative;
+    height: 125px;
+    margin-top: auto;
+    overflow: hidden;
+    border-radius: 8px;
+    background: #d7a39b;
+}
+
+.banner-agendamento img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+}
+
+.texto-banner {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    gap: 3px;
+    padding: 12px;
+    background: linear-gradient(transparent, rgba(55,22,25,0.72));
+    color: white;
+    font-size: 12px;
+    line-height: 17px;
+}
+
+.texto-banner span {
+    font-size: 10px;
+}
+
+.texto-banner strong {
+    font-size: 13px;
+}
+
+.btn-inicio {
+    min-height: 32px;
+    margin-top: 12px;
+    padding: 7px 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    border-radius: 6px;
+    background: #f9e9e8;
+    color: var(--vinho);
+    font-size: 12px;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.btn-inicio:hover {
+    background: white;
+}
+
+/* PAINEL DO PERFIL */
+
+.painel-perfil {
+    width: 100%;
+    min-height: 390px;
+    padding: 23px 22px;
+    background: var(--rosa);
+    border: 1px solid #efdfdc;
+    border-radius: 9px;
+}
+
+/* CABEÇALHO */
+
+.cabecalho-perfil {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 22px;
+    text-align: center;
+}
+
+.icone-perfil-container {
+    width: 43px;
+    height: 43px;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: #ead5dc;
+    color: var(--vinho);
+}
+
+.icone-perfil {
+    font-size: 23px;
+}
+
+.subtitulo-perfil {
+    margin-bottom: 4px;
+    color: #9b6a7e;
+    font-family: Arial, sans-serif;
+    font-size: 9px;
+    letter-spacing: 1px;
+}
+
+.cabecalho-perfil h2 {
+    margin-bottom: 5px;
+    color: var(--vinho);
+    font-size: 18px;
+}
+
+.cabecalho-perfil p {
+    color: #896c77;
+    font-family: Arial, sans-serif;
+    font-size: 11px;
+}
+
+/* MENSAGENS */
+
+.mensagem-perfil {
+    margin-bottom: 14px;
+    padding: 9px 11px;
+    border-radius: 6px;
+    font-family: Arial, sans-serif;
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+.mensagem-sucesso {
+    color: #246b45;
+    background: #e9f6ee;
+    border: 1px solid #c7e8d2;
+}
+
+.mensagem-erro {
+    color: #a32632;
+    background: #fff0f0;
+    border: 1px solid #f1cbce;
+}
+
+/* DADOS */
+
+.dados-perfil {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+}
+
+.campo-perfil {
+    width: 100%;
+    min-height: 48px;
+    padding: 9px 11px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: white;
+    border: 1px solid #efdfdf;
+    border-radius: 6px;
+    color: var(--texto);
+}
+
+.icone-campo {
+    flex-shrink: 0;
+    width: 29px;
+    height: 29px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    background: #f8eaee;
+    color: var(--vinho);
+    font-size: 12px;
+}
+
+.informacao-campo {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.informacao-campo strong {
+    color: #9b6a7e;
+    font-family: Arial, sans-serif;
+    font-size: 10px;
+}
+
+.informacao-campo span {
+    color: #553341;
+    font-family: Arial, sans-serif;
+    font-size: 12px;
+    line-height: 1.4;
+    overflow-wrap: anywhere;
+}
+
+/* BOTÕES E FORMULÁRIO */
+
+.btn-editar {
+    width: 100%;
+    min-height: 36px;
+    margin-top: 17px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border: none;
+    border-radius: 6px;
+    background: var(--vinho);
+    color: white;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.btn-editar:hover,
+.btn-salvar:hover {
+    background: var(--vinho-escuro);
+}
+
+.form-editar {
+    display: flex;
+    flex-direction: column;
+    gap: 11px;
+}
+
+.campo-formulario {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.form-editar label {
+    color: #75465a;
+    font-family: Arial, sans-serif;
+    font-size: 11px;
+    font-weight: bold;
+}
+
+.form-editar label span {
+    color: #a58b95;
+    font-weight: normal;
+}
+
+.form-editar input,
+.form-editar textarea {
+    width: 100%;
+    min-height: 36px;
+    padding: 8px 10px;
+    border: 1px solid #e5ccd5;
+    border-radius: 6px;
+    outline: none;
+    background: white;
+    color: #553341;
+    font-family: Arial, sans-serif;
+    font-size: 12px;
+}
+
+.form-editar input:focus,
+.form-editar textarea:focus {
+    border-color: var(--vinho);
+    box-shadow: 0 0 0 2px rgba(137,61,92,0.1);
+}
+
+.form-editar textarea {
+    min-height: 65px;
+    resize: vertical;
+}
+
+.botoes-edicao {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    margin-top: 5px;
+}
+
+.btn-salvar,
+.btn-cancelar {
+    width: 100%;
+    min-height: 36px;
+    border: none;
+    border-radius: 6px;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.btn-salvar {
+    background: var(--vinho);
+    color: white;
+}
+
+.btn-cancelar {
+    background: white;
+    border: 1px solid #ead4dc;
+    color: var(--vinho);
+}
+
+.btn-cancelar:hover {
+    background: #f8e8ed;
+}
+
+button:disabled {
+    opacity: 0.6;
+    cursor: wait;
+}
+
+/* RESPONSIVIDADE */
+
+@media (max-width: 950px) {
+    .layout-perfil {
+        max-width: 700px;
+        grid-template-columns: 190px minmax(0, 405px);
+        gap: 18px;
+    }
+
+    .menu-perfil {
+        width: 190px;
+    }
+
+    .painel-perfil {
+        padding: 20px 17px;
+    }
+}
+
+@media (max-width: 700px) {
+    .sidebar {
+        width: 68px;
+        background-image: none;
+    }
+
+    .logo-area {
+        height: 75px;
+        padding: 4px;
+    }
+
+    .logo-belleza {
+        width: 60px;
+        height: 65px;
+    }
+
+    .menu {
+        gap: 8px;
+    }
+
+    .menu-item {
+        justify-content: center;
+        padding: 10px 4px;
+    }
+
+    .menu-item i {
+        font-size: 17px;
+    }
+
+    .menu-item span {
+        display: none;
+    }
+
+    .menu-item.ativo {
+        border-radius: 0;
+    }
+
+    .conteudo {
+        margin-left: 68px;
+        padding: 20px 12px 25px;
+    }
+
+    .layout-perfil {
+        width: 100%;
+        margin: 10px auto 0;
+        grid-template-columns: minmax(0, 1fr);
+        justify-items: center;
+        gap: 16px;
+    }
+
+    .menu-perfil {
+        width: 100%;
+        max-width: 405px;
+        min-height: auto;
+    }
+
+    .banner-agendamento {
+        height: 130px;
+        margin-top: 14px;
+    }
+
+    .painel-perfil {
+        width: 100%;
+        max-width: 405px;
+        min-height: auto;
+        padding: 20px 14px;
+    }
+}
+
+/* MODAL DE CONFIRMAÇÃO */
+
+.modal-confirmacao {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: rgba(45, 20, 32, 0.55);
+    backdrop-filter: blur(3px);
+}
+
+.modal-confirmacao[hidden] {
+    display: none !important;
+}
+
+.conteudo-modal {
+    width: 100%;
+    max-width: 350px;
+    padding: 27px 23px 22px;
+    background: #fffaf9;
+    border: 1px solid #efdfdc;
+    border-radius: 14px;
+    box-shadow: 0 15px 45px rgba(65, 25, 43, 0.2);
+    text-align: center;
+    animation: aparecerModal 0.2s ease-out;
+}
+
+.icone-modal {
+    width: 55px;
+    height: 55px;
+    margin: 0 auto 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: #f6e5eb;
+    color: var(--vinho);
+    font-size: 23px;
+}
+
+.icone-modal.perigo {
+    background: #fce8e8;
+    color: #b83245;
+}
+
+.conteudo-modal h3 {
+    margin-bottom: 9px;
+    color: var(--vinho);
+    font-size: 19px;
+}
+
+.conteudo-modal p {
+    margin-bottom: 22px;
+    color: #806774;
+    font-family: Arial, sans-serif;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+.botoes-modal {
+    display: flex;
+    gap: 10px;
+}
+
+.botoes-modal button {
+    flex: 1;
+    min-height: 39px;
+    padding: 9px;
+    border: none;
+    border-radius: 7px;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.btn-modal-cancelar {
+    background: #f1e5e8;
+    color: var(--vinho);
+}
+
+.btn-modal-cancelar:hover {
+    background: #e8d5dc;
+}
+
+.btn-modal-confirmar {
+    background: var(--vinho);
+    color: white;
+}
+
+.btn-modal-confirmar:hover {
+    background: var(--vinho-escuro);
+}
+
+.btn-modal-confirmar.perigo {
+    background: #b83245;
+}
+
+.btn-modal-confirmar.perigo:hover {
+    background: #962638;
+}
+
+@keyframes aparecerModal {
+    from {
+        opacity: 0;
+        transform: translateY(8px) scale(0.98);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+
+@media (max-width: 380px) {
+    .sidebar {
+        width: 55px;
+    }
+
+    .logo-belleza {
+        width: 49px;
+    }
+
+    .conteudo {
+        margin-left: 55px;
+        padding-right: 8px;
+        padding-left: 8px;
+    }
+}

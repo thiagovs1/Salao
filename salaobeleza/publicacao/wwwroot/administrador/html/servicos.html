@@ -1,0 +1,1359 @@
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Serviços e Combos - Belleza</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" href="../css/servicos.css">
+
+    <style>
+        .campo-imagem-combo {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .campo-imagem-combo input[type="file"] {
+            width: 100%;
+            padding: 12px;
+            border: 1px dashed #c58da3;
+            border-radius: 10px;
+            background: #fffafa;
+            color: #6d4853;
+        }
+
+        .preview-imagem-combo {
+            display: none;
+            width: 100%;
+            max-height: 220px;
+            object-fit: cover;
+            border-radius: 12px;
+            border: 1px solid #ead8df;
+        }
+
+        .ajuda-imagem-combo {
+            font-size: 12px;
+            color: #806975;
+        }
+
+        .card-combo-imagem {
+            width: 100%;
+            height: 170px;
+            object-fit: cover;
+            border-radius: 12px;
+            margin-bottom: 14px;
+            background: #f7eae7;
+        }
+
+        .card-combo-imagem[hidden] {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <aside class="sidebar">
+        <div class="logo-area">
+            <img src="../../imagens/logo_belleza.png" alt="Belleza" class="logo-belleza">
+        </div>
+        <div class="linha-logo"></div>
+
+        <nav class="menu">
+            <a href="Painel_administrador.html" class="menu-item"><i class="fa-solid fa-house"></i><span>Início</span></a>
+            <a href="agendamentos.html" class="menu-item"><i class="fa-regular fa-calendar"></i><span>Agendamentos</span></a>
+            <a href="clientes.html" class="menu-item"><i class="fa-solid fa-circle-user"></i><span>Clientes</span></a>
+            <a href="servicos.html" class="menu-item ativo"><i class="fa-solid fa-scissors"></i><span>Serviços e combos</span></a>
+            <a href="profissionais.html" class="menu-item"><i class="fa-solid fa-users"></i><span>Profissionais</span></a>
+            <a href="financeiro.html" class="menu-item"><i class="fa-solid fa-wallet"></i><span>Financeiro</span></a>
+            <a href="estoque.html" class="menu-item"><i class="fa-solid fa-box"></i><span>Estoque e compras</span></a>
+            <a href="promocoes.html" class="menu-item"><i class="fa-solid fa-tags"></i><span>Promoções</span></a>
+            <a href="avaliacoes.html" class="menu-item"><i class="fa-regular fa-star"></i><span>Avaliações</span></a>
+            <a href="relatorios.html" class="menu-item"><i class="fa-solid fa-chart-column"></i><span>Relatórios</span></a>
+            <a href="configuracoes.html" class="menu-item"><i class="fa-solid fa-gear"></i><span>Configurações</span></a>
+            <a href="#" id="btnSair" class="menu-item sair"><i class="fa-solid fa-arrow-right-from-bracket"></i><span>Sair</span></a>
+        </nav>
+    </aside>
+
+    <main class="conteudo">
+        <header class="top-bar">
+            <div class="titulo-pagina">
+                <i class="fa-solid fa-scissors icone-titulo"></i>
+                <div>
+                    <h1>Serviços e combos</h1>
+                    <p>Gerencie os serviços e os pacotes oferecidos pelo salão.</p>
+                </div>
+            </div>
+        </header>
+
+        <div id="mensagem" class="mensagem" hidden></div>
+
+        <nav class="abas-gerenciamento">
+            <button type="button" class="aba-btn ativa" id="btnAbaServicos">
+                <i class="fa-solid fa-scissors"></i> Serviços
+            </button>
+            <button type="button" class="aba-btn" id="btnAbaCombos">
+                <i class="fa-solid fa-layer-group"></i> Combos
+            </button>
+        </nav>
+
+        <section class="painel-servicos painel-aba" id="painelAbaServicos">
+            <section class="coluna-lista">
+                <div class="barra-acoes">
+                    <div class="filtros-bar">
+                        <div class="busca-box">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                            <input type="search" id="buscaServico" placeholder="Buscar serviço...">
+                        </div>
+                        <div class="select-box">
+                            <i class="fa-solid fa-user"></i>
+                            <select id="filtroProfissional">
+                                <option value="">Todos os profissionais</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button type="button" class="btn-add-topo" id="btnNovoServico">
+                        <i class="fa-solid fa-plus"></i> Novo serviço
+                    </button>
+                </div>
+
+                <div class="tabela-container">
+                    <table class="tabela-servicos">
+                        <thead>
+                            <tr>
+                                <th>Serviço</th>
+                                <th>Profissionais</th>
+                                <th>Duração</th>
+                                <th>Preço</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="listaServicos">
+                            <tr><td colspan="5" class="estado-tabela">Carregando serviços...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="rodape-lista">
+                    <span id="contadorServicos">Carregando...</span>
+                </div>
+            </section>
+        </section>
+
+        <section class="painel-servicos painel-aba" id="painelAbaCombos" hidden>
+            <section class="coluna-lista">
+                <div class="barra-acoes">
+                    <div class="filtros-bar">
+                        <div class="busca-box">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                            <input type="search" id="buscaCombo" placeholder="Buscar combo...">
+                        </div>
+                    </div>
+                    <button type="button" class="btn-add-topo" id="btnNovoCombo">
+                        <i class="fa-solid fa-plus"></i> Novo combo
+                    </button>
+                </div>
+
+                <div id="mensagemCombos" class="mensagem" hidden></div>
+                <div id="listaCombos" class="lista-combos">
+                    <p class="estado-tabela">Carregando combos...</p>
+                </div>
+
+                <div class="rodape-lista">
+                    <span id="contadorCombos">Carregando...</span>
+                </div>
+            </section>
+        </section>
+    </main>
+
+    <!-- MODAL DE SERVIÇO -->
+    <div class="modal-overlay" id="modalServico" hidden>
+        <section class="modal-card" role="dialog" aria-modal="true" aria-labelledby="tituloModal">
+            <header class="modal-header">
+                <div>
+                    <h2 id="tituloModal">Novo serviço</h2>
+                    <p id="descricaoModal">Preencha os dados do serviço.</p>
+                </div>
+                <button type="button" class="btn-fechar" id="btnFecharModal" aria-label="Fechar">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </header>
+
+            <form id="formServico">
+                <div class="campo">
+                    <label for="nomeServico">Nome do serviço <span>*</span></label>
+                    <input type="text" id="nomeServico" maxlength="100" placeholder="Ex.: Corte" required>
+                </div>
+
+                <div class="linha-dupla">
+                    <div class="campo">
+                        <label for="duracaoServico">Duração <span>*</span></label>
+                        <select id="duracaoServico" required>
+                            <option value="">Selecione</option>
+                            <option value="15">15 minutos</option>
+                            <option value="25">25 minutos</option>
+                            <option value="30">30 minutos</option>
+                            <option value="35">35 minutos</option>
+                            <option value="40">40 minutos</option>
+                            <option value="45">45 minutos</option>
+                            <option value="50">50 minutos</option>
+                            <option value="60">1 hora</option>
+                            <option value="70">1h10</option>
+                            <option value="90">1h30</option>
+                            <option value="120">2 horas</option>
+                            <option value="150">2h30</option>
+                            <option value="180">3 horas</option>
+                            <option value="240">4 horas</option>
+                        </select>
+                    </div>
+                    <div class="campo">
+                        <label for="precoServico">Preço (R$) <span>*</span></label>
+                        <input type="number" id="precoServico" min="0.01" step="0.01" placeholder="60.00" required>
+                    </div>
+                </div>
+
+                <div class="campo">
+                    <label>Profissionais que realizam este serviço</label>
+                    <p class="texto-ajuda">Selecione todos os profissionais autorizados.</p>
+
+                    <div class="seletor-profissionais" id="seletorProfissionais">
+                        <button type="button" class="seletor-profissionais-botao" id="btnAbrirProfissionais" aria-expanded="false" aria-controls="profissionaisServico">
+                            <span id="textoProfissionais">Selecione os profissionais</span>
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </button>
+
+                        <div id="profissionaisServico" class="profissionais-opcoes" hidden>
+                            <p class="texto-ajuda">Carregando profissionais...</p>
+                        </div>
+                    </div>
+                </div>
+
+                <p class="aviso-form">
+                    <i class="fa-solid fa-circle-info"></i>
+                    Os profissionais selecionados serão vinculados ao serviço.
+                </p>
+
+                <div class="botoes-form">
+                    <button type="button" class="btn-cancelar" id="btnCancelar">Cancelar</button>
+                    <button type="submit" class="btn-salvar" id="btnSalvar">
+                        <i class="fa-regular fa-floppy-disk"></i> Salvar serviço
+                    </button>
+                </div>
+            </form>
+        </section>
+    </div>
+
+    <!-- MODAL DE COMBO -->
+    <div class="modal-overlay" id="modalCombo" hidden>
+        <section class="modal-card modal-combo" role="dialog" aria-modal="true" aria-labelledby="tituloModalCombo">
+            <header class="modal-header">
+                <div>
+                    <h2 id="tituloModalCombo">Novo combo</h2>
+                    <p id="descricaoModalCombo">Defina o nome, o preço e os serviços do combo.</p>
+                </div>
+                <button type="button" class="btn-fechar" id="btnFecharModalCombo" aria-label="Fechar">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </header>
+
+            <form id="formCombo">
+                <div class="campo">
+                    <label for="nomeCombo">Nome do combo <span>*</span></label>
+                    <input type="text" id="nomeCombo" maxlength="100" placeholder="Ex.: Dia de beleza" required>
+                </div>
+
+                <div class="campo">
+                    <label for="precoCombo">Preço do combo (R$) <span>*</span></label>
+                    <input type="number" id="precoCombo" min="0.01" step="0.01" placeholder="130.00" required>
+                </div>
+
+                <!-- NOVO CAMPO DE IMAGEM -->
+                <div class="campo campo-imagem-combo">
+                    <label for="imagemCombo">Imagem do combo</label>
+                    <input type="file" id="imagemCombo" accept="image/png,image/jpeg,image/webp">
+
+                    <span class="ajuda-imagem-combo">
+                        JPG, PNG ou WEBP. Tamanho máximo: 5 MB.
+                        Se estiver editando, selecione outra imagem apenas se quiser trocá-la.
+                    </span>
+
+                    <img id="previewImagemCombo" class="preview-imagem-combo" alt="Pré-visualização da imagem do combo">
+                </div>
+
+                <div class="campo">
+                    <label>Serviços incluídos <span>*</span></label>
+                    <p class="texto-ajuda">Marque os serviços que farão parte deste combo.</p>
+                    <div id="servicosComboOpcoes" class="servicos-combo-opcoes">
+                        <p class="texto-ajuda">Carregando serviços...</p>
+                    </div>
+                </div>
+
+                <div class="combo-selecao-resumo">
+                    <span id="resumoQuantidade">0 serviços selecionados</span>
+                    <span>Duração: <strong id="resumoDuracao">0 min</strong></span>
+                </div>
+
+                <p class="aviso-form">
+                    <i class="fa-solid fa-circle-info"></i>
+                    A duração é calculada pela soma dos serviços. O preço do combo é definido por você.
+                </p>
+
+                <div class="botoes-form">
+                    <button type="button" class="btn-cancelar" id="btnCancelarCombo">Cancelar</button>
+                    <button type="submit" class="btn-salvar" id="btnSalvarCombo">
+                        <i class="fa-regular fa-floppy-disk"></i> Salvar combo
+                    </button>
+                </div>
+            </form>
+        </section>
+    </div>
+
+    <!-- MODAL PERSONALIZADO DE EXCLUSÃO -->
+    <div id="modalConfirmacao" class="confirmacao-overlay" hidden>
+        <section class="confirmacao-card" role="dialog" aria-modal="true" aria-labelledby="tituloConfirmacao">
+            <div class="confirmacao-icone">
+                <i class="fa-regular fa-trash-can"></i>
+            </div>
+
+            <h2 id="tituloConfirmacao">Excluir item?</h2>
+            <p id="textoConfirmacao">Tem certeza de que deseja excluir este item?</p>
+
+            <p class="confirmacao-aviso">
+                <i class="fa-solid fa-circle-info"></i>
+                Essa ação poderá ser irreversível.
+            </p>
+
+            <div class="confirmacao-botoes">
+                <button type="button" class="btn-confirmar-cancelar" id="btnCancelarExclusao">Cancelar</button>
+                <button type="button" class="btn-confirmar-excluir" id="btnConfirmarExclusao">
+                    <i class="fa-regular fa-trash-can"></i> Excluir
+                </button>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        const API = "/api";
+        const $ = id => document.getElementById(id);
+
+        const listaServicos = $("listaServicos");
+        const filtroProfissional = $("filtroProfissional");
+        const buscaServico = $("buscaServico");
+        const modalServico = $("modalServico");
+        const formServico = $("formServico");
+        const campoProfissionais = $("profissionaisServico");
+        const botaoSalvarServico = $("btnSalvar");
+
+        const modalCombo = $("modalCombo");
+        const formCombo = $("formCombo");
+        const listaCombos = $("listaCombos");
+        const campoServicosCombo = $("servicosComboOpcoes");
+        const botaoSalvarCombo = $("btnSalvarCombo");
+        const campoImagemCombo = $("imagemCombo");
+        const previewImagemCombo = $("previewImagemCombo");
+
+        const modalConfirmacao = $("modalConfirmacao");
+        const btnCancelarExclusao = $("btnCancelarExclusao");
+        const btnConfirmarExclusao = $("btnConfirmarExclusao");
+
+        let servicos = [];
+        let profissionais = [];
+        let combos = [];
+        let servicoEditandoId = null;
+        let comboEditandoId = null;
+        let mensagemTimer = null;
+        let acaoExclusaoPendente = null;
+        let urlPreviewImagem = null;
+
+        async function requisicao(url, opcoes = {}) {
+            const cabecalhos = {
+                ...(opcoes.body && !(opcoes.body instanceof FormData)
+                    ? { "Content-Type": "application/json" }
+                    : {}),
+                ...opcoes.headers
+            };
+
+            const resposta = await fetch(url, {
+                credentials: "same-origin",
+                ...opcoes,
+                headers: cabecalhos
+            });
+
+            if (!resposta.ok) {
+                const texto = await resposta.text();
+                let detalhe = texto;
+
+                try {
+                    const json = JSON.parse(texto);
+                    detalhe = json.mensagem || json.message || json.title || texto;
+                } catch {}
+
+                throw new Error(detalhe || `Erro HTTP ${resposta.status}`);
+            }
+
+            if (resposta.status === 204) return null;
+
+            const texto = await resposta.text();
+            return texto ? JSON.parse(texto) : null;
+        }
+
+        function mostrarMensagem(texto, erro = false) {
+            const destino = $("painelAbaCombos").hidden
+                ? $("mensagem")
+                : $("mensagemCombos");
+
+            clearTimeout(mensagemTimer);
+
+            destino.textContent = texto;
+            destino.className = `mensagem ${erro ? "erro" : "sucesso"}`;
+            destino.hidden = false;
+
+            const outro = destino === $("mensagem")
+                ? $("mensagemCombos")
+                : $("mensagem");
+
+            outro.hidden = true;
+
+            mensagemTimer = setTimeout(() => {
+                destino.hidden = true;
+            }, 6000);
+        }
+
+        function formatarPreco(preco) {
+            return Number(preco || 0).toLocaleString("pt-BR", {
+                style: "currency",
+                currency: "BRL"
+            });
+        }
+
+        function formatarDuracao(minutos) {
+            minutos = Number(minutos) || 0;
+            const horas = Math.floor(minutos / 60);
+            const restante = minutos % 60;
+
+            if (horas && restante) return `${horas}h${String(restante).padStart(2, "0")}`;
+            if (horas) return `${horas}h`;
+            return `${restante} min`;
+        }
+
+        function criarCelula(texto) {
+            const td = document.createElement("td");
+            td.textContent = texto;
+            return td;
+        }
+
+        function criarBotaoIcone(icone, titulo, classe, acao) {
+            const botao = document.createElement("button");
+            botao.type = "button";
+            botao.className = `btn-icon ${classe || ""}`;
+            botao.title = titulo;
+            botao.setAttribute("aria-label", titulo);
+            botao.innerHTML = `<i class="${icone}"></i>`;
+            botao.addEventListener("click", acao);
+            return botao;
+        }
+
+        function trocarAba(aba) {
+            const servicosAtivos = aba === "servicos";
+
+            $("painelAbaServicos").hidden = !servicosAtivos;
+            $("painelAbaCombos").hidden = servicosAtivos;
+
+            $("btnAbaServicos").classList.toggle("ativa", servicosAtivos);
+            $("btnAbaCombos").classList.toggle("ativa", !servicosAtivos);
+
+            $("mensagem").hidden = true;
+            $("mensagemCombos").hidden = true;
+
+            document.title = servicosAtivos
+                ? "Serviços - Belleza"
+                : "Combos - Belleza";
+        }
+
+        $("btnAbaServicos").addEventListener("click", () => trocarAba("servicos"));
+        $("btnAbaCombos").addEventListener("click", () => trocarAba("combos"));
+
+        // CONFIRMAÇÃO DE EXCLUSÃO
+
+        function confirmarExclusao(nome, tipo, acao) {
+            $("tituloConfirmacao").textContent = `Excluir ${tipo}?`;
+            $("textoConfirmacao").replaceChildren();
+
+            const texto = document.createElement("span");
+            texto.textContent = `Tem certeza de que deseja excluir ${tipo.toLowerCase()} `;
+
+            const nomeItem = document.createElement("strong");
+            nomeItem.className = "confirmacao-nome";
+            nomeItem.textContent = nome;
+
+            const complemento = document.createElement("span");
+            complemento.textContent = "?";
+
+            $("textoConfirmacao").append(texto, nomeItem, complemento);
+
+            acaoExclusaoPendente = acao;
+            btnConfirmarExclusao.disabled = false;
+            btnConfirmarExclusao.innerHTML = '<i class="fa-regular fa-trash-can"></i> Excluir';
+
+            modalConfirmacao.hidden = false;
+            btnCancelarExclusao.focus();
+        }
+
+        function fecharConfirmacao() {
+            modalConfirmacao.hidden = true;
+            acaoExclusaoPendente = null;
+        }
+
+        btnCancelarExclusao.addEventListener("click", fecharConfirmacao);
+
+        modalConfirmacao.addEventListener("click", evento => {
+            if (evento.target === modalConfirmacao) fecharConfirmacao();
+        });
+
+        btnConfirmarExclusao.addEventListener("click", async () => {
+            if (!acaoExclusaoPendente) return;
+
+            const acao = acaoExclusaoPendente;
+            btnConfirmarExclusao.disabled = true;
+            btnConfirmarExclusao.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Excluindo...';
+
+            try {
+                await acao();
+                fecharConfirmacao();
+            } catch (erro) {
+                fecharConfirmacao();
+                mostrarMensagem(`Não foi possível excluir: ${erro.message}`, true);
+            } finally {
+                btnConfirmarExclusao.disabled = false;
+                btnConfirmarExclusao.innerHTML = '<i class="fa-regular fa-trash-can"></i> Excluir';
+            }
+        });
+
+        // PROFISSIONAIS
+
+        async function carregarProfissionais() {
+            const resultado = await requisicao(`${API}/Profissionais`);
+            profissionais = Array.isArray(resultado) ? resultado : [];
+
+            filtroProfissional.replaceChildren();
+
+            const opcaoTodos = document.createElement("option");
+            opcaoTodos.value = "";
+            opcaoTodos.textContent = "Todos os profissionais";
+            filtroProfissional.appendChild(opcaoTodos);
+
+            profissionais.forEach(profissional => {
+                const opcao = document.createElement("option");
+                opcao.value = profissional.id;
+                opcao.textContent = profissional.nome;
+                filtroProfissional.appendChild(opcao);
+            });
+
+            renderizarOpcoesProfissionais([]);
+        }
+
+        function renderizarOpcoesProfissionais(idsSelecionados = []) {
+            campoProfissionais.replaceChildren();
+
+            if (!profissionais.length) {
+                const aviso = document.createElement("p");
+                aviso.className = "texto-ajuda";
+                aviso.textContent = "Nenhum profissional encontrado.";
+                campoProfissionais.appendChild(aviso);
+                atualizarTextoProfissionais();
+                return;
+            }
+
+            profissionais.forEach(profissional => {
+                const linha = document.createElement("label");
+                linha.className = "opcao-profissional";
+
+                const checkbox = document.createElement("input");
+                checkbox.type = "checkbox";
+                checkbox.name = "profissionalIds";
+                checkbox.value = profissional.id;
+                checkbox.checked = idsSelecionados.some(
+                    id => Number(id) === Number(profissional.id)
+                );
+                checkbox.addEventListener("change", atualizarTextoProfissionais);
+
+                const nome = document.createElement("span");
+                nome.textContent = profissional.nome;
+
+                linha.append(checkbox, nome);
+                campoProfissionais.appendChild(linha);
+            });
+
+            atualizarTextoProfissionais();
+        }
+
+        function atualizarTextoProfissionais() {
+            const selecionados = [
+                ...campoProfissionais.querySelectorAll('input[name="profissionalIds"]:checked')
+            ];
+
+            const texto = $("textoProfissionais");
+
+            if (!selecionados.length) {
+                texto.textContent = "Selecione os profissionais";
+            } else if (selecionados.length === 1) {
+                const profissional = profissionais.find(
+                    p => Number(p.id) === Number(selecionados[0].value)
+                );
+
+                texto.textContent = profissional
+                    ? profissional.nome
+                    : "1 profissional selecionado";
+            } else {
+                texto.textContent = `${selecionados.length} profissionais selecionados`;
+            }
+        }
+
+        $("btnAbrirProfissionais").addEventListener("click", () => {
+            const aberto = !campoProfissionais.hidden;
+            campoProfissionais.hidden = aberto;
+
+            $("btnAbrirProfissionais").setAttribute("aria-expanded", String(!aberto));
+            $("btnAbrirProfissionais").classList.toggle("aberto", !aberto);
+        });
+
+        document.addEventListener("click", evento => {
+            const seletor = $("seletorProfissionais");
+
+            if (!seletor.contains(evento.target)) {
+                campoProfissionais.hidden = true;
+                $("btnAbrirProfissionais").setAttribute("aria-expanded", "false");
+                $("btnAbrirProfissionais").classList.remove("aberto");
+            }
+        });
+
+        // SERVIÇOS
+
+        async function carregarServicos() {
+            try {
+                const resultado = await requisicao(`${API}/Servicos`);
+                servicos = Array.isArray(resultado) ? resultado : [];
+                renderizarServicos();
+                renderizarOpcoesServicosCombo();
+            } catch (erro) {
+                listaServicos.innerHTML =
+                    '<tr><td colspan="5" class="estado-tabela">Não foi possível carregar os serviços.</td></tr>';
+
+                $("contadorServicos").textContent = "Erro ao carregar";
+                throw erro;
+            }
+        }
+
+        function renderizarServicos() {
+            const termo = buscaServico.value.trim().toLocaleLowerCase("pt-BR");
+            const profissionalId = filtroProfissional.value;
+
+            const filtrados = servicos.filter(servico => {
+                const nome = (servico.nome || "").toLocaleLowerCase("pt-BR");
+                const vinculados = Array.isArray(servico.profissionais)
+                    ? servico.profissionais
+                    : [];
+
+                const correspondeNome = nome.includes(termo);
+                const correspondeProfissional = !profissionalId ||
+                    vinculados.some(p => Number(p.id) === Number(profissionalId));
+
+                return correspondeNome && correspondeProfissional;
+            });
+
+            listaServicos.replaceChildren();
+
+            if (!filtrados.length) {
+                const linha = document.createElement("tr");
+                const celula = document.createElement("td");
+
+                celula.colSpan = 5;
+                celula.className = "estado-tabela";
+                celula.textContent = "Nenhum serviço encontrado.";
+
+                linha.appendChild(celula);
+                listaServicos.appendChild(linha);
+                $("contadorServicos").textContent = "0 serviços encontrados";
+                return;
+            }
+
+            filtrados.forEach(servico => {
+                const linha = document.createElement("tr");
+                const celulaNome = document.createElement("td");
+                const nome = document.createElement("strong");
+
+                nome.className = "nome-servico";
+                nome.textContent = servico.nome || "Sem nome";
+                celulaNome.appendChild(nome);
+
+                const celulaProfissionais = document.createElement("td");
+                const vinculados = Array.isArray(servico.profissionais)
+                    ? servico.profissionais
+                    : [];
+
+                if (vinculados.length) {
+                    const listaNomes = document.createElement("div");
+                    listaNomes.className = "lista-profissionais";
+
+                    vinculados.forEach(profissional => {
+                        const etiqueta = document.createElement("span");
+                        etiqueta.className = "etiqueta-profissional";
+                        etiqueta.textContent = profissional.nome;
+                        listaNomes.appendChild(etiqueta);
+                    });
+
+                    celulaProfissionais.appendChild(listaNomes);
+                } else {
+                    const semVinculo = document.createElement("span");
+                    semVinculo.className = "sem-vinculo";
+                    semVinculo.textContent = "Nenhum vinculado";
+                    celulaProfissionais.appendChild(semVinculo);
+                }
+
+                const celulaDuracao = criarCelula(formatarDuracao(servico.duracaoMinutos));
+                const celulaPreco = criarCelula(formatarPreco(servico.preco));
+                const celulaAcoes = document.createElement("td");
+                const acoes = document.createElement("div");
+
+                acoes.className = "acoes";
+                acoes.append(
+                    criarBotaoIcone(
+                        "fa-regular fa-pen-to-square",
+                        `Editar ${servico.nome}`,
+                        "",
+                        () => editarServico(servico)
+                    ),
+                    criarBotaoIcone(
+                        "fa-regular fa-trash-can",
+                        `Excluir ${servico.nome}`,
+                        "excluir",
+                        () => excluirServico(servico)
+                    )
+                );
+
+                celulaAcoes.appendChild(acoes);
+                linha.append(celulaNome, celulaProfissionais, celulaDuracao, celulaPreco, celulaAcoes);
+                listaServicos.appendChild(linha);
+            });
+
+            $("contadorServicos").textContent =
+                `Mostrando ${filtrados.length} de ${servicos.length} serviço(s)`;
+        }
+
+        function abrirModalServico() {
+            servicoEditandoId = null;
+            formServico.reset();
+
+            $("tituloModal").textContent = "Novo serviço";
+            $("descricaoModal").textContent = "Preencha os dados do serviço.";
+            botaoSalvarServico.innerHTML = '<i class="fa-regular fa-floppy-disk"></i> Salvar serviço';
+
+            renderizarOpcoesProfissionais([]);
+            campoProfissionais.hidden = true;
+            $("btnAbrirProfissionais").setAttribute("aria-expanded", "false");
+            $("btnAbrirProfissionais").classList.remove("aberto");
+
+            modalServico.hidden = false;
+            document.body.classList.add("modal-aberto");
+            $("nomeServico").focus();
+        }
+
+        function editarServico(servico) {
+            servicoEditandoId = servico.id;
+            formServico.reset();
+
+            $("tituloModal").textContent = "Editar serviço";
+            $("descricaoModal").textContent = "Altere os dados e os profissionais vinculados.";
+            $("nomeServico").value = servico.nome || "";
+            $("precoServico").value = Number(servico.preco);
+
+            const duracao = $("duracaoServico");
+            const minutos = String(servico.duracaoMinutos);
+
+            if (![...duracao.options].some(opcao => opcao.value === minutos)) {
+                const novaOpcao = document.createElement("option");
+                novaOpcao.value = minutos;
+                novaOpcao.textContent = formatarDuracao(Number(minutos));
+                duracao.appendChild(novaOpcao);
+            }
+
+            duracao.value = minutos;
+
+            const idsSelecionados = Array.isArray(servico.profissionais)
+                ? servico.profissionais.map(p => p.id)
+                : [];
+
+            renderizarOpcoesProfissionais(idsSelecionados);
+            campoProfissionais.hidden = true;
+            $("btnAbrirProfissionais").setAttribute("aria-expanded", "false");
+            $("btnAbrirProfissionais").classList.remove("aberto");
+
+            botaoSalvarServico.innerHTML = '<i class="fa-regular fa-floppy-disk"></i> Salvar alterações';
+
+            modalServico.hidden = false;
+            document.body.classList.add("modal-aberto");
+            $("nomeServico").focus();
+        }
+
+        function fecharModalServico() {
+            modalServico.hidden = true;
+            document.body.classList.remove("modal-aberto");
+            campoProfissionais.hidden = true;
+            $("btnAbrirProfissionais").setAttribute("aria-expanded", "false");
+            $("btnAbrirProfissionais").classList.remove("aberto");
+            servicoEditandoId = null;
+        }
+
+        async function excluirServico(servico) {
+            confirmarExclusao(servico.nome, "serviço", async () => {
+                await requisicao(`${API}/Servicos/${servico.id}`, {
+                    method: "DELETE"
+                });
+
+                mostrarMensagem("Serviço excluído com sucesso.");
+                await carregarServicos();
+                await carregarCombos();
+            });
+        }
+
+        $("btnNovoServico").addEventListener("click", abrirModalServico);
+        $("btnFecharModal").addEventListener("click", fecharModalServico);
+        $("btnCancelar").addEventListener("click", fecharModalServico);
+
+        modalServico.addEventListener("click", evento => {
+            if (evento.target === modalServico) fecharModalServico();
+        });
+
+        buscaServico.addEventListener("input", renderizarServicos);
+        filtroProfissional.addEventListener("change", renderizarServicos);
+
+        formServico.addEventListener("submit", async evento => {
+            evento.preventDefault();
+
+            const dados = {
+                nome: $("nomeServico").value.trim(),
+                preco: Number($("precoServico").value),
+                duracaoMinutos: Number($("duracaoServico").value),
+                profissionalIds: [
+                    ...campoProfissionais.querySelectorAll('input[name="profissionalIds"]:checked')
+                ].map(checkbox => Number(checkbox.value))
+            };
+
+            if (!dados.nome || dados.preco <= 0 || dados.duracaoMinutos <= 0) {
+                mostrarMensagem("Preencha corretamente o nome, o preço e a duração.", true);
+                return;
+            }
+
+            const editando = servicoEditandoId !== null;
+            const url = editando
+                ? `${API}/Servicos/${servicoEditandoId}`
+                : `${API}/Servicos`;
+
+            botaoSalvarServico.disabled = true;
+            botaoSalvarServico.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Salvando...';
+
+            try {
+                await requisicao(url, {
+                    method: editando ? "PUT" : "POST",
+                    body: JSON.stringify(dados)
+                });
+
+                fecharModalServico();
+                mostrarMensagem(editando
+                    ? "Serviço atualizado com sucesso."
+                    : "Serviço cadastrado com sucesso.");
+
+                await carregarServicos();
+                await carregarCombos();
+            } catch (erro) {
+                mostrarMensagem(`Erro ao salvar serviço: ${erro.message}`, true);
+            } finally {
+                botaoSalvarServico.disabled = false;
+                botaoSalvarServico.innerHTML = '<i class="fa-regular fa-floppy-disk"></i> Salvar serviço';
+            }
+        });
+
+        // IMAGEM DOS COMBOS
+
+        function limparPreviewImagem() {
+            if (urlPreviewImagem) {
+                URL.revokeObjectURL(urlPreviewImagem);
+                urlPreviewImagem = null;
+            }
+
+            previewImagemCombo.removeAttribute("src");
+            previewImagemCombo.style.display = "none";
+            campoImagemCombo.value = "";
+        }
+
+        function mostrarPreviewImagem(arquivo) {
+            if (urlPreviewImagem) {
+                URL.revokeObjectURL(urlPreviewImagem);
+                urlPreviewImagem = null;
+            }
+
+            if (!arquivo) {
+                previewImagemCombo.removeAttribute("src");
+                previewImagemCombo.style.display = "none";
+                return;
+            }
+
+            const extensoesPermitidas = ["image/jpeg", "image/png", "image/webp"];
+
+            if (!extensoesPermitidas.includes(arquivo.type)) {
+                campoImagemCombo.value = "";
+                previewImagemCombo.style.display = "none";
+                mostrarMensagem("Selecione uma imagem JPG, PNG ou WEBP.", true);
+                return;
+            }
+
+            if (arquivo.size > 5 * 1024 * 1024) {
+                campoImagemCombo.value = "";
+                previewImagemCombo.style.display = "none";
+                mostrarMensagem("A imagem deve ter no máximo 5 MB.", true);
+                return;
+            }
+
+            urlPreviewImagem = URL.createObjectURL(arquivo);
+            previewImagemCombo.src = urlPreviewImagem;
+            previewImagemCombo.style.display = "block";
+        }
+
+        campoImagemCombo.addEventListener("change", () => {
+            mostrarPreviewImagem(campoImagemCombo.files[0]);
+        });
+
+        async function enviarImagemCombo(id) {
+            const arquivo = campoImagemCombo.files[0];
+
+            if (!arquivo) return false;
+
+            const formulario = new FormData();
+            formulario.append("arquivo", arquivo);
+
+            await requisicao(`${API}/Combos/${id}/imagem`, {
+                method: "POST",
+                body: formulario
+            });
+
+            return true;
+        }
+
+        // COMBOS
+
+        async function carregarCombos() {
+            try {
+                const resultado = await requisicao(`${API}/Combos`);
+                combos = Array.isArray(resultado) ? resultado : [];
+                renderizarCombos();
+            } catch (erro) {
+                listaCombos.replaceChildren();
+
+                const aviso = document.createElement("p");
+                aviso.className = "estado-tabela";
+                aviso.textContent = `Não foi possível carregar os combos: ${erro.message}`;
+
+                listaCombos.appendChild(aviso);
+                $("contadorCombos").textContent = "Erro ao carregar";
+            }
+        }
+
+        function obterServicosCombo(combo) {
+            return Array.isArray(combo.servicos) ? combo.servicos : [];
+        }
+
+        function calcularDuracaoCombo(combo) {
+            return obterServicosCombo(combo).reduce(
+                (total, servico) => total + Number(servico.duracaoMinutos || 0),
+                0
+            );
+        }
+
+        function renderizarCombos() {
+            const termo = $("buscaCombo").value.trim().toLocaleLowerCase("pt-BR");
+
+            const filtrados = combos.filter(combo =>
+                (combo.nome || "").toLocaleLowerCase("pt-BR").includes(termo)
+            );
+
+            listaCombos.replaceChildren();
+
+            if (!filtrados.length) {
+                const aviso = document.createElement("p");
+                aviso.className = "estado-tabela";
+                aviso.textContent = combos.length
+                    ? "Nenhum combo corresponde à pesquisa."
+                    : "Nenhum combo cadastrado. Clique em Novo combo para começar.";
+
+                listaCombos.appendChild(aviso);
+                $("contadorCombos").textContent = "0 combos encontrados";
+                return;
+            }
+
+            filtrados.forEach(combo => {
+                const card = document.createElement("article");
+                card.className = "card-combo";
+
+                if (combo.imagem) {
+                    const imagem = document.createElement("img");
+                    imagem.className = "card-combo-imagem";
+                    imagem.src = combo.imagem;
+                    imagem.alt = `Imagem do combo ${combo.nome}`;
+                    imagem.onerror = () => {
+                        imagem.hidden = true;
+                    };
+                    card.appendChild(imagem);
+                }
+
+                const topo = document.createElement("div");
+                topo.className = "card-combo-topo";
+
+                const tituloGrupo = document.createElement("div");
+                const titulo = document.createElement("h3");
+                titulo.textContent = combo.nome || "Combo sem nome";
+
+                const subtitulo = document.createElement("p");
+                subtitulo.className = "combo-subtitulo";
+                subtitulo.textContent = `${obterServicosCombo(combo).length} serviço(s) incluído(s)`;
+
+                tituloGrupo.append(titulo, subtitulo);
+                topo.appendChild(tituloGrupo);
+
+                const lista = document.createElement("div");
+                lista.className = "combo-servicos";
+
+                const itens = obterServicosCombo(combo);
+
+                if (!itens.length) {
+                    const vazio = document.createElement("span");
+                    vazio.className = "combo-sem-servicos";
+                    vazio.textContent = "Nenhum serviço vinculado";
+                    lista.appendChild(vazio);
+                } else {
+                    itens.forEach(servico => {
+                        const etiqueta = document.createElement("span");
+                        etiqueta.className = "etiqueta-combo";
+                        etiqueta.textContent = servico.nome || "Serviço";
+                        lista.appendChild(etiqueta);
+                    });
+                }
+
+                const resumo = document.createElement("div");
+                resumo.className = "combo-resumo";
+
+                const duracao = document.createElement("div");
+                duracao.className = "combo-duracao";
+
+                const rotuloDuracao = document.createElement("small");
+                rotuloDuracao.textContent = "Duração total";
+
+                const valorDuracao = document.createElement("strong");
+                valorDuracao.textContent = formatarDuracao(calcularDuracaoCombo(combo));
+
+                duracao.append(rotuloDuracao, valorDuracao);
+
+                const preco = document.createElement("div");
+                preco.className = "combo-preco";
+
+                const rotuloPreco = document.createElement("small");
+                rotuloPreco.textContent = "Preço do combo";
+
+                const valorPreco = document.createElement("strong");
+                valorPreco.textContent = formatarPreco(combo.preco);
+
+                preco.append(rotuloPreco, valorPreco);
+                resumo.append(duracao, preco);
+
+                const acoes = document.createElement("div");
+                acoes.className = "combo-acoes";
+
+                acoes.append(
+                    criarBotaoIcone(
+                        "fa-regular fa-pen-to-square",
+                        `Editar ${combo.nome}`,
+                        "",
+                        () => editarCombo(combo)
+                    ),
+                    criarBotaoIcone(
+                        "fa-regular fa-trash-can",
+                        `Excluir ${combo.nome}`,
+                        "excluir",
+                        () => excluirCombo(combo)
+                    )
+                );
+
+                card.append(topo, lista, resumo, acoes);
+                listaCombos.appendChild(card);
+            });
+
+            $("contadorCombos").textContent =
+                `Mostrando ${filtrados.length} de ${combos.length} combo(s)`;
+        }
+
+        function renderizarOpcoesServicosCombo(idsSelecionados = []) {
+            campoServicosCombo.replaceChildren();
+
+            if (!servicos.length) {
+                const aviso = document.createElement("p");
+                aviso.className = "texto-ajuda";
+                aviso.textContent = "Cadastre pelo menos um serviço antes de criar um combo.";
+                campoServicosCombo.appendChild(aviso);
+                atualizarResumoCombo();
+                return;
+            }
+
+            servicos.forEach(servico => {
+                const linha = document.createElement("label");
+                linha.className = "opcao-servico-combo";
+
+                const checkbox = document.createElement("input");
+                checkbox.type = "checkbox";
+                checkbox.name = "servicoIds";
+                checkbox.value = servico.id;
+                checkbox.checked = idsSelecionados.some(
+                    id => Number(id) === Number(servico.id)
+                );
+                checkbox.addEventListener("change", atualizarResumoCombo);
+
+                const detalhes = document.createElement("span");
+                detalhes.className = "opcao-servico-detalhes";
+
+                const nome = document.createElement("strong");
+                nome.textContent = servico.nome || "Serviço sem nome";
+
+                const info = document.createElement("small");
+                info.textContent =
+                    `${formatarDuracao(servico.duracaoMinutos)} · ${formatarPreco(servico.preco)}`;
+
+                detalhes.append(nome, info);
+                linha.append(checkbox, detalhes);
+                campoServicosCombo.appendChild(linha);
+            });
+
+            atualizarResumoCombo();
+        }
+
+        function obterIdsServicosSelecionados() {
+            return [
+                ...campoServicosCombo.querySelectorAll('input[name="servicoIds"]:checked')
+            ].map(checkbox => Number(checkbox.value));
+        }
+
+        function atualizarResumoCombo() {
+            const ids = obterIdsServicosSelecionados();
+            const selecionados = servicos.filter(servico =>
+                ids.includes(Number(servico.id))
+            );
+
+            const duracaoTotal = selecionados.reduce(
+                (total, servico) => total + Number(servico.duracaoMinutos || 0),
+                0
+            );
+
+            $("resumoQuantidade").textContent =
+                `${selecionados.length} serviço(s) selecionado(s)`;
+
+            $("resumoDuracao").textContent = formatarDuracao(duracaoTotal);
+        }
+
+        function abrirModalCombo() {
+            comboEditandoId = null;
+            formCombo.reset();
+            limparPreviewImagem();
+
+            $("tituloModalCombo").textContent = "Novo combo";
+            $("descricaoModalCombo").textContent =
+                "Defina o nome, o preço, a imagem e os serviços do combo.";
+
+            botaoSalvarCombo.innerHTML = '<i class="fa-regular fa-floppy-disk"></i> Salvar combo';
+
+            renderizarOpcoesServicosCombo([]);
+            modalCombo.hidden = false;
+            document.body.classList.add("modal-aberto");
+            $("nomeCombo").focus();
+        }
+
+        function editarCombo(combo) {
+            comboEditandoId = combo.id;
+            formCombo.reset();
+            limparPreviewImagem();
+
+            $("tituloModalCombo").textContent = "Editar combo";
+            $("descricaoModalCombo").textContent =
+                "Altere os dados, os serviços ou selecione uma nova imagem.";
+
+            $("nomeCombo").value = combo.nome || "";
+            $("precoCombo").value = Number(combo.preco);
+
+            if (combo.imagem) {
+                previewImagemCombo.src = combo.imagem;
+                previewImagemCombo.style.display = "block";
+                previewImagemCombo.onerror = () => {
+                    previewImagemCombo.style.display = "none";
+                };
+            }
+
+            const idsSelecionados = obterServicosCombo(combo).map(servico => servico.id);
+            renderizarOpcoesServicosCombo(idsSelecionados);
+
+            botaoSalvarCombo.innerHTML = '<i class="fa-regular fa-floppy-disk"></i> Salvar alterações';
+
+            modalCombo.hidden = false;
+            document.body.classList.add("modal-aberto");
+            $("nomeCombo").focus();
+        }
+
+        function fecharModalCombo() {
+            modalCombo.hidden = true;
+            document.body.classList.remove("modal-aberto");
+            comboEditandoId = null;
+            limparPreviewImagem();
+        }
+
+        async function excluirCombo(combo) {
+            confirmarExclusao(combo.nome, "combo", async () => {
+                await requisicao(`${API}/Combos/${combo.id}`, {
+                    method: "DELETE"
+                });
+
+                mostrarMensagem("Combo excluído com sucesso.");
+                await carregarCombos();
+            });
+        }
+
+        $("btnNovoCombo").addEventListener("click", abrirModalCombo);
+        $("btnFecharModalCombo").addEventListener("click", fecharModalCombo);
+        $("btnCancelarCombo").addEventListener("click", fecharModalCombo);
+        $("buscaCombo").addEventListener("input", renderizarCombos);
+
+        modalCombo.addEventListener("click", evento => {
+            if (evento.target === modalCombo) fecharModalCombo();
+        });
+
+        formCombo.addEventListener("submit", async evento => {
+            evento.preventDefault();
+
+            const dados = {
+                nome: $("nomeCombo").value.trim(),
+                preco: Number($("precoCombo").value),
+                servicoIds: obterIdsServicosSelecionados()
+            };
+
+            if (!dados.nome || dados.preco <= 0) {
+                mostrarMensagem("Informe o nome e um preço válido para o combo.", true);
+                return;
+            }
+
+            if (!dados.servicoIds.length) {
+                mostrarMensagem("Selecione pelo menos um serviço para o combo.", true);
+                return;
+            }
+
+            const editando = comboEditandoId !== null;
+            const idEditado = comboEditandoId;
+            const url = editando
+                ? `${API}/Combos/${idEditado}`
+                : `${API}/Combos`;
+
+            botaoSalvarCombo.disabled = true;
+            botaoSalvarCombo.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Salvando...';
+
+            try {
+                let resultado;
+
+                if (editando) {
+                    await requisicao(url, {
+                        method: "PUT",
+                        body: JSON.stringify(dados)
+                    });
+
+                    resultado = { id: idEditado };
+                } else {
+                    resultado = await requisicao(url, {
+                        method: "POST",
+                        body: JSON.stringify(dados)
+                    });
+                }
+
+                const comboId = resultado?.id || idEditado;
+                let mensagemSucesso = editando
+                    ? "Combo atualizado com sucesso."
+                    : "Combo cadastrado com sucesso.";
+
+                try {
+                    if (campoImagemCombo.files.length > 0) {
+                        if (!comboId) {
+                            throw new Error("A API não retornou o ID do combo.");
+                        }
+
+                        await enviarImagemCombo(comboId);
+                        mensagemSucesso += " Imagem salva com sucesso.";
+                    }
+                } catch (erroImagem) {
+                    fecharModalCombo();
+                    await carregarCombos();
+                    mostrarMensagem(
+                        `O combo foi salvo, mas a imagem não foi enviada: ${erroImagem.message}`,
+                        true
+                    );
+                    return;
+                }
+
+                fecharModalCombo();
+                await carregarCombos();
+                mostrarMensagem(mensagemSucesso);
+            } catch (erro) {
+                mostrarMensagem(`Erro ao salvar combo: ${erro.message}`, true);
+            } finally {
+                botaoSalvarCombo.disabled = false;
+                botaoSalvarCombo.innerHTML = '<i class="fa-regular fa-floppy-disk"></i> Salvar combo';
+            }
+        });
+
+        // FECHAR MODAIS COM ESCAPE
+
+        document.addEventListener("keydown", evento => {
+            if (evento.key !== "Escape") return;
+
+            if (!modalConfirmacao.hidden) fecharConfirmacao();
+            else if (!modalServico.hidden) fecharModalServico();
+            else if (!modalCombo.hidden) fecharModalCombo();
+        });
+
+        // SAIR
+
+        $("btnSair").addEventListener("click", evento => {
+            evento.preventDefault();
+
+            if (confirm("Deseja sair da página?")) {
+                window.location.href = "../../html/login_cliente.html";
+            }
+        });
+
+        // INICIALIZAÇÃO
+
+        async function iniciar() {
+            try {
+                await carregarProfissionais();
+            } catch (erro) {
+                profissionais = [];
+                renderizarOpcoesProfissionais([]);
+                mostrarMensagem(
+                    `Não foi possível carregar os profissionais: ${erro.message}`,
+                    true
+                );
+            }
+
+            try {
+                await carregarServicos();
+            } catch (erro) {
+                mostrarMensagem(`Erro ao carregar serviços: ${erro.message}`, true);
+            }
+
+            await carregarCombos();
+        }
+
+        iniciar();
+    </script>
+</body>
+</html>

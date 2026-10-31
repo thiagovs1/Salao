@@ -1,0 +1,1012 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agendamentos | Belleza</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" href="../css/agendamentos.css">
+    <style>
+        .aviso-combo-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 99999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background: rgba(35, 29, 32, 0.48);
+            backdrop-filter: blur(3px);
+        }
+
+        .aviso-combo-overlay[hidden] {
+            display: none;
+        }
+
+        .aviso-combo-card {
+            width: 100%;
+            max-width: 400px;
+            padding: 30px;
+            border-radius: 18px;
+            background: #fff;
+            text-align: center;
+            box-shadow: 0 18px 55px rgba(0, 0, 0, 0.2);
+            animation: aparecerAvisoCombo 0.2s ease-out;
+        }
+
+        .aviso-combo-icone {
+            width: 66px;
+            height: 66px;
+            margin: 0 auto 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: #f8eeee;
+            color: #b96b75;
+            font-size: 28px;
+        }
+
+        .aviso-combo-card h2 {
+            margin: 0 0 12px;
+            color: #49383d;
+            font-size: 21px;
+        }
+
+        .aviso-combo-card p {
+            margin: 0 0 24px;
+            color: #75666b;
+            font-size: 15px;
+            line-height: 1.6;
+        }
+
+        .aviso-combo-card .botao {
+            min-width: 130px;
+        }
+
+        @keyframes aparecerAvisoCombo {
+            from {
+                opacity: 0;
+                transform: translateY(8px) scale(0.97);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+    </style>
+</head>
+<body>
+    <aside class="sidebar">
+        <div class="logo-area">
+            <img src="/imagens/logo_belleza.png" alt="Belleza Salão de Beleza" class="logo-belleza">
+        </div>
+        <div class="linha-logo"></div>
+        <nav class="menu">
+            <a href="painel_administrador.html" class="menu-item"><i class="fa-solid fa-house"></i><span>Início</span></a>
+            <a href="agendamentos.html" class="menu-item ativo"><i class="fa-regular fa-calendar"></i><span>Agendamentos</span></a>
+            <a href="clientes.html" class="menu-item"><i class="fa-solid fa-circle-user"></i><span>Clientes</span></a>
+            <a href="servicos.html" class="menu-item"><i class="fa-solid fa-scissors"></i><span>Serviços</span></a>
+            <a href="profissionais.html" class="menu-item"><i class="fa-solid fa-users"></i><span>Profissionais</span></a>
+            <a href="financeiro.html" class="menu-item"><i class="fa-solid fa-wallet"></i><span>Financeiro</span></a>
+            <a href="estoque.html" class="menu-item"><i class="fa-solid fa-box-open"></i><span>Estoque e compras</span></a>
+            <a href="promocoes.html" class="menu-item"><i class="fa-solid fa-tags"></i><span>Promoções</span></a>
+            <a href="avaliacoes.html" class="menu-item"><i class="fa-regular fa-star"></i><span>Avaliações</span></a>
+            <a href="relatorios.html" class="menu-item"><i class="fa-solid fa-chart-column"></i><span>Relatórios</span></a>
+            <a href="configuracoes.html" class="menu-item"><i class="fa-solid fa-gear"></i><span>Configurações</span></a>
+            <a href="#" id="btnSair" class="menu-item sair"><i class="fa-solid fa-arrow-right-from-bracket"></i><span>Sair</span></a>
+        </nav>
+    </aside>
+
+    <main class="conteudo">
+        <header class="cabecalho-agenda">
+            <div>
+                <h1>Agendamentos</h1>
+                <p>Consulte os horários e registre os atendimentos concluídos.</p>
+            </div>
+            <div class="acoes-cabecalho">
+                <button id="btnAtualizar" class="botao primario" type="button">
+                    <i class="fa-solid fa-rotate"></i> Atualizar
+                </button>
+                <button id="btnNovo" class="botao primario" type="button">
+                    <i class="fa-solid fa-plus"></i> Novo agendamento
+                </button>
+            </div>
+        </header>
+
+        <div id="mensagem" class="mensagem" role="status" aria-live="polite"></div>
+
+        <section class="filtros">
+            <label class="campo">Data
+                <input type="date" id="filtroData">
+            </label>
+            <label class="campo">Status
+                <select id="filtroStatus">
+                    <option value="todos">Todos os status</option>
+                    <option value="Aberto">Aberto</option>
+                    <option value="Confirmado">Confirmado</option>
+                    <option value="Atendido">Atendido</option>
+                    <option value="Cancelado">Cancelado</option>
+                </select>
+            </label>
+            <label class="campo">Buscar cliente ou profissional
+                <input type="search" id="filtroTexto" placeholder="Digite um nome">
+            </label>
+            <button id="btnLimpar" class="botao secundario" type="button">Limpar filtros</button>
+        </section>
+
+        <section class="tabela-card">
+            <div class="tabela-topo">
+                <strong>Lista de agendamentos</strong>
+                <span id="contador">Carregando...</span>
+            </div>
+            <div class="tabela-responsiva">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Data</th>
+                            <th>Horário</th>
+                            <th>Cliente</th>
+                            <th>Profissional</th>
+                            <th>Serviço(s)</th>
+                            <th>Valor</th>
+                            <th>Status</th>
+                            <th>Ação</th>
+                        </tr>
+                    </thead>
+                    <tbody id="lista">
+                        <tr><td colspan="8" class="vazio">Carregando agendamentos...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <div id="modalAgendamento" class="modal-overlay" hidden>
+        <section class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modalTitulo">
+            <header class="modal-cabecalho">
+                <div>
+                    <h2 id="modalTitulo">Novo agendamento</h2>
+                    <p>Preencha os dados para registrar um atendimento.</p>
+                </div>
+                <button id="btnFecharModal" class="fechar-modal" type="button" aria-label="Fechar">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </header>
+
+            <form id="formAgendamento">
+                <div id="erroFormulario" class="mensagem" role="alert"></div>
+
+                <div class="form-grid">
+                    <label class="campo campo-largo">Cliente
+                        <select id="clienteId" required>
+                            <option value="">Carregando clientes...</option>
+                        </select>
+                    </label>
+
+                    <label class="campo">Profissional
+                        <select id="profissionalId" required>
+                            <option value="">Carregando profissionais...</option>
+                        </select>
+                    </label>
+
+                    <label class="campo">Combo
+                        <select id="comboId">
+                            <option value="">Nenhum combo</option>
+                        </select>
+                        <small>Escolha um combo e, se necessário, adicione serviços que não estejam incluídos nele.</small>
+                    </label>
+
+                    <div class="campo campo-largo campo-servicos">
+                        <div class="servicos-titulo">
+                            <span>Serviços individuais</span>
+                            <small>Selecione serviços adicionais ao combo ou serviços individuais.</small>
+                        </div>
+                        <div id="servicosLista" class="servicos-lista">
+                            <p class="servicos-carregando">Carregando serviços...</p>
+                        </div>
+                        <select id="servicoIds" multiple hidden aria-hidden="true"></select>
+                    </div>
+
+                    <label class="campo">Data
+                        <input type="date" id="dataAgendamento" required>
+                    </label>
+
+                    <label class="campo">Horário disponível
+                        <select id="horaAgendamento" required disabled>
+                            <option value="">Selecione os serviços e a data primeiro</option>
+                        </select>
+                    </label>
+
+                    <label class="campo">Status inicial
+                        <select id="statusAgendamento" required>
+                            <option value="Aberto">Aberto</option>
+                            <option value="Confirmado">Confirmado</option>
+                        </select>
+                    </label>
+                </div>
+
+                <div class="resumo-agendamento">
+                    <span>Valor estimado</span>
+                    <strong id="valorEstimado">R$ 0,00</strong>
+                    <small id="duracaoEstimada">Selecione um combo ou serviços.</small>
+                </div>
+
+                <footer class="modal-acoes">
+                    <button id="btnCancelarModal" class="botao secundario" type="button">Cancelar</button>
+                    <button id="btnSalvarAgendamento" class="botao primario" type="submit">
+                        <i class="fa-solid fa-floppy-disk"></i> Salvar agendamento
+                    </button>
+                </footer>
+            </form>
+        </section>
+    </div>
+
+    <div id="modalConfirmacao" class="confirmacao-overlay" hidden>
+        <section class="confirmacao-card" role="dialog" aria-modal="true" aria-labelledby="confirmacaoTitulo">
+            <div class="confirmacao-icone">
+                <i class="fa-solid fa-circle-question"></i>
+            </div>
+            <h2 id="confirmacaoTitulo">Confirmar ação</h2>
+            <p id="confirmacaoTexto">Deseja continuar?</p>
+            <div class="confirmacao-acoes">
+                <button id="btnConfirmarNao" class="botao secundario" type="button">Cancelar</button>
+                <button id="btnConfirmarSim" class="botao primario" type="button">Confirmar</button>
+            </div>
+        </section>
+    </div>
+
+    <div id="modalAvisoCombo" class="aviso-combo-overlay" hidden>
+        <div class="aviso-combo-card" role="alertdialog" aria-modal="true" aria-labelledby="tituloAvisoCombo">
+            <div class="aviso-combo-icone">
+                <i class="fa-solid fa-circle-exclamation"></i>
+            </div>
+            <h2 id="tituloAvisoCombo">Serviço já incluído</h2>
+            <p id="textoAvisoCombo"></p>
+            <button id="btnFecharAvisoCombo" class="botao primario" type="button">Entendi</button>
+        </div>
+    </div>
+
+<script>
+"use strict";
+
+const API = "/api";
+const $ = id => document.getElementById(id);
+
+let agendamentos = [];
+let clientes = [];
+let profissionais = [];
+let servicos = [];
+let combos = [];
+let requisicaoHorarios = 0;
+let resolverConfirmacao = null;
+
+function normalizar(texto) {
+    return String(texto ?? "")
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .toLowerCase()
+        .trim();
+}
+
+function propriedade(obj, ...nomes) {
+    for (const nome of nomes) {
+        if (obj?.[nome] !== undefined && obj[nome] !== null)
+            return obj[nome];
+
+        const chave = Object.keys(obj || {}).find(k => k.toLowerCase() === nome.toLowerCase());
+
+        if (chave && obj[chave] !== null)
+            return obj[chave];
+    }
+    return "";
+}
+
+function dataLocalISO(data = new Date()) {
+    return `${data.getFullYear()}-${String(data.getMonth() + 1).padStart(2, "0")}-${String(data.getDate()).padStart(2, "0")}`;
+}
+
+function dataObjeto(valor) {
+    if (!valor) return null;
+    const d = new Date(valor);
+    return Number.isNaN(d.getTime()) ? null : d;
+}
+
+function dataISO(valor) {
+    if (!valor) return "";
+    if (typeof valor === "string") {
+        const correspondencia = valor.match(/^(\d{4}-\d{2}-\d{2})/);
+        if (correspondencia) return correspondencia[1];
+    }
+    const d = dataObjeto(valor);
+    return d ? dataLocalISO(d) : "";
+}
+
+function dataBR(valor) {
+    const iso = dataISO(valor);
+    if (!iso) return "--";
+    const [ano, mes, dia] = iso.split("-");
+    return `${dia}/${mes}/${ano}`;
+}
+
+function horaBR(valor) {
+    if (!valor) return "--:--";
+    const correspondencia = String(valor).match(/T(\d{2}:\d{2})/);
+    if (correspondencia) return correspondencia[1];
+    const hora = String(valor).match(/^(\d{2}:\d{2})/);
+    if (hora) return hora[1];
+    const d = dataObjeto(valor);
+    return d ? d.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" }) : "--:--";
+}
+
+function moeda(valor) {
+    return Number(valor || 0).toLocaleString("pt-BR", {
+        style: "currency",
+        currency: "BRL"
+    });
+}
+
+async function requisicao(url, opcoes = {}) {
+    const resposta = await fetch(url, {
+        credentials: "include",
+        ...opcoes,
+        headers: {
+            ...(opcoes.headers || {}),
+            ...(opcoes.body ? { "Content-Type": "application/json" } : {})
+        }
+    });
+
+    const texto = await resposta.text();
+    let dados = {};
+
+    try {
+        dados = texto ? JSON.parse(texto) : {};
+    } catch {
+        dados = {};
+    }
+
+    if (resposta.status === 401 || resposta.status === 403)
+        throw new Error(dados.mensagem || "Acesso negado. Entre novamente como administrador.");
+
+    if (!resposta.ok)
+        throw new Error(dados.mensagem || dados.title || `Erro HTTP ${resposta.status}.`);
+
+    return dados;
+}
+
+function mostrarMensagem(texto, tipo = "erro") {
+    $("mensagem").textContent = texto;
+    $("mensagem").className = `mensagem visivel ${tipo}`;
+    $("mensagem").scrollIntoView({ behavior: "smooth", block: "nearest" });
+}
+
+function erroFormulario(texto) {
+    $("erroFormulario").textContent = texto;
+    $("erroFormulario").className = texto ? "mensagem visivel erro" : "mensagem";
+}
+
+function mostrarAvisoCombo(texto) {
+    $("textoAvisoCombo").textContent = texto;
+    $("modalAvisoCombo").hidden = false;
+    $("btnFecharAvisoCombo").focus();
+}
+
+function fecharAvisoCombo() {
+    $("modalAvisoCombo").hidden = true;
+}
+
+$("btnFecharAvisoCombo").addEventListener("click", fecharAvisoCombo);
+
+$("modalAvisoCombo").addEventListener("click", e => {
+    if (e.target === $("modalAvisoCombo")) {
+        fecharAvisoCombo();
+    }
+});
+
+function confirmar(texto, titulo = "Confirmar ação", botao = "Confirmar") {
+    $("confirmacaoTitulo").textContent = titulo;
+    $("confirmacaoTexto").textContent = texto;
+    $("btnConfirmarSim").textContent = botao;
+    $("modalConfirmacao").hidden = false;
+
+    return new Promise(resolve => {
+        resolverConfirmacao = resolve;
+        $("btnConfirmarSim").focus();
+    });
+}
+
+function fecharConfirmacao(resultado) {
+    $("modalConfirmacao").hidden = true;
+
+    if (resolverConfirmacao) {
+        resolverConfirmacao(resultado);
+        resolverConfirmacao = null;
+    }
+}
+
+$("btnConfirmarSim").addEventListener("click", () => fecharConfirmacao(true));
+$("btnConfirmarNao").addEventListener("click", () => fecharConfirmacao(false));
+
+$("modalConfirmacao").addEventListener("click", e => {
+    if (e.target === $("modalConfirmacao")) fecharConfirmacao(false);
+});
+
+function abrirModal() {
+    erroFormulario("");
+    $("formAgendamento").reset();
+    $("valorEstimado").textContent = moeda(0);
+    $("duracaoEstimada").textContent = "Selecione um combo ou serviços.";
+    $("horaAgendamento").replaceChildren(new Option("Selecione os serviços e a data primeiro", ""));
+    $("horaAgendamento").disabled = true;
+    $("comboId").value = "";
+    $("servicoIds").selectedIndex = -1;
+
+    document.querySelectorAll(".servico-opcao input").forEach(input => {
+        input.checked = false;
+        input.closest(".servico-opcao")?.classList.remove("selecionado");
+    });
+
+    $("dataAgendamento").min = dataLocalISO();
+    $("modalAgendamento").hidden = false;
+    document.body.classList.add("modal-aberto");
+    $("clienteId").focus();
+}
+
+function fecharModal() {
+    $("modalAgendamento").hidden = true;
+    document.body.classList.remove("modal-aberto");
+    erroFormulario("");
+}
+
+function carregarOpcoes(select, itens, textoVazio, nomes = ["nome", "Nome"]) {
+    select.replaceChildren();
+
+    if (!select.multiple) {
+        const inicial = document.createElement("option");
+        inicial.value = "";
+        inicial.textContent = textoVazio;
+        select.appendChild(inicial);
+    }
+
+    for (const item of itens) {
+        const option = document.createElement("option");
+        option.value = propriedade(item, "id", "Id");
+        option.textContent = propriedade(item, ...nomes) || `Registro ${option.value}`;
+        option.dataset.preco = propriedade(item, "preco", "Preco") || 0;
+        option.dataset.duracao = propriedade(item, "duracaoMinutos", "DuracaoMinutos") || 0;
+        select.appendChild(option);
+    }
+}
+
+function comboIncluiServico(servicoId, combo) {
+    if (!combo) return false;
+
+    const ids = propriedade(combo, "servicoIds", "ServicoIds");
+
+    return Array.isArray(ids) &&
+        ids.some(id => Number(id) === Number(servicoId));
+}
+
+function renderizarServicos() {
+    const lista = $("servicosLista");
+    lista.replaceChildren();
+
+    if (!servicos.length) {
+        const aviso = document.createElement("p");
+        aviso.className = "servicos-carregando";
+        aviso.textContent = "Nenhum serviço disponível.";
+        lista.appendChild(aviso);
+        return;
+    }
+
+    for (const servico of servicos) {
+        const id = Number(propriedade(servico, "id", "Id"));
+        const nome = propriedade(servico, "nome", "Nome") || `Serviço ${id}`;
+        const preco = Number(propriedade(servico, "preco", "Preco") || 0);
+        const duracao = Number(propriedade(servico, "duracaoMinutos", "DuracaoMinutos") || 0);
+
+        const label = document.createElement("label");
+        label.className = "servico-opcao";
+        label.htmlFor = `servico-${id}`;
+
+        const checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.id = `servico-${id}`;
+        checkbox.value = String(id);
+
+        checkbox.addEventListener("change", () => {
+            const combo = comboSelecionado();
+
+            if (checkbox.checked && combo && comboIncluiServico(id, combo)) {
+                checkbox.checked = false;
+                label.classList.remove("selecionado");
+
+                const nomeCombo = propriedade(combo, "nome", "Nome");
+
+                mostrarAvisoCombo(
+                    `O serviço "${nome}" já faz parte do combo "${nomeCombo}". Escolha outro serviço para complementar seu agendamento.`
+                );
+
+                return;
+            }
+
+            erroFormulario("");
+
+            const option = [...$("servicoIds").options]
+                .find(o => Number(o.value) === id);
+
+            if (option) {
+                option.selected = checkbox.checked;
+            }
+
+            label.classList.toggle("selecionado", checkbox.checked);
+            atualizarResumo();
+            carregarHorarios();
+        });
+
+        const icone = document.createElement("span");
+        icone.className = "servico-icone";
+        icone.innerHTML = '<i class="fa-solid fa-scissors"></i>';
+
+        const informacoes = document.createElement("span");
+        informacoes.className = "servico-informacoes";
+
+        const titulo = document.createElement("strong");
+        titulo.textContent = nome;
+
+        const detalhe = document.createElement("small");
+        detalhe.textContent = duracao > 0 ? minutosFormatados(duracao) : "Duração não informada";
+
+        informacoes.append(titulo, detalhe);
+
+        const valor = document.createElement("span");
+        valor.className = "servico-preco";
+        valor.textContent = moeda(preco);
+
+        const checkIcon = document.createElement("span");
+        checkIcon.className = "servico-check";
+        checkIcon.innerHTML = '<i class="fa-solid fa-check"></i>';
+
+        label.append(checkbox, icone, informacoes, valor, checkIcon);
+        lista.appendChild(label);
+    }
+}
+
+async function carregarOpcoesFormulario() {
+    const [listaClientes, listaServicos, listaProfissionais, listaCombos] = await Promise.all([
+        requisicao(`${API}/ClientesAdministracao`),
+        requisicao(`${API}/Servicos`),
+        requisicao(`${API}/Profissionais`),
+        requisicao(`${API}/AgendamentosAdministracao/combos`)
+    ]);
+
+    clientes = Array.isArray(listaClientes) ? listaClientes : [];
+    servicos = Array.isArray(listaServicos) ? listaServicos : [];
+    profissionais = Array.isArray(listaProfissionais) ? listaProfissionais : [];
+    combos = Array.isArray(listaCombos) ? listaCombos : [];
+
+    carregarOpcoes($("clienteId"), clientes, "Selecione o cliente");
+
+    const ativos = profissionais.filter(p => {
+        const ativo = propriedade(p, "ativo", "Ativo");
+        return ativo === "" || ativo === true || ativo === 1 || ativo === "true";
+    });
+
+    carregarOpcoes($("profissionalId"), ativos, "Selecione a profissional");
+    carregarOpcoes($("servicoIds"), servicos, "");
+    renderizarServicos();
+
+    $("comboId").replaceChildren(new Option("Nenhum combo", ""));
+
+    for (const combo of combos) {
+        const option = document.createElement("option");
+        option.value = propriedade(combo, "id", "Id");
+        option.textContent = `${propriedade(combo, "nome", "Nome")} - ${moeda(propriedade(combo, "preco", "Preco"))}`;
+        option.dataset.preco = propriedade(combo, "preco", "Preco") || 0;
+        option.dataset.duracao = propriedade(combo, "duracaoMinutos", "DuracaoMinutos") || 0;
+        $("comboId").appendChild(option);
+    }
+}
+
+function servicosSelecionados() {
+    return [...$("servicoIds").selectedOptions]
+        .map(o => Number(o.value))
+        .filter(n => n > 0);
+}
+
+function comboSelecionado() {
+    const id = Number($("comboId").value);
+    return combos.find(c => Number(propriedade(c, "id", "Id")) === id) || null;
+}
+
+function minutosFormatados(minutos) {
+    minutos = Number(minutos || 0);
+    if (minutos <= 0) return "Duração não informada";
+    const horas = Math.floor(minutos / 60);
+    const resto = minutos % 60;
+    if (horas && resto) return `${horas}h${String(resto).padStart(2, "0")}min`;
+    if (horas) return `${horas}h`;
+    return `${resto}min`;
+}
+
+function atualizarResumo() {
+    const combo = comboSelecionado();
+    const selecionados = [...$("servicoIds").selectedOptions];
+
+    let total = 0;
+    let minutos = 0;
+
+    if (combo) {
+        total = Number(propriedade(combo, "preco", "Preco") || 0);
+        minutos = Number(propriedade(combo, "duracaoMinutos", "DuracaoMinutos") || 0);
+    }
+
+    total += selecionados.reduce((s, o) => s + Number(o.dataset.preco || 0), 0);
+    minutos += selecionados.reduce((s, o) => s + Number(o.dataset.duracao || 0), 0);
+
+    $("valorEstimado").textContent = moeda(total);
+    $("duracaoEstimada").textContent = minutos > 0
+        ? `Duração estimada: ${minutosFormatados(minutos)}`
+        : "Selecione um combo ou serviços.";
+}
+
+function limparHorarios(texto = "Selecione os serviços e a data primeiro") {
+    $("horaAgendamento").replaceChildren(new Option(texto, ""));
+    $("horaAgendamento").disabled = true;
+}
+
+async function carregarHorarios() {
+    const numeroRequisicao = ++requisicaoHorarios;
+    const profissionalId = Number($("profissionalId").value);
+    const data = $("dataAgendamento").value;
+    const servicoIds = servicosSelecionados();
+    const combo = comboSelecionado();
+
+    limparHorarios("Carregando horários...");
+
+    if (!profissionalId || !data || (!combo && servicoIds.length === 0)) {
+        limparHorarios("Selecione profissional, data e serviços ou combo");
+        return;
+    }
+
+    const params = new URLSearchParams();
+    params.set("profissionalId", String(profissionalId));
+    params.set("data", data);
+    servicoIds.forEach(id => params.append("servicoIds", String(id)));
+
+    if (combo) params.set("comboId", String(propriedade(combo, "id", "Id")));
+
+    try {
+        const dados = await requisicao(
+            `${API}/AgendamentosAdministracao/horarios-disponiveis?${params.toString()}`
+        );
+
+        if (numeroRequisicao !== requisicaoHorarios) return;
+
+        $("horaAgendamento").replaceChildren();
+
+        if (!Array.isArray(dados) || dados.length === 0) {
+            limparHorarios("Nenhum horário disponível nessa data");
+            return;
+        }
+
+        $("horaAgendamento").appendChild(new Option("Selecione um horário", ""));
+
+        const horarios = dados
+            .map(item => propriedade(item, "horario", "Horario"))
+            .filter(Boolean)
+            .sort();
+
+        for (const horario of [...new Set(horarios)]) {
+            $("horaAgendamento").appendChild(new Option(horario, horario));
+        }
+
+        $("horaAgendamento").disabled = false;
+    } catch (e) {
+        if (numeroRequisicao !== requisicaoHorarios) return;
+        limparHorarios("Erro ao carregar horários");
+        erroFormulario(e.message);
+    }
+}
+
+function classeStatus(status) {
+    const s = normalizar(status);
+    if (s.includes("cancel")) return "status-cancelado";
+    if (s.includes("atendido") || s.includes("realizado") || s.includes("concluido")) return "status-atendido";
+    if (s.includes("confirm")) return "status-confirmado";
+    return "status-aberto";
+}
+
+function normalizarAgendamento(a) {
+    const itens = propriedade(a, "servicos", "Servicos", "agendamentoServicos", "AgendamentoServicos");
+    const combo = propriedade(a, "combo", "Combo");
+    let nomesServicos = "";
+    let valor = propriedade(a, "preco", "Preco", "valor", "Valor");
+
+    if (Array.isArray(itens) && itens.length) {
+        nomesServicos = itens.map(x =>
+            propriedade(x, "nome", "Nome", "nomeServico", "NomeServico") ||
+            propriedade(propriedade(x, "servico", "Servico"), "nome", "Nome")
+        ).filter(Boolean).join(", ");
+
+        if (!valor) {
+            valor = itens.reduce((s, x) =>
+                s + Number(
+                    propriedade(x, "preco", "Preco") ||
+                    propriedade(propriedade(x, "servico", "Servico"), "preco", "Preco") || 0
+                ), 0);
+        }
+    }
+
+    if (!nomesServicos && combo) {
+        nomesServicos = propriedade(combo, "nome", "Nome");
+        if (!valor) valor = propriedade(combo, "preco", "Preco");
+    }
+
+    if (!nomesServicos) {
+        nomesServicos = propriedade(a, "nomeServico", "NomeServico", "servicoNome", "ServicoNome", "nomeCombo", "NomeCombo");
+    }
+
+    return {
+        id: Number(propriedade(a, "id", "Id")),
+        dataHora: propriedade(a, "dataHora", "DataHora"),
+        cliente: propriedade(a, "nomeCliente", "NomeCliente") ||
+            propriedade(propriedade(a, "cliente", "Cliente"), "nome", "Nome") || "Cliente",
+        profissional: propriedade(a, "nomeProfissional", "NomeProfissional") ||
+            propriedade(propriedade(a, "profissional", "Profissional"), "nome", "Nome") || "Profissional",
+        servico: nomesServicos || "Atendimento",
+        preco: Number(valor || 0),
+        status: propriedade(a, "status", "Status") || "Aberto"
+    };
+}
+
+function renderizar() {
+    const tbody = $("lista");
+    tbody.replaceChildren();
+
+    const data = $("filtroData").value;
+    const status = $("filtroStatus").value;
+    const texto = normalizar($("filtroTexto").value);
+
+    const filtrados = agendamentos.filter(a =>
+        (!data || dataISO(a.dataHora) === data) &&
+        (status === "todos" || normalizar(a.status) === normalizar(status)) &&
+        (!texto || normalizar(a.cliente).includes(texto) ||
+            normalizar(a.profissional).includes(texto) ||
+            normalizar(a.servico).includes(texto))
+    ).sort((a, b) => new Date(a.dataHora) - new Date(b.dataHora));
+
+    $("contador").textContent = `${filtrados.length} agendamento(s)`;
+
+    if (!filtrados.length) {
+        tbody.innerHTML = '<tr><td colspan="8" class="vazio">Nenhum agendamento encontrado com esses filtros.</td></tr>';
+        return;
+    }
+
+    for (const a of filtrados) {
+        const tr = document.createElement("tr");
+
+        for (const valor of [
+            dataBR(a.dataHora),
+            horaBR(a.dataHora),
+            a.cliente,
+            a.profissional,
+            a.servico,
+            moeda(a.preco)
+        ]) {
+            const td = document.createElement("td");
+            td.textContent = valor;
+            tr.appendChild(td);
+        }
+
+        const tdStatus = document.createElement("td");
+        const badge = document.createElement("span");
+        badge.className = `status ${classeStatus(a.status)}`;
+        badge.textContent = a.status;
+        tdStatus.appendChild(badge);
+        tr.appendChild(tdStatus);
+
+        const tdAcao = document.createElement("td");
+        const s = normalizar(a.status);
+
+        if (s === "atendido" || s === "realizado" || s === "concluido") {
+            const etiqueta = document.createElement("span");
+            etiqueta.className = "acao-etiqueta acao-realizado";
+            etiqueta.innerHTML = '<i class="fa-solid fa-check"></i> Atendimento Realizado';
+            tdAcao.appendChild(etiqueta);
+        } else if (s === "cancelado") {
+            const etiqueta = document.createElement("span");
+            etiqueta.className = "acao-etiqueta acao-cancelado";
+            etiqueta.innerHTML = '<i class="fa-solid fa-xmark"></i> Atendimento Cancelado';
+            tdAcao.appendChild(etiqueta);
+        } else {
+            const btn = document.createElement("button");
+            btn.className = "botao acao-atendido";
+            btn.type = "button";
+            btn.innerHTML = '<i class="fa-solid fa-check"></i> Confirmar atendimento';
+            btn.addEventListener("click", () => marcarAtendido(a.id, btn));
+            tdAcao.appendChild(btn);
+        }
+
+        tr.appendChild(tdAcao);
+        tbody.appendChild(tr);
+    }
+}
+
+async function carregarAgendamentos() {
+    $("btnAtualizar").disabled = true;
+
+    try {
+        const dados = await requisicao(`${API}/Agendamentos`);
+
+        if (!Array.isArray(dados))
+            throw new Error("A API não retornou uma lista de agendamentos.");
+
+        agendamentos = dados.map(normalizarAgendamento).filter(a => a.id && a.dataHora);
+        renderizar();
+    } catch (e) {
+        mostrarMensagem(e.message);
+        $("lista").innerHTML = '<tr><td colspan="8" class="vazio">Não foi possível carregar os agendamentos.</td></tr>';
+        $("contador").textContent = "Erro ao carregar";
+    } finally {
+        $("btnAtualizar").disabled = false;
+    }
+}
+
+async function marcarAtendido(id, botao) {
+    const autorizado = await confirmar(
+        "Deseja marcar este atendimento como realizado?",
+        "Concluir atendimento",
+        "Sim, concluir"
+    );
+
+    if (!autorizado) return;
+
+    botao.disabled = true;
+
+    try {
+        const resposta = await requisicao(`${API}/Agendamentos/${id}/atendido`, {
+            method: "PUT"
+        });
+
+        mostrarMensagem(resposta.mensagem || "Atendimento marcado como realizado.", "sucesso");
+        await carregarAgendamentos();
+    } catch (e) {
+        mostrarMensagem(e.message);
+        botao.disabled = false;
+    }
+}
+
+$("btnNovo").addEventListener("click", async () => {
+    abrirModal();
+
+    try {
+        await carregarOpcoesFormulario();
+    } catch (e) {
+        erroFormulario(`Não foi possível carregar os dados do formulário: ${e.message}`);
+    }
+});
+
+$("btnFecharModal").addEventListener("click", fecharModal);
+$("btnCancelarModal").addEventListener("click", fecharModal);
+
+$("modalAgendamento").addEventListener("click", e => {
+    if (e.target === $("modalAgendamento")) fecharModal();
+});
+
+document.addEventListener("keydown", e => {
+    if (e.key === "Escape" && !$("modalAvisoCombo").hidden) fecharAvisoCombo();
+    else if (e.key === "Escape" && !$("modalConfirmacao").hidden) fecharConfirmacao(false);
+    else if (e.key === "Escape" && !$("modalAgendamento").hidden) fecharModal();
+});
+
+$("comboId").addEventListener("change", () => {
+    erroFormulario("");
+    atualizarResumo();
+    carregarHorarios();
+});
+
+$("profissionalId").addEventListener("change", carregarHorarios);
+$("dataAgendamento").addEventListener("change", carregarHorarios);
+
+$("btnAtualizar").addEventListener("click", carregarAgendamentos);
+$("filtroData").addEventListener("change", renderizar);
+$("filtroStatus").addEventListener("change", renderizar);
+$("filtroTexto").addEventListener("input", renderizar);
+
+$("btnLimpar").addEventListener("click", () => {
+    $("filtroData").value = "";
+    $("filtroStatus").value = "todos";
+    $("filtroTexto").value = "";
+    renderizar();
+});
+
+$("formAgendamento").addEventListener("submit", async e => {
+    e.preventDefault();
+    erroFormulario("");
+
+    const clienteId = Number($("clienteId").value);
+    const profissionalId = Number($("profissionalId").value);
+    const data = $("dataAgendamento").value;
+    const hora = $("horaAgendamento").value;
+    const servicoIds = servicosSelecionados();
+    const combo = comboSelecionado();
+
+    if (!clienteId || !profissionalId) {
+        erroFormulario("Selecione o cliente e a profissional.");
+        return;
+    }
+
+    if (!combo && servicoIds.length === 0) {
+        erroFormulario("Selecione um combo ou pelo menos um serviço individual.");
+        return;
+    }
+
+    if (!data || !hora) {
+        erroFormulario("Selecione a data e um horário disponível.");
+        return;
+    }
+
+    const dataHora = `${data}T${hora}:00`;
+
+    if (new Date(dataHora).getTime() < Date.now()) {
+        erroFormulario("O horário selecionado já passou. Escolha outro.");
+        await carregarHorarios();
+        return;
+    }
+
+    const botao = $("btnSalvarAgendamento");
+    botao.disabled = true;
+    botao.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Salvando...';
+
+    try {
+        const resposta = await requisicao(`${API}/AgendamentosAdministracao`, {
+            method: "POST",
+            body: JSON.stringify({
+                clienteId,
+                profissionalId,
+                dataHora,
+                servicoIds,
+                comboId: combo ? Number(propriedade(combo, "id", "Id")) : null,
+                status: $("statusAgendamento").value
+            })
+        });
+
+        fecharModal();
+        mostrarMensagem(resposta.mensagem || "Agendamento cadastrado com sucesso.", "sucesso");
+        await carregarAgendamentos();
+    } catch (erro) {
+        erroFormulario(erro.message);
+        await carregarHorarios();
+    } finally {
+        botao.disabled = false;
+        botao.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Salvar agendamento';
+    }
+});
+
+$("btnSair").addEventListener("click", async e => {
+    e.preventDefault();
+
+    const autorizado = await confirmar(
+        "Deseja realmente sair do painel administrativo?",
+        "Sair do painel",
+        "Sim, sair"
+    );
+
+    if (!autorizado) return;
+
+    try {
+        await fetch(`${API}/Usuarios/logout?tipoUsuario=Administrador`, {
+            method: "POST",
+            credentials: "include"
+        });
+    } finally {
+        location.replace("/html/login_cliente.html");
+    }
+});
+
+$("dataAgendamento").min = dataLocalISO();
+carregarAgendamentos();
+</script>
+</body>
+</html>

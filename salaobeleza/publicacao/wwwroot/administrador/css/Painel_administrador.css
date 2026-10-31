@@ -1,0 +1,872 @@
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+[hidden] {
+    display: none !important;
+}
+
+:root {
+    --vinho: #8f3d5e;
+    --vinho-escuro: #713049;
+    --rosa: #f7eae7;
+    --texto: #6d4853;
+    --texto-claro: #92777e;
+    --borda: #eadbd7;
+    --branco: #fffafa;
+}
+
+body {
+    background: #fff;
+    color: var(--texto);
+    font-family: Georgia, "Times New Roman", serif;
+    min-height: 100vh;
+    font-size: 14px;
+}
+
+.sidebar {
+    width: 200px;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 10;
+    background-image: url("../imagens/menu_belleza.png");
+    background-size: cover;
+    background-position: center;
+    border-right: 1px solid var(--borda);
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.sidebar::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(250, 242, 242, .78);
+    z-index: 0;
+}
+
+.logo-area,
+.linha-logo,
+.menu {
+    position: relative;
+    z-index: 1;
+}
+
+.logo-area {
+    height: 105px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+}
+
+.logo-belleza {
+    width: 135px;
+    max-height: 90px;
+    object-fit: contain;
+}
+
+.linha-logo {
+    width: 176px;
+    height: 3px;
+    background: var(--vinho);
+    margin: 0 auto 10px;
+}
+
+.menu {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    padding-bottom: 12px;
+}
+
+.menu-item {
+    width: 100%;
+    min-height: 39px;
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    padding: 8px 12px 8px 17px;
+    color: #994e6a;
+    text-decoration: none;
+    font-size: 13px;
+    white-space: nowrap;
+    transition: background .2s, color .2s;
+}
+
+.menu-item i {
+    width: 17px;
+    min-width: 17px;
+    text-align: center;
+    font-size: 14px;
+}
+
+.menu-item:hover {
+    background: rgba(234, 214, 220, .9);
+}
+
+.menu-item.ativo {
+    background: var(--vinho);
+    color: #fff;
+    border-radius: 0 5px 5px 0;
+}
+
+.menu-item.sair {
+    margin-top: 5px;
+}
+
+.conteudo {
+    margin-left: 200px;
+    padding: 24px;
+    min-height: 100vh;
+    min-width: 0;
+}
+
+.cabecalho {
+    min-height: 90px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.cabecalho h1 {
+    color: #91425f;
+    font-size: 24px;
+    font-weight: 400;
+    margin-bottom: 5px;
+}
+
+.cabecalho p {
+    font-size: 14px;
+    color: var(--texto-claro);
+    margin-bottom: 9px;
+}
+
+.data-atual {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    color: #91425f;
+    font-size: 13px;
+}
+
+.btn-atualizar {
+    border: 1px solid #e5c5ce;
+    border-radius: 6px;
+    background: #fffafa;
+    color: var(--vinho);
+    padding: 10px 14px;
+    font: inherit;
+    font-size: 13px;
+    cursor: pointer;
+    transition: background .2s;
+    white-space: nowrap;
+}
+
+.btn-atualizar:hover {
+    background: #f7eae7;
+}
+
+.btn-atualizar:disabled {
+    opacity: .65;
+    cursor: wait;
+}
+
+.mensagem {
+    padding: 12px 15px;
+    border-radius: 6px;
+    margin-bottom: 16px;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.mensagem.erro {
+    color: #8b303d;
+    background: #fff0f0;
+    border: 1px solid #e6b8bd;
+}
+
+.mensagem.sucesso {
+    color: #356c49;
+    background: #edf8f0;
+    border: 1px solid #b9dfc4;
+}
+
+.indicadores {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 16px;
+    margin-bottom: 18px;
+}
+
+.indicador {
+    min-height: 115px;
+    min-width: 0;
+    background: var(--rosa);
+    border-radius: 7px;
+    padding: 16px;
+    overflow: hidden;
+    border: 1px solid #f1dfdc;
+}
+
+.indicador h2 {
+    font-size: 14px;
+    font-weight: 400;
+    color: #a35b76;
+    margin-bottom: 14px;
+}
+
+.indicador-valor {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-height: 25px;
+    color: #91425f;
+}
+
+.indicador-valor i {
+    font-size: 19px;
+}
+
+.indicador-valor strong {
+    font-size: 23px;
+    font-weight: 400;
+}
+
+.indicador-valor .valor-financeiro {
+    font-size: clamp(16px, 1.4vw, 22px);
+    white-space: nowrap;
+}
+
+.indicador p {
+    color: #a07880;
+    font-size: 11px;
+    margin-top: 11px;
+    line-height: 1.4;
+}
+
+.painel-principal {
+    display: grid;
+    grid-template-columns: minmax(0, 1.08fr) minmax(0, 1.08fr) minmax(290px, 1fr);
+    grid-template-rows: minmax(245px, auto) minmax(220px, auto);
+    grid-template-areas:
+        "movimentacao servicos proximos"
+        "status financeiro proximos";
+    gap: 16px;
+}
+
+.cartao {
+    min-width: 0;
+    min-height: 0;
+    background: var(--rosa);
+    border: 1px solid #f1dfdc;
+    border-radius: 7px;
+    padding: 15px;
+    overflow: hidden;
+}
+
+.cartao h2 {
+    color: #a35b76;
+    font-size: 16px;
+    font-weight: 400;
+    margin-bottom: 7px;
+}
+
+.movimentacao {
+    grid-area: movimentacao;
+}
+
+.subtitulo {
+    font-size: 12px;
+    color: var(--texto-claro);
+    margin-bottom: 12px;
+}
+
+.grafico-barras {
+    display: flex;
+    height: 165px;
+    width: 100%;
+    min-width: 0;
+}
+
+.eixo-y {
+    width: 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 0 7px 25px 0;
+    font-size: 10px;
+    color: #826b70;
+    text-align: right;
+}
+
+.area-barras {
+    position: relative;
+    flex: 1;
+    height: 100%;
+    min-width: 0;
+}
+
+.linhas-grafico {
+    position: absolute;
+    inset: 0 0 25px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.linhas-grafico span {
+    height: 1px;
+    width: 100%;
+    background: var(--borda);
+}
+
+.barras {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: stretch;
+    justify-content: space-around;
+    gap: 6px;
+    padding: 0 3px;
+}
+
+.barra-grupo {
+    height: 100%;
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 5px;
+}
+
+.barra {
+    width: 75%;
+    max-width: 30px;
+    min-height: 0;
+    background: #a77c80;
+    border-radius: 4px 4px 0 0;
+    z-index: 1;
+    transition: height .3s;
+}
+
+.barra-grupo span {
+    height: 20px;
+    font-size: 10px;
+    color: #80676c;
+    white-space: nowrap;
+}
+
+.servicos-realizados {
+    grid-area: servicos;
+}
+
+.grafico-servicos {
+    min-height: 185px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    gap: 14px;
+}
+
+.rosca {
+    flex-shrink: 0;
+    border-radius: 50%;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.rosca-servicos {
+    width: 135px;
+    height: 135px;
+    background: #eadbd7;
+}
+
+.centro-rosca {
+    width: 56%;
+    height: 56%;
+    background: var(--rosa);
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: #8b6c71;
+    padding: 4px;
+}
+
+.centro-rosca strong {
+    font-size: 11px;
+    font-weight: 400;
+}
+
+.centro-rosca span {
+    font-size: 19px;
+    margin-top: 5px;
+}
+
+.legenda {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+    color: #8c6872;
+    font-size: 12px;
+}
+
+.legenda-servicos {
+    flex: 1;
+    min-width: 0;
+    gap: 8px;
+}
+
+.legenda span {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    min-width: 0;
+}
+
+.legenda .texto-legenda {
+    overflow-wrap: anywhere;
+    white-space: normal;
+}
+
+.cor {
+    width: 9px;
+    height: 9px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.proximos {
+    grid-area: proximos;
+    padding: 16px;
+}
+
+.proximos h2 {
+    margin-bottom: 18px;
+}
+
+.agendamento {
+    display: grid;
+    grid-template-columns: 53px minmax(0, 1fr);
+    align-items: start;
+    gap: 10px;
+    margin-bottom: 19px;
+    padding-bottom: 13px;
+    border-bottom: 1px solid #eadbd7;
+}
+
+.hora {
+    background: var(--vinho);
+    color: #fff;
+    border-radius: 5px;
+    font-size: 13px;
+    min-height: 31px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+}
+
+.dados-agendamento {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    min-width: 0;
+    font-size: 12px;
+    color: #5d4449;
+    overflow-wrap: anywhere;
+}
+
+.dados-agendamento strong {
+    font-weight: 600;
+    color: #91425f;
+    font-size: 13px;
+}
+
+.dados-agendamento span {
+    line-height: 1.4;
+}
+
+.estado {
+    grid-column: 2;
+    font-size: 11px;
+    font-weight: 400;
+    overflow-wrap: anywhere;
+}
+
+.confirmado {
+    color: #716b59;
+}
+
+.nao-confirmado {
+    color: #a34d4d;
+}
+
+.aviso-pendente {
+    border: 1px solid #d4a1ad;
+    border-radius: 5px;
+    padding: 10px;
+    color: #a35b76;
+    background: rgba(255, 255, 255, .65);
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+.status-agendamentos {
+    grid-area: status;
+}
+
+.grafico-status {
+    min-height: 160px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    gap: 15px;
+}
+
+.rosca-status {
+    width: 125px;
+    height: 125px;
+    background: #eadbd7;
+}
+
+.rosca-status .centro-rosca {
+    background: var(--rosa);
+}
+
+.rosca-status .centro-rosca strong {
+    font-size: 23px;
+    color: #91425f;
+    font-weight: bold;
+}
+
+.rosca-status .centro-rosca span {
+    font-size: 10px;
+}
+
+.legenda-status {
+    gap: 12px;
+}
+
+.resumo-financeiro {
+    grid-area: financeiro;
+}
+
+.financeiro-valores {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+.financeiro-bloco {
+    min-height: 62px;
+    border: 1px solid #e7c4ce;
+    background: var(--branco);
+    border-radius: 5px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 8px;
+    min-width: 0;
+}
+
+.financeiro-bloco span {
+    color: #a35b76;
+    font-size: 12px;
+}
+
+.financeiro-bloco strong {
+    color: #7d6269;
+    font-size: clamp(13px, 1.1vw, 17px);
+    font-weight: 400;
+    overflow-wrap: anywhere;
+}
+
+.formas-pagamento {
+    border: 1px solid #e7c4ce;
+    border-radius: 5px;
+    overflow: hidden;
+    background: var(--branco);
+}
+
+.formas-pagamento h3 {
+    padding: 9px;
+    color: #a35b76;
+    font-size: 12px;
+    font-weight: 400;
+    border-bottom: 1px solid #e7c4ce;
+}
+
+.resumo-status-mes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 10px;
+    font-size: 12px;
+    color: #6d535a;
+}
+
+.resumo-status-mes span {
+    background: #f7eae7;
+    border-radius: 4px;
+    padding: 6px 8px;
+}
+
+.texto-vazio {
+    color: #92777e;
+    font-size: 13px;
+    line-height: 1.6;
+    padding: 10px 0;
+}
+
+@media (max-width: 1250px) {
+    .conteudo {
+        padding: 18px;
+    }
+
+    .indicadores {
+        gap: 10px;
+    }
+
+    .indicador {
+        padding: 12px;
+    }
+
+    .painel-principal {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-template-rows: auto;
+        grid-template-areas:
+            "movimentacao servicos"
+            "status financeiro"
+            "proximos proximos";
+    }
+
+    .proximos {
+        min-height: 260px;
+    }
+
+    #listaProximos {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0 18px;
+    }
+}
+
+@media (max-width: 850px) {
+    .sidebar {
+        width: 175px;
+    }
+
+    .logo-belleza {
+        width: 120px;
+    }
+
+    .linha-logo {
+        width: 150px;
+    }
+
+    .menu-item {
+        font-size: 12px;
+        padding-left: 12px;
+    }
+
+    .conteudo {
+        margin-left: 175px;
+        padding: 15px;
+    }
+
+    .indicadores {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .indicador {
+        min-height: 105px;
+    }
+
+    .indicador h2 {
+        font-size: 13px;
+    }
+
+    .grafico-servicos,
+    .grafico-status {
+        gap: 10px;
+    }
+
+    .rosca-servicos,
+    .rosca-status {
+        width: 105px;
+        height: 105px;
+    }
+
+    .legenda {
+        font-size: 11px;
+    }
+}
+
+@media (max-width: 560px) {
+    .sidebar {
+        width: 115px;
+    }
+
+    .logo-area {
+        height: 75px;
+    }
+
+    .logo-belleza {
+        width: 90px;
+    }
+
+    .linha-logo {
+        width: 100px;
+    }
+
+    .menu-item {
+        min-height: 34px;
+        padding: 7px;
+        gap: 6px;
+        font-size: 9px;
+        white-space: normal;
+    }
+
+    .menu-item i {
+        width: 13px;
+        min-width: 13px;
+        font-size: 11px;
+    }
+
+    .conteudo {
+        margin-left: 115px;
+        padding: 10px;
+    }
+
+    .cabecalho {
+        min-height: 110px;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .cabecalho h1 {
+        font-size: 20px;
+    }
+
+    .cabecalho p {
+        font-size: 12px;
+    }
+
+    .data-atual {
+        font-size: 11px;
+    }
+
+    .btn-atualizar {
+        padding: 8px 10px;
+        font-size: 12px;
+    }
+
+    .indicadores {
+        gap: 8px;
+    }
+
+    .indicador {
+        min-height: 105px;
+        padding: 10px;
+    }
+
+    .indicador h2 {
+        font-size: 12px;
+        margin-bottom: 10px;
+    }
+
+    .indicador-valor {
+        gap: 7px;
+    }
+
+    .indicador-valor i {
+        font-size: 15px;
+    }
+
+    .indicador-valor strong {
+        font-size: 18px;
+    }
+
+    .indicador-valor .valor-financeiro {
+        font-size: 14px;
+        white-space: normal;
+    }
+
+    .indicador p {
+        font-size: 10px;
+    }
+
+    .painel-principal {
+        grid-template-columns: minmax(0, 1fr);
+        grid-template-areas:
+            "movimentacao"
+            "servicos"
+            "proximos"
+            "status"
+            "financeiro";
+        gap: 10px;
+    }
+
+    .cartao {
+        padding: 12px;
+    }
+
+    .cartao h2 {
+        font-size: 15px;
+    }
+
+    .grafico-barras {
+        height: 150px;
+    }
+
+    .grafico-servicos,
+    .grafico-status {
+        justify-content: center;
+        gap: 18px;
+    }
+
+    .rosca-servicos,
+    .rosca-status {
+        width: 105px;
+        height: 105px;
+    }
+
+    .legenda {
+        font-size: 11px;
+    }
+
+    #listaProximos {
+        display: block;
+    }
+
+    .agendamento {
+        grid-template-columns: 48px minmax(0, 1fr);
+    }
+
+    .financeiro-valores {
+        gap: 8px;
+    }
+
+    .financeiro-bloco {
+        padding: 8px;
+    }
+}
