@@ -150,526 +150,615 @@
     </main>
 
     <script>
-        // Usa o endereço atual do site. Não fixa localhost nem uma porta específica.
-        const API_URL = `${window.location.origin}/api`;
+    
+    const API_URL = `${window.location.origin}/api`;
 
-        let dataAtual = new Date();
-        let dataSelecionada = null;
-        let horarioSelecionado = null;
-        let selecao = [];
-        let profissionalSelecionado = null;
-        let tipo = "";
-        let precoSelecionado = 0;
-        let idsServicos = [];
-        let comboSelecionado = null;
-        let notificacaoTimer = null;
+    let dataAtual = new Date();
+    let dataSelecionada = null;
+    let horarioSelecionado = null;
+    let selecao = [];
+    let profissionalSelecionado = null;
+    let tipo = "";
+    let precoSelecionado = 0;
+    let idsServicos = [];
+    let comboSelecionado = null;
+    let notificacaoTimer = null;
 
-        const listaManha = document.getElementById("listaManha");
-        const listaTarde = document.getElementById("listaTarde");
-        const botaoContinuar = document.getElementById("btnContinuar");
+    const listaManha = document.getElementById("listaManha");
+    const listaTarde = document.getElementById("listaTarde");
+    const botaoContinuar = document.getElementById("btnContinuar");
 
-        function formatarPreco(valor) {
-            return Number(valor || 0).toLocaleString("pt-BR", {
-                style: "currency",
-                currency: "BRL"
-            });
+    function formatarPreco(valor) {
+        return Number(valor || 0).toLocaleString("pt-BR", {
+            style: "currency",
+            currency: "BRL"
+        });
+    }
+
+    function normalizarNome(nome) {
+        return String(nome || "")
+            .trim()
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, "")
+            .toLowerCase();
+    }
+
+    function obterTipo(item) {
+        return String(item.tipo ?? item.Tipo ?? "").trim().toLowerCase();
+    }
+
+    function obterId(item) {
+        return Number(item.id ?? item.Id ?? 0);
+    }
+
+    function obterNome(item) {
+        return item.nome ?? item.Nome ?? "Item";
+    }
+
+    function obterPreco(item) {
+        return Number(item.preco ?? item.Preco ?? 0);
+    }
+
+    function mostrarNotificacao(mensagem, tipoMensagem = "info") {
+        const caixa = document.getElementById("notificacao");
+        const icone = document.getElementById("notificacaoIcone");
+
+        clearTimeout(notificacaoTimer);
+
+        caixa.className = `notificacao ${tipoMensagem}`;
+
+        document.getElementById("notificacaoTitulo").textContent =
+            tipoMensagem === "erro" ? "Não foi possível continuar" :
+            tipoMensagem === "sucesso" ? "Tudo certo!" : "Atenção";
+
+        document.getElementById("notificacaoMensagem").textContent = mensagem;
+
+        icone.className = tipoMensagem === "erro"
+            ? "fa-solid fa-circle-exclamation"
+            : tipoMensagem === "sucesso"
+                ? "fa-solid fa-circle-check"
+                : "fa-solid fa-circle-info";
+
+        requestAnimationFrame(() => caixa.classList.add("visivel"));
+
+        notificacaoTimer = setTimeout(() => {
+            caixa.classList.remove("visivel");
+        }, 4500);
+    }
+
+    async function lerResposta(resposta) {
+        const texto = await resposta.text();
+        let dados = null;
+
+        try {
+            dados = texto ? JSON.parse(texto) : null;
+        } catch {
+            dados = null;
         }
 
-        function obterTipo(item) {
-            return String(item.tipo ?? item.Tipo ?? "").trim().toLowerCase();
+        if (!resposta.ok) {
+            const mensagem =
+                dados?.mensagem ||
+                dados?.Mensagem ||
+                dados?.title ||
+                dados?.detail ||
+                (typeof dados === "string" ? dados : null) ||
+                "Não foi possível concluir a solicitação.";
+
+            throw new Error(mensagem);
         }
 
-        function obterId(item) {
-            return Number(item.id ?? item.Id ?? 0);
+        return dados;
+    }
+
+    function mostrarMensagem(container, mensagem) {
+        container.replaceChildren();
+
+        const p = document.createElement("p");
+        p.className = "mensagem-horario";
+        p.textContent = mensagem;
+
+        container.appendChild(p);
+    }
+
+    function obterServicosDoCombo(combo) {
+        return combo?.servicos ??
+            combo?.Servicos ??
+            combo?.comboServicos?.map(item => item.servico ?? item.Servico) ??
+            combo?.ComboServicos?.map(item => item.servico ?? item.Servico) ??
+            [];
+    }
+
+    async function carregarCombos() {
+        const resposta = await fetch(`${API_URL}/Combos`, {
+            credentials: "include"
+        });
+
+        const dados = await lerResposta(resposta);
+
+        if (!Array.isArray(dados)) {
+            throw new Error("Não foi possível verificar os serviços dos combos.");
         }
 
-        function obterNome(item) {
-            return item.nome ?? item.Nome ?? "Item";
+        return dados;
+    }
+
+    async function removerServicosInclusosNoCombo() {
+        if (!comboSelecionado) return [];
+
+        const combos = await carregarCombos();
+
+        const comboAtual = combos.find(combo =>
+            normalizarNome(obterNome(combo)) ===
+            normalizarNome(obterNome(comboSelecionado))
+        );
+
+        if (!comboAtual) {
+            throw new Error(
+                "Não foi possível localizar os serviços incluídos no combo selecionado."
+            );
         }
 
-        function obterPreco(item) {
-            return Number(item.preco ?? item.Preco ?? 0);
-        }
+        const servicosInclusos = obterServicosDoCombo(comboAtual);
 
-        function mostrarNotificacao(mensagem, tipoMensagem = "info") {
-            const caixa = document.getElementById("notificacao");
-            const icone = document.getElementById("notificacaoIcone");
+        const nomesInclusos = servicosInclusos.map(servico =>
+            normalizarNome(obterNome(servico))
+        );
 
-            clearTimeout(notificacaoTimer);
+        const servicosRemovidos = [];
 
-            caixa.className = `notificacao ${tipoMensagem}`;
+        selecao = selecao.filter(item => {
+            if (obterTipo(item) === "combo") return true;
 
-            document.getElementById("notificacaoTitulo").textContent =
-                tipoMensagem === "erro" ? "Não foi possível continuar" :
-                tipoMensagem === "sucesso" ? "Tudo certo!" : "Atenção";
+            const nomeServico = normalizarNome(obterNome(item));
 
-            document.getElementById("notificacaoMensagem").textContent = mensagem;
-
-            icone.className = tipoMensagem === "erro"
-                ? "fa-solid fa-circle-exclamation"
-                : tipoMensagem === "sucesso"
-                    ? "fa-solid fa-circle-check"
-                    : "fa-solid fa-circle-info";
-
-            requestAnimationFrame(() => caixa.classList.add("visivel"));
-
-            notificacaoTimer = setTimeout(() => {
-                caixa.classList.remove("visivel");
-            }, 4500);
-        }
-
-        async function lerResposta(resposta) {
-            const texto = await resposta.text();
-            let dados = null;
-
-            try {
-                dados = texto ? JSON.parse(texto) : null;
-            } catch {
-                dados = null;
+            if (nomesInclusos.includes(nomeServico)) {
+                servicosRemovidos.push(obterNome(item));
+                return false;
             }
 
-            if (!resposta.ok) {
-                const mensagem =
-                    dados?.mensagem ||
-                    dados?.Mensagem ||
-                    dados?.title ||
-                    dados?.detail ||
-                    (typeof dados === "string" ? dados : null) ||
-                    "Não foi possível concluir a solicitação.";
+            return true;
+        });
 
-                throw new Error(mensagem);
-            }
+        return servicosRemovidos;
+    }
 
-            return dados;
+    function atualizarResumoDataHorario() {
+        const elemento = document.getElementById("resumoDataHorario");
+
+        if (!dataSelecionada) {
+            elemento.textContent = "Não selecionado";
+            return;
         }
 
-        function mostrarMensagem(container, mensagem) {
-            container.replaceChildren();
+        elemento.textContent =
+            dataSelecionada.toLocaleDateString("pt-BR") +
+            (horarioSelecionado ? ` às ${horarioSelecionado}` : "");
+    }
 
-            const p = document.createElement("p");
-            p.className = "mensagem-horario";
-            p.textContent = mensagem;
+    async function carregarSelecao() {
+        botaoContinuar.disabled = true;
 
-            container.appendChild(p);
-        }
-
-        function atualizarResumoDataHorario() {
-            const elemento = document.getElementById("resumoDataHorario");
-
-            if (!dataSelecionada) {
-                elemento.textContent = "Não selecionado";
-                return;
-            }
-
-            elemento.textContent =
-                dataSelecionada.toLocaleDateString("pt-BR") +
-                (horarioSelecionado ? ` às ${horarioSelecionado}` : "");
-        }
-
-        async function carregarSelecao() {
-            botaoContinuar.disabled = true;
-
-            try {
-                const resposta = await fetch(`${API_URL}/Selecao`, {
-                    credentials: "include"
-                });
-
-                const dados = await lerResposta(resposta);
-
-                if (!Array.isArray(dados) || dados.length === 0) {
-                    throw new Error(
-                        "Nenhum serviço ou combo foi selecionado. Volte à página de serviços."
-                    );
-                }
-
-                selecao = dados;
-
-                const combos = selecao.filter(item => obterTipo(item) === "combo");
-                const servicos = selecao.filter(item => obterTipo(item) !== "combo");
-
-                if (combos.length > 1) {
-                    throw new Error(
-                        "Selecione no máximo um combo por atendimento. Você pode combiná-lo com serviços individuais."
-                    );
-                }
-
-                comboSelecionado = combos.length === 1 ? combos[0] : null;
-
-                idsServicos = [...new Set(
-                    servicos.map(obterId).filter(id => id > 0)
-                )];
-
-                if (idsServicos.length !== servicos.length) {
-                    throw new Error(
-                        "Um ou mais serviços individuais selecionados são inválidos. Volte à página de serviços e selecione-os novamente."
-                    );
-                }
-
-                if (!comboSelecionado && idsServicos.length === 0) {
-                    throw new Error("Selecione pelo menos um serviço ou um combo.");
-                }
-
-                if (comboSelecionado && obterId(comboSelecionado) <= 0) {
-                    throw new Error("O combo selecionado possui um identificador inválido.");
-                }
-
-                if (comboSelecionado && idsServicos.length > 0) {
-                    tipo = "misto";
-                } else if (comboSelecionado) {
-                    tipo = "combo";
-                } else {
-                    tipo = "servico";
-                }
-
-                // Soma o preço de todos os itens: combo, serviços individuais ou ambos.
-                precoSelecionado = selecao.reduce(
-                    (total, item) => total + obterPreco(item),
-                    0
-                );
-
-                const resumoServico = document.getElementById("resumoServico");
-
-                if (tipo === "misto") {
-                    resumoServico.textContent =
-                        `${obterNome(comboSelecionado)} + ${idsServicos.length} serviço(s) individual(is)`;
-                } else if (tipo === "combo") {
-                    resumoServico.textContent = obterNome(comboSelecionado);
-                } else {
-                    resumoServico.textContent =
-                        `${idsServicos.length} serviço(s) selecionado(s)`;
-                }
-
-                const lista = document.getElementById("listaServicosResumo");
-                lista.replaceChildren();
-
-                selecao.forEach(item => {
-                    const li = document.createElement("li");
-                    const nome = obterNome(item);
-                    const ehCombo = obterTipo(item) === "combo";
-
-                    li.textContent =
-                        `${ehCombo ? "Combo: " : ""}${nome} · ${formatarPreco(obterPreco(item))}`;
-
-                    lista.appendChild(li);
-                });
-
-                document.getElementById("resumoPreco").textContent =
-                    formatarPreco(precoSelecionado);
-
-                await carregarProfissional();
-
-                botaoContinuar.disabled = false;
-                renderizarCalendario();
-            } catch (erro) {
-                console.error("Erro ao carregar seleção:", erro);
-
-                mostrarMensagem(listaManha, erro.message);
-                mostrarMensagem(listaTarde, erro.message);
-
-                document.getElementById("resumoServico").textContent =
-                    "Erro ao carregar";
-
-                botaoContinuar.disabled = true;
-                mostrarNotificacao(erro.message, "erro");
-            }
-        }
-
-        async function carregarProfissional() {
-            const resposta = await fetch(`${API_URL}/Selecao/profissional`, {
+        try {
+            const resposta = await fetch(`${API_URL}/Selecao`, {
                 credentials: "include"
             });
 
             const dados = await lerResposta(resposta);
 
-            if (!dados) {
-                throw new Error("Nenhuma profissional foi selecionada.");
-            }
-
-            const id = Number(dados.id ?? dados.Id);
-            const nome = dados.nome ?? dados.Nome ?? "Não informado";
-
-            if (!id) {
-                throw new Error("O ID da profissional selecionada é inválido.");
-            }
-
-            profissionalSelecionado = { id, nome };
-
-            document.getElementById("resumoProfissional").textContent = nome;
-        }
-
-        function renderizarCalendario() {
-            const ano = dataAtual.getFullYear();
-            const mes = dataAtual.getMonth();
-
-            const nomeMes = dataAtual.toLocaleDateString("pt-BR", {
-                month: "long",
-                year: "numeric"
-            });
-
-            document.getElementById("mesAtual").textContent =
-                nomeMes.charAt(0).toUpperCase() + nomeMes.slice(1);
-
-            const container = document.getElementById("diasCalendario");
-            container.replaceChildren();
-
-            const primeiroDia = new Date(ano, mes, 1).getDay();
-            const quantidadeDias = new Date(ano, mes + 1, 0).getDate();
-
-            for (let i = 0; i < primeiroDia; i++) {
-                const vazio = document.createElement("div");
-                vazio.className = "vazio";
-                container.appendChild(vazio);
-            }
-
-            const hoje = new Date();
-            hoje.setHours(0, 0, 0, 0);
-
-            for (let dia = 1; dia <= quantidadeDias; dia++) {
-                const data = new Date(ano, mes, dia);
-                const botao = document.createElement("button");
-
-                botao.type = "button";
-                botao.className = "dia";
-                botao.textContent = dia;
-
-                if (data < hoje || data.getDay() === 0) {
-                    botao.classList.add("indisponivel");
-                    botao.disabled = true;
-                } else {
-                    botao.classList.add("disponivel");
-                    botao.addEventListener("click", () => selecionarData(data));
-                }
-
-                if (dataSelecionada && mesmaData(data, dataSelecionada)) {
-                    botao.classList.add("selecionado");
-                }
-
-                container.appendChild(botao);
-            }
-
-            document.getElementById("mesAnterior").disabled =
-                ano === hoje.getFullYear() && mes <= hoje.getMonth();
-        }
-
-        function mesmaData(a, b) {
-            return a.getFullYear() === b.getFullYear() &&
-                a.getMonth() === b.getMonth() &&
-                a.getDate() === b.getDate();
-        }
-
-        function selecionarData(data) {
-            if (data.getDay() === 0) return;
-
-            dataSelecionada = data;
-            horarioSelecionado = null;
-
-            atualizarResumoDataHorario();
-            renderizarCalendario();
-            carregarHorarios();
-        }
-
-        function formatarDataParaApi(data) {
-            const ano = data.getFullYear();
-            const mes = String(data.getMonth() + 1).padStart(2, "0");
-            const dia = String(data.getDate()).padStart(2, "0");
-
-            return `${ano}-${mes}-${dia}`;
-        }
-
-        async function carregarHorarios() {
-            if (!dataSelecionada) return;
-
-            mostrarMensagem(listaManha, "Carregando horários...");
-            mostrarMensagem(listaTarde, "Carregando horários...");
-
-            try {
-                const horarios = await buscarHorariosParaData(
-                    formatarDataParaApi(dataSelecionada)
+            if (!Array.isArray(dados) || dados.length === 0) {
+                throw new Error(
+                    "Nenhum serviço ou combo foi selecionado. Volte à página de serviços."
                 );
-
-                mostrarHorarios(horarios);
-            } catch (erro) {
-                console.error("Erro ao consultar horários:", erro);
-
-                mostrarMensagem(listaManha, erro.message);
-                mostrarMensagem(listaTarde, erro.message);
-
-                mostrarNotificacao(erro.message, "erro");
-            }
-        }
-
-        async function buscarHorariosParaData(data) {
-            if (!profissionalSelecionado?.id) {
-                throw new Error("Profissional não selecionado.");
             }
 
-            const parametros = new URLSearchParams({
-                profissionalId: String(profissionalSelecionado.id),
-                data
-            });
+            selecao = dados;
 
-            // Envia o combo e os serviços individuais juntos, quando existirem.
-            if (comboSelecionado) {
-                parametros.set("comboId", String(obterId(comboSelecionado)));
-            }
-
-            if (idsServicos.length > 0) {
-                parametros.set("servicoIds", idsServicos.join(","));
-            }
-
-            const resposta = await fetch(
-                `${API_URL}/Agendamentos/horarios-disponiveis?${parametros}`,
-                { credentials: "include" }
+            const combos = selecao.filter(item =>
+                obterTipo(item) === "combo"
             );
 
-            return await lerResposta(resposta);
-        }
-
-        function mostrarHorarios(horarios) {
-            listaManha.replaceChildren();
-            listaTarde.replaceChildren();
-
-            if (!Array.isArray(horarios)) {
-                throw new Error("A resposta de horários recebida é inválida.");
+            if (combos.length > 1) {
+                throw new Error(
+                    "Selecione no máximo um combo por atendimento. Você pode combiná-lo com serviços individuais."
+                );
             }
 
-            const manha = horarios.filter(item => item.horario < "12:00");
-            const tarde = horarios.filter(item => item.horario >= "12:00");
+            comboSelecionado = combos.length === 1 ? combos[0] : null;
 
-            renderizarPeriodo(listaManha, manha);
-            renderizarPeriodo(listaTarde, tarde);
-        }
+            // NOVA REGRA:
+            // Remove serviços individuais que já estão incluídos no combo.
+            const servicosRemovidos =
+                await removerServicosInclusosNoCombo();
 
-        function renderizarPeriodo(container, horarios) {
-            if (!horarios.length) {
-                mostrarMensagem(container, "Nenhum horário disponível.");
-                return;
-            }
+            if (servicosRemovidos.length > 0) {
+                const nomes = servicosRemovidos.join(", ");
 
-            horarios.forEach(item => {
-                const botao = document.createElement("button");
-
-                botao.type = "button";
-                botao.className = "horario";
-                botao.textContent = item.horario;
-
-                if (!item.disponivel) {
-                    botao.disabled = true;
-                    botao.classList.add("indisponivel");
-                } else {
-                    botao.addEventListener("click", () => {
-                        document.querySelectorAll(".horario.selecionado")
-                            .forEach(el => el.classList.remove("selecionado"));
-
-                        botao.classList.add("selecionado");
-                        horarioSelecionado = item.horario;
-
-                        atualizarResumoDataHorario();
-                    });
-                }
-
-                container.appendChild(botao);
-            });
-        }
-
-        document.getElementById("mesAnterior").addEventListener("click", () => {
-            const hoje = new Date();
-
-            if (
-                dataAtual.getFullYear() === hoje.getFullYear() &&
-                dataAtual.getMonth() <= hoje.getMonth()
-            ) {
-                return;
-            }
-
-            dataAtual = new Date(
-                dataAtual.getFullYear(),
-                dataAtual.getMonth() - 1,
-                1
-            );
-
-            renderizarCalendario();
-        });
-
-        document.getElementById("mesProximo").addEventListener("click", () => {
-            dataAtual = new Date(
-                dataAtual.getFullYear(),
-                dataAtual.getMonth() + 1,
-                1
-            );
-
-            renderizarCalendario();
-        });
-
-        botaoContinuar.addEventListener("click", async () => {
-            if (!dataSelecionada) {
-                mostrarNotificacao("Selecione uma data para continuar.", "erro");
-                return;
-            }
-
-            if (!horarioSelecionado) {
-                mostrarNotificacao("Selecione um horário disponível.", "erro");
-                return;
-            }
-
-            if (!profissionalSelecionado?.id || !selecao.length) {
                 mostrarNotificacao(
-                    "Confira os serviços e a profissional selecionada.",
-                    "erro"
+                    `${nomes} já está incluso no combo ${obterNome(comboSelecionado)}. O serviço não será adicionado novamente nem cobrado separadamente.`,
+                    "info"
                 );
-                return;
             }
 
-            const dataHora =
-                `${formatarDataParaApi(dataSelecionada)}T${horarioSelecionado}:00`;
+            const servicos = selecao.filter(item =>
+                obterTipo(item) !== "combo"
+            );
 
-            // O objeto contém os dois campos quando há combo e serviços individuais.
-            const agendamento = {
-                dataHora,
-                servicoId: idsServicos.length === 1 ? idsServicos[0] : null,
-                servicoIds: idsServicos,
-                comboId: comboSelecionado ? obterId(comboSelecionado) : null,
-                profissionalId: profissionalSelecionado.id
-            };
+            idsServicos = [...new Set(
+                servicos.map(obterId).filter(id => id > 0)
+            )];
 
-            const textoOriginal = botaoContinuar.innerHTML;
+            if (idsServicos.length !== servicos.length) {
+                throw new Error(
+                    "Um ou mais serviços individuais selecionados são inválidos. Volte à página de serviços e selecione-os novamente."
+                );
+            }
+
+            if (!comboSelecionado && idsServicos.length === 0) {
+                throw new Error("Selecione pelo menos um serviço ou um combo.");
+            }
+
+            if (comboSelecionado && obterId(comboSelecionado) <= 0) {
+                throw new Error("O combo selecionado possui um identificador inválido.");
+            }
+
+            if (comboSelecionado && idsServicos.length > 0) {
+                tipo = "misto";
+            } else if (comboSelecionado) {
+                tipo = "combo";
+            } else {
+                tipo = "servico";
+            }
+
+            // Recalcula o preço somente com os itens válidos.
+            precoSelecionado = selecao.reduce(
+                (total, item) => total + obterPreco(item),
+                0
+            );
+
+            const resumoServico = document.getElementById("resumoServico");
+
+            if (tipo === "misto") {
+                resumoServico.textContent =
+                    `${obterNome(comboSelecionado)} + ${idsServicos.length} serviço(s) individual(is)`;
+            } else if (tipo === "combo") {
+                resumoServico.textContent = obterNome(comboSelecionado);
+            } else {
+                resumoServico.textContent =
+                    `${idsServicos.length} serviço(s) selecionado(s)`;
+            }
+
+            const lista = document.getElementById("listaServicosResumo");
+            lista.replaceChildren();
+
+            selecao.forEach(item => {
+                const li = document.createElement("li");
+                const nome = obterNome(item);
+                const ehCombo = obterTipo(item) === "combo";
+
+                li.textContent =
+                    `${ehCombo ? "Combo: " : ""}${nome} · ${formatarPreco(obterPreco(item))}`;
+
+                lista.appendChild(li);
+            });
+
+            document.getElementById("resumoPreco").textContent =
+                formatarPreco(precoSelecionado);
+
+            await carregarProfissional();
+
+            botaoContinuar.disabled = false;
+            renderizarCalendario();
+
+        } catch (erro) {
+            console.error("Erro ao carregar seleção:", erro);
+
+            mostrarMensagem(listaManha, erro.message);
+            mostrarMensagem(listaTarde, erro.message);
+
+            document.getElementById("resumoServico").textContent =
+                "Erro ao carregar";
 
             botaoContinuar.disabled = true;
-            botaoContinuar.textContent = "Processando...";
+            mostrarNotificacao(erro.message, "erro");
+        }
+    }
 
-            try {
-                const resposta = await fetch(`${API_URL}/Agendamentos`, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    credentials: "include",
-                    body: JSON.stringify(agendamento)
-                });
-
-                const criado = await lerResposta(resposta);
-                const id = criado.id ?? criado.Id;
-
-                if (!id) {
-                    throw new Error(
-                        "O agendamento foi enviado, mas a resposta não trouxe o identificador."
-                    );
-                }
-
-                window.location.href =
-                    `finalizar_atendimento.html?id=${encodeURIComponent(id)}`;
-            } catch (erro) {
-                console.error("Erro ao criar agendamento:", erro);
-
-                mostrarNotificacao(
-                    erro.message || "Não foi possível realizar o agendamento.",
-                    "erro"
-                );
-
-                botaoContinuar.disabled = false;
-                botaoContinuar.innerHTML = textoOriginal;
-            }
+    async function carregarProfissional() {
+        const resposta = await fetch(`${API_URL}/Selecao/profissional`, {
+            credentials: "include"
         });
 
-        carregarSelecao();
-    </script>
+        const dados = await lerResposta(resposta);
+
+        if (!dados) {
+            throw new Error("Nenhuma profissional foi selecionada.");
+        }
+
+        const id = Number(dados.id ?? dados.Id);
+        const nome = dados.nome ?? dados.Nome ?? "Não informado";
+
+        if (!id) {
+            throw new Error("O ID da profissional selecionada é inválido.");
+        }
+
+        profissionalSelecionado = { id, nome };
+
+        document.getElementById("resumoProfissional").textContent = nome;
+    }
+
+    function renderizarCalendario() {
+        const ano = dataAtual.getFullYear();
+        const mes = dataAtual.getMonth();
+
+        const nomeMes = dataAtual.toLocaleDateString("pt-BR", {
+            month: "long",
+            year: "numeric"
+        });
+
+        document.getElementById("mesAtual").textContent =
+            nomeMes.charAt(0).toUpperCase() + nomeMes.slice(1);
+
+        const container = document.getElementById("diasCalendario");
+        container.replaceChildren();
+
+        const primeiroDia = new Date(ano, mes, 1).getDay();
+        const quantidadeDias = new Date(ano, mes + 1, 0).getDate();
+
+        for (let i = 0; i < primeiroDia; i++) {
+            const vazio = document.createElement("div");
+            vazio.className = "vazio";
+            container.appendChild(vazio);
+        }
+
+        const hoje = new Date();
+        hoje.setHours(0, 0, 0, 0);
+
+        for (let dia = 1; dia <= quantidadeDias; dia++) {
+            const data = new Date(ano, mes, dia);
+            const botao = document.createElement("button");
+
+            botao.type = "button";
+            botao.className = "dia";
+            botao.textContent = dia;
+
+            if (data < hoje || data.getDay() === 0) {
+                botao.classList.add("indisponivel");
+                botao.disabled = true;
+            } else {
+                botao.classList.add("disponivel");
+                botao.addEventListener("click", () => selecionarData(data));
+            }
+
+            if (dataSelecionada && mesmaData(data, dataSelecionada)) {
+                botao.classList.add("selecionado");
+            }
+
+            container.appendChild(botao);
+        }
+
+        document.getElementById("mesAnterior").disabled =
+            ano === hoje.getFullYear() && mes <= hoje.getMonth();
+    }
+
+    function mesmaData(a, b) {
+        return a.getFullYear() === b.getFullYear() &&
+            a.getMonth() === b.getMonth() &&
+            a.getDate() === b.getDate();
+    }
+
+    function selecionarData(data) {
+        if (data.getDay() === 0) return;
+
+        dataSelecionada = data;
+        horarioSelecionado = null;
+
+        atualizarResumoDataHorario();
+        renderizarCalendario();
+        carregarHorarios();
+    }
+
+    function formatarDataParaApi(data) {
+        const ano = data.getFullYear();
+        const mes = String(data.getMonth() + 1).padStart(2, "0");
+        const dia = String(data.getDate()).padStart(2, "0");
+
+        return `${ano}-${mes}-${dia}`;
+    }
+
+    async function carregarHorarios() {
+        if (!dataSelecionada) return;
+
+        mostrarMensagem(listaManha, "Carregando horários...");
+        mostrarMensagem(listaTarde, "Carregando horários...");
+
+        try {
+            const horarios = await buscarHorariosParaData(
+                formatarDataParaApi(dataSelecionada)
+            );
+
+            mostrarHorarios(horarios);
+        } catch (erro) {
+            console.error("Erro ao consultar horários:", erro);
+
+            mostrarMensagem(listaManha, erro.message);
+            mostrarMensagem(listaTarde, erro.message);
+
+            mostrarNotificacao(erro.message, "erro");
+        }
+    }
+
+    async function buscarHorariosParaData(data) {
+        if (!profissionalSelecionado?.id) {
+            throw new Error("Profissional não selecionado.");
+        }
+
+        const parametros = new URLSearchParams({
+            profissionalId: String(profissionalSelecionado.id),
+            data
+        });
+
+        if (comboSelecionado) {
+            parametros.set("comboId", String(obterId(comboSelecionado)));
+        }
+
+        if (idsServicos.length > 0) {
+            parametros.set("servicoIds", idsServicos.join(","));
+        }
+
+        const resposta = await fetch(
+            `${API_URL}/Agendamentos/horarios-disponiveis?${parametros}`,
+            { credentials: "include" }
+        );
+
+        return await lerResposta(resposta);
+    }
+
+    function mostrarHorarios(horarios) {
+        listaManha.replaceChildren();
+        listaTarde.replaceChildren();
+
+        if (!Array.isArray(horarios)) {
+            throw new Error("A resposta de horários recebida é inválida.");
+        }
+
+        const manha = horarios.filter(item => item.horario < "12:00");
+        const tarde = horarios.filter(item => item.horario >= "12:00");
+
+        renderizarPeriodo(listaManha, manha);
+        renderizarPeriodo(listaTarde, tarde);
+    }
+
+    function renderizarPeriodo(container, horarios) {
+        if (!horarios.length) {
+            mostrarMensagem(container, "Nenhum horário disponível.");
+            return;
+        }
+
+        horarios.forEach(item => {
+            const botao = document.createElement("button");
+
+            botao.type = "button";
+            botao.className = "horario";
+            botao.textContent = item.horario;
+
+            if (!item.disponivel) {
+                botao.disabled = true;
+                botao.classList.add("indisponivel");
+            } else {
+                botao.addEventListener("click", () => {
+                    document.querySelectorAll(".horario.selecionado")
+                        .forEach(el => el.classList.remove("selecionado"));
+
+                    botao.classList.add("selecionado");
+                    horarioSelecionado = item.horario;
+
+                    atualizarResumoDataHorario();
+                });
+            }
+
+            container.appendChild(botao);
+        });
+    }
+
+    document.getElementById("mesAnterior").addEventListener("click", () => {
+        const hoje = new Date();
+
+        if (
+            dataAtual.getFullYear() === hoje.getFullYear() &&
+            dataAtual.getMonth() <= hoje.getMonth()
+        ) {
+            return;
+        }
+
+        dataAtual = new Date(
+            dataAtual.getFullYear(),
+            dataAtual.getMonth() - 1,
+            1
+        );
+
+        renderizarCalendario();
+    });
+
+    document.getElementById("mesProximo").addEventListener("click", () => {
+        dataAtual = new Date(
+            dataAtual.getFullYear(),
+            dataAtual.getMonth() + 1,
+            1
+        );
+
+        renderizarCalendario();
+    });
+
+    botaoContinuar.addEventListener("click", async () => {
+        if (!dataSelecionada) {
+            mostrarNotificacao("Selecione uma data para continuar.", "erro");
+            return;
+        }
+
+        if (!horarioSelecionado) {
+            mostrarNotificacao("Selecione um horário disponível.", "erro");
+            return;
+        }
+
+        if (!profissionalSelecionado?.id || !selecao.length) {
+            mostrarNotificacao(
+                "Confira os serviços e a profissional selecionada.",
+                "erro"
+            );
+            return;
+        }
+
+        const dataHora =
+            `${formatarDataParaApi(dataSelecionada)}T${horarioSelecionado}:00`;
+
+        const agendamento = {
+            dataHora,
+            servicoId: idsServicos.length === 1 ? idsServicos[0] : null,
+            servicoIds: idsServicos,
+            comboId: comboSelecionado ? obterId(comboSelecionado) : null,
+            profissionalId: profissionalSelecionado.id
+        };
+
+        const textoOriginal = botaoContinuar.innerHTML;
+
+        botaoContinuar.disabled = true;
+        botaoContinuar.textContent = "Processando...";
+
+        try {
+            const resposta = await fetch(`${API_URL}/Agendamentos`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                credentials: "include",
+                body: JSON.stringify(agendamento)
+            });
+
+            const criado = await lerResposta(resposta);
+            const id = criado.id ?? criado.Id;
+
+            if (!id) {
+                throw new Error(
+                    "O agendamento foi enviado, mas a resposta não trouxe o identificador."
+                );
+            }
+
+            window.location.href =
+                `finalizar_atendimento.html?id=${encodeURIComponent(id)}`;
+
+        } catch (erro) {
+            console.error("Erro ao criar agendamento:", erro);
+
+            mostrarNotificacao(
+                erro.message || "Não foi possível realizar o agendamento.",
+                "erro"
+            );
+
+            botaoContinuar.disabled = false;
+            botaoContinuar.innerHTML = textoOriginal;
+        }
+    });
+
+    carregarSelecao();
+</script>
 </body>
 </html>
