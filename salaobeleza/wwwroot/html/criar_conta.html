@@ -125,152 +125,166 @@
 
     <script>
 
-        const formCadastro = document.getElementById("formCadastro");
-        const mensagemCadastro = document.getElementById("mensagemCadastro");
-        const btnCriar = document.getElementById("btnCriar");
+const formCadastro = document.getElementById("formCadastro");
+const mensagemCadastro = document.getElementById("mensagemCadastro");
+const btnCriar = document.getElementById("btnCriar");
 
-        formCadastro.addEventListener("submit", async function (event) {
+formCadastro.addEventListener("submit", async function (event) {
 
-            event.preventDefault();
+    event.preventDefault();
 
-            if (btnCriar.disabled) return;
+    if (btnCriar.disabled) return;
 
-            mensagemCadastro.textContent = "";
-            mensagemCadastro.style.color = "";
+    mensagemCadastro.textContent = "";
+    mensagemCadastro.style.color = "";
 
-            const nome = document.getElementById("nome").value.trim();
-            const email = document.getElementById("email").value.trim();
-            const telefone = document.getElementById("telefone").value.trim();
-            const senha = document.getElementById("senha").value;
-            const confirmar = document.getElementById("confirmar").value;
+    const nome = document.getElementById("nome").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const telefone = document.getElementById("telefone").value.trim();
+    const senha = document.getElementById("senha").value;
+    const confirmar = document.getElementById("confirmar").value;
 
-            if (
-                nome === "" ||
-                email === "" ||
-                telefone === "" ||
-                senha === "" ||
-                confirmar === ""
-            ) {
+    if (
+        nome === "" ||
+        email === "" ||
+        telefone === "" ||
+        senha === "" ||
+        confirmar === ""
+    ) {
 
-                mensagemCadastro.textContent = "Preencha todos os campos.";
-                mensagemCadastro.style.color = "#c0392b";
+        mensagemCadastro.textContent = "Preencha todos os campos.";
+        mensagemCadastro.style.color = "#c0392b";
 
-                return;
-            }
+        return;
+    }
 
-            if (senha !== confirmar) {
+    // Bloqueia e-mails reservados aos administradores.
+    if (email.toLowerCase().endsWith("@adm.belleza.com")) {
 
-                mensagemCadastro.textContent = "As senhas não coincidem.";
-                mensagemCadastro.style.color = "#c0392b";
+        mensagemCadastro.textContent =
+            "Este domínio de e-mail é reservado aos administradores.";
 
-                return;
-            }
+        mensagemCadastro.style.color = "#c0392b";
 
-            // Ativa a animação.
-            btnCriar.disabled = true;
+        return;
+    }
 
-            btnCriar.innerHTML = `
-                <span class="spinner"></span>
-                <span>Criando conta...</span>
-            `;
+    if (senha !== confirmar) {
 
-            try {
+        mensagemCadastro.textContent = "As senhas não coincidem.";
+        mensagemCadastro.style.color = "#c0392b";
 
-                const resposta = await fetch("/api/Usuarios", {
+        return;
+    }
 
-                    method: "POST",
+    // Ativa a animação.
+    btnCriar.disabled = true;
 
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
+    btnCriar.innerHTML = `
+        <span class="spinner"></span>
+        <span>Criando conta...</span>
+    `;
 
-                    body: JSON.stringify({
-                        nome: nome,
-                        email: email,
-                        telefone: telefone,
-                        senha: senha
-                    })
+    try {
 
-                });
+        const resposta = await fetch("/api/Usuarios", {
 
-                const textoResposta = await resposta.text();
+            method: "POST",
 
-                let resultado;
+            headers: {
+                "Content-Type": "application/json"
+            },
 
-                try {
+            credentials: "include",
 
-                    resultado = textoResposta
-                        ? JSON.parse(textoResposta)
-                        : {};
-
-                } catch {
-
-                    console.error(
-                        "Resposta inválida do servidor:",
-                        textoResposta
-                    );
-
-                    mensagemCadastro.textContent =
-                        "O servidor apresentou um erro ao criar a conta.";
-
-                    mensagemCadastro.style.color = "#c0392b";
-
-                    return;
-                }
-
-                if (!resposta.ok) {
-
-                    mensagemCadastro.textContent =
-                        resultado.message ||
-                        resultado.mensagem ||
-                        resultado.title ||
-                        "Não foi possível criar a conta.";
-
-                    mensagemCadastro.style.color = "#c0392b";
-
-                    return;
-                }
-
-                mensagemCadastro.textContent =
-                    "Conta criada com sucesso!";
-
-                mensagemCadastro.style.color = "#2e8b57";
-
-                btnCriar.innerHTML = `
-                    <span>Conta criada!</span>
-                    <span>✓</span>
-                `;
-
-                formCadastro.reset();
-
-                setTimeout(function () {
-
-                    window.location.href =
-                        "../html/login_cliente.html";
-
-                }, 1500);
-
-            } catch (erro) {
-
-                console.error("Erro ao criar conta:", erro);
-
-                mensagemCadastro.textContent =
-                    "Erro ao criar conta. Tente novamente mais tarde.";
-
-                mensagemCadastro.style.color = "#c0392b";
-
-            } finally {
-
-                if (!mensagemCadastro.textContent.includes("sucesso")) {
-
-                    btnCriar.disabled = false;
-                    btnCriar.innerHTML = "Criar conta";
-
-                }
-
-            }
+            body: JSON.stringify({
+                nome: nome,
+                email: email,
+                telefone: telefone,
+                senha: senha
+            })
 
         });
+
+        const textoResposta = await resposta.text();
+
+        let resultado;
+
+        try {
+
+            resultado = textoResposta
+                ? JSON.parse(textoResposta)
+                : {};
+
+        } catch {
+
+            console.error(
+                "Resposta inválida do servidor:",
+                textoResposta
+            );
+
+            mensagemCadastro.textContent =
+                "O servidor apresentou um erro ao criar a conta.";
+
+            mensagemCadastro.style.color = "#c0392b";
+
+            return;
+        }
+
+        if (!resposta.ok) {
+
+            mensagemCadastro.textContent =
+                resultado.message ||
+                resultado.mensagem ||
+                resultado.title ||
+                "Não foi possível criar a conta.";
+
+            mensagemCadastro.style.color = "#c0392b";
+
+            return;
+        }
+
+        mensagemCadastro.textContent =
+            "Conta criada com sucesso!";
+
+        mensagemCadastro.style.color = "#2e8b57";
+
+        btnCriar.innerHTML = `
+            <span>Conta criada!</span>
+            <span>✓</span>
+        `;
+
+        formCadastro.reset();
+
+        setTimeout(function () {
+
+            window.location.href =
+                "../html/login_cliente.html";
+
+        }, 1500);
+
+    } catch (erro) {
+
+        console.error("Erro ao criar conta:", erro);
+
+        mensagemCadastro.textContent =
+            "Erro ao criar conta. Tente novamente mais tarde.";
+
+        mensagemCadastro.style.color = "#c0392b";
+
+    } finally {
+
+        if (!mensagemCadastro.textContent.includes("sucesso")) {
+
+            btnCriar.disabled = false;
+            btnCriar.innerHTML = "Criar conta";
+
+        }
+
+    }
+
+});
+
 
     </script>
 

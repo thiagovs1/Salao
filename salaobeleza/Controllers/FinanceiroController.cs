@@ -18,11 +18,19 @@ public class FinanceiroController : ControllerBase
     }
 
     private bool AdministradorAutenticado()
-    {
-        return HttpContext.Session.GetString("AdministradorAutenticado") == "true"
-            || HttpContext.Session.GetString("TipoUsuarioAdmin") == "Administrador"
-            || !string.IsNullOrWhiteSpace(HttpContext.Session.GetString("EmailAdmin"));
-    }
+{
+    return HttpContext.Session.GetString("AdministradorAutenticado")
+               ?.Equals("true", StringComparison.OrdinalIgnoreCase) == true
+
+        && HttpContext.Session.GetString("TipoUsuarioAdmin")
+               ?.Equals("Administrador", StringComparison.OrdinalIgnoreCase) == true
+
+        && string.Equals(
+            HttpContext.Session.GetString("EmailAdmin")?.Trim(),
+            "Administrador@adm.Belleza.com",
+            StringComparison.OrdinalIgnoreCase
+        );
+}
 
     [HttpGet]
     public async Task<IActionResult> Resumo(

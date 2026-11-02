@@ -12,12 +12,24 @@ public class UsuarioService
     private readonly IClienteRepository _clienteRepo;
     private readonly PasswordHasher<Usuario> _passwordHasher = new();
 
+    private const string DominioAdmin = "@adm.belleza.com";
+
+    private const string EmailAdminPrincipal =
+        "Administrador@adm.Belleza.com";
+
     public UsuarioService(
         IUsuarioRepository usuarioRepo,
         IClienteRepository clienteRepo)
     {
         _usuarioRepo = usuarioRepo;
         _clienteRepo = clienteRepo;
+    }
+
+    private static bool EhEmailAdministrativo(string email)
+    {
+        return email.Trim().EndsWith(
+            DominioAdmin,
+            StringComparison.OrdinalIgnoreCase);
     }
 
     public async Task<Usuario> Criar(UsuarioCriarDTO dto)
@@ -35,6 +47,13 @@ public class UsuarioService
             throw new Exception("A senha é obrigatória.");
 
         var email = dto.Email.Trim();
+
+        // Impede cadastro público de qualquer e-mail administrativo.
+        if (EhEmailAdministrativo(email))
+        {
+            throw new Exception(
+                "Este domínio de e-mail é reservado aos administradores.");
+        }
 
         var usuarioExistente =
             await _usuarioRepo.BuscarPorEmail(email);
@@ -82,6 +101,65 @@ public class UsuarioService
         return usuarioCriado;
     }
 
+    // Chamado exclusivamente pelo endpoint protegido do administrador principal.
+    public async Task<Usuario> CriarAdministrador(
+        UsuarioCriarDTO dto)
+    {
+        if (string.IsNullOrWhiteSpace(dto.Nome))
+            throw new Exception("O nome é obrigatório.");
+
+        if (string.IsNullOrWhiteSpace(dto.Email))
+            throw new Exception("O e-mail é obrigatório.");
+
+        if (string.IsNullOrWhiteSpace(dto.Senha))
+            throw new Exception("A senha é obrigatória.");
+
+        var email = dto.Email.Trim();
+
+        if (EhEmailAdministrativo(email))
+        {
+            throw new Exception(
+                "O domínio @adm.Belleza.com é reservado ao administrador principal.");
+        }
+
+        if (string.Equals(
+            email,
+            EmailAdminPrincipal,
+            StringComparison.OrdinalIgnoreCase))
+        {
+            throw new Exception(
+                "Este e-mail pertence ao administrador principal.");
+        }
+
+        var usuarioExistente =
+            await _usuarioRepo.BuscarPorEmail(email);
+
+        if (usuarioExistente != null)
+            throw new Exception("Este e-mail já está cadastrado.");
+
+        var clienteExistente =
+            await _clienteRepo.BuscarPorEmail(email);
+
+        if (clienteExistente != null)
+            throw new Exception(
+                "Este e-mail já pertence a uma conta de cliente.");
+
+        var usuario = new Usuario
+        {
+            Nome = dto.Nome.Trim(),
+            Email = email,
+            TipoUsuario = "Administrador",
+            ProfissionalId = null
+        };
+
+        usuario.Senha = _passwordHasher.HashPassword(
+            usuario,
+            dto.Senha
+        );
+
+        return await _usuarioRepo.Adicionar(usuario);
+    }
+
     public async Task<Usuario?> Login(UsuarioLoginDTO dto)
     {
         if (string.IsNullOrWhiteSpace(dto.Email) ||
@@ -97,7 +175,17 @@ public class UsuarioService
         if (usuario == null)
             return null;
 
-        // Primeiro verifica se a senha antiga está em texto puro.
+        // Nunca permite autenticação de uma conta falsa
+        // usando o endereço reservado ao administrador principal.
+        if (string.Equals(
+            usuario.Email,
+            EmailAdminPrincipal,
+            StringComparison.OrdinalIgnoreCase))
+        {
+            return null;
+        }
+
+        // Compatibilidade com senhas antigas em texto puro.
         if (usuario.Senha == dto.Senha)
         {
             var novoHash = _passwordHasher.HashPassword(
@@ -115,7 +203,6 @@ public class UsuarioService
             return usuario;
         }
 
-        // Depois verifica a senha criptografada.
         PasswordVerificationResult resultado;
 
         try
@@ -128,7 +215,6 @@ public class UsuarioService
         }
         catch (FormatException)
         {
-            // Senha armazenada em formato inválido.
             return null;
         }
 
@@ -175,10 +261,25 @@ public class UsuarioService
 
         var email = dto.Email.Trim();
 
+        if (EhEmailAdministrativo(email))
+        {
+            throw new Exception(
+                "A recuperação pública de senhas administrativas não está disponível.");
+        }
+
         var usuario = await _usuarioRepo.BuscarPorEmail(email);
 
         if (usuario == null)
             throw new Exception("Não existe uma conta com este e-mail.");
+
+        if (string.Equals(
+            usuario.TipoUsuario,
+            "Administrador",
+            StringComparison.OrdinalIgnoreCase))
+        {
+            throw new Exception(
+                "A senha de administradores não pode ser alterada pela recuperação pública.");
+        }
 
         var novoHash = _passwordHasher.HashPassword(
             usuario,
