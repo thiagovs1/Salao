@@ -10,13 +10,17 @@ namespace SalaoBeleza.Controllers;
 public class UsuariosController : ControllerBase
 {
     private readonly UsuarioService _service;
+    private readonly IConfiguration _configuration;
 
-    private const string EmailAdmin = "admistrador@salaobeleza.com";
-    private const string SenhaAdmin = "12345";
+    private const string EmailAdmin =
+        "admistrador@salaobeleza.com";
 
-    public UsuariosController(UsuarioService service)
+    public UsuariosController(
+        UsuarioService service,
+        IConfiguration configuration)
     {
         _service = service;
+        _configuration = configuration;
     }
 
     [HttpPost]
@@ -43,12 +47,15 @@ public class UsuariosController : ControllerBase
     [HttpPost("login")]
     public async Task<IActionResult> Login(UsuarioLoginDTO dto)
     {
+        var senhaAdmin = _configuration["Administrador:Senha"];
+
         // LOGIN DO ADMINISTRADOR
         if (string.Equals(
                 dto.Email?.Trim(),
                 EmailAdmin,
                 StringComparison.OrdinalIgnoreCase)
-            && dto.Senha == SenhaAdmin)
+            && !string.IsNullOrWhiteSpace(senhaAdmin)
+            && dto.Senha == senhaAdmin)
         {
             HttpContext.Session.SetString(
                 "AdministradorAutenticado", "true");
@@ -206,15 +213,10 @@ public class UsuariosController : ControllerBase
         }
     }
 
-    // O parâmetro identifica qual conta deve ser desconectada.
-    // Exemplos: /api/Usuarios/logout?tipoUsuario=Administrador
-    //           /api/Usuarios/logout?tipoUsuario=Cliente
-    //           /api/Usuarios/logout?tipoUsuario=Funcionario
     [HttpPost("logout")]
     public IActionResult Logout(
         [FromQuery] string? tipoUsuario)
     {
-        // Compatibilidade com páginas que ainda não enviam o parâmetro.
         if (string.IsNullOrWhiteSpace(tipoUsuario))
         {
             var referer = Request.Headers.Referer.ToString();

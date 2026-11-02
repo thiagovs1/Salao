@@ -1,244 +1,183 @@
-<!DOCTYPE html>
 
+<!DOCTYPE html>
 <html lang="pt-br">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+    <title>Criar Conta - Belleza</title>
 
-<title>Criar Conta - Belleza</title>
-
-<link rel="stylesheet" href="/css/criar_conta.css?v=2">
-
+    <link rel="stylesheet" href="/css/criar_conta.css?v=2">
 
 </head>
 
 <body>
 
+    <main class="cadastro-card">
 
-<main class="cadastro-card">
-
-    <div class="logo-area">
-
-        <img
-            src="../imagens/logo_belleza_login.png"
-            alt="Logo Belleza"
-            class="logo"
-        >
-
-    </div>
-
-
-    <p class="texto-cadastro">
-        Preencha os dados abaixo para criar sua conta.
-    </p>
-
-
-    <form id="formCadastro">
-
-
-        <div class="campo">
-
-            <label for="nome">
-                Nome
-            </label>
-
-            <input
-                type="text"
-                id="nome"
-                name="nome"
-                placeholder="Digite seu nome"
-                required
+        <div class="logo-area">
+            <img
+                src="../imagens/logo_belleza_login.png"
+                alt="Logo Belleza"
+                class="logo"
             >
-
         </div>
 
-
-        <div class="campo">
-
-            <label for="email">
-                E-mail
-            </label>
-
-            <input
-                type="email"
-                id="email"
-                name="email"
-                placeholder="Digite seu e-mail"
-                required
-            >
-
-        </div>
-
-
-        <div class="campo">
-
-            <label for="telefone">
-                Telefone
-            </label>
-
-            <input
-                type="tel"
-                id="telefone"
-                name="telefone"
-                placeholder="(00) 00000-0000"
-                required
-            >
-
-        </div>
-
-
-        <div class="campo">
-
-            <label for="senha">
-                Senha
-            </label>
-
-            <input
-                type="password"
-                id="senha"
-                name="senha"
-                placeholder="Digite sua senha"
-                required
-            >
-
-        </div>
-
-
-        <div class="campo">
-
-            <label for="confirmar">
-                Confirmar senha
-            </label>
-
-            <input
-                type="password"
-                id="confirmar"
-                name="confirmar"
-                placeholder="Confirme sua senha"
-                required
-            >
-
-        </div>
-
-
-        <label class="lembrar">
-
-            <input
-                type="checkbox"
-                name="lembrar"
-            >
-
-            Lembrar-me
-
-        </label>
-
-
-        <div
-            id="mensagemCadastro"
-            style="
-                margin-top: 10px;
-                margin-bottom: 10px;
-                text-align: center;
-                font-size: 14px;
-                min-height: 20px;
-            ">
-        </div>
-
-
-        <button
-            type="submit"
-            class="btn-criar">
-
-            Criar conta
-
-        </button>
-
-
-        <div class="ou">
-
-            <span>ou</span>
-
-        </div>
-
-
-        <p class="login">
-
-            Já tem uma conta?
-
-            <a href="../html/login_cliente.html">
-                Fazer login
-            </a>
-
+        <p class="texto-cadastro">
+            Preencha os dados abaixo para criar sua conta.
         </p>
 
-    </form>
+        <form id="formCadastro">
 
-</main>
+            <div class="campo">
+                <label for="nome">Nome</label>
+                <input
+                    type="text"
+                    id="nome"
+                    name="nome"
+                    placeholder="Digite seu nome"
+                    required
+                >
+            </div>
 
+            <div class="campo">
+                <label for="email">E-mail</label>
+                <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    placeholder="Digite seu e-mail"
+                    required
+                >
+            </div>
 
-<script>
+            <div class="campo">
+                <label for="telefone">Telefone</label>
+                <input
+                    type="tel"
+                    id="telefone"
+                    name="telefone"
+                    placeholder="(00) 00000-0000"
+                    required
+                >
+            </div>
 
-    const formCadastro = document.getElementById("formCadastro");
-    const mensagemCadastro = document.getElementById("mensagemCadastro");
+            <div class="campo">
+                <label for="senha">Senha</label>
+                <input
+                    type="password"
+                    id="senha"
+                    name="senha"
+                    placeholder="Digite sua senha"
+                    required
+                >
+            </div>
 
+            <div class="campo">
+                <label for="confirmar">Confirmar senha</label>
+                <input
+                    type="password"
+                    id="confirmar"
+                    name="confirmar"
+                    placeholder="Confirme sua senha"
+                    required
+                >
+            </div>
 
-    formCadastro.addEventListener("submit", async function (event) {
+            <label class="lembrar">
+                <input
+                    type="checkbox"
+                    name="lembrar"
+                >
+                Lembrar-me
+            </label>
 
-        event.preventDefault();
+            <div
+                id="mensagemCadastro"
+                style="margin-top:10px;margin-bottom:10px;text-align:center;font-size:14px;min-height:20px;">
+            </div>
 
+            <button
+                type="submit"
+                class="btn-criar"
+                id="btnCriar">
 
-        mensagemCadastro.textContent = "";
-        mensagemCadastro.style.color = "";
+                Criar conta
 
+            </button>
 
-        const nome = document.getElementById("nome").value.trim();
-        const email = document.getElementById("email").value.trim();
-        const telefone = document.getElementById("telefone").value.trim();
-        const senha = document.getElementById("senha").value;
-        const confirmar = document.getElementById("confirmar").value;
+            <div class="ou">
+                <span>ou</span>
+            </div>
 
+            <p class="login">
+                Já tem uma conta?
 
-        // Verifica se algum campo está vazio.
+                <a href="../html/login_cliente.html">
+                    Fazer login
+                </a>
+            </p>
 
-        if (
-            nome === "" ||
-            email === "" ||
-            telefone === "" ||
-            senha === "" ||
-            confirmar === ""
-        ) {
+        </form>
 
-            mensagemCadastro.textContent =
-                "Preencha todos os campos.";
+    </main>
 
-            mensagemCadastro.style.color = "#c0392b";
+    <script>
 
-            return;
-        }
+        const formCadastro = document.getElementById("formCadastro");
+        const mensagemCadastro = document.getElementById("mensagemCadastro");
+        const btnCriar = document.getElementById("btnCriar");
 
+        formCadastro.addEventListener("submit", async function (event) {
 
-        // Verifica se as senhas são iguais.
+            event.preventDefault();
 
-        if (senha !== confirmar) {
+            if (btnCriar.disabled) return;
 
-            mensagemCadastro.textContent =
-                "As senhas não coincidem.";
+            mensagemCadastro.textContent = "";
+            mensagemCadastro.style.color = "";
 
-            mensagemCadastro.style.color = "#c0392b";
+            const nome = document.getElementById("nome").value.trim();
+            const email = document.getElementById("email").value.trim();
+            const telefone = document.getElementById("telefone").value.trim();
+            const senha = document.getElementById("senha").value;
+            const confirmar = document.getElementById("confirmar").value;
 
-            return;
-        }
+            if (
+                nome === "" ||
+                email === "" ||
+                telefone === "" ||
+                senha === "" ||
+                confirmar === ""
+            ) {
 
+                mensagemCadastro.textContent = "Preencha todos os campos.";
+                mensagemCadastro.style.color = "#c0392b";
 
-        try {
+                return;
+            }
 
-            // Envia os dados para a API.
+            if (senha !== confirmar) {
 
-            const resposta = await fetch(
-                "/api/Usuarios",
-                {
+                mensagemCadastro.textContent = "As senhas não coincidem.";
+                mensagemCadastro.style.color = "#c0392b";
+
+                return;
+            }
+
+            // Ativa a animação.
+            btnCriar.disabled = true;
+
+            btnCriar.innerHTML = `
+                <span class="spinner"></span>
+                <span>Criando conta...</span>
+            `;
+
+            try {
+
+                const resposta = await fetch("/api/Usuarios", {
+
                     method: "POST",
 
                     headers: {
@@ -246,78 +185,94 @@
                     },
 
                     body: JSON.stringify({
-
                         nome: nome,
                         email: email,
                         telefone: telefone,
                         senha: senha
-
                     })
+
+                });
+
+                const textoResposta = await resposta.text();
+
+                let resultado;
+
+                try {
+
+                    resultado = textoResposta
+                        ? JSON.parse(textoResposta)
+                        : {};
+
+                } catch {
+
+                    console.error(
+                        "Resposta inválida do servidor:",
+                        textoResposta
+                    );
+
+                    mensagemCadastro.textContent =
+                        "O servidor apresentou um erro ao criar a conta.";
+
+                    mensagemCadastro.style.color = "#c0392b";
+
+                    return;
                 }
-            );
 
+                if (!resposta.ok) {
 
-            // Tenta pegar a resposta da API.
+                    mensagemCadastro.textContent =
+                        resultado.message ||
+                        resultado.mensagem ||
+                        resultado.title ||
+                        "Não foi possível criar a conta.";
 
-            const resultado = await resposta.json();
+                    mensagemCadastro.style.color = "#c0392b";
 
-
-            // Se a API retornar erro.
-
-            if (!resposta.ok) {
+                    return;
+                }
 
                 mensagemCadastro.textContent =
-                    resultado.message ||
-                    resultado.title ||
-                    "Não foi possível criar a conta.";
+                    "Conta criada com sucesso!";
+
+                mensagemCadastro.style.color = "#2e8b57";
+
+                btnCriar.innerHTML = `
+                    <span>Conta criada!</span>
+                    <span>✓</span>
+                `;
+
+                formCadastro.reset();
+
+                setTimeout(function () {
+
+                    window.location.href =
+                        "../html/login_cliente.html";
+
+                }, 1500);
+
+            } catch (erro) {
+
+                console.error("Erro ao criar conta:", erro);
+
+                mensagemCadastro.textContent =
+                    "Erro ao criar conta. Tente novamente mais tarde.";
 
                 mensagemCadastro.style.color = "#c0392b";
 
-                return;
+            } finally {
+
+                if (!mensagemCadastro.textContent.includes("sucesso")) {
+
+                    btnCriar.disabled = false;
+                    btnCriar.innerHTML = "Criar conta";
+
+                }
+
             }
 
+        });
 
-            // Cadastro realizado.
-
-            mensagemCadastro.textContent =
-                "Conta criada com sucesso!";
-
-            mensagemCadastro.style.color = "#2e8b57";
-
-
-            // Limpa o formulário.
-
-            formCadastro.reset();
-
-
-            // Aguarda 1,5 segundo e vai para o login.
-
-            setTimeout(function () {
-
-                window.location.href =
-                    "../html/login_cliente.html";
-
-            }, 1500);
-
-        }
-
-
-        catch (erro) {
-
-            console.error(erro);
-
-            mensagemCadastro.textContent =
-                "Telefone ou email já cadastrados.";
-
-            mensagemCadastro.style.color = "#c0392b";
-
-        }
-
-    });
-
-</script>
-
+    </script>
 
 </body>
-
 </html>

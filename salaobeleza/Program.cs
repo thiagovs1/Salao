@@ -15,11 +15,15 @@ if (string.IsNullOrWhiteSpace(connectionString))
         "A conexão com o banco não foi configurada. Defina ConnectionStrings__DefaultConnection nas variáveis de ambiente da hospedagem."
     );
 }
-
 // CLOUDINARY
-var cloudName = builder.Configuration["CLOUDINARY_CLOUD_NAME"];
-var apiKey = builder.Configuration["CLOUDINARY_API_KEY"];
-var apiSecret = builder.Configuration["CLOUDINARY_API_SECRET"];
+var cloudName = builder.Configuration["Cloudinary:CloudName"]
+    ?? builder.Configuration["CLOUDINARY_CLOUD_NAME"];
+
+var apiKey = builder.Configuration["Cloudinary:ApiKey"]
+    ?? builder.Configuration["CLOUDINARY_API_KEY"];
+
+var apiSecret = builder.Configuration["Cloudinary:ApiSecret"]
+    ?? builder.Configuration["CLOUDINARY_API_SECRET"];
 
 if (string.IsNullOrWhiteSpace(cloudName) ||
     string.IsNullOrWhiteSpace(apiKey) ||
@@ -35,7 +39,6 @@ var cloudinary = new Cloudinary(cloudinaryAccount);
 cloudinary.Api.Secure = true;
 
 builder.Services.AddSingleton<Cloudinary>(cloudinary);
-
 // SESSION
 builder.Services.AddDistributedMemoryCache();
 

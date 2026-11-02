@@ -231,7 +231,32 @@ body {
 
     margin-top: 38px;
 }
+.btn-entrar {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
 
+        .btn-entrar:disabled {
+            opacity: 0.75;
+            cursor: not-allowed;
+        }
+
+        .spinner {
+            width: 17px;
+            height: 17px;
+            border: 2px solid rgba(255, 255, 255, 0.4);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: girar 0.7s linear infinite;
+        }
+
+        @keyframes girar {
+            to {
+                transform: rotate(360deg);
+            }
+        }
 
 @media (max-width: 600px) {
 

@@ -1,4 +1,5 @@
 
+using Microsoft.AspNetCore.Identity;
 using SalaoBeleza.DTOs;
 using SalaoBeleza.Models;
 using SalaoBeleza.Repositories;
@@ -9,6 +10,7 @@ public class UsuarioService
 {
     private readonly IUsuarioRepository _usuarioRepo;
     private readonly IClienteRepository _clienteRepo;
+    private readonly PasswordHasher<Usuario> _passwordHasher = new();
 
     public UsuarioService(
         IUsuarioRepository usuarioRepo,
@@ -41,7 +43,7 @@ public class UsuarioService
             throw new Exception("Este e-mail já está cadastrado.");
 
         var clienteExistente =
-            await _clienteRepo.BuscarPorTelefone(dto.Telefone);
+            await _clienteRepo.BuscarPorTelefone(dto.Telefone.Trim());
 
         if (clienteExistente != null)
             throw new Exception("Este telefone já está cadastrado.");
@@ -56,10 +58,14 @@ public class UsuarioService
         {
             Nome = dto.Nome.Trim(),
             Email = email,
-            Senha = dto.Senha,
             TipoUsuario = "Cliente",
             ProfissionalId = null
         };
+
+        usuario.Senha = _passwordHasher.HashPassword(
+            usuario,
+            dto.Senha
+        );
 
         var cliente = new Cliente
         {
@@ -91,8 +97,58 @@ public class UsuarioService
         if (usuario == null)
             return null;
 
-        if (usuario.Senha != dto.Senha)
+        // Primeiro verifica se a senha antiga está em texto puro.
+        if (usuario.Senha == dto.Senha)
+        {
+            var novoHash = _passwordHasher.HashPassword(
+                usuario,
+                dto.Senha
+            );
+
+            await _usuarioRepo.AlterarSenha(
+                usuario.Email,
+                novoHash
+            );
+
+            usuario.Senha = novoHash;
+
+            return usuario;
+        }
+
+        // Depois verifica a senha criptografada.
+        PasswordVerificationResult resultado;
+
+        try
+        {
+            resultado = _passwordHasher.VerifyHashedPassword(
+                usuario,
+                usuario.Senha,
+                dto.Senha
+            );
+        }
+        catch (FormatException)
+        {
+            // Senha armazenada em formato inválido.
             return null;
+        }
+
+        if (resultado == PasswordVerificationResult.Failed)
+            return null;
+
+        if (resultado == PasswordVerificationResult.SuccessRehashNeeded)
+        {
+            var novoHash = _passwordHasher.HashPassword(
+                usuario,
+                dto.Senha
+            );
+
+            await _usuarioRepo.AlterarSenha(
+                usuario.Email,
+                novoHash
+            );
+
+            usuario.Senha = novoHash;
+        }
 
         return usuario;
     }
@@ -117,16 +173,21 @@ public class UsuarioService
         if (dto.NovaSenha != dto.ConfirmarSenha)
             throw new Exception("As senhas não são iguais.");
 
-        var usuario = await _usuarioRepo.BuscarPorEmail(
-            dto.Email.Trim()
-        );
+        var email = dto.Email.Trim();
+
+        var usuario = await _usuarioRepo.BuscarPorEmail(email);
 
         if (usuario == null)
             throw new Exception("Não existe uma conta com este e-mail.");
 
-        return await _usuarioRepo.AlterarSenha(
-            dto.Email.Trim(),
+        var novoHash = _passwordHasher.HashPassword(
+            usuario,
             dto.NovaSenha
+        );
+
+        return await _usuarioRepo.AlterarSenha(
+            email,
+            novoHash
         );
     }
 }

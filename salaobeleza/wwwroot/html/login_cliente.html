@@ -6,50 +6,106 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Belleza</title>
     <link rel="stylesheet" href="/css/login_cliente.css?v=2">
+
+
+    <style>
+        .btn-entrar {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn-entrar:disabled {
+            opacity: 0.75;
+            cursor: not-allowed;
+        }
+
+        .spinner {
+            width: 17px;
+            height: 17px;
+            border: 2px solid rgba(255,255,255,0.4);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: girar 0.7s linear infinite;
+        }
+
+        @keyframes girar {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
 </head>
+
 <body>
+
     <main class="login-card">
+
         <div class="logo-area">
-            <img src="/imagens/logo_belleza_login.png" alt="Logo Belleza" class="logo">
+            <img src="/imagens/logo_belleza_login.png"
+                 alt="Logo Belleza"
+                 class="logo">
         </div>
 
         <p class="texto-login">Faça login para continuar</p>
 
         <form id="formLogin">
+
             <div class="campo">
                 <label for="email">E-mail</label>
-                <input type="email" id="email" name="email" placeholder="Digite seu e-mail" required>
+                <input type="email"
+                       id="email"
+                       name="email"
+                       placeholder="Digite seu e-mail"
+                       required>
             </div>
 
             <div class="campo">
                 <label for="senha">Senha</label>
-                <input type="password" id="senha" name="senha" placeholder="Digite sua senha" required>
+                <input type="password"
+                       id="senha"
+                       name="senha"
+                       placeholder="Digite sua senha"
+                       required>
             </div>
 
             <div class="esqueci">
                 <a href="recuperar_senha.html">Esqueci minha senha</a>
             </div>
 
-            <div id="mensagemLogin" style="margin-top:10px;margin-bottom:10px;text-align:center;font-size:14px;min-height:20px;"></div>
+            <div id="mensagemLogin"
+                 style="margin-top:10px;margin-bottom:10px;text-align:center;font-size:14px;min-height:20px;">
+            </div>
 
-            <button type="submit" class="btn-entrar">Entrar</button>
+            <button type="submit" class="btn-entrar" id="btnEntrar">
+                Entrar
+            </button>
 
             <div class="ou">
                 <span>ou</span>
             </div>
 
-            <a href="criar_conta.html" class="btn-criar">Criar conta</a>
+            <a href="criar_conta.html" class="btn-criar">
+                Criar conta
+            </a>
+
         </form>
 
         <p class="frase">Realce sua beleza. Revele sua essência.</p>
+
     </main>
 
     <script>
         const formLogin = document.getElementById("formLogin");
         const mensagemLogin = document.getElementById("mensagemLogin");
+        const btnEntrar = document.getElementById("btnEntrar");
 
         formLogin.addEventListener("submit", async function (event) {
+
             event.preventDefault();
+
+            if (btnEntrar.disabled) return;
 
             mensagemLogin.textContent = "";
             mensagemLogin.style.color = "";
@@ -63,7 +119,15 @@
                 return;
             }
 
+            btnEntrar.disabled = true;
+
+            btnEntrar.innerHTML = `
+                <span class="spinner"></span>
+                <span>Entrando...</span>
+            `;
+
             try {
+
                 const resposta = await fetch("/api/Usuarios/login", {
                     method: "POST",
                     headers: {
@@ -76,32 +140,91 @@
                     })
                 });
 
-                const resultado = await resposta.json();
+                const textoResposta = await resposta.text();
 
-                if (!resposta.ok) {
-                    mensagemLogin.textContent = resultado.mensagem || "E-mail ou senha incorretos.";
+                let resultado;
+
+                try {
+                    resultado = textoResposta
+                        ? JSON.parse(textoResposta)
+                        : {};
+                } catch {
+
+                    console.error(
+                        "Resposta inválida do servidor:",
+                        textoResposta
+                    );
+
+                    mensagemLogin.textContent =
+                        "O servidor apresentou um erro ao processar o login.";
+
                     mensagemLogin.style.color = "#c0392b";
                     return;
                 }
 
-                if (!resultado.redirecionamento) {
-                    mensagemLogin.textContent = "O destino após o login não foi informado.";
+                if (resposta.ok) {
+
+                    mensagemLogin.textContent =
+                        "Login realizado com sucesso!";
+
+                    mensagemLogin.style.color = "#27ae60";
+
+                    btnEntrar.innerHTML = `
+                        <span>Login realizado!</span>
+                        <span>✓</span>
+                    `;
+
+                    // Identifica os e-mails profissionais.
+                    const emailNormalizado = email.toLowerCase();
+
+                    const ehProfissional =
+                        emailNormalizado.endsWith("@belleza.com") ||
+                        emailNormalizado.endsWith("@beleza.com");
+
+                    setTimeout(() => {
+
+                        if (ehProfissional) {
+
+                            window.location.href ="../funcionarios/html/painel_profissional.html";
+
+                        } else {
+
+                            window.location.href =
+                                "/html/tela_inicial.html";
+
+                        }
+
+                    }, 1000);
+
+                } else {
+
+                    mensagemLogin.textContent =
+                        resultado.mensagem || "E-mail ou senha incorretos.";
+
                     mensagemLogin.style.color = "#c0392b";
-                    return;
+
                 }
 
-                mensagemLogin.textContent = "Login realizado com sucesso!";
-                mensagemLogin.style.color = "#2e8b57";
-
-                setTimeout(function () {
-                    window.location.href = resultado.redirecionamento;
-                }, 800);
             } catch (erro) {
-                console.error(erro);
-                mensagemLogin.textContent = "Não foi possível conectar ao servidor.";
+
+                console.error("Erro ao realizar login:", erro);
+
+                mensagemLogin.textContent =
+                    "Erro ao realizar login. Tente novamente mais tarde.";
+
                 mensagemLogin.style.color = "#c0392b";
+
+            } finally {
+
+                if (!mensagemLogin.textContent.includes("sucesso")) {
+                    btnEntrar.disabled = false;
+                    btnEntrar.innerHTML = "Entrar";
+                }
+
             }
+
         });
     </script>
+
 </body>
 </html>
