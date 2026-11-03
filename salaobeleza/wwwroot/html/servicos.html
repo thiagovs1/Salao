@@ -380,151 +380,228 @@
             return `${horas}h ${minutosRestantes}min`;
         }
 
-        function encontrarComboDoServico(id, nome) {
-            for (const combo of combos) {
-                const listaCombo = combo.servicos ?? combo.Servicos ?? [];
-                const encontrado = listaCombo.some(servico => {
-                    const servicoId = servico.id ?? servico.Id;
-                    const servicoNome = servico.nome ?? servico.Nome;
+        function obterServicosDoCombo(combo) {
+    return combo.servicos ?? combo.Servicos ?? [];
+}
 
-                    return Number(servicoId) === Number(id) || servicoNome === nome;
-                });
+function obterId(item) {
+    return Number(item.id ?? item.Id);
+}
 
-                if (encontrado) return combo;
-            }
+function obterNome(item) {
+    return item.nome ?? item.Nome ?? "";
+}
 
-            return null;
-        }
+function obterTipo(item) {
+    return String(item.tipo ?? item.Tipo ?? "").toLowerCase();
+}
 
-        function comboContemServico(combo, item) {
-            const listaCombo = combo.servicos ?? combo.Servicos ?? [];
+function comboContemServico(combo, item) {
+    const servicosCombo = obterServicosDoCombo(combo);
 
-            return listaCombo.some(servico => {
-                const servicoId = servico.id ?? servico.Id;
-                const servicoNome = servico.nome ?? servico.Nome;
+    return servicosCombo.some(servico =>
+        obterId(servico) === Number(item.id ?? item.Id)
+    );
+}
 
-                return Number(servicoId) === Number(item.id) ||
-                    servicoNome === item.nome;
-            });
-        }
+function obterCombosSelecionados() {
+    return selecionados.filter(item => obterTipo(item) === "combo");
+}
 
-        async function selecionarItem(id, nome, preco, duracao, tipo) {
-            const jaSelecionado = selecionados.some(item =>
-                Number(item.id ?? item.Id) === Number(id) &&
-                (item.tipo ?? item.Tipo) === tipo
+function obterServicosSelecionados() {
+    return selecionados.filter(item => obterTipo(item) === "servico");
+}
+
+function encontrarConflitosEntreCombos(comboAtual) {
+    const combosSelecionados = obterCombosSelecionados();
+    const conflitos = [];
+
+    for (const comboSelecionado of combosSelecionados) {
+        const servicosDoComboAtual = obterServicosDoCombo(comboAtual);
+        const servicosDoComboSelecionado = obterServicosDoCombo(
+            combos.find(combo =>
+                obterId(combo) === obterId(comboSelecionado)
+            ) ?? {}
+        );
+
+        for (const servico of servicosDoComboAtual) {
+            const existe = servicosDoComboSelecionado.some(outro =>
+                obterId(outro) === obterId(servico)
             );
 
-            if (jaSelecionado) {
+            if (existe && !conflitos.some(item =>
+                obterId(item) === obterId(servico)
+            )) {
+                conflitos.push(servico);
+            }
+        }
+    }
+
+    return conflitos;
+}
+
+        async function selecionarItem(id, nome, preco, duracao, tipo) {
+
+    tipo = String(tipo).toLowerCase();
+
+    const idNumerico = Number(id);
+
+    // Verifica se o mesmo item já foi selecionado.
+    const jaSelecionado = selecionados.some(item =>
+        obterId(item) === idNumerico &&
+        obterTipo(item) === tipo
+    );
+
+    if (jaSelecionado) {
+        mostrarNotificacao(
+            tipo === "servico"
+                ? "Este serviço já foi selecionado."
+                : "Este combo já foi selecionado.",
+            "aviso"
+        );
+        return;
+    }
+
+    // =========================================
+    // SELEÇÃO DE SERVIÇO INDIVIDUAL
+    // =========================================
+
+    if (tipo === "servico") {
+
+        const servicoAtual = {
+            id: idNumerico,
+            nome
+        };
+
+        // Verifica TODOS os combos selecionados.
+        for (const comboSelecionado of obterCombosSelecionados()) {
+
+            const comboCompleto = combos.find(combo =>
+                obterId(combo) === obterId(comboSelecionado)
+            );
+
+            if (comboCompleto && comboContemServico(
+                comboCompleto,
+                servicoAtual
+            )) {
                 mostrarNotificacao(
-                    tipo === "servico"
-                        ? "Este serviço já foi selecionado."
-                        : "Este combo já foi selecionado.",
+                    `O serviço "${nome}" já está incluído no combo "${obterNome(comboSelecionado)}". Remova o combo antes de selecionar este serviço separadamente.`,
                     "aviso"
                 );
                 return;
             }
+        }
+    }
 
-            if (tipo === "servico") {
-                const comboDoServico = encontrarComboDoServico(id, nome);
+    // =========================================
+    // SELEÇÃO DE COMBO
+    // =========================================
 
-                if (comboDoServico) {
-                    const nomeCombo = comboDoServico.nome ?? comboDoServico.Nome;
-                    const comboSelecionado = selecionados.find(item =>
-                        (item.tipo ?? item.Tipo) === "combo" &&
-                        (item.nome ?? item.Nome) === nomeCombo
-                    );
+    if (tipo === "combo") {
 
-                    if (comboSelecionado) {
-                        mostrarNotificacao(
-                            `Este serviço já está incluído no combo "${nomeCombo}". Remova o combo para selecionar este serviço separadamente.`,
-                            "aviso"
-                        );
-                        return;
-                    }
-                }
-            }
+        const comboAtual = combos.find(combo =>
+            obterId(combo) === idNumerico
+        );
 
-            if (tipo === "combo") {
-                const comboAtual = combos.find(combo =>
-                    Number(combo.id ?? combo.Id) === Number(id)
-                );
-
-                if (comboAtual) {
-                    const nomeComboAtual = comboAtual.nome ?? comboAtual.Nome;
-
-                    if (nomeComboAtual.toLowerCase().includes("belleza completa")) {
-                        const outrosCombos = selecionados.filter(item =>
-                            (item.tipo ?? item.Tipo) === "combo"
-                        );
-
-                        if (outrosCombos.length > 0) {
-                            const nomes = outrosCombos
-                                .map(item => item.nome ?? item.Nome)
-                                .join(", ");
-
-                            mostrarNotificacao(
-                                `O combo Belleza Completa já inclui os serviços dos combos ${nomes}. Remova os outros combos antes de selecioná-lo.`,
-                                "aviso"
-                            );
-                            return;
-                        }
-                    }
-
-                    const servicosSelecionados = selecionados.filter(item =>
-                        (item.tipo ?? item.Tipo) === "servico"
-                    );
-
-                    const servicosConflitantes = servicosSelecionados.filter(item =>
-                        comboContemServico(comboAtual, item)
-                    );
-
-                    if (servicosConflitantes.length > 0) {
-                        const nomes = servicosConflitantes
-                            .map(item => item.nome ?? item.Nome)
-                            .join(", ");
-
-                        mostrarNotificacao(
-                            `O serviço ${nomes} já está incluído no combo "${nomeComboAtual}". Remova esse serviço antes de selecionar o combo.`,
-                            "aviso"
-                        );
-                        return;
-                    }
-                }
-            }
-
-            const item = {
-                id: Number(id),
-                nome,
-                preco: Number(preco),
-                duracaoMinutos: Number(duracao),
-                tipo
-            };
-
-            try {
-                const resposta = await fetch(`${API_URL}/Selecao`, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    credentials: "include",
-                    body: JSON.stringify(item)
-                });
-
-                const dados = await resposta.json().catch(() => ({}));
-
-                if (!resposta.ok) {
-                    throw new Error(dados.mensagem || "Não foi possível adicionar o item à seleção.");
-                }
-
-                await carregarSelecao();
-                mostrarNotificacao(`${nome} foi adicionado à sua seleção.`, "sucesso");
-            } catch (erro) {
-                console.error("Erro ao selecionar item:", erro);
-                mostrarNotificacao(
-                    erro.message || "Não foi possível selecionar o item. Tente novamente.",
-                    "erro"
-                );
-            }
+        if (!comboAtual) {
+            mostrarNotificacao(
+                "Não foi possível encontrar os serviços deste combo.",
+                "erro"
+            );
+            return;
         }
 
+        const nomeCombo = obterNome(comboAtual);
+
+        // Verifica serviços selecionados individualmente.
+        const servicosIndividuais = obterServicosSelecionados();
+
+        const conflitosIndividuais = servicosIndividuais.filter(item =>
+            comboContemServico(comboAtual, item)
+        );
+
+        if (conflitosIndividuais.length > 0) {
+
+            const nomes = conflitosIndividuais
+                .map(obterNome)
+                .join(", ");
+
+            mostrarNotificacao(
+                `O combo "${nomeCombo}" já inclui: ${nomes}. Remova esses serviços individuais antes de selecionar o combo.`,
+                "aviso"
+            );
+
+            return;
+        }
+
+        // Verifica se existem serviços repetidos em outros combos.
+        const conflitosCombos = encontrarConflitosEntreCombos(comboAtual);
+
+        if (conflitosCombos.length > 0) {
+
+            const nomes = conflitosCombos
+                .map(obterNome)
+                .join(", ");
+
+            mostrarNotificacao(
+                `O combo "${nomeCombo}" possui serviços que já estão em outro combo selecionado: ${nomes}. Remova o outro combo primeiro.`,
+                "aviso"
+            );
+
+            return;
+        }
+    }
+
+    // =========================================
+    // ENVIA PARA A SESSION
+    // =========================================
+
+    const item = {
+        id: idNumerico,
+        nome,
+        preco: Number(preco),
+        duracaoMinutos: Number(duracao) || 0,
+        tipo: tipo
+    };
+
+    try {
+
+        const resposta = await fetch(`${API_URL}/Selecao`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            credentials: "include",
+            body: JSON.stringify(item)
+        });
+
+        const dados = await resposta.json().catch(() => ({}));
+
+        if (!resposta.ok) {
+            throw new Error(
+                dados.mensagem ||
+                "Não foi possível adicionar o item à seleção."
+            );
+        }
+
+        await carregarSelecao();
+
+        mostrarNotificacao(
+            `${nome} foi adicionado à sua seleção.`,
+            "sucesso"
+        );
+
+    } catch (erro) {
+
+        console.error("Erro ao selecionar item:", erro);
+
+        mostrarNotificacao(
+            erro.message ||
+            "Não foi possível selecionar o item.",
+            "erro"
+        );
+    }
+}
         async function carregarServicos() {
             try {
                 const resposta = await fetch(`${API_URL}/Servicos`);

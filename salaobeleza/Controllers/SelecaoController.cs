@@ -18,68 +18,88 @@ public class SelecaoController : ControllerBase
     [HttpGet]
     public IActionResult Get()
     {
-        var json = HttpContext.Session.GetString(ChaveSelecao);
+        var selecao = ObterSelecao();
 
-        if (string.IsNullOrWhiteSpace(json))
-            return Ok(new List<ItemSelecao>());
-
-        try
-        {
-            return Ok(
-                JsonSerializer.Deserialize<List<ItemSelecao>>(json, JsonOptions)
-                ?? new List<ItemSelecao>()
-            );
-        }
-        catch (JsonException)
-        {
-            return Ok(new List<ItemSelecao>());
-        }
+        return Ok(selecao);
     }
 
     [HttpPost]
     public IActionResult Post([FromBody] ItemSelecao item)
     {
         if (item == null || item.Id <= 0)
-            return BadRequest(new { mensagem = "O item selecionado é inválido." });
+        {
+            return BadRequest(new
+            {
+                mensagem = "O item selecionado é inválido."
+            });
+        }
 
         if (string.IsNullOrWhiteSpace(item.Tipo))
-            return BadRequest(new { mensagem = "O tipo do item não foi informado." });
-
-        var tipo = item.Tipo.Trim();
-
-        if (!tipo.Equals("Servico", StringComparison.OrdinalIgnoreCase) &&
-            !tipo.Equals("Combo", StringComparison.OrdinalIgnoreCase))
         {
-            return BadRequest(new { mensagem = "O tipo deve ser Servico ou Combo." });
+            return BadRequest(new
+            {
+                mensagem = "O tipo do item não foi informado."
+            });
         }
 
-        var json = HttpContext.Session.GetString(ChaveSelecao);
+        var tipo = item.Tipo.Trim().ToLowerInvariant();
 
-        var selecao = string.IsNullOrWhiteSpace(json)
-            ? new List<ItemSelecao>()
-            : JsonSerializer.Deserialize<List<ItemSelecao>>(json, JsonOptions)
-                ?? new List<ItemSelecao>();
+        if (tipo != "servico" && tipo != "combo")
+        {
+            return BadRequest(new
+            {
+                mensagem = "O tipo deve ser Servico ou Combo."
+            });
+        }
 
-        // Não adiciona novamente o mesmo serviço ou combo.
-        if (selecao.Any(x =>
+        if (item.Preco < 0)
+        {
+            return BadRequest(new
+            {
+                mensagem = "O preço informado é inválido."
+            });
+        }
+
+        if (item.DuracaoMinutos < 0)
+        {
+            return BadRequest(new
+            {
+                mensagem = "A duração informada é inválida."
+            });
+        }
+
+        var selecao = ObterSelecao();
+
+        // Impede duplicação do mesmo serviço ou combo.
+        var jaExiste = selecao.Any(x =>
             x.Id == item.Id &&
-            x.Tipo.Equals(tipo, StringComparison.OrdinalIgnoreCase)))
+            string.Equals(
+                x.Tipo,
+                tipo,
+                StringComparison.OrdinalIgnoreCase
+            )
+        );
+
+        if (jaExiste)
         {
-            return Ok(selecao);
+            return Conflict(new
+            {
+                mensagem = "Este item já está na sua seleção."
+            });
         }
 
-        selecao.Add(new ItemSelecao
+        var novoItem = new ItemSelecao
         {
             Id = item.Id,
             Nome = item.Nome?.Trim() ?? "",
             Preco = item.Preco,
+            DuracaoMinutos = item.DuracaoMinutos,
             Tipo = tipo
-        });
+        };
 
-        HttpContext.Session.SetString(
-            ChaveSelecao,
-            JsonSerializer.Serialize(selecao, JsonOptions)
-        );
+        selecao.Add(novoItem);
+
+        SalvarSelecao(selecao);
 
         return Ok(selecao);
     }
@@ -90,27 +110,35 @@ public class SelecaoController : ControllerBase
         HttpContext.Session.Remove(ChaveSelecao);
         HttpContext.Session.Remove(ChaveProfissional);
 
-        return Ok(new { mensagem = "Seleção excluída com sucesso." });
+        return Ok(new
+        {
+            mensagem = "Seleção excluída com sucesso."
+        });
     }
 
     [HttpDelete("{tipo}/{id:int}")]
     public IActionResult RemoverItem(string tipo, int id)
     {
-        var json = HttpContext.Session.GetString(ChaveSelecao);
+        if (id <= 0)
+        {
+            return BadRequest(new
+            {
+                mensagem = "Identificador inválido."
+            });
+        }
 
-        var selecao = string.IsNullOrWhiteSpace(json)
-            ? new List<ItemSelecao>()
-            : JsonSerializer.Deserialize<List<ItemSelecao>>(json, JsonOptions)
-                ?? new List<ItemSelecao>();
+        var selecao = ObterSelecao();
 
         selecao.RemoveAll(x =>
             x.Id == id &&
-            x.Tipo.Equals(tipo, StringComparison.OrdinalIgnoreCase));
-
-        HttpContext.Session.SetString(
-            ChaveSelecao,
-            JsonSerializer.Serialize(selecao, JsonOptions)
+            string.Equals(
+                x.Tipo,
+                tipo,
+                StringComparison.OrdinalIgnoreCase
+            )
         );
+
+        SalvarSelecao(selecao);
 
         return Ok(selecao);
     }
@@ -123,9 +151,21 @@ public class SelecaoController : ControllerBase
         if (string.IsNullOrWhiteSpace(json))
             return Ok(null);
 
-        return Ok(
-            JsonSerializer.Deserialize<ProfissionalSelecionado>(json, JsonOptions)
-        );
+        try
+        {
+            var profissional =
+                JsonSerializer.Deserialize<ProfissionalSelecionado>(
+                    json,
+                    JsonOptions
+                );
+
+            return Ok(profissional);
+        }
+        catch (JsonException)
+        {
+            HttpContext.Session.Remove(ChaveProfissional);
+            return Ok(null);
+        }
     }
 
     [HttpPost("profissional")]
@@ -133,7 +173,20 @@ public class SelecaoController : ControllerBase
         [FromBody] ProfissionalSelecionado profissional)
     {
         if (profissional == null || profissional.Id <= 0)
-            return BadRequest(new { mensagem = "A profissional selecionada é inválida." });
+        {
+            return BadRequest(new
+            {
+                mensagem = "A profissional selecionada é inválida."
+            });
+        }
+
+        if (string.IsNullOrWhiteSpace(profissional.Nome))
+        {
+            return BadRequest(new
+            {
+                mensagem = "O nome da profissional não foi informado."
+            });
+        }
 
         HttpContext.Session.SetString(
             ChaveProfissional,
@@ -148,20 +201,71 @@ public class SelecaoController : ControllerBase
     {
         HttpContext.Session.Remove(ChaveProfissional);
 
-        return Ok(new { mensagem = "Profissional removida da seleção." });
+        return Ok(new
+        {
+            mensagem = "Profissional removida da seleção."
+        });
+    }
+
+    // =========================================
+    // MÉTODOS AUXILIARES DA SELECTION
+    // =========================================
+
+    private List<ItemSelecao> ObterSelecao()
+    {
+        var json = HttpContext.Session.GetString(ChaveSelecao);
+
+        if (string.IsNullOrWhiteSpace(json))
+            return new List<ItemSelecao>();
+
+        try
+        {
+            return JsonSerializer.Deserialize<List<ItemSelecao>>(
+                json,
+                JsonOptions
+            ) ?? new List<ItemSelecao>();
+        }
+        catch (JsonException)
+        {
+            HttpContext.Session.Remove(ChaveSelecao);
+
+            return new List<ItemSelecao>();
+        }
+    }
+
+    private void SalvarSelecao(List<ItemSelecao> selecao)
+    {
+        HttpContext.Session.SetString(
+            ChaveSelecao,
+            JsonSerializer.Serialize(selecao, JsonOptions)
+        );
     }
 }
+
+// =========================================
+// MODELO DOS ITENS SELECIONADOS
+// =========================================
 
 public class ItemSelecao
 {
     public int Id { get; set; }
+
     public string Nome { get; set; } = "";
+
     public decimal Preco { get; set; }
+
+    public int DuracaoMinutos { get; set; }
+
     public string Tipo { get; set; } = "";
 }
+
+// =========================================
+// MODELO DA PROFISSIONAL SELECIONADA
+// =========================================
 
 public class ProfissionalSelecionado
 {
     public int Id { get; set; }
+
     public string Nome { get; set; } = "";
 }
