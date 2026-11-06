@@ -1,4 +1,8 @@
 
+/* =====================================================
+   CONFIGURAÇÕES GERAIS
+===================================================== */
+
 * {
     margin: 0;
     padding: 0;
@@ -13,9 +17,9 @@ body {
 }
 
 
-/* =========================
+/* =====================================================
    MENU LATERAL
-========================= */
+===================================================== */
 
 .sidebar {
     width: 190px;
@@ -35,10 +39,7 @@ body {
 .sidebar::before {
     content: "";
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
+    inset: 0;
     background: rgba(248, 238, 238, 0.72);
     z-index: 0;
 }
@@ -81,16 +82,42 @@ body {
 
 .menu-item {
     width: 100%;
-    height: 37px;
+    min-height: 42px;
     display: flex;
     align-items: center;
-    gap: 15px;
-    padding-left: 18px;
+    gap: 13px;
+    padding: 8px 14px 8px 18px;
     text-decoration: none;
     color: #994e6a;
-    font-size: 14px;
+    font-size: 15px;
     transition: 0.2s;
 }
+
+.menu-item i {
+    width: 20px;
+    flex-shrink: 0;
+    text-align: center;
+    font-size: 17px;
+}
+
+.menu-item:hover {
+    background: rgba(234, 214, 220, 0.90);
+}
+
+.menu-item.ativo {
+    background: #8f3d5e;
+    color: white;
+    border-radius: 0 4px 4px 0;
+}
+
+.menu-item.sair {
+    margin-top: 5px;
+}
+
+
+/* =====================================================
+   NOTIFICAÇÕES
+===================================================== */
 
 .notificacao-belleza {
     position: fixed;
@@ -125,7 +152,7 @@ body {
 .notificacao-belleza .texto {
     flex: 1;
     color: #444;
-    font-size: 14px;
+    font-size: 15px;
     line-height: 1.5;
     overflow-wrap: anywhere;
 }
@@ -134,7 +161,7 @@ body {
     display: block;
     margin-bottom: 3px;
     color: #713b49;
-    font-size: 15px;
+    font-size: 16px;
 }
 
 .notificacao-belleza .fechar {
@@ -142,7 +169,7 @@ body {
     border: 0;
     background: transparent;
     color: #888;
-    font-size: 20px;
+    font-size: 22px;
     cursor: pointer;
 }
 
@@ -151,55 +178,29 @@ body {
         opacity: 0;
         transform: translateX(25px);
     }
+
     to {
         opacity: 1;
         transform: translateX(0);
     }
 }
 
-@media (max-width: 480px) {
-    .notificacao-belleza {
-        top: 12px;
-        right: 12px;
-    }
-}
 
-.menu-item i {
-    width: 18px;
-    text-align: center;
-    font-size: 16px;
-}
-
-.menu-item:hover {
-    background: rgba(234, 214, 220, 0.90);
-}
-
-.menu-item.ativo {
-    background: #8f3d5e;
-    color: white;
-    border-radius: 0 4px 4px 0;
-}
-
-.menu-item.sair {
-    margin-top: 5px;
-}
-
-
-/* =========================
-   CONTEÚDO
-========================= */
+/* =====================================================
+   CONTEÚDO PRINCIPAL
+===================================================== */
 
 .conteudo {
-    margin-left: 210px;
+    margin-left: 190px;
     min-height: 100vh;
-    padding: 20px 24px;
+    padding: 28px 25px;
     position: relative;
 }
 
 .area-servicos {
     display: grid;
-    grid-template-columns: minmax(650px, 1fr) 240px;
-    gap: 24px;
+    grid-template-columns: minmax(0, 1fr) 280px;
+    gap: 25px;
     align-items: start;
 }
 
@@ -209,29 +210,27 @@ body {
 
 .titulo-pagina {
     color: #91425f;
-    font-size: 20px;
+    font-size: 27px;
     font-weight: 400;
-    margin: 0 0 24px 2px;
+    margin: 0 0 25px 2px;
 }
 
 
-/* =========================
-   ESCOLHA SERVIÇOS / COMBOS
-========================= */
+/* =====================================================
+   ESCOLHA ENTRE SERVIÇOS E COMBOS
+===================================================== */
 
 .categorias-escolha {
     display: flex;
-    gap: 12px;
-    margin-bottom: 25px;
+    gap: 15px;
+    margin-bottom: 28px;
 }
 
 .categoria {
-    width: 181px;
-    height: 51px;
-    margin-left: 0;
-    margin-bottom: 0;
+    width: 190px;
+    min-height: 65px;
     border: 1px solid #c77b91;
-    border-radius: 3px;
+    border-radius: 5px;
     background-color: #ffffff;
     color: #91425f;
     font-family: Georgia, "Times New Roman", serif;
@@ -240,6 +239,7 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    transition: 0.2s;
 }
 
 .categoria:hover {
@@ -251,20 +251,20 @@ body {
 }
 
 .nome-categoria {
-    font-size: 18px;
-    line-height: 20px;
+    font-size: 19px;
+    line-height: 23px;
 }
 
 .quantidade {
-    font-size: 11px;
-    margin-top: 3px;
+    font-size: 13px;
+    margin-top: 4px;
     color: #76545d;
 }
 
 
-/* =========================
-   ÁREAS
-========================= */
+/* =====================================================
+   ÁREAS DE SERVIÇOS E COMBOS
+===================================================== */
 
 .area-lista {
     width: 100%;
@@ -276,85 +276,98 @@ body {
 
 .titulo-servicos {
     color: #91425f;
-    font-size: 20px;
+    font-size: 23px;
     font-weight: 400;
-    margin-bottom: 4px;
+    margin-bottom: 12px;
 }
 
 
-/* =========================
+/* =====================================================
    LISTA DE SERVIÇOS
-========================= */
+===================================================== */
 
 .lista-servicos {
     width: 100%;
     background-color: #f8eaea;
-    padding: 15px 11px;
+    padding: 18px;
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px 24px;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px;
+    border-radius: 5px;
 }
 
 
-/* =========================
-   CARD
-========================= */
+/* =====================================================
+   CARDS DE SERVIÇOS E COMBOS
+===================================================== */
 
 .servico {
-    height: 115px;
+    min-width: 0;
+    min-height: 175px;
+    height: auto;
     background-color: #ffffff;
-    border-radius: 4px;
-    padding: 9px 22px 8px;
+    border: 1px solid #eadada;
+    border-radius: 6px;
+    padding: 14px 13px 12px;
     display: flex;
     flex-direction: column;
     overflow: hidden;
+    box-shadow: 0 2px 7px rgba(90, 40, 55, 0.05);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.servico:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 14px rgba(90, 40, 55, 0.12);
 }
 
 .servico h3 {
     color: #30282a;
-    font-size: 12px;
-    font-weight: 400;
+    font-size: 17px;
+    font-weight: 500;
     text-align: center;
-    margin-bottom: 3px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    margin-bottom: 9px;
+    line-height: 22px;
+    overflow-wrap: anywhere;
 }
 
 .servico p {
-    color: #91425f;
-    font-size: 9px;
-    line-height: 12px;
-    margin-bottom: 2px;
-    min-height: 25px;
+    color: #76545d;
+    font-size: 14px;
+    line-height: 19px;
+    margin-bottom: 8px;
+    min-height: 35px;
+    overflow-wrap: anywhere;
 }
 
 .servico > span {
     color: #91425f;
-    font-size: 9px;
-    line-height: 12px;
+    font-size: 14px;
+    line-height: 21px;
+    margin-bottom: 3px;
 }
 
 
-/* =========================
-   BOTÃO SERVIÇO
-========================= */
+/* =====================================================
+   BOTÃO SELECIONAR SERVIÇO
+===================================================== */
 
 .btn-servico {
     width: 100%;
-    height: 20px;
-    margin-top: auto;
+    min-height: 36px;
+    margin-top: 12px;
     border: none;
-    border-radius: 3px;
+    border-radius: 4px;
     background-color: #7e4861;
     color: #ffffff;
     font-family: Georgia, "Times New Roman", serif;
-    font-size: 10px;
+    font-size: 15px;
     cursor: pointer;
     text-decoration: none;
     text-align: center;
-    line-height: 20px;
+    line-height: 36px;
     display: block;
+    transition: background-color 0.2s;
 }
 
 .btn-servico:hover {
@@ -362,136 +375,138 @@ body {
 }
 
 .selecionado-btn {
-    background-color: #7e4861;
+    background-color: #91425f;
 }
 
 
-/* =========================
-   RESUMO
-========================= */
+/* =====================================================
+   RESUMO DO ATENDIMENTO
+===================================================== */
 
 .resumo {
-    width: 240px;
+    width: 100%;
     min-height: 340px;
     background-color: #f8eaea;
-    border-radius: 4px;
+    border-radius: 5px;
     overflow: hidden;
     margin-top: 90px;
 }
 
 .resumo h2 {
     color: #91425f;
-    font-size: 13px;
+    font-size: 18px;
     font-weight: 400;
-    padding: 10px 17px 7px;
+    padding: 16px 15px 12px;
+    border-bottom: 1px solid #eadada;
 }
 
 
-/* =========================
+/* =====================================================
    ITENS SELECIONADOS
-========================= */
+===================================================== */
 
 .itens-selecionados {
-    padding: 0 10px;
+    padding: 0 12px;
 }
 
 .nenhum-item {
     color: #76545d;
-    font-size: 10px;
-    padding: 10px 5px;
+    font-size: 14px;
+    line-height: 21px;
+    padding: 15px 5px;
 }
-
 
 .item-selecionado {
     border-bottom: 1px solid #e5c9cf;
-    padding: 9px 4px;
+    padding: 12px 4px;
 }
 
 .pedido-numero {
     color: #91425f;
-    font-size: 9px;
-    margin-bottom: 4px;
+    font-size: 13px;
+    margin-bottom: 5px;
 }
 
 .pedido-detalhes {
     display: flex;
     flex-direction: column;
-    gap: 2px;
+    gap: 4px;
 }
 
 .pedido-detalhes strong {
     color: #3d3033;
-    font-size: 11px;
+    font-size: 15px;
     font-weight: 400;
+    overflow-wrap: anywhere;
 }
 
 .pedido-detalhes span {
     color: #91425f;
-    font-size: 9px;
+    font-size: 13px;
 }
 
 .pedido-preco {
     color: #30282a;
-    font-size: 11px;
-    margin-top: 4px;
+    font-size: 15px;
+    margin-top: 6px;
 }
 
 
-/* =========================
-   RESUMO ITEM
-========================= */
+/* =====================================================
+   INFORMAÇÕES DO RESUMO
+===================================================== */
 
 .resumo-item {
-    min-height: 55px;
+    min-height: 67px;
     border-bottom: 1px solid #e5c9cf;
     display: flex;
     align-items: center;
-    padding: 7px 12px;
+    padding: 10px 13px;
 }
 
 .resumo-icone {
-    width: 28px;
+    width: 32px;
+    flex-shrink: 0;
     color: #91425f;
-    font-size: 17px;
+    font-size: 19px;
     text-align: center;
-    margin-right: 5px;
+    margin-right: 8px;
 }
 
 .resumo-texto {
     flex: 1;
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 5px;
     min-width: 0;
 }
 
 .resumo-texto span {
     color: #91425f;
-    font-size: 11px;
+    font-size: 14px;
 }
 
 .resumo-texto strong {
     color: #3d3033;
-    font-size: 11px;
+    font-size: 14px;
     font-weight: 400;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    overflow-wrap: anywhere;
 }
 
 
-/* =========================
+/* =====================================================
    TOTAL
-========================= */
+===================================================== */
 
 .total {
-    padding: 30px 10px 12px;
+    padding: 22px 14px 15px;
 }
 
 .titulo-total {
     display: block;
     color: #91425f;
-    font-size: 12px;
-    margin-bottom: 7px;
+    font-size: 15px;
+    margin-bottom: 8px;
 }
 
 .valor {
@@ -502,31 +517,32 @@ body {
 
 .valor strong {
     color: #30282a;
-    font-size: 16px;
+    font-size: 22px;
     font-weight: 400;
 }
 
 .valor small {
     color: #30282a;
-    font-size: 6px;
+    font-size: 10px;
 }
 
 
-/* =========================
+/* =====================================================
    BOTÃO LIMPAR
-========================= */
+===================================================== */
 
 .btn-limpar {
-    width: calc(100% - 20px);
-    height: 30px;
-    margin: 0 10px 10px;
+    width: calc(100% - 24px);
+    min-height: 38px;
+    margin: 0 12px 12px;
     border: 1px solid #8e3d61;
-    border-radius: 3px;
+    border-radius: 4px;
     background-color: transparent;
     color: #8e3d61;
     font-family: Georgia, "Times New Roman", serif;
-    font-size: 11px;
+    font-size: 14px;
     cursor: pointer;
+    transition: 0.2s;
 }
 
 .btn-limpar:hover {
@@ -534,20 +550,20 @@ body {
 }
 
 
-/* =========================
+/* =====================================================
    BOTÃO CONTINUAR
-========================= */
+===================================================== */
 
 .btn-continuar {
-    width: calc(100% - 20px);
-    height: 32px;
-    margin: 0 10px 15px;
+    width: calc(100% - 24px);
+    min-height: 42px;
+    margin: 0 12px 16px;
     border: none;
-    border-radius: 3px;
+    border-radius: 4px;
     background-color: #8e3d61;
     color: #ffffff;
     font-family: Georgia, "Times New Roman", serif;
-    font-size: 13px;
+    font-size: 16px;
     font-weight: bold;
     cursor: pointer;
     display: flex;
@@ -555,6 +571,7 @@ body {
     justify-content: center;
     gap: 10px;
     text-decoration: none;
+    transition: 0.2s;
 }
 
 .btn-continuar:hover {
@@ -562,31 +579,40 @@ body {
 }
 
 .btn-continuar span:last-child {
-    font-size: 17px;
+    font-size: 19px;
 }
 
 
-/* =========================
-   RESPONSIVIDADE
-========================= */
+/* =====================================================
+   TABLETS E NOTEBOOKS MENORES
+===================================================== */
 
-@media (max-width: 1100px) {
+@media (max-width: 1200px) {
 
     .area-servicos {
-        grid-template-columns: minmax(500px, 1fr) 220px;
+        grid-template-columns: minmax(0, 1fr) 260px;
         gap: 18px;
     }
 
-    .resumo {
-        width: 220px;
-    }
-
     .lista-servicos {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 14px;
+        padding: 14px;
     }
 
+    .resumo {
+        width: 100%;
+    }
+
+    .conteudo {
+        padding: 24px 18px;
+    }
 }
 
+
+/* =====================================================
+   TABLETS
+===================================================== */
 
 @media (max-width: 850px) {
 
@@ -594,74 +620,337 @@ body {
         width: 160px;
     }
 
-    .conteudo {
-        margin-left: 175px;
-        padding: 20px;
-    }
-
-    .area-servicos {
-        grid-template-columns: 1fr;
-    }
-
-    .resumo {
-        width: 100%;
-        margin-top: 20px;
-    }
-
-    .lista-servicos {
-        grid-template-columns: repeat(2, 1fr);
-    }
-
-}
-
-
-@media (max-width: 600px) {
-
-    .sidebar {
-        position: relative;
-        width: 100%;
-        min-height: auto;
-        height: auto;
-    }
-
-    .logo-area {
-        height: 90px;
-    }
-
     .logo-belleza {
-        width: 140px;
+        width: 145px;
     }
 
     .menu-item {
-        height: 40px;
+        font-size: 14px;
+        gap: 9px;
+        padding-left: 12px;
     }
 
     .conteudo {
-        margin-left: 0;
-        padding: 15px;
+        margin-left: 160px;
+        padding: 22px 16px;
     }
 
     .area-servicos {
         grid-template-columns: 1fr;
     }
 
-    .categorias-escolha {
-        flex-direction: column;
-    }
-
-    .categoria {
-        width: 100%;
+    .resumo {
+        margin-top: 20px;
+        min-height: auto;
     }
 
     .lista-servicos {
-        grid-template-columns: 1fr;
-        gap: 15px;
-    }
-
-    .resumo {
-        width: 100%;
-        margin-top: 20px;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
 }
 
+
+/* =====================================================
+   CELULARES
+===================================================== */
+
+@media (max-width: 600px) {
+
+    /* Menu superior */
+
+    .sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: auto;
+        width: 100%;
+        height: auto;
+        min-height: 0;
+        overflow: visible;
+        z-index: 1000;
+        border-right: none;
+        border-bottom: 1px solid #eadada;
+        background-position: center;
+    }
+
+    .logo-area {
+        height: 65px;
+        padding: 5px;
+    }
+
+    .logo-belleza {
+        width: 115px;
+        max-height: 58px;
+    }
+
+    .linha-logo {
+        display: none;
+    }
+
+    .menu {
+        width: 100%;
+        height: 48px;
+        display: flex;
+        flex-direction: row;
+        overflow-x: auto;
+        overflow-y: hidden;
+        white-space: nowrap;
+        scrollbar-width: thin;
+        scrollbar-color: #c77b91 #f8eaea;
+    }
+
+    .menu-item {
+        flex: 0 0 auto;
+        width: auto;
+        min-width: max-content;
+        min-height: 48px;
+        height: 48px;
+        padding: 0 13px;
+        justify-content: center;
+        gap: 7px;
+        font-size: 13px;
+        border-radius: 0;
+    }
+
+    .menu-item i {
+        width: auto;
+        font-size: 15px;
+    }
+
+    .menu-item.ativo {
+        border-radius: 0;
+    }
+
+    .menu-item.sair {
+        margin-top: 0;
+    }
+
+
+    /* Conteúdo */
+
+    .conteudo {
+        margin-left: 0;
+        width: 100%;
+        min-height: 100vh;
+        padding: 132px 13px 25px;
+    }
+
+    .area-servicos {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        width: 100%;
+    }
+
+    .conteudo-servicos {
+        width: 100%;
+    }
+
+    .titulo-pagina {
+        font-size: 24px;
+        margin-bottom: 20px;
+    }
+
+
+    /* Categorias */
+
+    .categorias-escolha {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 23px;
+    }
+
+    .categoria {
+        width: 50%;
+        min-height: 60px;
+    }
+
+    .nome-categoria {
+        font-size: 17px;
+    }
+
+    .quantidade {
+        font-size: 12px;
+    }
+
+
+    /* Lista */
+
+    .titulo-servicos {
+        font-size: 21px;
+        margin-bottom: 12px;
+    }
+
+    .lista-servicos {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+        padding: 12px;
+    }
+
+
+    /* Cards */
+
+    .servico {
+        min-height: 180px;
+        padding: 12px 10px;
+    }
+
+    .servico h3 {
+        font-size: 15px;
+        line-height: 20px;
+        margin-bottom: 8px;
+    }
+
+    .servico p {
+        font-size: 13px;
+        line-height: 18px;
+        min-height: 36px;
+    }
+
+    .servico > span {
+        font-size: 12px;
+        line-height: 19px;
+    }
+
+    .btn-servico {
+        min-height: 35px;
+        font-size: 13px;
+        line-height: 35px;
+        margin-top: 10px;
+    }
+
+
+    /* Resumo */
+
+    .resumo {
+        width: 100%;
+        margin-top: 0;
+        min-height: auto;
+    }
+
+    .resumo h2 {
+        font-size: 17px;
+        padding: 14px;
+    }
+
+    .nenhum-item {
+        font-size: 14px;
+    }
+
+    .pedido-detalhes strong {
+        font-size: 14px;
+    }
+
+    .pedido-detalhes span {
+        font-size: 13px;
+    }
+
+    .pedido-preco {
+        font-size: 14px;
+    }
+
+    .resumo-item {
+        min-height: 62px;
+    }
+
+    .resumo-texto span,
+    .resumo-texto strong {
+        font-size: 13px;
+    }
+
+    .titulo-total {
+        font-size: 14px;
+    }
+
+    .valor strong {
+        font-size: 21px;
+    }
+
+    .btn-limpar {
+        min-height: 40px;
+        font-size: 14px;
+    }
+
+    .btn-continuar {
+        min-height: 43px;
+        font-size: 15px;
+    }
+
+
+    /* Notificação */
+
+    .notificacao-belleza {
+        top: 12px;
+        right: 12px;
+        width: calc(100% - 24px);
+        padding: 14px;
+    }
+}
+
+
+/* =====================================================
+   CELULARES PEQUENOS
+===================================================== */
+
+@media (max-width: 380px) {
+
+    .conteudo {
+        padding-left: 9px;
+        padding-right: 9px;
+    }
+
+    .menu-item {
+        padding: 0 10px;
+        font-size: 12px;
+    }
+
+    .lista-servicos {
+        padding: 9px;
+        gap: 9px;
+    }
+
+    .servico {
+        min-height: 185px;
+        padding: 10px 8px;
+    }
+
+    .servico h3 {
+        font-size: 14px;
+    }
+
+    .servico p {
+        font-size: 12px;
+    }
+
+    .servico > span {
+        font-size: 11px;
+    }
+
+    .btn-servico {
+        font-size: 12px;
+    }
+
+    .titulo-pagina {
+        font-size: 22px;
+    }
+
+}
+
+
+/* =====================================================
+   CELULAR NA HORIZONTAL
+===================================================== */
+
+@media (max-width: 600px) and (max-height: 500px) {
+
+    .sidebar {
+        position: absolute;
+    }
+
+    .conteudo {
+        padding-top: 125px;
+    }
+
+}

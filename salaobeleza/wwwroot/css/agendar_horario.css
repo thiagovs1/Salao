@@ -1,4 +1,3 @@
-
 * {
     margin: 0;
     padding: 0;
@@ -10,12 +9,14 @@ body {
     color: #30282a;
     font-family: Georgia, "Times New Roman", serif;
     min-height: 100vh;
+    font-size: 16px;
+    line-height: 1.5;
 }
 
 /* SIDEBAR */
 
 .sidebar {
-    width: 190px;
+    width: 210px;
     min-height: 100vh;
     height: 100%;
     position: fixed;
@@ -27,51 +28,6 @@ body {
     background-color: #ffffff;
 }
 
-.notificacao {
-            position: fixed;
-            top: 22px;
-            right: 22px;
-            z-index: 9999;
-            display: flex;
-            align-items: flex-start;
-            gap: 12px;
-            width: min(390px, calc(100% - 32px));
-            padding: 16px 18px;
-            color: #34243a;
-            background: #fff;
-            border-left: 5px solid #8b5cf6;
-            border-radius: 12px;
-            box-shadow: 0 12px 35px #24152b26;
-            opacity: 0;
-            transform: translateY(-12px);
-            pointer-events: none;
-            transition: opacity .25s ease, transform .25s ease;
-        }
-
-        .notificacao.visivel {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .notificacao.erro { border-left-color: #dc4562; }
-        .notificacao.sucesso { border-left-color: #23966b; }
-        .notificacao i { margin-top: 3px; font-size: 20px; }
-        .notificacao strong { display: block; margin-bottom: 4px; }
-        .notificacao p { margin: 0; line-height: 1.45; font-size: 14px; }
-
-        .lista-servicos-resumo {
-            padding-left: 18px;
-            margin: 8px 0 0;
-            color: #5d5064;
-            font-size: 13px;
-            line-height: 1.6;
-        }
-
-        .btn-continuar:disabled {
-            opacity: .65;
-            cursor: not-allowed;
-        }
-        
 .sidebar::before {
     content: "";
     position: absolute;
@@ -89,7 +45,7 @@ body {
 
 .logo-area {
     width: 100%;
-    height: 120px;
+    height: 135px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -97,7 +53,7 @@ body {
 }
 
 .logo-belleza {
-    width: 165px;
+    width: 175px;
     height: auto;
     object-fit: contain;
     display: block;
@@ -105,7 +61,7 @@ body {
 
 .linha-logo {
     height: 4px;
-    width: 174px;
+    width: 185px;
     background: #8d3b5c;
     margin: 0 auto 8px;
 }
@@ -118,22 +74,23 @@ body {
 
 .menu-item {
     width: 100%;
-    min-height: 37px;
+    min-height: 46px;
     display: flex;
     align-items: center;
-    gap: 15px;
-    padding: 8px 10px 8px 18px;
+    gap: 13px;
+    padding: 10px 12px 10px 19px;
     text-decoration: none;
     color: #994e6a;
-    font-size: 14px;
-    transition: 0.2s;
+    font-size: 15px;
+    font-weight: 500;
+    transition: background 0.2s, color 0.2s;
 }
 
 .menu-item i {
-    width: 18px;
+    width: 20px;
     flex-shrink: 0;
     text-align: center;
-    font-size: 16px;
+    font-size: 17px;
 }
 
 .menu-item:hover {
@@ -143,34 +100,88 @@ body {
 .menu-item.ativo {
     background: #8f3d5e;
     color: white;
-    border-radius: 0 4px 4px 0;
+    border-radius: 0 5px 5px 0;
 }
 
 .menu-item.sair {
-    margin-top: 5px;
+    margin-top: 8px;
+}
+
+/* NOTIFICAÇÕES */
+
+.notificacao {
+    position: fixed;
+    top: 22px;
+    right: 22px;
+    z-index: 9999;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    width: min(420px, calc(100% - 32px));
+    padding: 18px 20px;
+    color: #34243a;
+    background: #ffffff;
+    border-left: 5px solid #8b5cf6;
+    border-radius: 12px;
+    box-shadow: 0 12px 35px #24152b26;
+    opacity: 0;
+    transform: translateY(-12px);
+    pointer-events: none;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.notificacao.visivel {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.notificacao.erro {
+    border-left-color: #dc4562;
+}
+
+.notificacao.sucesso {
+    border-left-color: #23966b;
+}
+
+.notificacao i {
+    margin-top: 3px;
+    font-size: 22px;
+}
+
+.notificacao strong {
+    display: block;
+    margin-bottom: 4px;
+    font-size: 16px;
+}
+
+.notificacao p {
+    margin: 0;
+    line-height: 1.5;
+    font-size: 15px;
 }
 
 /* CONTEÚDO */
 
 .conteudo {
-    margin-left: 190px;
+    margin-left: 210px;
     min-height: 100vh;
-    padding: 20px;
+    padding: 28px;
     position: relative;
     overflow: visible;
 }
 
 .titulo-pagina {
     color: #91425f;
-    font-size: 21px;
+    font-size: 29px;
     font-weight: 400;
-    margin-bottom: 17px;
+    margin-bottom: 25px;
+    line-height: 1.3;
 }
 
 .layout-principal {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) 240px;
-    gap: 20px;
+    grid-template-columns: minmax(0, 1fr) 285px;
+    gap: 24px;
     align-items: start;
     width: 100%;
 }
@@ -180,76 +191,84 @@ body {
 }
 
 .cabecalho-calendario {
-    min-height: 52px;
+    min-height: 60px;
     background-color: #f8eaea;
     color: #91425f;
-    border-radius: 4px;
-    padding: 17px 10px;
-    font-size: 13px;
-    margin-bottom: 10px;
+    border-radius: 7px;
+    padding: 18px 16px;
+    font-size: 16px;
+    font-weight: 500;
+    margin-bottom: 15px;
 }
 
 /* CALENDÁRIO E HORÁRIOS */
 
 .area-agendamento {
     display: grid;
-    grid-template-columns: minmax(250px, 352px) minmax(0, 1fr);
-    gap: 14px;
+    grid-template-columns: minmax(280px, 0.9fr) minmax(0, 1.1fr);
+    gap: 18px;
     align-items: stretch;
 }
 
 .calendario,
 .horarios {
     min-width: 0;
-    min-height: 396px;
+    min-height: 440px;
     height: auto;
     background-color: #f8eaea;
-    border-radius: 4px;
-    padding: 13px 14px;
+    border-radius: 7px;
+    padding: 20px 18px;
 }
 
 .calendario h2,
 .horarios h2 {
     color: #91425f;
-    font-size: 18px;
+    font-size: 21px;
     font-weight: 400;
     display: flex;
     align-items: center;
     gap: 12px;
-    margin-bottom: 17px;
+    margin-bottom: 22px;
+    line-height: 1.4;
 }
 
-.calendario h2 i {
-    font-size: 24px;
-    flex-shrink: 0;
-}
-
+.calendario h2 i,
 .horarios h2 i {
     font-size: 25px;
     flex-shrink: 0;
 }
 
+/* MÊS */
+
 .mes {
-    min-height: 28px;
+    min-height: 42px;
     background-color: #f1d2da;
-    border-radius: 3px;
+    border-radius: 5px;
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 8px;
-    padding: 3px 8px;
+    padding: 5px 10px;
     color: #91425f;
-    font-size: 12px;
-    margin-bottom: 13px;
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 17px;
 }
 
 .mes button {
+    width: 36px;
+    height: 34px;
     border: none;
+    border-radius: 5px;
     background: transparent;
     color: #91425f;
     font-size: 18px;
     cursor: pointer;
-    padding: 2px 4px;
+    transition: background 0.2s;
+}
+
+.mes button:hover:not(:disabled) {
+    background: #e9bdca;
 }
 
 .mes button:disabled {
@@ -257,18 +276,21 @@ body {
     cursor: not-allowed;
 }
 
+/* DIAS DA SEMANA */
+
 .dias-semana {
     display: grid;
     grid-template-columns: repeat(7, minmax(0, 1fr));
     text-align: center;
     color: #71475a;
-    font-size: 12px;
-    margin-bottom: 5px;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 8px;
 }
 
 .dias-semana span {
     min-width: 0;
-    height: 24px;
+    height: 30px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -277,13 +299,13 @@ body {
 .dias {
     display: grid;
     grid-template-columns: repeat(7, minmax(0, 1fr));
-    row-gap: 5px;
+    row-gap: 8px;
     text-align: center;
 }
 
 .dia {
-    width: 32px;
-    height: 32px;
+    width: 39px;
+    height: 39px;
     max-width: 100%;
     margin: auto;
     border: none;
@@ -291,7 +313,7 @@ body {
     background: transparent;
     color: #79566a;
     font-family: Georgia, "Times New Roman", serif;
-    font-size: 15px;
+    font-size: 16px;
     cursor: pointer;
     transition: 0.2s;
 }
@@ -307,7 +329,7 @@ body {
 
 .dia.indisponivel {
     background-color: #ffffff;
-    color: #dddddd;
+    color: #b8aeb2;
     cursor: not-allowed;
 }
 
@@ -316,6 +338,7 @@ body {
     background-color: #e9c5d1;
     color: #91425f;
     box-shadow: 0 0 0 2px #d9a9b9;
+    font-weight: bold;
 }
 
 .dia.selecionado:hover {
@@ -327,31 +350,31 @@ body {
 }
 
 .vazio {
-    width: 32px;
-    height: 32px;
+    width: 39px;
+    height: 39px;
 }
 
 /* LEGENDA DO CALENDÁRIO */
 
 .legenda-calendario {
-    margin-top: 15px;
+    margin-top: 23px;
     display: flex;
     flex-direction: column;
-    gap: 7px;
+    gap: 10px;
     color: #604b54;
-    font-size: 11px;
+    font-size: 14px;
 }
 
 .legenda-calendario div,
 .legenda-horarios div {
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 9px;
 }
 
 .bolinha {
-    width: 11px;
-    height: 11px;
+    width: 13px;
+    height: 13px;
     border-radius: 50%;
     display: inline-block;
     flex-shrink: 0;
@@ -367,6 +390,7 @@ body {
 
 .bolinha.clara {
     background-color: #ffffff;
+    border: 1px solid #dfcbd1;
 }
 
 /* HORÁRIOS */
@@ -374,8 +398,8 @@ body {
 .lista-horarios {
     display: flex;
     flex-direction: column;
-    gap: 22px;
-    padding: 0 4px;
+    gap: 28px;
+    padding: 0 5px;
 }
 
 .periodo-horarios {
@@ -385,41 +409,43 @@ body {
 
 .titulo-periodo {
     color: #91425f;
-    font-size: 14px;
+    font-size: 17px;
+    font-weight: 500;
     display: flex;
     align-items: center;
-    gap: 8px;
-    margin-bottom: 10px;
+    gap: 9px;
+    margin-bottom: 13px;
 }
 
 .titulo-periodo i {
-    font-size: 17px;
+    font-size: 19px;
 }
 
 .lista-periodo {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 10px;
+    gap: 12px;
     width: 100%;
 }
 
 .horario {
     width: 100%;
     min-width: 0;
-    min-height: 34px;
-    padding: 5px 3px;
+    min-height: 43px;
+    padding: 8px 5px;
     background-color: #ffffff;
     border: 1px solid #91425f;
-    border-radius: 3px;
+    border-radius: 5px;
     color: #30282a;
     font-family: Georgia, "Times New Roman", serif;
-    font-size: 11px;
+    font-size: 15px;
     cursor: pointer;
     transition: 0.2s;
 }
 
 .horario:hover {
     background-color: #f1d7de;
+    transform: translateY(-1px);
 }
 
 .horario.escolhido-horario,
@@ -427,6 +453,7 @@ body {
     background-color: #e9c5d1;
     color: #91425f;
     border-color: #d9a9b9;
+    font-weight: bold;
 }
 
 .horario:disabled {
@@ -434,14 +461,15 @@ body {
     color: #ffffff;
     border-color: #e3c2aa;
     cursor: not-allowed;
+    transform: none;
 }
 
 .legenda-horarios {
-    margin-top: 25px;
+    margin-top: 30px;
     display: flex;
     flex-direction: column;
-    gap: 8px;
-    font-size: 11px;
+    gap: 11px;
+    font-size: 14px;
     color: #604b54;
 }
 
@@ -461,9 +489,9 @@ body {
     grid-column: 1 / -1;
     text-align: center;
     color: #91425f;
-    font-size: 12px;
-    line-height: 1.5;
-    padding: 15px 5px;
+    font-size: 14px;
+    line-height: 1.6;
+    padding: 20px 8px;
 }
 
 /* RESUMO DO ATENDIMENTO */
@@ -474,7 +502,7 @@ body {
     min-height: 0;
     height: auto;
     background-color: #f8eaea;
-    border-radius: 4px;
+    border-radius: 7px;
     overflow: visible;
     display: flex;
     flex-direction: column;
@@ -482,27 +510,28 @@ body {
 
 .resumo h2 {
     color: #91425f;
-    font-size: 13px;
-    font-weight: 400;
-    padding: 12px 10px 8px;
+    font-size: 19px;
+    font-weight: 500;
+    padding: 19px 16px 13px;
+    line-height: 1.4;
 }
 
 .resumo-item {
-    min-height: 61px;
+    min-height: 76px;
     border-bottom: 1px solid #e4c8ce;
     display: flex;
     align-items: center;
-    padding: 9px 10px;
-    gap: 4px;
+    padding: 13px 14px;
+    gap: 8px;
 }
 
 .resumo-icone {
-    width: 28px;
+    width: 32px;
     flex-shrink: 0;
     color: #91425f;
-    font-size: 17px;
+    font-size: 20px;
     text-align: center;
-    margin-right: 2px;
+    margin-right: 3px;
 }
 
 .resumo-texto {
@@ -510,88 +539,89 @@ body {
     min-width: 0;
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 5px;
     overflow-wrap: anywhere;
 }
 
 .resumo-texto span {
     color: #91425f;
-    font-size: 11px;
+    font-size: 14px;
 }
 
 .resumo-texto strong {
     color: #30282a;
-    font-size: 11px;
-    font-weight: 400;
+    font-size: 14px;
+    font-weight: 500;
     line-height: 1.5;
     overflow-wrap: anywhere;
 }
 
 .lista-servicos-resumo {
-    padding-left: 16px;
+    padding-left: 18px;
     margin: 8px 0 0;
     color: #5d5064;
-    font-size: 11px;
-    line-height: 1.5;
+    font-size: 13px;
+    line-height: 1.6;
     overflow-wrap: anywhere;
 }
 
 .lista-servicos-resumo li {
-    margin-bottom: 5px;
+    margin-bottom: 6px;
 }
 
 .seta {
     color: #8e5b6b;
-    font-size: 23px;
+    font-size: 25px;
     flex-shrink: 0;
 }
 
 /* TOTAL */
 
 .total {
-    padding: 20px 10px 16px;
+    padding: 24px 16px 20px;
 }
 
 .total span {
     display: block;
     color: #91425f;
-    font-size: 12px;
-    margin-bottom: 8px;
+    font-size: 15px;
+    margin-bottom: 9px;
 }
 
 .total strong {
     color: #30282a;
-    font-size: 16px;
-    font-weight: 400;
+    font-size: 23px;
+    font-weight: 600;
 }
 
 /* BOTÕES */
 
 .btn-continuar,
 .btn-adicionar {
-    width: calc(100% - 20px);
-    min-height: 38px;
+    width: calc(100% - 32px);
+    min-height: 47px;
     height: auto;
-    margin-left: 10px;
-    margin-right: 10px;
-    padding: 9px 7px;
-    border-radius: 3px;
+    margin-left: 16px;
+    margin-right: 16px;
+    padding: 11px 10px;
+    border-radius: 5px;
     text-decoration: none;
     display: flex;
     align-items: center;
     justify-content: center;
     text-align: center;
-    gap: 8px;
+    gap: 10px;
     font-family: Georgia, "Times New Roman", serif;
-    font-size: 12px;
+    font-size: 15px;
     line-height: 1.4;
     overflow-wrap: anywhere;
     flex-shrink: 0;
+    transition: background 0.2s, color 0.2s;
 }
 
 .btn-continuar {
     margin-top: 0;
-    margin-bottom: 9px;
+    margin-bottom: 12px;
     background-color: #8e3d61;
     color: #ffffff;
     font-weight: bold;
@@ -599,12 +629,12 @@ body {
     cursor: pointer;
 }
 
-.btn-continuar:hover {
+.btn-continuar:hover:not(:disabled) {
     background-color: #71314d;
 }
 
 .btn-continuar span {
-    font-size: 16px;
+    font-size: 19px;
 }
 
 .btn-continuar:disabled {
@@ -613,7 +643,7 @@ body {
 }
 
 .btn-adicionar {
-    margin-bottom: 12px;
+    margin-bottom: 16px;
     background-color: #ffffff;
     color: #91425f;
     border: 1px solid #91425f;
@@ -624,22 +654,22 @@ body {
     color: #ffffff;
 }
 
-/* FRASE LATERAL
-   Mantida no fluxo para não cobrir os botões. */
+/* FRASE LATERAL */
 
 .frase-lateral {
     position: relative;
     right: auto;
     top: auto;
-    width: 240px;
-    min-height: 140px;
+    width: 285px;
+    min-height: 155px;
     height: auto;
-    margin: 24px 0 20px auto;
+    margin: 28px 0 20px auto;
     background-color: #f8eaea;
     color: #91425f;
     text-align: center;
     overflow: hidden;
-    padding: 25px 10px 20px;
+    padding: 25px 12px 22px;
+    border-radius: 6px;
 }
 
 .frase-lateral::before {
@@ -647,7 +677,7 @@ body {
     position: absolute;
     left: 8px;
     top: 25px;
-    font-size: 48px;
+    font-size: 52px;
     opacity: 0.5;
     transform: rotate(-20deg);
     pointer-events: none;
@@ -658,72 +688,84 @@ body {
     position: absolute;
     right: 8px;
     bottom: 3px;
-    font-size: 48px;
+    font-size: 52px;
     opacity: 0.5;
     transform: rotate(160deg);
     pointer-events: none;
 }
 
 .frase-lateral span {
-    font-size: 25px;
+    font-size: 28px;
 }
 
 .frase-lateral p {
-    margin-top: 7px;
-    font-size: 13px;
+    margin-top: 8px;
+    font-size: 16px;
     font-style: italic;
-    line-height: 21px;
+    line-height: 25px;
 }
 
-/* TELAS MENORES */
+/* TABLETS E NOTEBOOKS MENORES */
 
 @media (max-width: 1200px) {
     .conteudo {
-        padding: 18px;
+        padding: 22px;
     }
 
     .layout-principal {
-        grid-template-columns: minmax(0, 1fr) 220px;
-        gap: 14px;
+        grid-template-columns: minmax(0, 1fr) 260px;
+        gap: 16px;
     }
 
     .area-agendamento {
-        grid-template-columns: minmax(230px, 0.9fr) minmax(0, 1.1fr);
-        gap: 10px;
+        grid-template-columns: minmax(250px, 0.9fr) minmax(0, 1.1fr);
+        gap: 12px;
     }
 
     .calendario,
     .horarios {
-        padding: 12px 10px;
+        padding: 16px 12px;
     }
 
     .calendario h2,
     .horarios h2 {
-        font-size: 16px;
-        gap: 8px;
+        font-size: 19px;
+        gap: 9px;
     }
 
     .lista-periodo {
-        gap: 8px;
+        gap: 9px;
     }
 
     .frase-lateral {
-        width: 220px;
+        width: 260px;
     }
 }
 
-@media (max-width: 900px) {
+/* TABLETS */
+
+@media (max-width: 950px) {
     .sidebar {
-        width: 160px;
+        width: 175px;
+    }
+
+    .logo-area {
+        height: 115px;
     }
 
     .logo-belleza {
-        width: 140px;
+        width: 150px;
+    }
+
+    .menu-item {
+        font-size: 14px;
+        gap: 10px;
+        padding-left: 14px;
     }
 
     .conteudo {
-        margin-left: 160px;
-        padding: 16px;
+        margin-left: 175px;
+        padding: 20px;
     }
 
     .layout-principal {
@@ -731,7 +773,12 @@ body {
     }
 
     .area-agendamento {
-        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .calendario,
+    .horarios {
+        min-height: 420px;
     }
 
     .resumo {
@@ -745,6 +792,8 @@ body {
     }
 }
 
+/* CELULARES */
+
 @media (max-width: 600px) {
     .sidebar {
         position: relative;
@@ -755,127 +804,261 @@ body {
     }
 
     .logo-area {
-        height: 85px;
+        height: 90px;
+        padding: 10px;
     }
 
     .logo-belleza {
-        width: 125px;
-        max-height: 75px;
+        width: 135px;
+        max-height: 80px;
     }
 
     .menu {
         display: grid;
         grid-template-columns: repeat(2, minmax(0, 1fr));
-        padding-bottom: 8px;
+        padding: 0 8px 10px;
+        gap: 3px;
     }
 
     .menu-item {
-        min-height: 40px;
-        padding: 8px;
-        gap: 8px;
-        font-size: 12px;
+        min-height: 45px;
+        padding: 8px 7px;
+        gap: 7px;
+        font-size: 13px;
+        border-radius: 4px;
     }
 
     .menu-item i {
-        width: 16px;
-        font-size: 14px;
+        width: 17px;
+        font-size: 15px;
+    }
+
+    .menu-item.ativo {
+        border-radius: 4px;
     }
 
     .conteudo {
         margin-left: 0;
-        padding: 16px 12px;
+        padding: 20px 14px;
     }
 
     .titulo-pagina {
-        font-size: 20px;
+        font-size: 25px;
+        margin-bottom: 20px;
     }
 
     .cabecalho-calendario {
-        padding: 14px 10px;
+        padding: 15px 12px;
+        min-height: auto;
+        font-size: 15px;
         line-height: 1.5;
+    }
+
+    .layout-principal {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 16px;
     }
 
     .area-agendamento {
         grid-template-columns: minmax(0, 1fr);
+        gap: 15px;
     }
 
     .calendario,
     .horarios {
         min-height: 0;
-        padding: 15px 12px;
+        padding: 18px 14px;
     }
 
     .calendario h2,
     .horarios h2 {
-        font-size: 17px;
+        font-size: 20px;
+        margin-bottom: 19px;
+    }
+
+    .mes {
+        min-height: 43px;
+        font-size: 16px;
+    }
+
+    .dias-semana {
+        font-size: 13px;
+    }
+
+    .dias {
+        row-gap: 9px;
     }
 
     .dia {
-        width: 34px;
-        height: 34px;
+        width: 40px;
+        height: 40px;
+        font-size: 16px;
     }
 
     .vazio {
-        width: 34px;
-        height: 34px;
+        width: 40px;
+        height: 40px;
+    }
+
+    .legenda-calendario {
+        margin-top: 20px;
+        font-size: 13px;
     }
 
     .lista-horarios {
-        gap: 20px;
+        gap: 23px;
         padding: 0 3px;
+    }
+
+    .titulo-periodo {
+        font-size: 16px;
     }
 
     .lista-periodo {
         grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 10px;
+        gap: 11px;
     }
 
     .horario {
-        min-height: 38px;
-        font-size: 12px;
+        min-height: 45px;
+        font-size: 14px;
+        padding: 8px 4px;
     }
 
     .legenda-horarios {
-        margin-top: 20px;
+        margin-top: 23px;
+        font-size: 13px;
+    }
+
+    .mensagem-horario {
+        font-size: 14px;
     }
 
     .resumo {
-        margin-top: 4px;
+        margin-top: 3px;
+    }
+
+    .resumo h2 {
+        font-size: 19px;
+        padding: 17px 14px 12px;
     }
 
     .resumo-item {
-        padding: 12px 10px;
+        padding: 13px 12px;
+        min-height: 75px;
     }
 
-    .resumo-texto span,
+    .resumo-texto span {
+        font-size: 13px;
+    }
+
     .resumo-texto strong {
-        font-size: 12px;
+        font-size: 14px;
     }
 
     .lista-servicos-resumo {
-        font-size: 12px;
+        font-size: 13px;
     }
 
     .total {
-        padding: 18px 12px;
+        padding: 20px 14px;
+    }
+
+    .total span {
+        font-size: 14px;
+    }
+
+    .total strong {
+        font-size: 23px;
     }
 
     .btn-continuar,
     .btn-adicionar {
-        width: calc(100% - 24px);
-        margin-left: 12px;
-        margin-right: 12px;
-        min-height: 42px;
-        font-size: 13px;
+        width: calc(100% - 28px);
+        margin-left: 14px;
+        margin-right: 14px;
+        min-height: 48px;
+        font-size: 15px;
     }
 
     .btn-adicionar {
-        margin-bottom: 12px;
+        margin-bottom: 14px;
     }
 
     .frase-lateral {
-        margin: 20px auto;
+        margin: 22px auto;
         width: 100%;
         max-width: 300px;
+    }
+
+    .notificacao {
+        top: 12px;
+        right: 12px;
+        width: calc(100% - 24px);
+        padding: 15px;
+    }
+}
+
+/* CELULARES PEQUENOS */
+
+@media (max-width: 380px) {
+    .conteudo {
+        padding: 16px 10px;
+    }
+
+    .titulo-pagina {
+        font-size: 22px;
+    }
+
+    .menu-item {
+        font-size: 12px;
+        gap: 5px;
+    }
+
+    .menu-item i {
+        font-size: 14px;
+        width: 15px;
+    }
+
+    .calendario,
+    .horarios {
+        padding: 15px 10px;
+    }
+
+    .dia {
+        width: 35px;
+        height: 35px;
+        font-size: 14px;
+    }
+
+    .vazio {
+        width: 35px;
+        height: 35px;
+    }
+
+    .lista-periodo {
+        gap: 7px;
+    }
+
+    .horario {
+        font-size: 13px;
+    }
+}
+
+/* ACESSIBILIDADE */
+
+button:focus-visible,
+a:focus-visible {
+    outline: 3px solid #b66b88;
+    outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
     }
 }

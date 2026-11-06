@@ -206,11 +206,6 @@ public class SelecaoController : ControllerBase
             mensagem = "Profissional removida da seleção."
         });
     }
-
-    // =========================================
-    // MÉTODOS AUXILIARES DA SELECTION
-    // =========================================
-
     private List<ItemSelecao> ObterSelecao()
     {
         var json = HttpContext.Session.GetString(ChaveSelecao);
@@ -242,10 +237,6 @@ public class SelecaoController : ControllerBase
     }
 }
 
-// =========================================
-// MODELO DOS ITENS SELECIONADOS
-// =========================================
-
 public class ItemSelecao
 {
     public int Id { get; set; }
@@ -258,10 +249,6 @@ public class ItemSelecao
 
     public string Tipo { get; set; } = "";
 }
-
-// =========================================
-// MODELO DA PROFISSIONAL SELECIONADA
-// =========================================
 
 public class ProfissionalSelecionado
 {

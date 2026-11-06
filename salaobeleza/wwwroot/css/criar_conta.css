@@ -1,3 +1,4 @@
+
 * {
     margin: 0;
     padding: 0;
@@ -6,7 +7,6 @@
 
 body {
     min-height: 100vh;
-
     font-family: Georgia, "Times New Roman", serif;
 
     background:
@@ -23,229 +23,277 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+    padding: 25px;
 }
 
-
-/* CARD */
-
 .cadastro-card {
-    width: 495px;
+    width: 500px;
+    max-width: 100%;
 
     background: rgba(255, 255, 255, 0.97);
 
-    border-radius: 7px;
+    border-radius: 9px;
+    padding: 30px 50px 28px;
 
-    padding: 25px 50px 18px;
-
-    box-shadow:
-        0 10px 35px rgba(0, 0, 0, 0.20);
+    box-shadow: 0 10px 35px rgba(0, 0, 0, 0.20);
 }
-
-
-
 
 .logo-area {
     text-align: center;
 }
 
 .logo {
-    width: 160px;
-    height: 160px;
+    width: 150px;
+    height: 150px;
 
     object-fit: contain;
-
     display: block;
-
-    margin: 0 auto 2px;
+    margin: 0 auto 5px;
 }
-
-
-
 
 .texto-cadastro {
     text-align: center;
-
     color: #4f4643;
 
-    font-size: 12px;
+    font-size: 17px;
 
     margin-top: 10px;
-    margin-bottom: 20px;
+    margin-bottom: 25px;
 }
 
-
-
 .campo {
-    margin-bottom: 21px;
+    margin-bottom: 19px;
 }
 
 .campo label {
     display: block;
 
     color: #403734;
+    font-size: 16px;
 
-    font-size: 12px;
-
-    margin-bottom: 2px;
+    margin-bottom: 7px;
 }
 
 .campo input {
     width: 100%;
-
-    height: 16px;
+    height: 43px;
 
     border: 1px solid #8f8987;
-
-    border-radius: 1px;
+    border-radius: 4px;
 
     background: #ffffff;
 
-    padding: 1px 4px;
+    padding: 8px 12px;
 
     font-family: Georgia, "Times New Roman", serif;
-
-    font-size: 11px;
+    font-size: 15px;
 
     outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
 }
 
 .campo input:focus {
     border-color: #863e5c;
+    box-shadow: 0 0 0 3px rgba(134, 62, 92, 0.12);
 }
 
 .campo input::placeholder {
     color: #77716f;
+    font-size: 14px;
 }
 
+/* Campo de senha e botão do olho */
 
+.senha-container {
+    position: relative;
+    width: 100%;
+}
 
+.senha-container input {
+    padding-right: 48px;
+}
+
+.btn-olho {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+
+    border: none;
+    background: transparent;
+
+    cursor: pointer;
+    padding: 5px;
+
+    color: #444;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-olho svg {
+    width: 23px;
+    height: 23px;
+
+    stroke: currentColor;
+    fill: none;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.btn-olho:hover {
+    color: #863e5c;
+}
+
+/* Lembrar-me */
 
 .lembrar {
     display: flex;
-
     align-items: center;
-
-    gap: 3px;
+    gap: 7px;
 
     color: #863e5c;
+    font-size: 14px;
 
-    font-size: 11px;
+    margin-top: 0;
+    margin-bottom: 18px;
 
-    margin-top: -8px;
-
-    margin-bottom: 17px;
+    cursor: pointer;
 }
 
 .lembrar input {
-    width: 11px;
-    height: 11px;
+    width: 16px;
+    height: 16px;
 
     accent-color: #863e5c;
+    cursor: pointer;
 }
 
+/* Mensagem */
 
+#mensagemCadastro {
+    margin-top: 10px;
+    margin-bottom: 12px;
 
+    text-align: center;
+    font-size: 14px;
+    min-height: 20px;
+}
+
+/* Botão criar conta */
 
 .btn-criar {
     width: 100%;
+    height: 43px;
 
-    height: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
 
     border: none;
-
-    border-radius: 2px;
+    border-radius: 4px;
 
     background: #863e5c;
-
     color: #ffffff;
 
     font-family: Georgia, "Times New Roman", serif;
-
-    font-size: 11px;
-
+    font-size: 16px;
     font-weight: bold;
 
     cursor: pointer;
+    transition: background 0.2s;
 }
 
 .btn-criar:hover {
     background: #71334d;
 }
 
+.btn-criar:disabled {
+    opacity: 0.75;
+    cursor: not-allowed;
+}
 
+/* Carregamento */
 
+.spinner {
+    width: 18px;
+    height: 18px;
+
+    border: 2px solid rgba(255, 255, 255, 0.4);
+    border-top-color: white;
+    border-radius: 50%;
+
+    animation: girar 0.7s linear infinite;
+}
+
+@keyframes girar {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Separador */
 
 .ou {
     text-align: center;
-
-    margin: 17px 0 16px;
+    margin: 21px 0;
 }
 
 .ou span {
     color: #403734;
-
-    font-size: 12px;
+    font-size: 15px;
 }
 
-
-
+/* Login */
 
 .login {
     text-align: center;
-
     color: #403734;
-
-    font-size: 11px;
+    font-size: 14px;
 }
 
 .login a {
     color: #863e5c;
-
-    font-size: 11px;
-
+    font-size: 14px;
     font-weight: bold;
-
     text-decoration: underline;
 }
 
-
- .btn-criar {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-        }
-
-        .btn-criar:disabled {
-            opacity: 0.75;
-            cursor: not-allowed;
-        }
-
-        .spinner {
-            width: 17px;
-            height: 17px;
-            border: 2px solid rgba(255, 255, 255, 0.4);
-            border-top-color: white;
-            border-radius: 50%;
-            animation: girar 0.7s linear infinite;
-        }
-
-        @keyframes girar {
-            to {
-                transform: rotate(360deg);
-            }
-        }
+/* Celular */
 
 @media (max-width: 600px) {
-
     body {
-        padding: 20px;
+        padding: 18px;
+        align-items: flex-start;
     }
 
     .cadastro-card {
         width: 100%;
-
-        padding: 25px 30px 20px;
+        padding: 25px 25px;
+        margin: auto 0;
     }
 
+    .logo {
+        width: 125px;
+        height: 125px;
+    }
+
+    .texto-cadastro {
+        font-size: 15px;
+    }
+
+    .campo label {
+        font-size: 15px;
+    }
+
+    .campo input {
+        height: 44px;
+    }
+
+    .lembrar {
+        font-size: 13px;
+    }
 }

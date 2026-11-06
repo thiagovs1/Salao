@@ -1,22 +1,32 @@
 
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Meus agendamentos - Belleza</title>
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
     <link rel="stylesheet" href="../css/meus_agendamentos.css">
 </head>
 
 <body>
+
     <aside class="sidebar">
         <div class="logo-area">
-            <img src="../imagens/salao_belleza.png" alt="Belleza" class="logo-belleza">
+            <img
+                src="../imagens/salao_belleza.png"
+                alt="Logo Belleza"
+                class="logo-belleza">
         </div>
 
-        <nav class="menu">
+        <nav class="menu" aria-label="Menu principal">
+
             <a href="tela_inicial.html" class="menu-item">
                 <i class="fa-solid fa-house"></i>
                 <span>Início</span>
@@ -37,14 +47,12 @@
                 <span>Agendar horário</span>
             </a>
 
-            <a href="meus_agendamentos.html" class="menu-item ativo">
+            <a
+                href="meus_agendamentos.html"
+                class="menu-item ativo"
+                aria-current="page">
                 <i class="fa-regular fa-calendar"></i>
                 <span>Meus agendamentos</span>
-            </a>
-
-            <a href="#" class="menu-item">
-                <i class="fa-solid fa-tags"></i>
-                <span>Promoções</span>
             </a>
 
             <a href="avaliacoes.html" class="menu-item">
@@ -57,69 +65,127 @@
                 <span>Minha Conta</span>
             </a>
 
-            <a href="#" class="menu-item sair">
-                <i class="fa-solid fa-arrow-right-from-bracket"></i>
-                <span>Sair</span>
-            </a>
         </nav>
     </aside>
 
     <main class="conteudo">
+
         <section class="coluna-esquerda">
+
             <div class="promocao">
+
                 <div class="texto-promocao">
                     <h2>Promoção especial</h2>
                     <h1>10 % &nbsp;OFF</h1>
-                    <p>em todos os nossos serviços<br>de cabelo</p>
+                    <p>
+                        em todos os nossos serviços<br>
+                        de cabelo
+                    </p>
                 </div>
 
-                <img src="/imagens/promocao.png" alt="Promoção">
+                <img src="/imagens/promocao.png" alt="Promoção especial">
 
-                <a href="pagina_promocao.html" class="botao-promocao">
+                <a href="servicos.html" class="botao-promocao">
                     Aproveite agora <span>➜</span>
                 </a>
+
             </div>
 
             <div class="frase">
                 <span class="coracao">♥</span>
-                <p>Cuidar de você<br>é sempre uma boa ideia</p>
+                <p>
+                    Cuidar de você<br>
+                    é sempre uma boa ideia
+                </p>
             </div>
 
             <div class="cortes">
-                <img src="/imagens/beatriz.png" alt="Cortes">
+
+                <img src="/imagens/beatriz.png" alt="Inspiração de cortes de cabelo">
 
                 <div class="texto-cortes">
-                    <h2>Cortes para<br>todo tipo de<br>cabelos</h2>
-                    <a href="pagina_promocao.html" class="botao-cortes">Venha conferir</a>
+                    <h2>
+                        Cortes para<br>
+                        todo tipo de<br>
+                        cabelos
+                    </h2>
+
+                    <a href="servicos.html" class="botao-cortes">
+                        Venha conferir
+                    </a>
                 </div>
+
             </div>
+
         </section>
 
         <section class="agendamentos">
+
             <h1>Meus agendamentos</h1>
 
-            <div class="filtros">
-                <button type="button" class="filtro todos ativo-filtro" data-filtro="Todos">Todos</button>
-                <button type="button" class="filtro" data-filtro="Aberto">Abertos</button>
-                <button type="button" class="filtro" data-filtro="Confirmado">Confirmados</button>
-                <button type="button" class="filtro" data-filtro="Cancelado">Cancelados</button>
+            <div class="filtros" aria-label="Filtrar agendamentos">
+
+                <button
+                    type="button"
+                    class="filtro todos ativo-filtro"
+                    data-filtro="Todos"
+                    aria-pressed="true">
+                    Todos
+                </button>
+
+                <button
+                    type="button"
+                    class="filtro"
+                    data-filtro="Aberto"
+                    aria-pressed="false">
+                    Abertos
+                </button>
+
+                <button
+                    type="button"
+                    class="filtro"
+                    data-filtro="Confirmado"
+                    aria-pressed="false">
+                    Confirmados
+                </button>
+
+                <button
+                    type="button"
+                    class="filtro"
+                    data-filtro="Cancelado"
+                    aria-pressed="false">
+                    Cancelados
+                </button>
+
             </div>
 
-            <div id="lista-agendamentos" class="lista-agendamentos"></div>
+            <div
+                id="lista-agendamentos"
+                class="lista-agendamentos"
+                aria-live="polite">
+            </div>
 
-            <div id="sem-agendamento" class="sem-agendamento" style="display:none">
+            <div
+                id="sem-agendamento"
+                class="sem-agendamento"
+                style="display: none;">
+
                 <h2>Nenhum agendamento encontrado</h2>
-                <p>Você ainda não realizou nenhum agendamento</p>
+
+                <p>Você ainda não realizou nenhum agendamento.</p>
 
                 <a href="agendar_horario.html" class="botao-agendar">
                     Agendar horário <span>➜</span>
                 </a>
+
             </div>
 
             <div id="mensagem-erro" class="mensagem-erro">
                 Não foi possível carregar seus agendamentos.
             </div>
+
         </section>
+
     </main>
 
     <script>
@@ -136,12 +202,17 @@
             const configuracoes = {
                 sucesso: { icone: "✓", titulo: "Tudo certo!" },
                 aviso: { icone: "!", titulo: "Atenção" },
-                erro: { icone: "×", titulo: "Não foi possível concluir" }
+                erro: {
+                    icone: "×",
+                    titulo: "Não foi possível concluir"
+                }
             };
 
             const config = configuracoes[tipo] || configuracoes.aviso;
+
             const notificacao = document.createElement("div");
             notificacao.className = "notificacao-belleza";
+            notificacao.setAttribute("role", "alert");
 
             const icone = document.createElement("div");
             icone.className = "icone";
@@ -154,6 +225,7 @@
             titulo.textContent = config.titulo;
 
             const descricao = document.createElement("span");
+
             descricao.textContent = String(mensagem)
                 .replace(/https?:\/\/\S+/gi, "o servidor")
                 .replace(/\blocalhost(?::\d+)?\b/gi, "o servidor")
@@ -164,32 +236,45 @@
             fechar.type = "button";
             fechar.textContent = "×";
             fechar.setAttribute("aria-label", "Fechar notificação");
-            fechar.addEventListener("click", () => notificacao.remove());
+
+            fechar.addEventListener("click", () => {
+                notificacao.remove();
+            });
 
             texto.append(titulo, descricao);
             notificacao.append(icone, texto, fechar);
+
             document.body.appendChild(notificacao);
 
-            temporizadorNotificacao = setTimeout(() => notificacao.remove(), 4500);
+            temporizadorNotificacao = setTimeout(() => {
+                notificacao.remove();
+            }, 4500);
         }
 
         function confirmarCancelamento() {
             return new Promise(resolve => {
+
                 const fundo = document.createElement("div");
                 fundo.className = "confirmacao-fundo";
 
                 const caixa = document.createElement("div");
                 caixa.className = "confirmacao-caixa";
 
+                caixa.setAttribute("role", "dialog");
+                caixa.setAttribute("aria-modal", "true");
+                caixa.setAttribute("aria-labelledby", "titulo-confirmacao");
+
                 const icone = document.createElement("div");
                 icone.className = "confirmacao-icone";
                 icone.innerHTML = '<i class="fa-regular fa-calendar-xmark"></i>';
 
                 const titulo = document.createElement("h2");
+                titulo.id = "titulo-confirmacao";
                 titulo.textContent = "Cancelar agendamento?";
 
                 const mensagem = document.createElement("p");
-                mensagem.textContent = "Tem certeza de que deseja cancelar este agendamento? Essa ação alterará o status da sua reserva.";
+                mensagem.textContent =
+                    "Tem certeza de que deseja cancelar este agendamento? Essa ação alterará o status da sua reserva.";
 
                 const botoes = document.createElement("div");
                 botoes.className = "confirmacao-botoes";
@@ -209,16 +294,24 @@
                     resolve(resultado);
                 }
 
-                voltar.addEventListener("click", () => finalizar(false));
-                confirmar.addEventListener("click", () => finalizar(true));
+                voltar.addEventListener("click", () => {
+                    finalizar(false);
+                });
+
+                confirmar.addEventListener("click", () => {
+                    finalizar(true);
+                });
 
                 fundo.addEventListener("click", evento => {
-                    if (evento.target === fundo) finalizar(false);
+                    if (evento.target === fundo) {
+                        finalizar(false);
+                    }
                 });
 
                 botoes.append(voltar, confirmar);
                 caixa.append(icone, titulo, mensagem, botoes);
                 fundo.appendChild(caixa);
+
                 document.body.appendChild(fundo);
 
                 confirmar.focus();
@@ -232,6 +325,7 @@
 
             lista.innerHTML = "";
             lista.style.display = "flex";
+
             semAgendamento.style.display = "none";
             mensagemErro.style.display = "none";
 
@@ -246,17 +340,27 @@
                 }
 
                 if (!resposta.ok) {
-                    throw new Error("Não foi possível carregar seus agendamentos.");
+                    throw new Error(
+                        "Não foi possível carregar seus agendamentos."
+                    );
                 }
 
                 agendamentos = await resposta.json();
+
                 mostrarAgendamentos();
+
             } catch (erro) {
                 console.error("Erro ao carregar agendamentos:", erro);
+
                 lista.innerHTML = "";
                 lista.style.display = "none";
+
                 mensagemErro.style.display = "block";
-                mostrarNotificacao("Não foi possível carregar seus agendamentos. Tente novamente.", "erro");
+
+                mostrarNotificacao(
+                    "Não foi possível carregar seus agendamentos. Tente novamente.",
+                    "erro"
+                );
             }
         }
 
@@ -269,7 +373,8 @@
             const filtrados = filtroAtual === "Todos"
                 ? agendamentos
                 : agendamentos.filter(agendamento =>
-                    String(agendamento.status).toLowerCase() === filtroAtual.toLowerCase()
+                    String(agendamento.status).toLowerCase() ===
+                    filtroAtual.toLowerCase()
                 );
 
             if (filtrados.length === 0) {
@@ -281,10 +386,12 @@
 
                 if (agendamentos.length === 0) {
                     titulo.textContent = "Nenhum agendamento encontrado";
-                    descricao.textContent = "Você ainda não realizou nenhum agendamento.";
+                    descricao.textContent =
+                        "Você ainda não realizou nenhum agendamento.";
                 } else {
                     titulo.textContent = "Nenhum resultado para este filtro";
-                    descricao.textContent = "Não há agendamentos com esse status.";
+                    descricao.textContent =
+                        "Não há agendamentos com esse status.";
                 }
 
                 return;
@@ -303,7 +410,9 @@
             card.className = "card-agendamento";
 
             const data = new Date(agendamento.dataHora);
+
             const dataFormatada = data.toLocaleDateString("pt-BR");
+
             const horarioFormatado = data.toLocaleTimeString("pt-BR", {
                 hour: "2-digit",
                 minute: "2-digit"
@@ -318,9 +427,11 @@
             if (statusNormalizado === "confirmado") {
                 classeStatus = "status-confirmado";
                 textoStatus = "Confirmado";
+
             } else if (statusNormalizado === "cancelado") {
                 classeStatus = "status-cancelado";
                 textoStatus = "Cancelado";
+
             } else if (statusNormalizado === "aberto") {
                 textoStatus = "Aberto";
             }
@@ -340,20 +451,27 @@
 
             const linhaData = document.createElement("p");
             linhaData.innerHTML = "<strong>Data:</strong> ";
-            linhaData.appendChild(document.createTextNode(dataFormatada));
+            linhaData.appendChild(
+                document.createTextNode(dataFormatada)
+            );
 
             const linhaHorario = document.createElement("p");
             linhaHorario.innerHTML = "<strong>Horário:</strong> ";
-            linhaHorario.appendChild(document.createTextNode(horarioFormatado));
+            linhaHorario.appendChild(
+                document.createTextNode(horarioFormatado)
+            );
 
             const linhaValor = document.createElement("p");
             linhaValor.innerHTML = "<strong>Valor:</strong> ";
-            linhaValor.appendChild(document.createTextNode(
-                Number(agendamento.preco || 0).toLocaleString("pt-BR", {
-                    style: "currency",
-                    currency: "BRL"
-                })
-            ));
+
+            linhaValor.appendChild(
+                document.createTextNode(
+                    Number(agendamento.preco || 0).toLocaleString("pt-BR", {
+                        style: "currency",
+                        currency: "BRL"
+                    })
+                )
+            );
 
             dados.append(titulo, linhaData, linhaHorario, linhaValor);
             informacoes.append(icone, dados);
@@ -364,32 +482,41 @@
             const statusElemento = document.createElement("span");
             statusElemento.className = `status ${classeStatus}`;
             statusElemento.textContent = textoStatus;
+
             acoes.appendChild(statusElemento);
 
             if (statusNormalizado === "aberto") {
                 const botaoCancelar = document.createElement("button");
+
                 botaoCancelar.type = "button";
                 botaoCancelar.className = "botao-cancelar";
                 botaoCancelar.textContent = "Cancelar";
+
                 botaoCancelar.addEventListener("click", () => {
                     cancelarAgendamento(agendamento.id);
                 });
+
                 acoes.appendChild(botaoCancelar);
             }
 
             card.append(informacoes, acoes);
+
             return card;
         }
 
         async function cancelarAgendamento(id) {
             const confirmou = await confirmarCancelamento();
+
             if (!confirmou) return;
 
             try {
-                const resposta = await fetch(`${API_URL}/agendamentos/${id}/cancelar`, {
-                    method: "PUT",
-                    credentials: "include"
-                });
+                const resposta = await fetch(
+                    `${API_URL}/agendamentos/${id}/cancelar`,
+                    {
+                        method: "PUT",
+                        credentials: "include"
+                    }
+                );
 
                 if (resposta.status === 401) {
                     window.location.href = "login_cliente.html";
@@ -398,33 +525,52 @@
 
                 if (!resposta.ok) {
                     const erro = await resposta.json().catch(() => ({}));
-                    throw new Error(erro.mensagem || "Não foi possível cancelar o agendamento.");
+
+                    throw new Error(
+                        erro.mensagem ||
+                        "Não foi possível cancelar o agendamento."
+                    );
                 }
 
-                mostrarNotificacao("Seu agendamento foi cancelado.", "sucesso");
+                mostrarNotificacao(
+                    "Seu agendamento foi cancelado.",
+                    "sucesso"
+                );
+
                 await carregarAgendamentos();
+
             } catch (erro) {
                 console.error("Erro ao cancelar agendamento:", erro);
+
                 mostrarNotificacao(
-                    erro.message || "Ocorreu um erro ao cancelar o agendamento. Tente novamente.",
+                    erro.message ||
+                    "Ocorreu um erro ao cancelar o agendamento. Tente novamente.",
                     "erro"
                 );
             }
         }
 
         document.querySelectorAll(".filtro").forEach(botao => {
+
             botao.addEventListener("click", function () {
+
                 document.querySelectorAll(".filtro").forEach(outro => {
                     outro.classList.remove("ativo-filtro");
+                    outro.setAttribute("aria-pressed", "false");
                 });
 
                 this.classList.add("ativo-filtro");
+                this.setAttribute("aria-pressed", "true");
+
                 filtroAtual = this.dataset.filtro;
+
                 mostrarAgendamentos();
             });
+
         });
 
         carregarAgendamentos();
     </script>
+
 </body>
 </html>
