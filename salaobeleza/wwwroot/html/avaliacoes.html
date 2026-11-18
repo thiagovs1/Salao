@@ -35,6 +35,7 @@
             </a>
             <a href="minha_conta.html" class="menu-item">
                 <i class="fa-regular fa-circle-user"></i><span>Minha conta</span>
+            </a>
         </nav>
     </aside>
 
@@ -43,13 +44,19 @@
             <div>
                 <span class="etiqueta">SUA OPINIÃO IMPORTA</span>
                 <h1 class="titulo-pagina">Avaliações</h1>
-                <p class="descricao-pagina">Compartilhe sua experiência e conheça as opiniões dos nossos clientes.</p>
+                <p class="descricao-pagina">
+                    Compartilhe sua experiência e conheça as opiniões dos nossos clientes.
+                </p>
             </div>
-            <div class="icone-titulo"><i class="fa-regular fa-star"></i></div>
+            <div class="icone-titulo">
+                <i class="fa-regular fa-star"></i>
+            </div>
         </header>
 
         <section class="resumo-avaliacoes">
-            <div class="resumo-icone"><i class="fa-solid fa-heart"></i></div>
+            <div class="resumo-icone">
+                <i class="fa-solid fa-heart"></i>
+            </div>
             <div>
                 <h2>Um espaço para sua opinião</h2>
                 <p>Seu comentário ajuda outras pessoas a conhecerem o Belleza.</p>
@@ -87,8 +94,10 @@
             <div id="erroLista" class="estado-lista erro-lista" hidden>
                 <i class="fa-solid fa-cloud-arrow-down"></i>
                 <h3>Não conseguimos carregar as avaliações</h3>
-                <p>Tente novamente em instantes.</p>
-                <button class="btn-secundario" id="btnTentarNovamente" type="button">Tentar novamente</button>
+                <p id="mensagemErro">Verifique sua conexão e tente novamente.</p>
+                <button class="btn-secundario" id="btnTentarNovamente" type="button">
+                    Tentar novamente
+                </button>
             </div>
         </section>
     </main>
@@ -105,19 +114,34 @@
 
             <form id="formAvaliacao">
                 <label class="label-formulario">Sua nota</label>
+
                 <div class="seletor-estrelas" id="seletorEstrelas" role="radiogroup" aria-label="Nota de 1 a 5">
-                    <button type="button" data-nota="1" aria-label="1 estrela"><i class="fa-regular fa-star"></i></button>
-                    <button type="button" data-nota="2" aria-label="2 estrelas"><i class="fa-regular fa-star"></i></button>
-                    <button type="button" data-nota="3" aria-label="3 estrelas"><i class="fa-regular fa-star"></i></button>
-                    <button type="button" data-nota="4" aria-label="4 estrelas"><i class="fa-regular fa-star"></i></button>
-                    <button type="button" data-nota="5" aria-label="5 estrelas"><i class="fa-regular fa-star"></i></button>
+                    <button type="button" data-nota="1" aria-label="1 estrela">
+                        <i class="fa-regular fa-star"></i>
+                    </button>
+                    <button type="button" data-nota="2" aria-label="2 estrelas">
+                        <i class="fa-regular fa-star"></i>
+                    </button>
+                    <button type="button" data-nota="3" aria-label="3 estrelas">
+                        <i class="fa-regular fa-star"></i>
+                    </button>
+                    <button type="button" data-nota="4" aria-label="4 estrelas">
+                        <i class="fa-regular fa-star"></i>
+                    </button>
+                    <button type="button" data-nota="5" aria-label="5 estrelas">
+                        <i class="fa-regular fa-star"></i>
+                    </button>
                 </div>
+
                 <p id="textoNota" class="texto-nota">Selecione uma nota</p>
 
                 <label for="campoComentario" class="label-formulario">Seu comentário</label>
                 <textarea id="campoComentario" maxlength="1000" minlength="2"
                     placeholder="Conte como foi sua experiência..." required></textarea>
-                <div class="contador-caracteres"><span id="contadorCaracteres">0</span>/1000</div>
+
+                <div class="contador-caracteres">
+                    <span id="contadorCaracteres">0</span>/1000
+                </div>
 
                 <button class="btn-principal btn-enviar" id="btnEnviarAvaliacao" type="submit">
                     <i class="fa-solid fa-paper-plane"></i> Publicar avaliação
@@ -131,14 +155,21 @@
             <button class="modal-fechar" type="button" data-fechar-modal aria-label="Fechar">
                 <i class="fa-solid fa-xmark"></i>
             </button>
+
             <div class="modal-icone"><i class="fa-solid fa-reply"></i></div>
             <h2 id="tituloResposta">Responder comentário</h2>
             <p class="modal-descricao">Sua resposta ficará visível abaixo da avaliação.</p>
+
             <form id="formResposta">
                 <label for="campoResposta" class="label-formulario">Sua resposta</label>
+
                 <textarea id="campoResposta" maxlength="1000" minlength="1"
                     placeholder="Escreva sua resposta..." required></textarea>
-                <div class="contador-caracteres"><span id="contadorResposta">0</span>/1000</div>
+
+                <div class="contador-caracteres">
+                    <span id="contadorResposta">0</span>/1000
+                </div>
+
                 <button class="btn-principal btn-enviar" id="btnEnviarResposta" type="submit">
                     <i class="fa-solid fa-paper-plane"></i> Enviar resposta
                 </button>
@@ -149,7 +180,11 @@
     <div id="areaNotificacoes" class="area-notificacoes" aria-live="polite"></div>
 
     <script>
+        "use strict";
+
         const API = "/api/avaliacoes";
+        const TEMPO_LIMITE = 20000;
+
         const listaComentarios = document.getElementById("listaComentarios");
         const modalAvaliacao = document.getElementById("modalAvaliacao");
         const modalResposta = document.getElementById("modalResposta");
@@ -158,6 +193,7 @@
         let avaliacaoRespostaId = null;
         let enviandoAvaliacao = false;
         let enviandoResposta = false;
+        let carregandoAvaliacoes = false;
 
         function notificar(mensagem, tipo = "sucesso") {
             const item = document.createElement("div");
@@ -171,10 +207,7 @@
                     : "fa-solid fa-circle-info";
 
             const texto = document.createElement("span");
-            texto.textContent = String(mensagem)
-                .replace(/https?:\/\/\S+/gi, "o servidor")
-                .replace(/\blocalhost(?::\d+)?\b/gi, "o servidor")
-                .replace(/\b127\.0\.0\.1(?::\d+)?\b/gi, "o servidor");
+            texto.textContent = String(mensagem);
 
             const fechar = document.createElement("button");
             fechar.type = "button";
@@ -183,32 +216,81 @@
             fechar.addEventListener("click", () => item.remove());
 
             item.append(icone, texto, fechar);
+
             document.getElementById("areaNotificacoes").appendChild(item);
+
             setTimeout(() => item.remove(), 4500);
         }
 
         async function requisicao(url, opcoes = {}) {
-            const resposta = await fetch(url, {
-                credentials: "include",
-                ...opcoes,
-                headers: {
-                    ...(opcoes.body ? { "Content-Type": "application/json" } : {}),
-                    ...(opcoes.headers || {})
+            const controlador = new AbortController();
+            const temporizador = setTimeout(
+                () => controlador.abort(),
+                TEMPO_LIMITE
+            );
+
+            try {
+                const resposta = await fetch(url, {
+                    credentials: "include",
+                    ...opcoes,
+                    signal: controlador.signal,
+                    headers: {
+                        ...(opcoes.body ? { "Content-Type": "application/json" } : {}),
+                        ...(opcoes.headers || {})
+                    }
+                });
+
+                if (resposta.status === 401) {
+                    throw new Error("LOGIN_NECESSARIO");
                 }
-            });
 
-            if (resposta.status === 401) {
-                notificar("Entre na sua conta para realizar essa ação.", "aviso");
-                throw new Error("LOGIN_NECESSARIO");
+                if (!resposta.ok) {
+                    const texto = await resposta.text();
+
+                    let mensagem = "Não foi possível concluir a operação.";
+
+                    try {
+                        const dados = JSON.parse(texto);
+                        mensagem = dados.mensagem || dados.message || mensagem;
+                    } catch {
+                        if (texto && texto.length < 200) {
+                            mensagem = texto;
+                        }
+                    }
+
+                    throw new Error(`HTTP ${resposta.status}: ${mensagem}`);
+                }
+
+                if (resposta.status === 204) {
+                    return null;
+                }
+
+                const texto = await resposta.text();
+
+                if (!texto.trim()) {
+                    return null;
+                }
+
+                try {
+                    return JSON.parse(texto);
+                } catch {
+                    throw new Error("O servidor retornou uma resposta inválida.");
+                }
+
+            } catch (erro) {
+                if (erro.name === "AbortError") {
+                    throw new Error("A requisição demorou demais. Tente novamente.");
+                }
+
+                if (erro instanceof TypeError) {
+                    throw new Error("Não foi possível conectar ao servidor.");
+                }
+
+                throw erro;
+
+            } finally {
+                clearTimeout(temporizador);
             }
-
-            if (!resposta.ok) {
-                const dados = await resposta.json().catch(() => ({}));
-                throw new Error(dados.mensagem || "Não foi possível concluir a operação.");
-            }
-
-            if (resposta.status === 204) return null;
-            return resposta.json();
         }
 
         function abrirModal(modal) {
@@ -232,7 +314,9 @@
 
         document.querySelectorAll(".modal-fundo").forEach(modal => {
             modal.addEventListener("click", evento => {
-                if (evento.target === modal) fecharModal(modal);
+                if (evento.target === modal) {
+                    fecharModal(modal);
+                }
             });
         });
 
@@ -246,16 +330,21 @@
         function abrirAvaliacao() {
             notaSelecionada = 0;
             atualizarEstrelas();
+
             document.getElementById("campoComentario").value = "";
             document.getElementById("contadorCaracteres").textContent = "0";
             document.getElementById("textoNota").textContent = "Selecione uma nota";
+
             abrirModal(modalAvaliacao);
         }
 
         document.getElementById("btnComentar").addEventListener("click", abrirAvaliacao);
+
         document.getElementById("btnPrimeiraAvaliacao").addEventListener("click", abrirAvaliacao);
+
         document.getElementById("campoComentario").addEventListener("input", evento => {
-            document.getElementById("contadorCaracteres").textContent = evento.target.value.length;
+            document.getElementById("contadorCaracteres").textContent =
+                evento.target.value.length;
         });
 
         const descricoesNotas = {
@@ -269,8 +358,11 @@
         document.querySelectorAll("[data-nota]").forEach(botao => {
             botao.addEventListener("click", () => {
                 notaSelecionada = Number(botao.dataset.nota);
+
                 atualizarEstrelas();
-                document.getElementById("textoNota").textContent = descricoesNotas[notaSelecionada];
+
+                document.getElementById("textoNota").textContent =
+                    descricoesNotas[notaSelecionada];
             });
         });
 
@@ -278,17 +370,32 @@
             document.querySelectorAll("[data-nota]").forEach(botao => {
                 const ativa = Number(botao.dataset.nota) <= notaSelecionada;
                 const icone = botao.querySelector("i");
-                icone.className = ativa ? "fa-solid fa-star" : "fa-regular fa-star";
+
+                icone.className = ativa
+                    ? "fa-solid fa-star"
+                    : "fa-regular fa-star";
+
                 botao.classList.toggle("selecionada", ativa);
-                botao.setAttribute("aria-checked", String(Number(botao.dataset.nota) === notaSelecionada));
+
+                botao.setAttribute(
+                    "aria-checked",
+                    String(Number(botao.dataset.nota) === notaSelecionada)
+                );
             });
         }
 
         function dataRelativa(valor) {
             const data = new Date(valor);
-            if (Number.isNaN(data.getTime())) return "";
 
-            const segundos = Math.max(0, Math.floor((Date.now() - data.getTime()) / 1000));
+            if (Number.isNaN(data.getTime())) {
+                return "";
+            }
+
+            const segundos = Math.max(
+                0,
+                Math.floor((Date.now() - data.getTime()) / 1000)
+            );
+
             if (segundos < 60) return "Agora mesmo";
             if (segundos < 3600) return `Há ${Math.floor(segundos / 60)} min`;
             if (segundos < 86400) return `Há ${Math.floor(segundos / 3600)} h`;
@@ -299,114 +406,217 @@
 
         function criarElemento(tag, classe, texto) {
             const elemento = document.createElement(tag);
+
             if (classe) elemento.className = classe;
             if (texto !== undefined) elemento.textContent = texto;
+
             return elemento;
         }
 
         function criarEstrelas(nota) {
             const container = criarElemento("div", "estrelas-avaliacao");
+
             for (let i = 1; i <= 5; i++) {
                 const estrela = document.createElement("i");
-                estrela.className = i <= nota ? "fa-solid fa-star" : "fa-regular fa-star estrela-vazia";
+
+                estrela.className = i <= nota
+                    ? "fa-solid fa-star"
+                    : "fa-regular fa-star estrela-vazia";
+
                 container.appendChild(estrela);
             }
+
             return container;
         }
 
         function criarAvaliacao(avaliacao) {
             const artigo = criarElemento("article", "comentario");
+
             const avatar = criarElemento("div", "avatar");
             avatar.innerHTML = '<i class="fa-solid fa-user"></i>';
 
             const conteudo = criarElemento("div", "conteudo-comentario");
             const topo = criarElemento("div", "topo-comentario");
             const dadosCliente = criarElemento("div", "dados-cliente");
-            const nome = criarElemento("div", "nome-cliente", avaliacao.nomeCliente || "Cliente");
-            const data = criarElemento("span", "data-comentario", dataRelativa(avaliacao.dataCriacao));
+
+            const nome = criarElemento(
+                "div",
+                "nome-cliente",
+                avaliacao.nomeCliente || "Cliente"
+            );
+
+            const data = criarElemento(
+                "span",
+                "data-comentario",
+                dataRelativa(avaliacao.dataCriacao)
+            );
 
             dadosCliente.append(nome, data);
             topo.append(dadosCliente, criarEstrelas(Number(avaliacao.nota) || 0));
 
-            const texto = criarElemento("p", "texto-comentario", avaliacao.comentario);
+            const texto = criarElemento(
+                "p",
+                "texto-comentario",
+                avaliacao.comentario || ""
+            );
+
             const acoes = criarElemento("div", "acoes-comentario");
 
             const botaoLike = document.createElement("button");
+
             botaoLike.type = "button";
-            botaoLike.className = `btn-like${avaliacao.curtidoPorMim ? " curtido" : ""}`;
+            botaoLike.className =
+                `btn-like${avaliacao.curtidoPorMim ? " curtido" : ""}`;
+
             botaoLike.disabled = Boolean(avaliacao.curtidoPorMim);
-            botaoLike.innerHTML = '<i class="fa-solid fa-thumbs-up"></i> <span>Curtir</span> <span class="contador-curtidas"></span>';
-            botaoLike.querySelector(".contador-curtidas").textContent = `(${avaliacao.curtidas || 0})`;
-            botaoLike.addEventListener("click", () => curtirAvaliacao(avaliacao.id, botaoLike));
+
+            botaoLike.innerHTML =
+                '<i class="fa-solid fa-thumbs-up"></i> <span>Curtir</span> <span class="contador-curtidas"></span>';
+
+            botaoLike.querySelector(".contador-curtidas").textContent =
+                `(${avaliacao.curtidas || 0})`;
+
+            botaoLike.addEventListener("click", () => {
+                curtirAvaliacao(avaliacao.id, botaoLike);
+            });
 
             const botaoResponder = document.createElement("button");
+
             botaoResponder.type = "button";
             botaoResponder.className = "btn-responder";
-            botaoResponder.innerHTML = '<i class="fa-solid fa-reply"></i> Responder';
+
+            botaoResponder.innerHTML =
+                '<i class="fa-solid fa-reply"></i> Responder';
+
             botaoResponder.addEventListener("click", () => {
                 avaliacaoRespostaId = avaliacao.id;
+
                 document.getElementById("campoResposta").value = "";
                 document.getElementById("contadorResposta").textContent = "0";
+
                 abrirModal(modalResposta);
             });
 
             acoes.append(botaoLike, botaoResponder);
 
             const areaRespostas = criarElemento("div", "area-respostas");
-            const respostas = Array.isArray(avaliacao.respostas) ? avaliacao.respostas : [];
+
+            const respostas = Array.isArray(avaliacao.respostas)
+                ? avaliacao.respostas
+                : [];
 
             if (respostas.length > 0) {
-                const tituloRespostas = criarElemento("h4", "titulo-respostas", `Respostas (${respostas.length})`);
+                const tituloRespostas = criarElemento(
+                    "h4",
+                    "titulo-respostas",
+                    `Respostas (${respostas.length})`
+                );
+
                 areaRespostas.appendChild(tituloRespostas);
 
                 respostas.forEach(resposta => {
                     const item = criarElemento("div", "resposta");
                     const cabecalho = criarElemento("div", "cabecalho-resposta");
-                    const nomeResposta = criarElemento("strong", "", resposta.nomeCliente || "Cliente");
-                    const dataResposta = criarElemento("span", "data-comentario", dataRelativa(resposta.dataCriacao));
-                    const textoResposta = criarElemento("p", "texto-resposta", resposta.resposta);
+
+                    const nomeResposta = criarElemento(
+                        "strong",
+                        "",
+                        resposta.nomeCliente || "Cliente"
+                    );
+
+                    const dataResposta = criarElemento(
+                        "span",
+                        "data-comentario",
+                        dataRelativa(resposta.dataCriacao)
+                    );
+
+                    const textoResposta = criarElemento(
+                        "p",
+                        "texto-resposta",
+                        resposta.resposta || ""
+                    );
+
                     cabecalho.append(nomeResposta, dataResposta);
                     item.append(cabecalho, textoResposta);
+
                     areaRespostas.appendChild(item);
                 });
             }
 
             conteudo.append(topo, texto, acoes, areaRespostas);
             artigo.append(avatar, conteudo);
+
             return artigo;
         }
 
         async function carregarAvaliacoes() {
+            if (carregandoAvaliacoes) return;
+
+            carregandoAvaliacoes = true;
+
             const carregando = document.getElementById("carregando");
             const semAvaliacoes = document.getElementById("semAvaliacoes");
             const erroLista = document.getElementById("erroLista");
+            const mensagemErro = document.getElementById("mensagemErro");
+            const total = document.getElementById("totalAvaliacoes");
+            const botaoTentar = document.getElementById("btnTentarNovamente");
 
             carregando.hidden = false;
             semAvaliacoes.hidden = true;
             erroLista.hidden = true;
+
             listaComentarios.innerHTML = "";
 
-            try {
-                const avaliacoes = await requisicao(API);
-                document.getElementById("totalAvaliacoes").textContent =
-                    `${avaliacoes.length} avaliação(ões) publicada(s)`;
+            botaoTentar.disabled = true;
 
-                carregando.hidden = true;
+            try {
+                const resultado = await requisicao(API);
+
+                // Aceita uma lista direta ou uma lista dentro de um objeto.
+                const avaliacoes = Array.isArray(resultado)
+                    ? resultado
+                    : Array.isArray(resultado?.dados)
+                        ? resultado.dados
+                        : Array.isArray(resultado?.avaliacoes)
+                            ? resultado.avaliacoes
+                            : null;
+
+                if (!avaliacoes) {
+                    throw new Error("A API retornou um formato de dados inesperado.");
+                }
+
+                total.textContent =
+                    `${avaliacoes.length} avaliação(ões) publicada(s)`;
 
                 if (avaliacoes.length === 0) {
                     semAvaliacoes.hidden = false;
                     return;
                 }
 
+                const fragmento = document.createDocumentFragment();
+
                 avaliacoes.forEach(avaliacao => {
-                    listaComentarios.appendChild(criarAvaliacao(avaliacao));
+                    fragmento.appendChild(criarAvaliacao(avaliacao));
                 });
+
+                listaComentarios.appendChild(fragmento);
+
             } catch (erro) {
-                carregando.hidden = true;
-                if (erro.message === "LOGIN_NECESSARIO") return;
+                console.error("Erro ao carregar avaliações:", erro);
+
+                total.textContent = "Não foi possível carregar";
+
+                mensagemErro.textContent =
+                    erro.message === "LOGIN_NECESSARIO"
+                        ? "Entre na sua conta para visualizar as avaliações."
+                        : erro.message;
 
                 erroLista.hidden = false;
-                document.getElementById("totalAvaliacoes").textContent = "Não foi possível carregar";
+
+            } finally {
+                carregando.hidden = true;
+                carregandoAvaliacoes = false;
+                botaoTentar.disabled = false;
             }
         }
 
@@ -428,27 +638,44 @@
             }
 
             enviandoAvaliacao = true;
+
             const botao = document.getElementById("btnEnviarAvaliacao");
+
             botao.disabled = true;
-            botao.innerHTML = '<i class="fa-solid fa-spinner girando"></i> Publicando...';
+            botao.innerHTML =
+                '<i class="fa-solid fa-spinner girando"></i> Publicando...';
 
             try {
                 await requisicao(API, {
                     method: "POST",
-                    body: JSON.stringify({ nota: notaSelecionada, comentario })
+                    body: JSON.stringify({
+                        nota: notaSelecionada,
+                        comentario: comentario
+                    })
                 });
 
                 fecharModal(modalAvaliacao);
+
                 notificar("Sua avaliação foi publicada com sucesso!");
+
                 await carregarAvaliacoes();
+
             } catch (erro) {
-                if (erro.message !== "LOGIN_NECESSARIO") {
-                    notificar(erro.message, "erro");
-                }
+                console.error("Erro ao publicar avaliação:", erro);
+
+                notificar(
+                    erro.message === "LOGIN_NECESSARIO"
+                        ? "Entre na sua conta para publicar uma avaliação."
+                        : erro.message,
+                    "erro"
+                );
+
             } finally {
                 enviandoAvaliacao = false;
                 botao.disabled = false;
-                botao.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Publicar avaliação';
+
+                botao.innerHTML =
+                    '<i class="fa-solid fa-paper-plane"></i> Publicar avaliação';
             }
         });
 
@@ -463,18 +690,29 @@
                 });
 
                 botao.classList.add("curtido");
-                botao.querySelector(".contador-curtidas").textContent = `(${resultado.curtidas})`;
+
+                botao.querySelector(".contador-curtidas").textContent =
+                    `(${resultado?.curtidas ?? 0})`;
+
                 notificar("Curtida registrada!");
+
             } catch (erro) {
+                console.error("Erro ao curtir avaliação:", erro);
+
                 botao.disabled = false;
-                if (erro.message !== "LOGIN_NECESSARIO") {
-                    notificar(erro.message, "erro");
-                }
+
+                notificar(
+                    erro.message === "LOGIN_NECESSARIO"
+                        ? "Entre na sua conta para curtir."
+                        : erro.message,
+                    "erro"
+                );
             }
         }
 
         document.getElementById("campoResposta").addEventListener("input", evento => {
-            document.getElementById("contadorResposta").textContent = evento.target.value.length;
+            document.getElementById("contadorResposta").textContent =
+                evento.target.value.length;
         });
 
         document.getElementById("formResposta").addEventListener("submit", async evento => {
@@ -482,51 +720,63 @@
 
             if (enviandoResposta || !avaliacaoRespostaId) return;
 
-            const respostaTexto = document.getElementById("campoResposta").value.trim();
+            const respostaTexto =
+                document.getElementById("campoResposta").value.trim();
+
             if (!respostaTexto) {
                 notificar("Escreva sua resposta antes de enviar.", "aviso");
                 return;
             }
 
             enviandoResposta = true;
+
             const botao = document.getElementById("btnEnviarResposta");
+
             botao.disabled = true;
-            botao.innerHTML = '<i class="fa-solid fa-spinner girando"></i> Enviando...';
+            botao.innerHTML =
+                '<i class="fa-solid fa-spinner girando"></i> Enviando...';
 
             try {
                 await requisicao(`${API}/${avaliacaoRespostaId}/respostas`, {
                     method: "POST",
-                    body: JSON.stringify({ resposta: respostaTexto })
+                    body: JSON.stringify({
+                        resposta: respostaTexto
+                    })
                 });
 
                 fecharModal(modalResposta);
+
                 notificar("Sua resposta foi publicada!");
+
                 await carregarAvaliacoes();
+
             } catch (erro) {
-                if (erro.message !== "LOGIN_NECESSARIO") {
-                    notificar(erro.message, "erro");
-                }
+                console.error("Erro ao responder avaliação:", erro);
+
+                notificar(
+                    erro.message === "LOGIN_NECESSARIO"
+                        ? "Entre na sua conta para responder."
+                        : erro.message,
+                    "erro"
+                );
+
             } finally {
                 enviandoResposta = false;
                 botao.disabled = false;
-                botao.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Enviar resposta';
+
+                botao.innerHTML =
+                    '<i class="fa-solid fa-paper-plane"></i> Enviar resposta';
             }
         });
 
-        document.getElementById("btnTentarNovamente").addEventListener("click", carregarAvaliacoes);
+        document.getElementById("btnTentarNovamente").addEventListener(
+            "click",
+            carregarAvaliacoes
+        );
 
-        document.getElementById("btnSair").addEventListener("click", async () => {
-            try {
-                await fetch("/api/usuarios/logout", {
-                    method: "POST",
-                    credentials: "include"
-                });
-            } finally {
-                window.location.href = "login_cliente.html";
-            }
-        });
-
+        // Inicia o carregamento das avaliações.
         carregarAvaliacoes();
+
     </script>
 </body>
 </html>
